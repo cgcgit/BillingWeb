@@ -1,0 +1,459 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+
+<f:metadata>
+	<f:viewAction id="loadData"
+		action="#{manageUserController.loadDataList()}"
+		phase="INVOKE_APPLICATION">
+	</f:viewAction>
+	<f:viewAction id="defaultControlVariables"
+		action="#{manageUserController.setInitVariablesToDefault()}"
+		phase="INVOKE_APPLICATION">
+	</f:viewAction>
+</f:metadata>
+
+
+<style type="text/css">
+button.ui-button {
+	margin-right: .5rem;
+}
+</style>
+
+
+<title>#{pageTitle.manageUsers}</title>
+
+<body>
+
+	<h:outputStylesheet library="webjars"
+		name="primeflex/2.0.0/primeflex.min.css" />
+
+
+	<header>
+		<ui:include id="mainTemplate"
+			src="/WEB-INF/templates/mainTemplate.xhtml">
+		</ui:include>
+	</header>
+
+
+
+	<h:form id="form">
+		<p:growl id="growlMessage" showDetail="true" keepAlive="true">
+			<p:autoUpdate />
+		</p:growl>
+
+
+
+		<!--  DATA TABLE -->
+
+		<p:remoteCommand id="remoteCommandUpdateMainTable"
+			name="updateMainTable" process="@this" update="form:mainTable" />
+
+
+		<p:dataTable id="mainTable" widgetVar="mainTableWidget"
+			var="dataTable" value="#{manageUserController.dataList}"
+			editable="true" rowIndexVar="rowIndexMainTable" rows="10"
+			showGridlines="true" stripedRows="true" scrollable="true"
+			reflow="true" resizableColumns="true" size="small" paginator="true"
+			paginatorPosition="bottom">
+
+			<!--  DATA TABLE - HEADER -->
+			<f:facet name="header">
+				<p:toolbar>
+					<p:toolbarGroup>
+						<h3>USER DATA TABLE</h3>
+						<p:divider layout="vertical" />
+						<p:commandButton id="createNewButton" value="Add new data"
+							icon="#{uiValue.addIcon}"
+							actionListener="#{manageUserController.pushAddNewButton()}"
+							rendered="#{manageUserController.canUserModify()}"
+							disabled="#{manageUserController.editingMode}"
+							update=":form:createNewDialogPanelData"
+							styleClass="ui-button-info" style="margin-right: .5rem">
+							<p:resetInput target=":form:createNewDialogPanelData" />
+						</p:commandButton>
+					</p:toolbarGroup>
+				</p:toolbar>
+			</f:facet>
+
+			<!--  DATA TABLE - FOOTER -->
+			<f:facet id="facetFooter" name="footer">
+			</f:facet>
+
+			<!--  DATA TABLE - MANAGE EDIT EVENTS -->
+			<p:ajax id="ajaxRowEditInit" event="rowEditInit"
+				listener="#{manageUserController.onRowInit}"
+				disabled="#{manageUserController.editingMode}"
+				update="form:growlMessage createNewButton form:mainTable">
+			</p:ajax>
+			<p:ajax id="ajaxRowEdit" event="rowEdit"
+				listener="#{manageUserController.onRowEdit}"
+				update="form:growlMessage"
+				oncomplete="if (!args.validationFailed) {updateMainTable();}">
+			</p:ajax>
+			<p:ajax id="ajaxRowEditCancel" event="rowEditCancel"
+				listener="#{manageUserController.onRowCancel}"
+				update="form:growlMessage" oncomplete="updateMainTable()">
+			</p:ajax>
+
+
+			<!--  DATA TABLE - EDITABLE COLUMNS -->
+			<p:column id="deleteRow" exportable="false"
+				style="font-family:Arial Black;
+                                   text-align: center;
+                                   font-size: 11px;
+                                   width: 60px;    
+                                   "
+				headerText="DEL ROW"
+				rendered="#{manageUserController.canUserModify()}">
+				<p:commandButton id="deleteRowButton"
+					class="ui-button-warning rounded-button"
+					icon="#{uiValue.deleteIcon}"
+					actionListener="#{manageUserController.pushDeleteRowButton()}"
+					immediate="true" onclick="PF('deleteRowDialogWidget').show()"
+					disabled="#{manageUserController.editingMode}"
+					oncomplete="if(!args.validationFailed) {updateMainTable();}"
+					rendered="#{manageUserController.canUserModify()}">
+					<f:setPropertyActionListener value="#{dataTable}"
+						target="#{manageUserController.selectedData}" />
+				</p:commandButton>
+			</p:column>
+			<p:column id="editRow"
+				style="font-family:Arial Black;
+                                  text-align: center;
+                                  font-size: 11px;
+                                  width: 60px;    
+                                  overflow: hidden"
+				headerText="EDIT ROW"
+				rendered="#{manageUserController.canUserModify()}">
+				<p:rowEditor id="editRowButton" editTitle="Edit Row"
+					cancelTitle="Cancel Edit" saveTitle="Save Row"
+					rendered="#{manageUserController.canUserModify()}">
+				</p:rowEditor>
+			</p:column>
+
+
+			<!--  DATA TABLE - DATA COLUMNS -->
+			<p:column id="userId"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 40px;    
+                                  overflow: hidden;
+                                  visibility: hidden"
+				headerText="USER_ID" rendered="false">
+				<h:outputText value="#{dataTable.userId}" />
+			</p:column>
+
+			<p:column id="userCode"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="USER CODE" rendered="true"
+				sortBy="#{dataTable.userCode}" filterBy="#{dataTable.userCode}"
+				filterMatchMode="contains">
+				<p:cellEditor id="cellEditorUserCode">
+					<f:facet id="facetUserCodeOutput" name="output">
+						<h:outputText id="userCodeOutput" value="#{dataTable.userCode}" />
+					</f:facet>
+					<f:facet id="facetUserCodeInput" name="input">
+						<p:inputText id="userCodeInput" label="UserCode"
+							value="#{dataTable.userCode}" style="width:96%">
+							<p:ajax event="change" update="userCodeOutput" />
+						</p:inputText>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+
+			<p:column id="password"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="PASSWORD" rendered="#{manageUserController.editingMode}">
+				<p:cellEditor id="cellEditorPassword">
+					<f:facet id="facetPasswordOutput" name="output">
+						<h:outputText id="passwordOutput"
+							value="#{manageUserController.password}" />
+					</f:facet>
+					<f:facet id="facetPasswordInput" name="input">
+						<p:password id="passwordInput" label="password" toggleMask="true"
+							redisplay="true" value="#{manageUserController.password}"
+							style="width:96%">
+							<p:ajax event="change" update="passwordOutput" />
+						</p:password>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column id="name"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="NAME" rendered="true" sortBy="#{dataTable.name}"
+				filterBy="#{dataTable.name}" filterMatchMode="contains">
+				<p:cellEditor id="cellEditorName">
+					<f:facet id="facetNameOutput" name="output">
+						<h:outputText id="nameOutput" value="#{dataTable.name}" />
+					</f:facet>
+					<f:facet id="facetNameInput" name="input">
+						<p:inputText id="nameInput" label="Name" value="#{dataTable.name}"
+							style="width:96%">
+							<p:ajax event="change" update="nameOutput" />
+						</p:inputText>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column id="surname"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="SURNAME" rendered="true" sortBy="#{dataTable.surname}"
+				filterBy="#{dataTable.surname}" filterMatchMode="contains">
+				<p:cellEditor id="cellEditorSurname">
+					<f:facet id="facetSurnameOutput" name="output">
+						<h:outputText id="surnameOutput" value="#{dataTable.surname}" />
+					</f:facet>
+					<f:facet id="facetSurnameInput" name="input">
+						<p:inputText id="surnameInput" label="Surname"
+							value="#{dataTable.surname}" style="width:96%">
+							<p:ajax event="change" update="surnameOutput" />
+						</p:inputText>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column id="email"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="EMAIL" rendered="true" sortBy="#{dataTable.email}"
+				filterBy="#{dataTable.email}" filterMatchMode="contains">
+				<p:cellEditor id="cellEditorEmail">
+					<f:facet id="facetEmailOutput" name="output">
+						<h:outputText id="emailOutput" value="#{dataTable.email}" />
+					</f:facet>
+					<f:facet id="facetEmailInput" name="input">
+						<p:inputText id="emailInput" label="email"
+							value="#{dataTable.email}" style="width:96%">
+							<p:ajax event="change" update="emailOutput" />
+						</p:inputText>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column id="phoneContact"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="PHONE_CONTACT" rendered="true"
+				sortBy="#{dataTable.phoneContact}"
+				filterBy="#{dataTable.phoneContact}" filterMatchMode="contains">
+				<p:cellEditor id="cellEditorPhoneContact">
+					<f:facet id="facetPhoneContactOutput" name="output">
+						<h:outputText id="phoneContactOutput"
+							value="#{dataTable.phoneContact}" />
+					</f:facet>
+					<f:facet id="facetPhoneContactInput" name="input">
+						<p:inputText id="phoneContactInput" label="phoneContact"
+							value="#{dataTable.phoneContact}" style="width:96%">
+							<p:ajax event="change" update="phoneContactOutput" />
+						</p:inputText>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column id="profile"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="PROFILE" rendered="true" filterable="false">
+				<p:cellEditor id="profileIdCellEditor">
+					<f:facet id="profileIdOutputFacet" name="output">
+						<p:selectOneMenu id="profileOutput" editable="false"
+							disabled="true" immediate="true" value="#{dataTable.profileId}">
+							<f:selectItems
+								value="#{manageUserController.populateProfileMenu()}"
+								id="selectItemsProfileOutput" itemDisabled="true" var="Profile"
+								itemValue="#{dataTable.profileId}" />
+						</p:selectOneMenu>
+					</f:facet>
+					<f:facet id="profileIdInputFacet" name="input">
+						<p:selectOneMenu id="profileInput" value="#{dataTable.profileId}"
+							immediate="true">
+							<f:selectItems
+								value="#{manageUserController.populateProfileMenu()}"
+								id="selectItemsProfileInput" var="Profile"
+								itemValue="#{dataTable.profileId}">
+
+							</f:selectItems>
+							<f:param id="currentRowProfile" name="currentRow"
+								value="#{rowIndexMainTable}" />
+							<p:ajax event="change" immediate="true" update="profileOutput" />
+						</p:selectOneMenu>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column id="active"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="ACTIVE?" rendered="true" filterable="false">
+				<p:cellEditor id="activeCellEditor">
+					<f:facet id="activeOutputFacet" name="output">
+						<p:selectOneMenu id="activeOutput" editable="false"
+							disabled="true" immediate="true" value="#{dataTable.active}">
+							<f:selectItems
+								value="#{manageUserController.populateBooleanMenu()}"
+								id="selectItemsActiveOutput" itemDisabled="true" var="Active"
+								itemValue="#{dataTable.active}" />
+						</p:selectOneMenu>
+					</f:facet>
+					<f:facet id="activeInputFacet" name="input">
+						<p:selectOneMenu id="activeInput" value="#{dataTable.active}"
+							immediate="true">
+							<f:selectItems
+								value="#{manageUserController.populateBooleanMenu()}"
+								id="selectItemsActiveInput" var="Active"
+								itemValue="#{dataTable.active}">
+
+							</f:selectItems>
+							<f:param id="currentRowActive" name="currentRow"
+								value="#{rowIndexMainTable}" />
+							<p:ajax event="change" immediate="true" update="activeOutput" />
+						</p:selectOneMenu>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+
+
+		</p:dataTable>
+
+		<!--  CREATE NEW DIALOG -->
+		<p:dialog id="createNewDialog" header="Create new User"
+			showEffect="fade" responsive="true" widgetVar="createNewDialogWidget">
+
+			<h:panelGrid id="createNewDialogPanelData" columns="2"
+				cellpadding="5">
+				<p:outputLabel id="newNameLabel" value="Name: " />
+				<p:inputText id="newNameInput" label="Name"
+					value="#{manageUserController.selectedData.name}">
+				</p:inputText>
+
+				<p:outputLabel id="newSurnameLabel" value="Surname: " />
+				<p:inputText id="newSurnameInput" label="Surname"
+					value="#{manageUserController.selectedData.surname}">
+				</p:inputText>
+
+				<p:outputLabel id="newEmailLabel" value="Email: " />
+				<p:inputText id="newEmailInput" label="Email"
+					value="#{manageUserController.selectedData.email}">
+				</p:inputText>
+
+				<p:outputLabel id="newPhoneContactLabel" value="Phone Contact: " />
+				<p:inputText id="newPhoneContactInput" label="PhoneContact"
+					value="#{manageUserController.selectedData.phoneContact}">
+				</p:inputText>
+
+				<p:outputLabel id="newUserCodeLabel" value="User Code: " />
+				<p:inputText id="newUserCodeInput" label="UserCode"
+					value="#{manageUserController.selectedData.userCode}">
+				</p:inputText>
+
+				<p:outputLabel id="newPasswordLabel" value="Password:" />
+				<p:password id="newPassword" label="Password:" toggleMask="true"
+					redisplay="true" value="#{manageUserController.selectedData.password}">
+				</p:password>
+
+				<p:outputLabel id="newProfileLabel" value="Profile: " />
+				<p:selectOneMenu id="profileInput"
+					value="#{manageUserController.selectedData.profileId}"
+					immediate="true">
+					<f:selectItems
+						value="#{manageUserController.populateProfileMenu()}"
+						id="selectItemsProfileInput" var="Profile"
+						itemValue="#{manageUserController.selectedData.profileId}">
+					</f:selectItems>
+				</p:selectOneMenu>
+				
+				<p:outputLabel id="newActiveFlagLabel" value="Active? " />
+				<p:selectOneMenu id="activeFlagInput"
+					value="#{manageUserController.selectedData.active}"
+					immediate="true">
+					<f:selectItems
+						value="#{manageUserController.populateBooleanMenu()}"
+						id="selectItemsActiveFlagInput" var="Active"
+						itemValue="#{manageUserController.selectedData.active}">
+					</f:selectItems>
+				</p:selectOneMenu>
+
+			</h:panelGrid>
+			<h:panelGrid id="createNewDialogPanelButtons" columns="3"
+				cellpadding="5">
+				<p:commandButton id="createNewDialogConfirm"
+					value="#{uiValue.okLabel}"
+					actionListener="#{manageUserController.pushConfirmButtonAddNewDialog()}"
+					styleClass="ui-confirmdialog-yes" icon="#{uiValue.okCircleIcon}"
+					oncomplete="if (!args.validationFailed) {updateMainTable();}">
+				</p:commandButton>
+				<p:commandButton id="createNewDialogCancel"
+					value="#{uiValue.cancelLabel}" icon="#{uiValue.cancelCircleIcon}"
+					onclick="PF('createNewDialogWidget').hide()"
+					class="ui-button-secondary" />
+				<p:commandButton id="createNewDialogClean"
+					value="#{uiValue.cleanLabel}" icon="#{uiValue.cleanIcon}"
+					update="createNewDialogPanelData" process="@this"
+					class="ui-button-secondary">
+					<p:resetInput target="createNewDialogPanelData" />
+				</p:commandButton>
+			</h:panelGrid>
+		</p:dialog>
+
+			<!--  DELETE ROW DIALOG -->
+		<p:confirmDialog global="true" styleClass="change-position"
+			showEffect="fade" responsive="true" widgetVar="deleteRowDialogWidget"
+			header="DELETE ROW"
+			message="Do you really want to delete this row? (The row will be inmediately deleted from the system)">
+			<p:commandButton id="deleteDialogConfirm" value="#{uiValue.okLabel}"
+				styleClass="ui-confirmdialog-yes"
+				update="form:growlMessage"
+				actionListener="#{manageUserController.pushConfirmButtonDeleteDialog()}"
+				oncomplete="updateMainTable(); PF('deleteRowDialogWidget').hide()"
+				process="@this" icon="#{uiValue.okCircleIcon}" />
+			<p:commandButton id="deleteDialogCancel"
+				value="#{uiValue.cancelLabel}" styleClass="ui-confirmdialog-no"
+				update="form:growlMessage"
+				oncomplete="PF('deleteDialogConfirm').hide()" type="button"
+				process="@this" icon="#{uiValue.cancelCircleIcon}" />
+		</p:confirmDialog>
+
+	</h:form>
+
+</body>
+</html>
+
