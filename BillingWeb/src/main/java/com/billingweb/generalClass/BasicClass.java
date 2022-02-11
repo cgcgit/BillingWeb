@@ -10,8 +10,6 @@ import javax.faces.context.FacesContext;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 
-import com.billingweb.ejb.user.ProfileEJB;
-import com.billingweb.exception.BillingWebDataAccessException;
 import com.billingweb.exception.BillingWebGeneralException;
 import com.billingweb.model.tables.pojos.VwUsers;
 
@@ -49,6 +47,8 @@ public class BasicClass {
 	protected static Integer DESCRIPTION_FIELD_LENGTH_MAX = Integer.valueOf(dbDefinitions.getString("DESCRIPTION_FIELD_LENGTH_MAX"));
 	
 	
+	
+	
 
 	public boolean canUserModify() {
 
@@ -68,12 +68,12 @@ public class BasicClass {
 
 		} catch (Exception e) {
 			if (!user.isPresent()) {
-				errorMessage = "Error checking the modify functionality. The user is null - " + e.getCause().toString();
+				errorMessage = "Error checking the modify functionality. The user is null - " + e.getMessage();
 				logger.error(errorMessage);
 				throw new BillingWebGeneralException(errorMessage, e);				
 			} else {
 				errorMessage = "Error checking the modify functionality for the user: "
-						+ user.get().getUserCode() + " - " + e.getCause().toString();
+						+ user.get().getUserCode() + " - " + e.getMessage();
 				logger.error(errorMessage);
 				throw new BillingWebGeneralException(errorMessage, e);
 			}

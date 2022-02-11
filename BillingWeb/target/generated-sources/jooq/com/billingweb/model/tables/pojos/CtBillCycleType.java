@@ -29,6 +29,7 @@ public class CtBillCycleType implements ICtBillCycleType {
     private String        inputUser;
     private LocalDateTime modifDate;
     private String        modifUser;
+    private Boolean       corrective;
 
     public CtBillCycleType() {}
 
@@ -45,6 +46,7 @@ public class CtBillCycleType implements ICtBillCycleType {
         this.inputUser = value.getInputUser();
         this.modifDate = value.getModifDate();
         this.modifUser = value.getModifUser();
+        this.corrective = value.getCorrective();
     }
 
     public CtBillCycleType(
@@ -59,7 +61,8 @@ public class CtBillCycleType implements ICtBillCycleType {
         LocalDateTime inputDate,
         String        inputUser,
         LocalDateTime modifDate,
-        String        modifUser
+        String        modifUser,
+        Boolean       corrective
     ) {
         this.billCycleTypeId = billCycleTypeId;
         this.code = code;
@@ -73,6 +76,7 @@ public class CtBillCycleType implements ICtBillCycleType {
         this.inputUser = inputUser;
         this.modifDate = modifDate;
         this.modifUser = modifUser;
+        this.corrective = corrective;
     }
 
     /**
@@ -267,6 +271,22 @@ public class CtBillCycleType implements ICtBillCycleType {
         this.modifUser = modifUser;
     }
 
+    /**
+     * Getter for <code>public.ct_bill_cycle_type.corrective</code>. Flag for corrective cycle (true: corrective cycle, false: ordinary cycle)
+     */
+    @Override
+    public Boolean getCorrective() {
+        return this.corrective;
+    }
+
+    /**
+     * Setter for <code>public.ct_bill_cycle_type.corrective</code>. Flag for corrective cycle (true: corrective cycle, false: ordinary cycle)
+     */
+    @Override
+    public void setCorrective(Boolean corrective) {
+        this.corrective = corrective;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("CtBillCycleType (");
@@ -283,6 +303,7 @@ public class CtBillCycleType implements ICtBillCycleType {
         sb.append(", ").append(inputUser);
         sb.append(", ").append(modifDate);
         sb.append(", ").append(modifUser);
+        sb.append(", ").append(corrective);
 
         sb.append(")");
         return sb.toString();
@@ -306,6 +327,7 @@ public class CtBillCycleType implements ICtBillCycleType {
         setInputUser(from.getInputUser());
         setModifDate(from.getModifDate());
         setModifUser(from.getModifUser());
+        setCorrective(from.getCorrective());
     }
 
     @Override

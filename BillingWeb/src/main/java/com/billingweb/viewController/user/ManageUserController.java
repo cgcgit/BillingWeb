@@ -18,9 +18,7 @@ import javax.inject.Named;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
-import org.omnifaces.util.Ajax;
 import org.primefaces.PrimeFaces;
-import org.primefaces.component.api.UIColumn;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.RowEditEvent;
 
@@ -30,7 +28,6 @@ import com.billingweb.generalClass.SimpleTableBasicClass;
 import com.billingweb.interfaces.IGeneralController;
 import com.billingweb.model.tables.pojos.ItProfiles;
 import com.billingweb.model.tables.pojos.ItUsers;
-import com.billingweb.model.tables.pojos.PtApplicationLevel;
 import com.billingweb.utilities.Utilities;
 import com.billingweb.viewController.parameterization.ApplicationLevelController;
 
@@ -236,12 +233,6 @@ public class ManageUserController extends SimpleTableBasicClass implements Seria
 
 		// Retrieved the data that was modified
 		dataObject = (ItUsers) event.getObject();
-
-		DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent(DATA_TABLE_ID);
-		int currentRow = dataTable.getRowIndex();
-		
-		System.out.println("objeto a guardar: " + dataObject.toString());
-		System.out.println("password: " + this.password);
 
 		try {
 			// Validates the password
@@ -468,7 +459,7 @@ public class ManageUserController extends SimpleTableBasicClass implements Seria
 				applicationUserEJB.deleteData(this.selectedData);
 				// this.selectedData = null;
 				messageDetail = "Data deleted succesfully";
-				logger.info(messageDetail);
+				logger.info("Delete user: " + this.selectedData.getUserCode() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;
@@ -541,15 +532,15 @@ public class ManageUserController extends SimpleTableBasicClass implements Seria
 			// required file validation was defined in the view
 
 			if (objectToValidate.getName() != null) {
-				objectToValidate.setName(objectToValidate.getName().toUpperCase().trim());
+				objectToValidate.setName(objectToValidate.getName().trim());
 			}
 
 			if (objectToValidate.getSurname() != null) {
-				objectToValidate.setSurname(objectToValidate.getSurname().toUpperCase().trim());
+				objectToValidate.setSurname(objectToValidate.getSurname().trim());
 			}
 
 			if (objectToValidate.getEmail() != null) {
-				objectToValidate.setEmail(objectToValidate.getEmail().toUpperCase().trim());
+				objectToValidate.setEmail(objectToValidate.getEmail().trim());
 			}
 
 			if (objectToValidate.getUserCode() != null) {

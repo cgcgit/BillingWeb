@@ -62,7 +62,7 @@ public class ApplicationUserEJB implements ApplicationUserEJBLocal {
 			}
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the user with username " + userName + " and password " + password
-					+ " - " + e.getCause().toString();
+					+ " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -79,11 +79,11 @@ public class ApplicationUserEJB implements ApplicationUserEJBLocal {
 			// Gets the user from the database
 			result = create.selectFrom(IT_USERS).orderBy(IT_USERS.USER_CODE).fetchInto(ItUsers.class);
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find all the system users - " + e.getCause().toString();
+			errorMessage = "Error while try to find all the system users - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		} catch (Exception e) {
-			errorMessage = "Error while try to find all the system users - " + e.getCause().toString();
+			errorMessage = "Error while try to find all the system users - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 
@@ -102,11 +102,11 @@ public class ApplicationUserEJB implements ApplicationUserEJBLocal {
 			ItUsersDao daoObject = new ItUsersDao(configuration);
 			result = daoObject.fetchOneByUserCode(code);
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the user with user code " + code + " - " + e.getCause().toString();
+			errorMessage = "Error while try to find the user with user code " + code + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		} catch (Exception e) {
-			errorMessage = "Error while try to find the user with user code " + code + " - " + e.getCause().toString();
+			errorMessage = "Error while try to find the user with user code " + code + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -125,11 +125,11 @@ public class ApplicationUserEJB implements ApplicationUserEJBLocal {
 			ItUsersDao daoObject = new ItUsersDao(configuration);
 			result = daoObject.fetchOneByUserId(id);
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the user with user id " + id + " - " + e.getCause().toString();
+			errorMessage = "Error while try to find the user with user id " + id + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		} catch (Exception e) {
-			errorMessage = "Error while try to find the user with user id " + id + " - " + e.getCause().toString();
+			errorMessage = "Error while try to find the user with user id " + id + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -148,11 +148,11 @@ public class ApplicationUserEJB implements ApplicationUserEJBLocal {
 			result = daoObject.fetchByProfileId(id);
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find users with profile id " + id + " - " + e.getCause().toString();
+			errorMessage = "Error while try to find users with profile id " + id + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		} catch (Exception e) {
-			errorMessage = "Error while try to find users with profile id " + id + " - " + e.getCause().toString();
+			errorMessage = "Error while try to find users with profile id " + id + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -174,11 +174,11 @@ public class ApplicationUserEJB implements ApplicationUserEJBLocal {
 			result = daoObject.fetchByProfileId(daoObjectProfile.fetchOneByProfileCode(code).getProfileId());
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find users with profile code " + code + " - " + e.getCause().toString();
+			errorMessage = "Error while try to find users with profile code " + code + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);			
 		} catch (Exception e) {
-			errorMessage = "Error while try to find users with profile code " + code + " - " + e.getCause().toString();
+			errorMessage = "Error while try to find users with profile code " + code + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);			
 		}
@@ -194,7 +194,7 @@ public class ApplicationUserEJB implements ApplicationUserEJBLocal {
 			ItUsersDao daoObject = new ItUsersDao(configuration);
 			daoObject.insert(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error inserting the user object (value: " + dataObject.toString() + ")" + e.getCause().toString();
+			errorMessage = "Error inserting the user object (value: " + dataObject.toString() + ") - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);	
 		}
@@ -209,7 +209,7 @@ public class ApplicationUserEJB implements ApplicationUserEJBLocal {
 			ItUsersDao daoObject = new ItUsersDao(configuration);
 			daoObject.update(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error updating the user object (value: " + dataObject.toString() + ")" + e.getCause().toString();
+			errorMessage = "Error updating the user object (value: " + dataObject.toString() + ") - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);			
 		}
@@ -225,7 +225,7 @@ public class ApplicationUserEJB implements ApplicationUserEJBLocal {
 			ItUsersDao daoObject = new ItUsersDao(configuration);
 			daoObject.delete(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error deleting the user object (value: " + dataObject.toString() + ")" + e.getCause().toString();
+			errorMessage = "Error deleting the user object (value: " + dataObject.toString() + ") - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}

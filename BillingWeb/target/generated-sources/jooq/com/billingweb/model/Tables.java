@@ -6,8 +6,8 @@ package com.billingweb.model;
 
 import com.billingweb.model.tables.CtAccountType;
 import com.billingweb.model.tables.CtBillCycleType;
-import com.billingweb.model.tables.CtClientType;
 import com.billingweb.model.tables.CtConsumptionType;
+import com.billingweb.model.tables.CtCustomerType;
 import com.billingweb.model.tables.CtFeeType;
 import com.billingweb.model.tables.CtProdFeeType;
 import com.billingweb.model.tables.CtProdServType;
@@ -27,6 +27,7 @@ import com.billingweb.model.tables.PtBillingPeriod;
 import com.billingweb.model.tables.PtDiscountType;
 import com.billingweb.model.tables.PtEntityType;
 import com.billingweb.model.tables.PtStatus;
+import com.billingweb.model.tables.VwEntityTypeConsumptions;
 import com.billingweb.model.tables.VwUsers;
 
 
@@ -47,14 +48,14 @@ public class Tables {
     public static final CtBillCycleType CT_BILL_CYCLE_TYPE = CtBillCycleType.CT_BILL_CYCLE_TYPE;
 
     /**
-     * Table that stores the client types of the catalog for the application
-     */
-    public static final CtClientType CT_CLIENT_TYPE = CtClientType.CT_CLIENT_TYPE;
-
-    /**
      * Table that stores the consumption types of the catalog for the application
      */
     public static final CtConsumptionType CT_CONSUMPTION_TYPE = CtConsumptionType.CT_CONSUMPTION_TYPE;
+
+    /**
+     * Table that stores the customer types of the catalog for the application
+     */
+    public static final CtCustomerType CT_CUSTOMER_TYPE = CtCustomerType.CT_CUSTOMER_TYPE;
 
     /**
      * Table that stores the fee types of the catalog for the application
@@ -150,6 +151,11 @@ public class Tables {
      * Table that stores the status for the entities of the application
      */
     public static final PtStatus PT_STATUS = PtStatus.PT_STATUS;
+
+    /**
+     * The table <code>public.vw_entity_type_consumptions</code>.
+     */
+    public static final VwEntityTypeConsumptions VW_ENTITY_TYPE_CONSUMPTIONS = VwEntityTypeConsumptions.VW_ENTITY_TYPE_CONSUMPTIONS;
 
     /**
      * The table <code>public.vw_users</code>.

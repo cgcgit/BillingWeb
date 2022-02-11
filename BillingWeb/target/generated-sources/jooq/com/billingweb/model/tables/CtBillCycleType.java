@@ -16,7 +16,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row12;
+import org.jooq.Row13;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -108,6 +108,11 @@ public class CtBillCycleType extends TableImpl<CtBillCycleTypeRecord> {
      */
     public final TableField<CtBillCycleTypeRecord, String> MODIF_USER = createField(DSL.name("modif_user"), SQLDataType.VARCHAR(10), this, "");
 
+    /**
+     * The column <code>public.ct_bill_cycle_type.corrective</code>. Flag for corrective cycle (true: corrective cycle, false: ordinary cycle)
+     */
+    public final TableField<CtBillCycleTypeRecord, Boolean> CORRECTIVE = createField(DSL.name("corrective"), SQLDataType.BOOLEAN.nullable(false), this, "Flag for corrective cycle (true: corrective cycle, false: ordinary cycle)");
+
     private CtBillCycleType(Name alias, Table<CtBillCycleTypeRecord> aliased) {
         this(alias, aliased, null);
     }
@@ -197,11 +202,11 @@ public class CtBillCycleType extends TableImpl<CtBillCycleTypeRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row12 type methods
+    // Row13 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row12<Integer, String, String, String, Integer, Byte, String, Integer, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
-        return (Row12) super.fieldsRow();
+    public Row13<Integer, String, String, String, Integer, Byte, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean> fieldsRow() {
+        return (Row13) super.fieldsRow();
     }
 }

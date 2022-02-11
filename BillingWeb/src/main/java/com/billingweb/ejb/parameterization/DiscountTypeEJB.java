@@ -55,7 +55,7 @@ public class DiscountTypeEJB implements DiscountTypeEJBLocal {
 					fetch().into(PtDiscountType.class);
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find all the discount types - " + e.getCause().toString();
+			errorMessage = "Error while try to find all the discount types - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -77,7 +77,7 @@ public class DiscountTypeEJB implements DiscountTypeEJBLocal {
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the discount type for discount_type_id: " + discounTypeId + " - "
-					+ e.getCause().toString();
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -98,7 +98,7 @@ public class DiscountTypeEJB implements DiscountTypeEJBLocal {
 					.into(PtDiscountType.class);
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the discount type for code " + code + " - " + e.getCause().toString();
+			errorMessage = "Error while try to find the discount type for code " + code + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -115,7 +115,7 @@ public class DiscountTypeEJB implements DiscountTypeEJBLocal {
 			daoObject.insert(dataObject);
 		} catch (Exception e) {
 			errorMessage = "Error inserting the discount type object (value: "
-					+ dataObject.toString() + ")" + e.getCause().toString();
+					+ dataObject.toString() + ") - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -130,7 +130,7 @@ public class DiscountTypeEJB implements DiscountTypeEJBLocal {
 			PtDiscountTypeDao daoObject = new PtDiscountTypeDao(configuration);
 			daoObject.update(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error updating the discount type object (value: " + dataObject.toString() + ")" + e.getCause().toString();
+			errorMessage = "Error updating the discount type object (value: " + dataObject.toString() + ") - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);			
 		}
@@ -145,7 +145,7 @@ public class DiscountTypeEJB implements DiscountTypeEJBLocal {
 			PtDiscountTypeDao daoObject = new PtDiscountTypeDao(configuration);
 			daoObject.delete(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error deleting the discount type object (value: " + dataObject.toString() + ")" + e.getCause().toString();
+			errorMessage = "Error deleting the discount type object (value: " + dataObject.toString() + ") - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}

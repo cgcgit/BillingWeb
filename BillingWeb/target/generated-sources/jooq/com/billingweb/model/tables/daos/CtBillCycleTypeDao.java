@@ -234,4 +234,18 @@ public class CtBillCycleTypeDao extends DAOImpl<CtBillCycleTypeRecord, com.billi
     public List<com.billingweb.model.tables.pojos.CtBillCycleType> fetchByModifUser(String... values) {
         return fetch(CtBillCycleType.CT_BILL_CYCLE_TYPE.MODIF_USER, values);
     }
+
+    /**
+     * Fetch records that have <code>corrective BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<com.billingweb.model.tables.pojos.CtBillCycleType> fetchRangeOfCorrective(Boolean lowerInclusive, Boolean upperInclusive) {
+        return fetchRange(CtBillCycleType.CT_BILL_CYCLE_TYPE.CORRECTIVE, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>corrective IN (values)</code>
+     */
+    public List<com.billingweb.model.tables.pojos.CtBillCycleType> fetchByCorrective(Boolean... values) {
+        return fetch(CtBillCycleType.CT_BILL_CYCLE_TYPE.CORRECTIVE, values);
+    }
 }

@@ -200,14 +200,15 @@ public class ApplicationLevelController extends SimpleTableBasicClass implements
 		// Retrieved the data that was modified
 		dataObject = (PtApplicationLevel) event.getObject();
 
-		DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent(DATA_TABLE_ID);
-		int currentRow = dataTable.getRowIndex();
-
 		try {
 
 			// Validates the data
 			if (this.objectValidation(dataObject)) {
 				applicationLevelEJB.updateData(dataObject);
+				messageDetail = "Data saves correctly";
+				logger.info("Update application level: " + this.selectedData.toString() + " - " + messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
+						messageDetail);
 				this.setControlVariablesToDefault();
 			} else {
 				messageDetail = "ERROR - Data values are incorrect";
@@ -238,10 +239,7 @@ public class ApplicationLevelController extends SimpleTableBasicClass implements
 		} finally {
 			if (error) {
 				FacesContext.getCurrentInstance().validationFailed();
-			} else {
-				messageDetail = "Data saves correctly";
-				logger.fatal(messageDetail);
-				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
+			} else {				
 				this.loadDataList();
 			}
 		}
@@ -303,7 +301,7 @@ public class ApplicationLevelController extends SimpleTableBasicClass implements
 			if (objectValidation(this.selectedData)) {
 				applicationLevelEJB.insertData(this.selectedData);
 				messageDetail = "Data saves succesfully";
-				logger.info(messageDetail);
+				logger.info("Create application level: " + this.selectedData.toString() + " - " +messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 			} else {
@@ -368,12 +366,12 @@ public class ApplicationLevelController extends SimpleTableBasicClass implements
 				applicationLevelEJB.deleteData(this.selectedData);
 				// this.selectedData = null;
 				messageDetail = "Data deletes succesfully";
-				logger.info(messageDetail);
+				logger.info("Delete application data: " + this.selectedData.toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;
 				messageDetail = "ERROR - Selected data is null";
-				logger.fatal(messageDetail);
+				logger.fatal("Delete application data: " + this.selectedData.getCode() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_FATAL, message, messageDetail);
 
 			}

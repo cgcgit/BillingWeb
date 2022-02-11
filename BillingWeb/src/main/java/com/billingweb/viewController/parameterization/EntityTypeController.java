@@ -216,6 +216,9 @@ public class EntityTypeController extends SimpleTableBasicClass implements Seria
 			// Validates the data
 			if (this.objectValidation(dataObject)) {
 				entityTypeEJB.updateData(dataObject);
+				messageDetail = "Data saves correctly";
+				logger.fatal("Update entity type: " + this.selectedData.toString() + " - " + messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 				this.setControlVariablesToDefault();
 			} else {
 				messageDetail = "ERROR - Data values are incorrect";
@@ -247,9 +250,7 @@ public class EntityTypeController extends SimpleTableBasicClass implements Seria
 			if (error) {
 				FacesContext.getCurrentInstance().validationFailed();
 			} else {
-				messageDetail = "Data saves correctly";
-				logger.fatal(messageDetail);
-				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
+				
 				this.loadDataList();
 			}
 		}
@@ -310,7 +311,7 @@ public class EntityTypeController extends SimpleTableBasicClass implements Seria
 			if (objectValidation(this.selectedData)) {
 				entityTypeEJB.insertData(this.selectedData);
 				messageDetail = "Data saves succesfully";
-				logger.info(messageDetail);
+				logger.info("Create entity type: " + this.selectedData.toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 			} else {
@@ -373,7 +374,7 @@ public class EntityTypeController extends SimpleTableBasicClass implements Seria
 			if (this.selectedData != null) {
 				entityTypeEJB.deleteData(this.selectedData);
 				messageDetail = "Data deletes succesfully";
-				logger.info(messageDetail);
+				logger.info("Delete entity type: " + this.selectedData.toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;

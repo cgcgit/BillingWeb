@@ -45,7 +45,9 @@
 
 		<p:dataTable id="mainTable" widgetVar="mainTableWidget"
 			var="dataTable" value="#{entityTypeController.dataList}"
-			reflow="true" styleClass="products-table" editable="true"
+			filteredValue="#{entityTypeController.filteredDataList}"
+			showGridlines="true" stripedRows="true" scrollable="true"
+			reflow="true" editable="true"
 			rowIndexVar="rowIndexMainTable" paginator="true" rows="10"
 			size="small" paginatorPosition="bottom">
 

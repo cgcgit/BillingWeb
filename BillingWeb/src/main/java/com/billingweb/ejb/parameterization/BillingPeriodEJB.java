@@ -54,7 +54,7 @@ public class BillingPeriodEJB implements BillingPeriodEJBLocal {
 					fetch().into(PtBillingPeriod.class);
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find all the billing periods - " + e.getCause().toString();
+			errorMessage = "Error while try to find all the billing periods - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -77,7 +77,7 @@ public class BillingPeriodEJB implements BillingPeriodEJBLocal {
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the billing period for billing_period_id: " + billingPeriodId + " - "
-					+ e.getCause().toString();
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -98,7 +98,7 @@ public class BillingPeriodEJB implements BillingPeriodEJBLocal {
 					.into(PtBillingPeriod.class);
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the billing period for code " + code + " - " + e.getCause().toString();
+			errorMessage = "Error while try to find the billing period for code " + code + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -115,7 +115,7 @@ public class BillingPeriodEJB implements BillingPeriodEJBLocal {
 			daoObject.insert(dataObject);
 		} catch (Exception e) {
 			errorMessage = "Error inserting the billing period object (value: "
-					+ dataObject.toString() + ")" + e.getCause().toString();
+					+ dataObject.toString() + ") - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -130,7 +130,7 @@ public class BillingPeriodEJB implements BillingPeriodEJBLocal {
 			PtBillingPeriodDao daoObject = new PtBillingPeriodDao(configuration);
 			daoObject.update(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error updating the billing period object (value: " + dataObject.toString() + ")" + e.getCause().toString();
+			errorMessage = "Error updating the billing period object (value: " + dataObject.toString() + ") - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);			
 		}
@@ -145,7 +145,7 @@ public class BillingPeriodEJB implements BillingPeriodEJBLocal {
 			PtBillingPeriodDao daoObject = new PtBillingPeriodDao(configuration);
 			daoObject.delete(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error deleting the billing period object (value: " + dataObject.toString() + ")" + e.getCause().toString();
+			errorMessage = "Error deleting the billing period object (value: " + dataObject.toString() + ") - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}

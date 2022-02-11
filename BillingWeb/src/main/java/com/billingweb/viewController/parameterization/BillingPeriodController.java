@@ -223,7 +223,7 @@ public class BillingPeriodController extends SimpleTableBasicClass implements Se
 		// If we are modifing a row we can't add a new row --> Disable all the other
 		// buttons
 
-		messageDetail = "Editing discount type: " + dataObject.getCode();
+		messageDetail = "Editing billing period: " + dataObject.getCode();
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
@@ -247,6 +247,9 @@ public class BillingPeriodController extends SimpleTableBasicClass implements Se
 			// Validates the data
 			if (this.objectValidation(dataObject)) {
 				billingPeriodEJB.updateData(dataObject);
+				messageDetail = "Data saves correctly";
+				logger.fatal("Update billing period cycle: " + this.selectedData.toString() + " - " + messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 				this.setControlVariablesToDefault();
 			} else {
 				messageDetail = "ERROR - Data values are incorrect";
@@ -278,9 +281,7 @@ public class BillingPeriodController extends SimpleTableBasicClass implements Se
 			if (error) {
 				FacesContext.getCurrentInstance().validationFailed();
 			} else {
-				messageDetail = "Data saves correctly";
-				logger.fatal(messageDetail);
-				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
+				
 				this.loadDataList();
 			}
 		}
@@ -340,7 +341,7 @@ public class BillingPeriodController extends SimpleTableBasicClass implements Se
 			if (objectValidation(this.selectedData)) {
 				billingPeriodEJB.insertData(this.selectedData);
 				messageDetail = "Data saves succesfully";
-				logger.info(messageDetail);
+				logger.info("Create billing period cycle: " + this.selectedData.toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 			} else {
@@ -403,7 +404,7 @@ public class BillingPeriodController extends SimpleTableBasicClass implements Se
 			if (this.selectedData != null) {
 				billingPeriodEJB.deleteData(this.selectedData);
 				messageDetail = "Data deletes succesfully";
-				logger.info(messageDetail);
+				logger.info("Delete billing period cycle: " + this.selectedData.toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;
@@ -530,7 +531,7 @@ public class BillingPeriodController extends SimpleTableBasicClass implements Se
 				result = false;
 			}
 			
-			if (objectToValidate.getBillingPeriodDays()<= 0) {
+			if (objectToValidate.getBillingPeriodDays() == null || objectToValidate.getBillingPeriodDays()<= 0) {
 				messageDetail = "ERROR - The period of the billing period must be greater than 0";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);

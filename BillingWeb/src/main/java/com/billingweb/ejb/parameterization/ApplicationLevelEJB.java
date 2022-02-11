@@ -59,7 +59,7 @@ public class ApplicationLevelEJB implements ApplicationLevelEJBLocal {
 					.into(PtApplicationLevel.class);		
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find all the application levels - " + e.getCause().toString();
+			errorMessage = "Error while try to find all the application levels - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -83,7 +83,7 @@ public class ApplicationLevelEJB implements ApplicationLevelEJBLocal {
 					.into(PtApplicationLevel.class);
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the application level for application_level_id: " + applicationLevelId + " - " + e.getCause();
+			errorMessage = "Error while try to find the application level for application_level_id: " + applicationLevelId + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);		
 		}
@@ -107,7 +107,7 @@ public class ApplicationLevelEJB implements ApplicationLevelEJBLocal {
 					.into(PtApplicationLevel.class);
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the application level for code " + code + " - " + e.getCause().toString();
+			errorMessage = "Error while try to find the application level for code " + code + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -124,7 +124,7 @@ public class ApplicationLevelEJB implements ApplicationLevelEJBLocal {
 			PtApplicationLevelDao daoObject = new PtApplicationLevelDao(configuration);			
 			daoObject.insert(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error inserting the application level object (value: " + dataObject.toString() + ")" + e.getCause().toString();
+			errorMessage = "Error inserting the application level object (value: " + dataObject.toString() + ") - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -139,7 +139,7 @@ public class ApplicationLevelEJB implements ApplicationLevelEJBLocal {
 			PtApplicationLevelDao daoObject = new PtApplicationLevelDao(configuration);
 			daoObject.update(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error updating the application level object (value: " + dataObject.toString() + ")" + e.getCause().toString();
+			errorMessage = "Error updating the application level object (value: " + dataObject.toString() + ") - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -154,7 +154,7 @@ public class ApplicationLevelEJB implements ApplicationLevelEJBLocal {
 			daoObject.delete(dataObject);
 		} catch (Exception e) {
 			errorMessage = "Error deleting the application level object (value: "
-					+ dataObject.toString() + ")" + e.getCause().toString();
+					+ dataObject.toString() + ") - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);			
 		}

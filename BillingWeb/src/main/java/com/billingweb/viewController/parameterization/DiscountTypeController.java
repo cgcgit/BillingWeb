@@ -234,6 +234,9 @@ public class DiscountTypeController extends SimpleTableBasicClass implements Ser
 			// Validates the data
 			if (this.objectValidation(dataObject)) {
 				discountTypeEJB.updateData(dataObject);
+				messageDetail = "Data saves correctly";
+				logger.fatal("Update discount type: " + this.selectedData.toString() + " - " + messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 				this.setControlVariablesToDefault();
 			} else {
 				messageDetail = "ERROR - Data values are incorrect";
@@ -265,9 +268,7 @@ public class DiscountTypeController extends SimpleTableBasicClass implements Ser
 			if (error) {
 				FacesContext.getCurrentInstance().validationFailed();
 			} else {
-				messageDetail = "Data saves correctly";
-				logger.fatal(messageDetail);
-				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
+				
 				this.loadDataList();
 			}
 		}
@@ -327,7 +328,7 @@ public class DiscountTypeController extends SimpleTableBasicClass implements Ser
 			if (objectValidation(this.selectedData)) {
 				discountTypeEJB.insertData(this.selectedData);
 				messageDetail = "Data saves succesfully";
-				logger.info(messageDetail);
+				logger.info("Create discount type: " + this.selectedData.toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 			} else {
@@ -390,7 +391,7 @@ public class DiscountTypeController extends SimpleTableBasicClass implements Ser
 			if (this.selectedData != null) {
 				discountTypeEJB.deleteData(this.selectedData);
 				messageDetail = "Data deletes succesfully";
-				logger.info(messageDetail);
+				logger.info("Delete discount type: " + this.selectedData.toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;

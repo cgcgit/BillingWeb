@@ -134,6 +134,16 @@ public interface ICtBillCycleType extends Serializable {
      */
     public String getModifUser();
 
+    /**
+     * Setter for <code>public.ct_bill_cycle_type.corrective</code>. Flag for corrective cycle (true: corrective cycle, false: ordinary cycle)
+     */
+    public void setCorrective(Boolean value);
+
+    /**
+     * Getter for <code>public.ct_bill_cycle_type.corrective</code>. Flag for corrective cycle (true: corrective cycle, false: ordinary cycle)
+     */
+    public Boolean getCorrective();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------

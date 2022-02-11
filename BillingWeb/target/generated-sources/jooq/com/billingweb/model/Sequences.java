@@ -41,14 +41,14 @@ public class Sequences {
     public static final Sequence<Long> SEQ_BILLING_PERIOD_ID = Internal.createSequence("seq_billing_period_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
 
     /**
-     * The sequence <code>public.seq_client_type_id</code>
-     */
-    public static final Sequence<Long> SEQ_CLIENT_TYPE_ID = Internal.createSequence("seq_client_type_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
-
-    /**
      * The sequence <code>public.seq_consumption_type</code>
      */
     public static final Sequence<Long> SEQ_CONSUMPTION_TYPE = Internal.createSequence("seq_consumption_type", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
+
+    /**
+     * The sequence <code>public.seq_customer_type_id</code>
+     */
+    public static final Sequence<Long> SEQ_CUSTOMER_TYPE_ID = Internal.createSequence("seq_customer_type_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
 
     /**
      * The sequence <code>public.seq_discount_type_id</code>

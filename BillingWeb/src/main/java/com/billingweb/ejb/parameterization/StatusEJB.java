@@ -50,7 +50,7 @@ public class StatusEJB implements StatusEJBLocal {
 			result = create.selectFrom(PT_STATUS).orderBy(PT_STATUS.CODE).fetch().into(PtStatus.class);
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find all the status - " + e.getCause().toString();
+			errorMessage = "Error while try to find all the status - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -70,7 +70,7 @@ public class StatusEJB implements StatusEJBLocal {
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the status for status_id: " + statusId + " - "
-					+ e.getCause().toString();
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -89,7 +89,7 @@ public class StatusEJB implements StatusEJBLocal {
 					.into(PtStatus.class);
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the status for code " + code + " - " + e.getCause().toString();
+			errorMessage = "Error while try to find the status for code " + code + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -106,7 +106,7 @@ public class StatusEJB implements StatusEJBLocal {
 			daoObject.insert(dataObject);
 		} catch (Exception e) {
 			errorMessage = "Error inserting the status object (value: "
-					+ dataObject.toString() + ")" + e.getCause().toString();
+					+ dataObject.toString() + ") - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -121,7 +121,7 @@ public class StatusEJB implements StatusEJBLocal {
 			PtStatusDao daoObject = new PtStatusDao(configuration);
 			daoObject.update(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error updating the status object (value: " + dataObject.toString() + ")" + e.getCause().toString();
+			errorMessage = "Error updating the status object (value: " + dataObject.toString() + ") - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);			
 		}
@@ -136,7 +136,7 @@ public class StatusEJB implements StatusEJBLocal {
 			PtStatusDao daoObject = new PtStatusDao(configuration);
 			daoObject.delete(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error deleting the status object (value: " + dataObject.toString() + ")" + e.getCause().toString();
+			errorMessage = "Error deleting the status object (value: " + dataObject.toString() + ") - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}

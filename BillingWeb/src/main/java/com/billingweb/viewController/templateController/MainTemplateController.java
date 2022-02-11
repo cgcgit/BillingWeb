@@ -41,7 +41,7 @@ public class MainTemplateController implements Serializable {
 			}
 
 		} catch (Exception e) {
-			errorMessage = "Error while try to verify session - " + e.getCause().toString();
+			errorMessage = "Error while try to verify session - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebGeneralException(errorMessage, e);
 		}

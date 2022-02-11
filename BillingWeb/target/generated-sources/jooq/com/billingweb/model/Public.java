@@ -6,8 +6,8 @@ package com.billingweb.model;
 
 import com.billingweb.model.tables.CtAccountType;
 import com.billingweb.model.tables.CtBillCycleType;
-import com.billingweb.model.tables.CtClientType;
 import com.billingweb.model.tables.CtConsumptionType;
+import com.billingweb.model.tables.CtCustomerType;
 import com.billingweb.model.tables.CtFeeType;
 import com.billingweb.model.tables.CtProdFeeType;
 import com.billingweb.model.tables.CtProdServType;
@@ -27,6 +27,7 @@ import com.billingweb.model.tables.PtBillingPeriod;
 import com.billingweb.model.tables.PtDiscountType;
 import com.billingweb.model.tables.PtEntityType;
 import com.billingweb.model.tables.PtStatus;
+import com.billingweb.model.tables.VwEntityTypeConsumptions;
 import com.billingweb.model.tables.VwUsers;
 
 import java.util.Arrays;
@@ -62,14 +63,14 @@ public class Public extends SchemaImpl {
     public final CtBillCycleType CT_BILL_CYCLE_TYPE = CtBillCycleType.CT_BILL_CYCLE_TYPE;
 
     /**
-     * Table that stores the client types of the catalog for the application
-     */
-    public final CtClientType CT_CLIENT_TYPE = CtClientType.CT_CLIENT_TYPE;
-
-    /**
      * Table that stores the consumption types of the catalog for the application
      */
     public final CtConsumptionType CT_CONSUMPTION_TYPE = CtConsumptionType.CT_CONSUMPTION_TYPE;
+
+    /**
+     * Table that stores the customer types of the catalog for the application
+     */
+    public final CtCustomerType CT_CUSTOMER_TYPE = CtCustomerType.CT_CUSTOMER_TYPE;
 
     /**
      * Table that stores the fee types of the catalog for the application
@@ -167,6 +168,11 @@ public class Public extends SchemaImpl {
     public final PtStatus PT_STATUS = PtStatus.PT_STATUS;
 
     /**
+     * The table <code>public.vw_entity_type_consumptions</code>.
+     */
+    public final VwEntityTypeConsumptions VW_ENTITY_TYPE_CONSUMPTIONS = VwEntityTypeConsumptions.VW_ENTITY_TYPE_CONSUMPTIONS;
+
+    /**
      * The table <code>public.vw_users</code>.
      */
     public final VwUsers VW_USERS = VwUsers.VW_USERS;
@@ -192,8 +198,8 @@ public class Public extends SchemaImpl {
             Sequences.SEQ_APPLICATION_MENU_ID,
             Sequences.SEQ_BILL_CYCLE_TYPE_ID,
             Sequences.SEQ_BILLING_PERIOD_ID,
-            Sequences.SEQ_CLIENT_TYPE_ID,
             Sequences.SEQ_CONSUMPTION_TYPE,
+            Sequences.SEQ_CUSTOMER_TYPE_ID,
             Sequences.SEQ_DISCOUNT_TYPE_ID,
             Sequences.SEQ_ENTITY_TYPE_ID,
             Sequences.SEQ_FEE_TYPE_ID,
@@ -217,8 +223,8 @@ public class Public extends SchemaImpl {
         return Arrays.<Table<?>>asList(
             CtAccountType.CT_ACCOUNT_TYPE,
             CtBillCycleType.CT_BILL_CYCLE_TYPE,
-            CtClientType.CT_CLIENT_TYPE,
             CtConsumptionType.CT_CONSUMPTION_TYPE,
+            CtCustomerType.CT_CUSTOMER_TYPE,
             CtFeeType.CT_FEE_TYPE,
             CtProdFeeType.CT_PROD_FEE_TYPE,
             CtProdServType.CT_PROD_SERV_TYPE,
@@ -238,6 +244,7 @@ public class Public extends SchemaImpl {
             PtDiscountType.PT_DISCOUNT_TYPE,
             PtEntityType.PT_ENTITY_TYPE,
             PtStatus.PT_STATUS,
+            VwEntityTypeConsumptions.VW_ENTITY_TYPE_CONSUMPTIONS,
             VwUsers.VW_USERS);
     }
 }

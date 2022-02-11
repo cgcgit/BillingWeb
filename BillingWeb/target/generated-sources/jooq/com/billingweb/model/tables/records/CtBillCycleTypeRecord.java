@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record12;
-import org.jooq.Row12;
+import org.jooq.Record13;
+import org.jooq.Row13;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -20,7 +20,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Table that stores the bill cycle type of the application
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class CtBillCycleTypeRecord extends UpdatableRecordImpl<CtBillCycleTypeRecord> implements Record12<Integer, String, String, String, Integer, Byte, String, Integer, LocalDateTime, String, LocalDateTime, String>, ICtBillCycleType {
+public class CtBillCycleTypeRecord extends UpdatableRecordImpl<CtBillCycleTypeRecord> implements Record13<Integer, String, String, String, Integer, Byte, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean>, ICtBillCycleType {
 
     private static final long serialVersionUID = 1L;
 
@@ -216,6 +216,22 @@ public class CtBillCycleTypeRecord extends UpdatableRecordImpl<CtBillCycleTypeRe
         return (String) get(11);
     }
 
+    /**
+     * Setter for <code>public.ct_bill_cycle_type.corrective</code>. Flag for corrective cycle (true: corrective cycle, false: ordinary cycle)
+     */
+    @Override
+    public void setCorrective(Boolean value) {
+        set(12, value);
+    }
+
+    /**
+     * Getter for <code>public.ct_bill_cycle_type.corrective</code>. Flag for corrective cycle (true: corrective cycle, false: ordinary cycle)
+     */
+    @Override
+    public Boolean getCorrective() {
+        return (Boolean) get(12);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -226,17 +242,17 @@ public class CtBillCycleTypeRecord extends UpdatableRecordImpl<CtBillCycleTypeRe
     }
 
     // -------------------------------------------------------------------------
-    // Record12 type implementation
+    // Record13 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row12<Integer, String, String, String, Integer, Byte, String, Integer, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
-        return (Row12) super.fieldsRow();
+    public Row13<Integer, String, String, String, Integer, Byte, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean> fieldsRow() {
+        return (Row13) super.fieldsRow();
     }
 
     @Override
-    public Row12<Integer, String, String, String, Integer, Byte, String, Integer, LocalDateTime, String, LocalDateTime, String> valuesRow() {
-        return (Row12) super.valuesRow();
+    public Row13<Integer, String, String, String, Integer, Byte, String, Integer, LocalDateTime, String, LocalDateTime, String, Boolean> valuesRow() {
+        return (Row13) super.valuesRow();
     }
 
     @Override
@@ -300,6 +316,11 @@ public class CtBillCycleTypeRecord extends UpdatableRecordImpl<CtBillCycleTypeRe
     }
 
     @Override
+    public Field<Boolean> field13() {
+        return CtBillCycleType.CT_BILL_CYCLE_TYPE.CORRECTIVE;
+    }
+
+    @Override
     public Integer component1() {
         return getBillCycleTypeId();
     }
@@ -360,6 +381,11 @@ public class CtBillCycleTypeRecord extends UpdatableRecordImpl<CtBillCycleTypeRe
     }
 
     @Override
+    public Boolean component13() {
+        return getCorrective();
+    }
+
+    @Override
     public Integer value1() {
         return getBillCycleTypeId();
     }
@@ -417,6 +443,11 @@ public class CtBillCycleTypeRecord extends UpdatableRecordImpl<CtBillCycleTypeRe
     @Override
     public String value12() {
         return getModifUser();
+    }
+
+    @Override
+    public Boolean value13() {
+        return getCorrective();
     }
 
     @Override
@@ -492,7 +523,13 @@ public class CtBillCycleTypeRecord extends UpdatableRecordImpl<CtBillCycleTypeRe
     }
 
     @Override
-    public CtBillCycleTypeRecord values(Integer value1, String value2, String value3, String value4, Integer value5, Byte value6, String value7, Integer value8, LocalDateTime value9, String value10, LocalDateTime value11, String value12) {
+    public CtBillCycleTypeRecord value13(Boolean value) {
+        setCorrective(value);
+        return this;
+    }
+
+    @Override
+    public CtBillCycleTypeRecord values(Integer value1, String value2, String value3, String value4, Integer value5, Byte value6, String value7, Integer value8, LocalDateTime value9, String value10, LocalDateTime value11, String value12, Boolean value13) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -505,6 +542,7 @@ public class CtBillCycleTypeRecord extends UpdatableRecordImpl<CtBillCycleTypeRe
         value10(value10);
         value11(value11);
         value12(value12);
+        value13(value13);
         return this;
     }
 
@@ -526,6 +564,7 @@ public class CtBillCycleTypeRecord extends UpdatableRecordImpl<CtBillCycleTypeRe
         setInputUser(from.getInputUser());
         setModifDate(from.getModifDate());
         setModifUser(from.getModifUser());
+        setCorrective(from.getCorrective());
     }
 
     @Override
@@ -548,7 +587,7 @@ public class CtBillCycleTypeRecord extends UpdatableRecordImpl<CtBillCycleTypeRe
     /**
      * Create a detached, initialised CtBillCycleTypeRecord
      */
-    public CtBillCycleTypeRecord(Integer billCycleTypeId, String code, String name, String description, Integer billingPeriodId, Byte billCycleDay, String billCycleCodenum, Integer statusId, LocalDateTime inputDate, String inputUser, LocalDateTime modifDate, String modifUser) {
+    public CtBillCycleTypeRecord(Integer billCycleTypeId, String code, String name, String description, Integer billingPeriodId, Byte billCycleDay, String billCycleCodenum, Integer statusId, LocalDateTime inputDate, String inputUser, LocalDateTime modifDate, String modifUser, Boolean corrective) {
         super(CtBillCycleType.CT_BILL_CYCLE_TYPE);
 
         setBillCycleTypeId(billCycleTypeId);
@@ -563,5 +602,6 @@ public class CtBillCycleTypeRecord extends UpdatableRecordImpl<CtBillCycleTypeRe
         setInputUser(inputUser);
         setModifDate(modifDate);
         setModifUser(modifUser);
+        setCorrective(corrective);
     }
 }

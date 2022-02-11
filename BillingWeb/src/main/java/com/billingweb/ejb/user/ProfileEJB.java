@@ -52,11 +52,11 @@ public class ProfileEJB implements ProfileEJBLocal {
 			// Gets the user from the database
 			result = create.selectFrom(IT_PROFILES).orderBy(IT_PROFILES.PROFILE_CODE).fetchInto(ItProfiles.class);
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find all the system profiles - " + e.getCause().toString();
+			errorMessage = "Error while try to find all the system profiles - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		} catch (Exception e) {
-			errorMessage = "Error while try to find all the system profiles - " + e.getCause().toString();
+			errorMessage = "Error while try to find all the system profiles - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -73,7 +73,7 @@ public class ProfileEJB implements ProfileEJBLocal {
 			daoObject.insert(dataObject);
 		} catch (Exception e) {			
 			errorMessage = "Error inserting the profile object (value: "
-					+ dataObject.toString() + ")" + e.getCause().toString();
+					+ dataObject.toString() + ") - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);	
 		}
@@ -90,7 +90,7 @@ public class ProfileEJB implements ProfileEJBLocal {
 			daoObject.update(dataObject);
 		} catch (Exception e) {
 			errorMessage = "Error updating the profile object (value: "
-					+ dataObject.toString() + ")" + e.getCause().toString();
+					+ dataObject.toString() + ") - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 			
@@ -108,7 +108,7 @@ public class ProfileEJB implements ProfileEJBLocal {
 			daoObject.delete(dataObject);
 		} catch (Exception e) {
 			errorMessage = "Error deleting the profile object (value: "
-					+ dataObject.toString() + ")" + e.getCause().toString();
+					+ dataObject.toString() + ") - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);	
 		}

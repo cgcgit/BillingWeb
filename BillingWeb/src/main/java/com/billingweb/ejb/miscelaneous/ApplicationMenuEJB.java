@@ -68,7 +68,7 @@ public class ApplicationMenuEJB implements ApplicationMenuEJBLocal {
 					.orderBy(MT_APPLICATION_MENU.MENU_LEVEL, MT_APPLICATION_MENU.POSITION).fetch();
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the application menu for profile " + profileCode + " - " + e.getCause().toString();
+			errorMessage = "Error while try to find the application menu for profile " + profileCode + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -89,7 +89,7 @@ public class ApplicationMenuEJB implements ApplicationMenuEJBLocal {
 					.orderBy(MT_APPLICATION_MENU.MENU_LEVEL, MT_APPLICATION_MENU.POSITION).fetch();
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the application menu for profile " + profileCode + " and level " + level + " - " + e.getCause().toString();
+			errorMessage = "Error while try to find the application menu for profile " + profileCode + " and level " + level + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
@@ -112,7 +112,7 @@ public class ApplicationMenuEJB implements ApplicationMenuEJBLocal {
 					.and(MT_APPLICATION_MENU.MENU_LEVEL.eq(val(rootLevel)))
 					.orderBy(MT_APPLICATION_MENU.MENU_LEVEL, MT_APPLICATION_MENU.POSITION).fetch();
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the root item application menu for profile " + profileCode +  " - " + e.getCause().toString();
+			errorMessage = "Error while try to find the root item application menu for profile " + profileCode +  " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);			
 		}
@@ -132,7 +132,7 @@ public class ApplicationMenuEJB implements ApplicationMenuEJBLocal {
 					.and(MT_APPLICATION_MENU.APPLICATION_PARENT_MENU_ID.eq(val(parentMenuId)))
 					.orderBy(MT_APPLICATION_MENU.MENU_LEVEL, MT_APPLICATION_MENU.POSITION).fetch();
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the child item application menu for profile " + profileCode +  " and parent menu id " + parentMenuId + " - " + e.getCause().toString();
+			errorMessage = "Error while try to find the child item application menu for profile " + profileCode +  " and parent menu id " + parentMenuId + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);		
 			

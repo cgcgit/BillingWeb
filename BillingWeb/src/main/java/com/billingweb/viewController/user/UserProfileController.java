@@ -1,8 +1,6 @@
 package com.billingweb.viewController.user;
 
 import java.io.Serializable;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -23,7 +21,7 @@ import com.billingweb.generalClass.BasicClass;
 import com.billingweb.model.tables.pojos.ItUsers;
 import com.billingweb.model.tables.pojos.VwUsers;
 import com.billingweb.utilities.Utilities;
-import com.billingweb.viewController.parameterization.ApplicationLevelController;
+
 
 @Named
 @ViewScoped

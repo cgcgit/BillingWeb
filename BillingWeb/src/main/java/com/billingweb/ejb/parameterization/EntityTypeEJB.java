@@ -57,7 +57,7 @@ public class EntityTypeEJB implements EntityTypeEJBLocal {
 
 		} catch (DataAccessException e) {
 			throw new BillingWebDataAccessException(
-					"Error while try to find all the entity types - " + e.getCause().toString(), e);
+					"Error while try to find all the entity types - " + e.getMessage(), e);
 		}
 
 		return result;
@@ -77,7 +77,7 @@ public class EntityTypeEJB implements EntityTypeEJBLocal {
 
 		} catch (DataAccessException e) {
 			throw new BillingWebDataAccessException(
-					"Error while try to find the entity type for entity_type_id: " + entityTypeId + " - " + e.getCause().toString(), e);
+					"Error while try to find the entity type for entity_type_id: " + entityTypeId + " - " + e.getMessage(), e);
 		}
 
 		return result;
@@ -97,7 +97,7 @@ public class EntityTypeEJB implements EntityTypeEJBLocal {
 
 		} catch (DataAccessException e) {
 			throw new BillingWebDataAccessException(
-					"Error while try to find the entity type for code " + code + " - " + e.getCause().toString(), e);
+					"Error while try to find the entity type for code " + code + " - " + e.getMessage(), e);
 		}
 
 		return result;
@@ -112,7 +112,7 @@ public class EntityTypeEJB implements EntityTypeEJBLocal {
 		} catch (Exception e) {
 			logger.error("ERROR - " + e.getMessage());
 			throw new BillingWebDataAccessException("Error inserting the entity type object (value: "
-					+ dataObject.toString() + ")" + e.getCause().toString(), e);
+					+ dataObject.toString() + ") - " + e.getMessage(), e);
 		}
 		
 	}
@@ -126,7 +126,7 @@ public class EntityTypeEJB implements EntityTypeEJBLocal {
 		} catch (Exception e) {
 			logger.error("ERROR - " + e.getMessage());
 			throw new BillingWebDataAccessException("Error updating the entity type object (value: "
-					+ dataObject.toString() + ")" + e.getCause().toString(), e);
+					+ dataObject.toString() + ") - " + e.getMessage(), e);
 		}
 		
 	}
@@ -140,7 +140,7 @@ public class EntityTypeEJB implements EntityTypeEJBLocal {
 		} catch (Exception e) {
 			logger.error("ERROR - " + e.getMessage());
 			throw new BillingWebDataAccessException("Error deleting the entity type object (value: "
-					+ dataObject.toString() + ")" + e.getCause().toString(), e);
+					+ dataObject.toString() + ") - " + e.getMessage(), e);
 		}
 		
 	}
