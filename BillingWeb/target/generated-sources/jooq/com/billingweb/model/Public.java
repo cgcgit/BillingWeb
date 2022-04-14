@@ -12,8 +12,8 @@ import com.billingweb.model.tables.CtFeeType;
 import com.billingweb.model.tables.CtProdFeeType;
 import com.billingweb.model.tables.CtProdServType;
 import com.billingweb.model.tables.CtProductType;
-import com.billingweb.model.tables.CtPromoConsumDiscountType;
-import com.billingweb.model.tables.CtPromoFeeDiscountType;
+import com.billingweb.model.tables.CtPromoConsumTypeDiscount;
+import com.billingweb.model.tables.CtPromoFeeTypeDiscount;
 import com.billingweb.model.tables.CtPromoProdType;
 import com.billingweb.model.tables.CtPromoServType;
 import com.billingweb.model.tables.CtPromotionType;
@@ -28,6 +28,13 @@ import com.billingweb.model.tables.PtDiscountType;
 import com.billingweb.model.tables.PtEntityType;
 import com.billingweb.model.tables.PtStatus;
 import com.billingweb.model.tables.VwEntityTypeConsumptions;
+import com.billingweb.model.tables.VwProductFeeType;
+import com.billingweb.model.tables.VwProductServiceType;
+import com.billingweb.model.tables.VwPromoConsumTypeDiscount;
+import com.billingweb.model.tables.VwPromotionFeeTypeDiscount;
+import com.billingweb.model.tables.VwPromotionProductType;
+import com.billingweb.model.tables.VwPromotionServiceType;
+import com.billingweb.model.tables.VwServiceFeeType;
 import com.billingweb.model.tables.VwUsers;
 
 import java.util.Arrays;
@@ -95,12 +102,12 @@ public class Public extends SchemaImpl {
     /**
      * Table that stores the promotion fee discount relation types of the catalog for the application
      */
-    public final CtPromoConsumDiscountType CT_PROMO_CONSUM_DISCOUNT_TYPE = CtPromoConsumDiscountType.CT_PROMO_CONSUM_DISCOUNT_TYPE;
+    public final CtPromoConsumTypeDiscount CT_PROMO_CONSUM_TYPE_DISCOUNT = CtPromoConsumTypeDiscount.CT_PROMO_CONSUM_TYPE_DISCOUNT;
 
     /**
      * Table that stores the promotion fee discount relation types of the catalog for the application
      */
-    public final CtPromoFeeDiscountType CT_PROMO_FEE_DISCOUNT_TYPE = CtPromoFeeDiscountType.CT_PROMO_FEE_DISCOUNT_TYPE;
+    public final CtPromoFeeTypeDiscount CT_PROMO_FEE_TYPE_DISCOUNT = CtPromoFeeTypeDiscount.CT_PROMO_FEE_TYPE_DISCOUNT;
 
     /**
      * Table that stores the promotion product relation types of the catalog for the application
@@ -173,6 +180,41 @@ public class Public extends SchemaImpl {
     public final VwEntityTypeConsumptions VW_ENTITY_TYPE_CONSUMPTIONS = VwEntityTypeConsumptions.VW_ENTITY_TYPE_CONSUMPTIONS;
 
     /**
+     * The table <code>public.vw_product_fee_type</code>.
+     */
+    public final VwProductFeeType VW_PRODUCT_FEE_TYPE = VwProductFeeType.VW_PRODUCT_FEE_TYPE;
+
+    /**
+     * The table <code>public.vw_product_service_type</code>.
+     */
+    public final VwProductServiceType VW_PRODUCT_SERVICE_TYPE = VwProductServiceType.VW_PRODUCT_SERVICE_TYPE;
+
+    /**
+     * The table <code>public.vw_promo_consum_type_discount</code>.
+     */
+    public final VwPromoConsumTypeDiscount VW_PROMO_CONSUM_TYPE_DISCOUNT = VwPromoConsumTypeDiscount.VW_PROMO_CONSUM_TYPE_DISCOUNT;
+
+    /**
+     * The table <code>public.vw_promotion_fee_type_discount</code>.
+     */
+    public final VwPromotionFeeTypeDiscount VW_PROMOTION_FEE_TYPE_DISCOUNT = VwPromotionFeeTypeDiscount.VW_PROMOTION_FEE_TYPE_DISCOUNT;
+
+    /**
+     * The table <code>public.vw_promotion_product_type</code>.
+     */
+    public final VwPromotionProductType VW_PROMOTION_PRODUCT_TYPE = VwPromotionProductType.VW_PROMOTION_PRODUCT_TYPE;
+
+    /**
+     * The table <code>public.vw_promotion_service_type</code>.
+     */
+    public final VwPromotionServiceType VW_PROMOTION_SERVICE_TYPE = VwPromotionServiceType.VW_PROMOTION_SERVICE_TYPE;
+
+    /**
+     * The table <code>public.vw_service_fee_type</code>.
+     */
+    public final VwServiceFeeType VW_SERVICE_FEE_TYPE = VwServiceFeeType.VW_SERVICE_FEE_TYPE;
+
+    /**
      * The table <code>public.vw_users</code>.
      */
     public final VwUsers VW_USERS = VwUsers.VW_USERS;
@@ -207,8 +249,8 @@ public class Public extends SchemaImpl {
             Sequences.SEQ_PROD_SERV_TYPE_ID,
             Sequences.SEQ_PRODUCT_TYPE_ID,
             Sequences.SEQ_PROFILE_ID,
-            Sequences.SEQ_PROMO_CONSUM_DISCOUNT_ID,
-            Sequences.SEQ_PROMO_FEE_DISCOUNT_ID,
+            Sequences.SEQ_PROMO_CONSUM_TYPE_DISC_ID,
+            Sequences.SEQ_PROMO_FEE_TYPE_DISC_ID,
             Sequences.SEQ_PROMO_PROD_TYPE_ID,
             Sequences.SEQ_PROMO_SERV_TYPE_ID,
             Sequences.SEQ_PROMOTION_TYPE_ID,
@@ -229,8 +271,8 @@ public class Public extends SchemaImpl {
             CtProdFeeType.CT_PROD_FEE_TYPE,
             CtProdServType.CT_PROD_SERV_TYPE,
             CtProductType.CT_PRODUCT_TYPE,
-            CtPromoConsumDiscountType.CT_PROMO_CONSUM_DISCOUNT_TYPE,
-            CtPromoFeeDiscountType.CT_PROMO_FEE_DISCOUNT_TYPE,
+            CtPromoConsumTypeDiscount.CT_PROMO_CONSUM_TYPE_DISCOUNT,
+            CtPromoFeeTypeDiscount.CT_PROMO_FEE_TYPE_DISCOUNT,
             CtPromoProdType.CT_PROMO_PROD_TYPE,
             CtPromoServType.CT_PROMO_SERV_TYPE,
             CtPromotionType.CT_PROMOTION_TYPE,
@@ -245,6 +287,13 @@ public class Public extends SchemaImpl {
             PtEntityType.PT_ENTITY_TYPE,
             PtStatus.PT_STATUS,
             VwEntityTypeConsumptions.VW_ENTITY_TYPE_CONSUMPTIONS,
+            VwProductFeeType.VW_PRODUCT_FEE_TYPE,
+            VwProductServiceType.VW_PRODUCT_SERVICE_TYPE,
+            VwPromoConsumTypeDiscount.VW_PROMO_CONSUM_TYPE_DISCOUNT,
+            VwPromotionFeeTypeDiscount.VW_PROMOTION_FEE_TYPE_DISCOUNT,
+            VwPromotionProductType.VW_PROMOTION_PRODUCT_TYPE,
+            VwPromotionServiceType.VW_PROMOTION_SERVICE_TYPE,
+            VwServiceFeeType.VW_SERVICE_FEE_TYPE,
             VwUsers.VW_USERS);
     }
 }

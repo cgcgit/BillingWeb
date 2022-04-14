@@ -8,7 +8,7 @@ package com.billingweb.generalClass;
  *         Basic class for entities showing in simple tables
  */
 
-public class SimpleTableBasicClass extends BasicClass{
+public class SimpleTableBasicClass extends BasicClassWithLists{
 
 
 

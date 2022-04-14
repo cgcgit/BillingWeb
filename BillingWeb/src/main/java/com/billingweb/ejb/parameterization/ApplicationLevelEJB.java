@@ -68,7 +68,7 @@ public class ApplicationLevelEJB implements ApplicationLevelEJBLocal {
 	}
 
 	@Override
-	public List<PtApplicationLevel> findDataByApplicationLevelId(Integer applicationLevelId)
+	public PtApplicationLevel findDataByApplicationLevelId(Integer applicationLevelId)
 			throws BillingWebDataAccessException {
 
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
@@ -81,6 +81,15 @@ public class ApplicationLevelEJB implements ApplicationLevelEJBLocal {
 					.orderBy(PT_APPLICATION_LEVEL.CODE)
 					.fetch()
 					.into(PtApplicationLevel.class);
+			
+			if (result.size() > 1) {
+				errorMessage = "Error while try to find the application level for application_level_id : " + applicationLevelId
+						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
+				logger.error(errorMessage);
+				throw new BillingWebDataAccessException(errorMessage);
+			} else {
+				return result.get(0);
+			}	
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the application level for application_level_id: " + applicationLevelId + " - " + e.getMessage();
@@ -88,12 +97,11 @@ public class ApplicationLevelEJB implements ApplicationLevelEJBLocal {
 			throw new BillingWebDataAccessException(errorMessage, e);		
 		}
 
-		return result;
-
+		
 	}
 
 	@Override
-	public List<PtApplicationLevel> findDataByCode(String code) throws BillingWebDataAccessException {
+	public PtApplicationLevel findDataByCode(String code) throws BillingWebDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<PtApplicationLevel> result = null;
 		String errorMessage;
@@ -105,6 +113,14 @@ public class ApplicationLevelEJB implements ApplicationLevelEJBLocal {
 					.orderBy(PT_APPLICATION_LEVEL.CODE)
 					.fetch()
 					.into(PtApplicationLevel.class);
+			if (result.size() > 1) {
+				errorMessage = "Error while try to find the application level for code : " + code
+						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
+				logger.error(errorMessage);
+				throw new BillingWebDataAccessException(errorMessage);
+			} else {
+				return result.get(0);
+			}				
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the application level for code " + code + " - " + e.getMessage();
@@ -112,8 +128,7 @@ public class ApplicationLevelEJB implements ApplicationLevelEJBLocal {
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
 
-		return result;
-
+		
 	}
 
 	@Override

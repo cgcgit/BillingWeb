@@ -229,7 +229,7 @@ public class StatusController extends SimpleTableBasicClass implements Serializa
 			if (this.objectValidation(dataObject)) {
 				statusEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";
-				logger.fatal("Update status: " + this.selectedData.toString() + " - " +messageDetail);
+				logger.info("Update status: " + this.selectedData.toString() + " - " +messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 				this.setControlVariablesToDefault();
 			} else {

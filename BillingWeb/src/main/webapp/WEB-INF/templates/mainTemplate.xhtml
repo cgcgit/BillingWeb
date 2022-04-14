@@ -6,13 +6,17 @@
 	xmlns:f="http://xmlns.jcp.org/jsf/core">
 
 
+
 <h:form id="mainFormTop">
+
 	<h:head id="maintTemplateHead">
 		<meta charset="UTF-8" />
 		<!--  check if the user is logged -->
 		<f:event type="preRenderView"
 			listener="#{mainTemplateController.verifySession()}" />
 		<title>#{pageTitle.templatePage}</title>
+
+
 		<p:toolbar>
 			<p:toolbarGroup>
 				<p:commandButton id="menu" value="menu"
@@ -54,10 +58,13 @@
 				</p:menu>
 			</p:toolbarGroup>
 		</p:toolbar>
+
+
 	</h:head>
 
 	<h:body id="mainTemplateBody">
-		<p:sidebar widgetVar="sidebar" position="top" style="height:15%">
+
+	<p:sidebar widgetVar="sidebar" position="top"  style="height:20%" >
 			<p />
 			<ui:insert id="topPanel" name="top">
 				<ui:insert id="topTemplate" name="top">
@@ -68,7 +75,6 @@
 			</ui:insert>
 
 		</p:sidebar>
-
 	</h:body>
 
 </h:form>

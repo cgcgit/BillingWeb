@@ -235,7 +235,7 @@ public class DiscountTypeController extends SimpleTableBasicClass implements Ser
 			if (this.objectValidation(dataObject)) {
 				discountTypeEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";
-				logger.fatal("Update discount type: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Update discount type: " + this.selectedData.toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 				this.setControlVariablesToDefault();
 			} else {

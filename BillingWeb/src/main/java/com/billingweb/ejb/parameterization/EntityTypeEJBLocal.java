@@ -22,18 +22,18 @@ public interface EntityTypeEJBLocal {
 	/**
 	 * Find the entity type data stores in the system for the given entityTypeId
 	 * @param entityTypeId
-	 * @return list of all entity type data in the system for the given entityTypeId
+	 * @return entity type data in the system for the given entityTypeId
 	 * @throws BillingWebDataAccessException
 	 */
-	public List <PtEntityType> findDataByEntityTypeId (Integer entityTypeId) throws BillingWebDataAccessException;
+	public PtEntityType findDataByEntityTypeId (Integer entityTypeId) throws BillingWebDataAccessException;
 	
 	/**
 	 * Find the entity type data stores in the system for the given code of entity type
 	 * @param code
-	 * @return list of all entity type data in the system for the given code of entity type
+	 * @return entity type data in the system for the given code of entity type
 	 * @throws BillingWebDataAccessException
 	 */
-	public List <PtEntityType> findDataByCode (String code) throws BillingWebDataAccessException;
+	public PtEntityType findDataByCode (String code) throws BillingWebDataAccessException;
 	
 	
 	/**

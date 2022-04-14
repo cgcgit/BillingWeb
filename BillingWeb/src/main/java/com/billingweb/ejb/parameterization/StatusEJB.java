@@ -59,7 +59,7 @@ public class StatusEJB implements StatusEJBLocal {
 	}
 
 	@Override
-	public List<PtStatus> findDataByStatusId(Integer statusId) throws BillingWebDataAccessException {
+	public PtStatus findDataByStatusId(Integer statusId) throws BillingWebDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<PtStatus> result = null;
 		String errorMessage;
@@ -67,6 +67,15 @@ public class StatusEJB implements StatusEJBLocal {
 		try {
 			result = create.selectFrom(PT_STATUS).where(PT_STATUS.STATUS_ID.eq(val(statusId))).orderBy(PT_STATUS.CODE)
 					.fetch().into(PtStatus.class);
+			
+			if (result.size() > 1) {
+				errorMessage = "Error while try to find the status for status_id : " + statusId
+						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
+				logger.error(errorMessage);
+				throw new BillingWebDataAccessException(errorMessage);
+			} else {
+				return result.get(0);
+			}	
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the status for status_id: " + statusId + " - "
@@ -74,12 +83,11 @@ public class StatusEJB implements StatusEJBLocal {
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
-
-		return result;
+		
 	}
 
 	@Override
-	public List<PtStatus> findDataByCode(String code) throws BillingWebDataAccessException {
+	public PtStatus findDataByCode(String code) throws BillingWebDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<PtStatus> result = null;
 		String errorMessage;
@@ -88,13 +96,21 @@ public class StatusEJB implements StatusEJBLocal {
 			result = create.selectFrom(PT_STATUS).where(PT_STATUS.CODE.eq(val(code))).orderBy(PT_STATUS.CODE).fetch()
 					.into(PtStatus.class);
 
+			if (result.size() > 1) {
+				errorMessage = "Error while try to find the status for code: " + code
+						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
+				logger.error(errorMessage);
+				throw new BillingWebDataAccessException(errorMessage);
+			} else {
+				return result.get(0);
+			}	
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the status for code " + code + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
 
-		return result;
+		
 	}
 
 	@Override

@@ -21,18 +21,18 @@ public interface StatusEJBLocal {
 	/**
 	 * Find the status data stores in the system for the given statusId
 	 * @param statusId
-	 * @return list of all status data in the system for the given statusId
+	 * @return status data in the system for the given statusId
 	 * @throws BillingWebDataAccessException
 	 */
-	public List <PtStatus> findDataByStatusId (Integer statusId) throws BillingWebDataAccessException;
+	public PtStatus findDataByStatusId (Integer statusId) throws BillingWebDataAccessException;
 	
 	/**
 	 * Find the status data stores in the system for the given code of status
 	 * @param code
-	 * @return list of all status data in the system for the given code of status
+	 * @return status data in the system for the given code of status
 	 * @throws BillingWebDataAccessException
 	 */
-	public List <PtStatus> findDataByCode (String code) throws BillingWebDataAccessException;
+	public PtStatus findDataByCode (String code) throws BillingWebDataAccessException;
 	
 	
 	/**

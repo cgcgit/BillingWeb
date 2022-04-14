@@ -13,6 +13,7 @@ import javax.inject.Named;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 import org.jooq.Result;
+import org.omnifaces.util.Ajax;
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
 import org.primefaces.model.menu.DefaultSubMenu;
@@ -41,6 +42,8 @@ public class ApplicationMenuController implements Serializable {
 	private Boolean profileAdmin;
 	
 
+	
+
 
 
 	/**
@@ -56,9 +59,14 @@ public class ApplicationMenuController implements Serializable {
 	public void setProfileAdmin(Boolean profileAdmin) {
 		this.profileAdmin = profileAdmin;
 	}
+	
+	
+
+	
 
 	@PostConstruct
 	public void init() {
+		
 		if (model == null) {
 			model = new DefaultMenuModel();
 			this.createMenu(null, null);
@@ -167,5 +175,6 @@ public class ApplicationMenuController implements Serializable {
 		}
 		return result;
 	}
+
 
 }

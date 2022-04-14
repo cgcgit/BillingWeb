@@ -248,7 +248,7 @@ public class BillingPeriodController extends SimpleTableBasicClass implements Se
 			if (this.objectValidation(dataObject)) {
 				billingPeriodEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";
-				logger.fatal("Update billing period cycle: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Update billing period cycle: " + this.selectedData.toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 				this.setControlVariablesToDefault();
 			} else {

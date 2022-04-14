@@ -19,20 +19,20 @@ public interface DiscountTypeEJBLocal {
 
 	
 	/**
-	 * Find the discount type data stores in the system for the given discounTypeId
-	 * @param discounTypeId
-	 * @return list of all discount type data in the system for the given discounTypeId
+	 * Find the discount type data stores in the system for the given discountTypeId
+	 * @param discountTypeId
+	 * @return discount type data in the system for the given discountTypeId
 	 * @throws BillingWebDataAccessException
 	 */
-	public List <PtDiscountType> findDataByDiscounTypeId (Integer discounTypeId) throws BillingWebDataAccessException;
+	public PtDiscountType findDataByDiscounTypeId (Integer discountTypeId) throws BillingWebDataAccessException;
 	
 	/**
 	 * Find the discount type data stores in the system for the given code of status
 	 * @param code
-	 * @return list of all discount type data in the system for the given code of status
+	 * @return discount type data in the system for the given code of status
 	 * @throws BillingWebDataAccessException
 	 */
-	public List <PtDiscountType> findDataByCode (String code) throws BillingWebDataAccessException;
+	public PtDiscountType findDataByCode (String code) throws BillingWebDataAccessException;
 	
 	
 	/**

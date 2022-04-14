@@ -64,29 +64,37 @@ public class DiscountTypeEJB implements DiscountTypeEJBLocal {
 	}
 
 	@Override
-	public List<PtDiscountType> findDataByDiscounTypeId(Integer discounTypeId) throws BillingWebDataAccessException {
+	public PtDiscountType findDataByDiscounTypeId(Integer discountTypeId) throws BillingWebDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<PtDiscountType> result = null;
 		String errorMessage;
 
 		try {
 			result = create.selectFrom(PT_DISCOUNT_TYPE).
-					where(PT_DISCOUNT_TYPE.DISCOUNT_TYPE_ID.eq(val(discounTypeId))).
+					where(PT_DISCOUNT_TYPE.DISCOUNT_TYPE_ID.eq(val(discountTypeId))).
 					orderBy(PT_DISCOUNT_TYPE.CODE)
 					.fetch().into(PtDiscountType.class);
+			
+			if (result.size() > 1) {
+				errorMessage = "Error while try to find the discount type for discount_type_id : " + discountTypeId
+						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
+				logger.error(errorMessage);
+				throw new BillingWebDataAccessException(errorMessage);
+			} else {
+				return result.get(0);
+			}		
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the discount type for discount_type_id: " + discounTypeId + " - "
+			errorMessage = "Error while try to find the discount type for discount_type_id: " + discountTypeId + " - "
 					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
-
-		return result;
+		
 	}
 
 	@Override
-	public List<PtDiscountType> findDataByCode(String code) throws BillingWebDataAccessException {
+	public PtDiscountType findDataByCode(String code) throws BillingWebDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<PtDiscountType> result = null;
 		String errorMessage;
@@ -96,14 +104,22 @@ public class DiscountTypeEJB implements DiscountTypeEJBLocal {
 					where(PT_DISCOUNT_TYPE.CODE.eq(val(code))).
 					orderBy(PT_DISCOUNT_TYPE.CODE).fetch()
 					.into(PtDiscountType.class);
+			
+			if (result.size() > 1) {
+				errorMessage = "Error while try to find the discount type for code : " + code
+						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
+				logger.error(errorMessage);
+				throw new BillingWebDataAccessException(errorMessage);
+			} else {
+				return result.get(0);
+			}	
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the discount type for code " + code + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
-
-		return result;
+		
 	}
 
 	@Override

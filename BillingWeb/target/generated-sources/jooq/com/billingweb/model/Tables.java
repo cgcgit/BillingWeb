@@ -12,8 +12,8 @@ import com.billingweb.model.tables.CtFeeType;
 import com.billingweb.model.tables.CtProdFeeType;
 import com.billingweb.model.tables.CtProdServType;
 import com.billingweb.model.tables.CtProductType;
-import com.billingweb.model.tables.CtPromoConsumDiscountType;
-import com.billingweb.model.tables.CtPromoFeeDiscountType;
+import com.billingweb.model.tables.CtPromoConsumTypeDiscount;
+import com.billingweb.model.tables.CtPromoFeeTypeDiscount;
 import com.billingweb.model.tables.CtPromoProdType;
 import com.billingweb.model.tables.CtPromoServType;
 import com.billingweb.model.tables.CtPromotionType;
@@ -28,6 +28,13 @@ import com.billingweb.model.tables.PtDiscountType;
 import com.billingweb.model.tables.PtEntityType;
 import com.billingweb.model.tables.PtStatus;
 import com.billingweb.model.tables.VwEntityTypeConsumptions;
+import com.billingweb.model.tables.VwProductFeeType;
+import com.billingweb.model.tables.VwProductServiceType;
+import com.billingweb.model.tables.VwPromoConsumTypeDiscount;
+import com.billingweb.model.tables.VwPromotionFeeTypeDiscount;
+import com.billingweb.model.tables.VwPromotionProductType;
+import com.billingweb.model.tables.VwPromotionServiceType;
+import com.billingweb.model.tables.VwServiceFeeType;
 import com.billingweb.model.tables.VwUsers;
 
 
@@ -80,12 +87,12 @@ public class Tables {
     /**
      * Table that stores the promotion fee discount relation types of the catalog for the application
      */
-    public static final CtPromoConsumDiscountType CT_PROMO_CONSUM_DISCOUNT_TYPE = CtPromoConsumDiscountType.CT_PROMO_CONSUM_DISCOUNT_TYPE;
+    public static final CtPromoConsumTypeDiscount CT_PROMO_CONSUM_TYPE_DISCOUNT = CtPromoConsumTypeDiscount.CT_PROMO_CONSUM_TYPE_DISCOUNT;
 
     /**
      * Table that stores the promotion fee discount relation types of the catalog for the application
      */
-    public static final CtPromoFeeDiscountType CT_PROMO_FEE_DISCOUNT_TYPE = CtPromoFeeDiscountType.CT_PROMO_FEE_DISCOUNT_TYPE;
+    public static final CtPromoFeeTypeDiscount CT_PROMO_FEE_TYPE_DISCOUNT = CtPromoFeeTypeDiscount.CT_PROMO_FEE_TYPE_DISCOUNT;
 
     /**
      * Table that stores the promotion product relation types of the catalog for the application
@@ -156,6 +163,41 @@ public class Tables {
      * The table <code>public.vw_entity_type_consumptions</code>.
      */
     public static final VwEntityTypeConsumptions VW_ENTITY_TYPE_CONSUMPTIONS = VwEntityTypeConsumptions.VW_ENTITY_TYPE_CONSUMPTIONS;
+
+    /**
+     * The table <code>public.vw_product_fee_type</code>.
+     */
+    public static final VwProductFeeType VW_PRODUCT_FEE_TYPE = VwProductFeeType.VW_PRODUCT_FEE_TYPE;
+
+    /**
+     * The table <code>public.vw_product_service_type</code>.
+     */
+    public static final VwProductServiceType VW_PRODUCT_SERVICE_TYPE = VwProductServiceType.VW_PRODUCT_SERVICE_TYPE;
+
+    /**
+     * The table <code>public.vw_promo_consum_type_discount</code>.
+     */
+    public static final VwPromoConsumTypeDiscount VW_PROMO_CONSUM_TYPE_DISCOUNT = VwPromoConsumTypeDiscount.VW_PROMO_CONSUM_TYPE_DISCOUNT;
+
+    /**
+     * The table <code>public.vw_promotion_fee_type_discount</code>.
+     */
+    public static final VwPromotionFeeTypeDiscount VW_PROMOTION_FEE_TYPE_DISCOUNT = VwPromotionFeeTypeDiscount.VW_PROMOTION_FEE_TYPE_DISCOUNT;
+
+    /**
+     * The table <code>public.vw_promotion_product_type</code>.
+     */
+    public static final VwPromotionProductType VW_PROMOTION_PRODUCT_TYPE = VwPromotionProductType.VW_PROMOTION_PRODUCT_TYPE;
+
+    /**
+     * The table <code>public.vw_promotion_service_type</code>.
+     */
+    public static final VwPromotionServiceType VW_PROMOTION_SERVICE_TYPE = VwPromotionServiceType.VW_PROMOTION_SERVICE_TYPE;
+
+    /**
+     * The table <code>public.vw_service_fee_type</code>.
+     */
+    public static final VwServiceFeeType VW_SERVICE_FEE_TYPE = VwServiceFeeType.VW_SERVICE_FEE_TYPE;
 
     /**
      * The table <code>public.vw_users</code>.

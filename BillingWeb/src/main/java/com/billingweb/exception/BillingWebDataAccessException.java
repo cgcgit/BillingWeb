@@ -9,6 +9,11 @@ import static java.lang.String.format;
  */
 public class BillingWebDataAccessException extends RuntimeException {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2601717122769155491L;
+
 	public BillingWebDataAccessException(String message) {
 		super(message);
 	}

@@ -217,7 +217,7 @@ public class EntityTypeController extends SimpleTableBasicClass implements Seria
 			if (this.objectValidation(dataObject)) {
 				entityTypeEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";
-				logger.fatal("Update entity type: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Update entity type: " + this.selectedData.toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 				this.setControlVariablesToDefault();
 			} else {

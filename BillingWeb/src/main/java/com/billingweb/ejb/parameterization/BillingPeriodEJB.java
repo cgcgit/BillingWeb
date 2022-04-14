@@ -63,7 +63,7 @@ public class BillingPeriodEJB implements BillingPeriodEJBLocal {
 	}
 
 	@Override
-	public List<PtBillingPeriod> findDataByBillingPeriodId(Integer billingPeriodId)
+	public PtBillingPeriod findDataByBillingPeriodId(Integer billingPeriodId)
 			throws BillingWebDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<PtBillingPeriod> result = null;
@@ -74,6 +74,15 @@ public class BillingPeriodEJB implements BillingPeriodEJBLocal {
 					where(PT_BILLING_PERIOD.BILLING_PERIOD_ID.eq(val(billingPeriodId))).
 					orderBy(PT_BILLING_PERIOD.CODE)
 					.fetch().into(PtBillingPeriod.class);
+			
+			if (result.size() > 1) {
+				errorMessage = "Error while try to find the billing period for billing_period_id : " + billingPeriodId
+						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
+				logger.error(errorMessage);
+				throw new BillingWebDataAccessException(errorMessage);
+			} else {
+				return result.get(0);
+			}				
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the billing period for billing_period_id: " + billingPeriodId + " - "
@@ -81,12 +90,11 @@ public class BillingPeriodEJB implements BillingPeriodEJBLocal {
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
-
-		return result;
 	}
+		
 
 	@Override
-	public List<PtBillingPeriod> findDataByCode(String code) throws BillingWebDataAccessException {
+	public PtBillingPeriod findDataByCode(String code) throws BillingWebDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<PtBillingPeriod> result = null;
 		String errorMessage;
@@ -96,6 +104,15 @@ public class BillingPeriodEJB implements BillingPeriodEJBLocal {
 					where(PT_BILLING_PERIOD.CODE.eq(val(code))).
 					orderBy(PT_BILLING_PERIOD.CODE).fetch()
 					.into(PtBillingPeriod.class);
+			
+			if (result.size() > 1) {
+				errorMessage = "Error while try to find the billing period for code : " + code
+						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
+				logger.error(errorMessage);
+				throw new BillingWebDataAccessException(errorMessage);
+			} else {
+				return result.get(0);
+			}				
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the billing period for code " + code + " - " + e.getMessage();
@@ -103,7 +120,6 @@ public class BillingPeriodEJB implements BillingPeriodEJBLocal {
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}
 
-		return result;
 	}
 
 	@Override

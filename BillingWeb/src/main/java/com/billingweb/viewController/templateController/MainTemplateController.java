@@ -3,7 +3,7 @@ package com.billingweb.viewController.templateController;
 import java.io.Serializable;
 import java.util.Optional;
 
-
+import javax.annotation.PostConstruct;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
@@ -11,6 +11,9 @@ import javax.inject.Named;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
+import org.omnifaces.util.Ajax;
+import org.primefaces.PrimeFaces;
+import org.primefaces.model.menu.DefaultMenuModel;
 
 import com.billingweb.exception.BillingWebGeneralException;
 
@@ -26,6 +29,24 @@ public class MainTemplateController implements Serializable {
 	private static final long serialVersionUID = -6171018974278400217L;
 
 	Logger logger = (Logger) LogManager.getLogger(MainTemplateController.class);
+	
+	
+	private Boolean hiddenPanel;
+	
+	
+	/**
+	 * @return the showMenu
+	 */
+	public Boolean getHiddenPanel() {
+		return hiddenPanel;
+	}
+
+	/**
+	 * @param showMenu the showMenu to set
+	 */
+	public void setHiddenPanel(Boolean hiddenPanel) {
+		this.hiddenPanel = hiddenPanel;
+	}
 	
 	//private final ResourceBundle pageTitleProperties = ResourceBundle.getBundle("pageTitle.properties");
 	
@@ -48,6 +69,26 @@ public class MainTemplateController implements Serializable {
 
 	}
 	
+	
+	@PostConstruct
+	public void init() {
+		this.hiddenPanel=true;
+		
+	}
+	
+	public void hiddenPanel() {
+		if (this.hiddenPanel == true) {			
+			this.hiddenPanel = false;
+			PrimeFaces.current().executeScript("PF('sidebar').show();");
+		} else {
+			this.hiddenPanel = true;
+			PrimeFaces.current().executeScript("PF('sidebar').hide();");
+		}
+		
+		Ajax.update("mainFormTop");
+		
+				
+	}
 
 
 }

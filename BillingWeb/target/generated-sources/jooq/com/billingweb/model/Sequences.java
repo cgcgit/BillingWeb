@@ -86,14 +86,14 @@ public class Sequences {
     public static final Sequence<Long> SEQ_PROFILE_ID = Internal.createSequence("seq_profile_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
 
     /**
-     * The sequence <code>public.seq_promo_consum_discount_id</code>
+     * The sequence <code>public.seq_promo_consum_type_disc_id</code>
      */
-    public static final Sequence<Long> SEQ_PROMO_CONSUM_DISCOUNT_ID = Internal.createSequence("seq_promo_consum_discount_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
+    public static final Sequence<Long> SEQ_PROMO_CONSUM_TYPE_DISC_ID = Internal.createSequence("seq_promo_consum_type_disc_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
 
     /**
-     * The sequence <code>public.seq_promo_fee_discount_id</code>
+     * The sequence <code>public.seq_promo_fee_type_disc_id</code>
      */
-    public static final Sequence<Long> SEQ_PROMO_FEE_DISCOUNT_ID = Internal.createSequence("seq_promo_fee_discount_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
+    public static final Sequence<Long> SEQ_PROMO_FEE_TYPE_DISC_ID = Internal.createSequence("seq_promo_fee_type_disc_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
 
     /**
      * The sequence <code>public.seq_promo_prod_type_id</code>

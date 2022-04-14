@@ -22,18 +22,18 @@ public interface BillingPeriodEJBLocal {
 	/**
 	 * Find the billing period data stores in the system for the given billingPeriodId
 	 * @param billingPeriodId
-	 * @return list of all billing period data in the system for the given billingPeriodId
+	 * @return billing period data in the system for the given billingPeriodId
 	 * @throws BillingWebDataAccessException
 	 */
-	public List <PtBillingPeriod> findDataByBillingPeriodId (Integer billingPeriodId) throws BillingWebDataAccessException;
+	public PtBillingPeriod findDataByBillingPeriodId (Integer billingPeriodId) throws BillingWebDataAccessException;
 	
 	/**
 	 * Find the billing period data stores in the system for the given code of status
 	 * @param code
-	 * @return list of all billing period data in the system for the given code of status
+	 * @return billing period data in the system for the given code of status
 	 * @throws BillingWebDataAccessException
 	 */
-	public List <PtBillingPeriod> findDataByCode (String code) throws BillingWebDataAccessException;
+	public PtBillingPeriod findDataByCode (String code) throws BillingWebDataAccessException;
 	
 	
 	/**

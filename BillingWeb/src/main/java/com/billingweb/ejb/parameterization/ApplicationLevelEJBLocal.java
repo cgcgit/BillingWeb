@@ -23,18 +23,18 @@ public interface ApplicationLevelEJBLocal {
 	/**
 	 * Find the application level data stores in the system for the given applicationLevelId
 	 * @param applicationLevelId
-	 * @return list of all application level data in the system for the given applicationLevelId
+	 * @return application level data in the system for the given applicationLevelId
 	 * @throws BillingWebDataAccessException
 	 */
-	public List <PtApplicationLevel> findDataByApplicationLevelId (Integer applicationLevelId) throws BillingWebDataAccessException;
+	public PtApplicationLevel findDataByApplicationLevelId (Integer applicationLevelId) throws BillingWebDataAccessException;
 	
 	/**
 	 * Find the application level data stores in the system for the given code of application level
 	 * @param code
-	 * @return list of all application level data in the system for the given code of application level
+	 * @return application level data in the system for the given code of application level
 	 * @throws BillingWebDataAccessException
 	 */
-	public List <PtApplicationLevel> findDataByCode (String code) throws BillingWebDataAccessException;
+	public PtApplicationLevel findDataByCode (String code) throws BillingWebDataAccessException;
 	
 	
 	/**
