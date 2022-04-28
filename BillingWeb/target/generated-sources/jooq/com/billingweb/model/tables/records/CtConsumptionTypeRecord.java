@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record10;
-import org.jooq.Row10;
+import org.jooq.Record11;
+import org.jooq.Row11;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -20,7 +20,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Table that stores the consumption types of the catalog for the application
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class CtConsumptionTypeRecord extends UpdatableRecordImpl<CtConsumptionTypeRecord> implements Record10<Integer, Integer, String, String, String, Integer, LocalDateTime, String, LocalDateTime, String>, ICtConsumptionType {
+public class CtConsumptionTypeRecord extends UpdatableRecordImpl<CtConsumptionTypeRecord> implements Record11<Integer, Integer, String, String, String, Integer, LocalDateTime, String, LocalDateTime, String, Integer>, ICtConsumptionType {
 
     private static final long serialVersionUID = 1L;
 
@@ -184,6 +184,22 @@ public class CtConsumptionTypeRecord extends UpdatableRecordImpl<CtConsumptionTy
         return (String) get(9);
     }
 
+    /**
+     * Setter for <code>public.ct_consumption_type.consumption_class_id</code>. Consumption class for the consumption type
+     */
+    @Override
+    public void setConsumptionClassId(Integer value) {
+        set(10, value);
+    }
+
+    /**
+     * Getter for <code>public.ct_consumption_type.consumption_class_id</code>. Consumption class for the consumption type
+     */
+    @Override
+    public Integer getConsumptionClassId() {
+        return (Integer) get(10);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -194,17 +210,17 @@ public class CtConsumptionTypeRecord extends UpdatableRecordImpl<CtConsumptionTy
     }
 
     // -------------------------------------------------------------------------
-    // Record10 type implementation
+    // Record11 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<Integer, Integer, String, String, String, Integer, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
-        return (Row10) super.fieldsRow();
+    public Row11<Integer, Integer, String, String, String, Integer, LocalDateTime, String, LocalDateTime, String, Integer> fieldsRow() {
+        return (Row11) super.fieldsRow();
     }
 
     @Override
-    public Row10<Integer, Integer, String, String, String, Integer, LocalDateTime, String, LocalDateTime, String> valuesRow() {
-        return (Row10) super.valuesRow();
+    public Row11<Integer, Integer, String, String, String, Integer, LocalDateTime, String, LocalDateTime, String, Integer> valuesRow() {
+        return (Row11) super.valuesRow();
     }
 
     @Override
@@ -258,6 +274,11 @@ public class CtConsumptionTypeRecord extends UpdatableRecordImpl<CtConsumptionTy
     }
 
     @Override
+    public Field<Integer> field11() {
+        return CtConsumptionType.CT_CONSUMPTION_TYPE.CONSUMPTION_CLASS_ID;
+    }
+
+    @Override
     public Integer component1() {
         return getConsumptionTypeId();
     }
@@ -308,6 +329,11 @@ public class CtConsumptionTypeRecord extends UpdatableRecordImpl<CtConsumptionTy
     }
 
     @Override
+    public Integer component11() {
+        return getConsumptionClassId();
+    }
+
+    @Override
     public Integer value1() {
         return getConsumptionTypeId();
     }
@@ -355,6 +381,11 @@ public class CtConsumptionTypeRecord extends UpdatableRecordImpl<CtConsumptionTy
     @Override
     public String value10() {
         return getModifUser();
+    }
+
+    @Override
+    public Integer value11() {
+        return getConsumptionClassId();
     }
 
     @Override
@@ -418,7 +449,13 @@ public class CtConsumptionTypeRecord extends UpdatableRecordImpl<CtConsumptionTy
     }
 
     @Override
-    public CtConsumptionTypeRecord values(Integer value1, Integer value2, String value3, String value4, String value5, Integer value6, LocalDateTime value7, String value8, LocalDateTime value9, String value10) {
+    public CtConsumptionTypeRecord value11(Integer value) {
+        setConsumptionClassId(value);
+        return this;
+    }
+
+    @Override
+    public CtConsumptionTypeRecord values(Integer value1, Integer value2, String value3, String value4, String value5, Integer value6, LocalDateTime value7, String value8, LocalDateTime value9, String value10, Integer value11) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -429,6 +466,7 @@ public class CtConsumptionTypeRecord extends UpdatableRecordImpl<CtConsumptionTy
         value8(value8);
         value9(value9);
         value10(value10);
+        value11(value11);
         return this;
     }
 
@@ -448,6 +486,7 @@ public class CtConsumptionTypeRecord extends UpdatableRecordImpl<CtConsumptionTy
         setInputUser(from.getInputUser());
         setModifDate(from.getModifDate());
         setModifUser(from.getModifUser());
+        setConsumptionClassId(from.getConsumptionClassId());
     }
 
     @Override
@@ -470,7 +509,7 @@ public class CtConsumptionTypeRecord extends UpdatableRecordImpl<CtConsumptionTy
     /**
      * Create a detached, initialised CtConsumptionTypeRecord
      */
-    public CtConsumptionTypeRecord(Integer consumptionTypeId, Integer entityTypeId, String code, String name, String description, Integer statusId, LocalDateTime inputDate, String inputUser, LocalDateTime modifDate, String modifUser) {
+    public CtConsumptionTypeRecord(Integer consumptionTypeId, Integer entityTypeId, String code, String name, String description, Integer statusId, LocalDateTime inputDate, String inputUser, LocalDateTime modifDate, String modifUser, Integer consumptionClassId) {
         super(CtConsumptionType.CT_CONSUMPTION_TYPE);
 
         setConsumptionTypeId(consumptionTypeId);
@@ -483,5 +522,6 @@ public class CtConsumptionTypeRecord extends UpdatableRecordImpl<CtConsumptionTy
         setInputUser(inputUser);
         setModifDate(modifDate);
         setModifUser(modifUser);
+        setConsumptionClassId(consumptionClassId);
     }
 }

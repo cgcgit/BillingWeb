@@ -1,12 +1,15 @@
 package com.billingweb.ejb.catalog.relationType;
 
 import static com.billingweb.model.Tables.CT_FEE_TYPE;
+import static com.billingweb.model.Tables.CT_PROMOTION_TYPE;
 import static com.billingweb.model.Tables.CT_PROMO_FEE_TYPE_DISCOUNT;
 import static com.billingweb.model.Tables.PT_STATUS;
 import static com.billingweb.model.Tables.VW_PROMOTION_FEE_TYPE_DISCOUNT;
 import static org.jooq.impl.DSL.val;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 import javax.annotation.Resource;
@@ -26,15 +29,16 @@ import com.billingweb.exception.BillingWebDataAccessException;
 import com.billingweb.model.tables.daos.CtPromoFeeTypeDiscountDao;
 import com.billingweb.model.tables.pojos.CtFeeType;
 import com.billingweb.model.tables.pojos.CtPromoFeeTypeDiscount;
+import com.billingweb.model.tables.pojos.CtPromotionType;
 import com.billingweb.model.tables.pojos.VwPromotionFeeTypeDiscount;
 
 /**
  * Session Bean implementation class PromotionFeeTypeEJB
  */
 @Stateless
-public class PromotionFeeTypeEJB implements PromotionFeeTypeEJBLocal {
+public class PromotionFeeTypeDiscountEJB implements PromotionFeeTypeDiscountEJBLocal {
 	
-	Logger logger = (Logger) LogManager.getLogger(PromotionFeeTypeEJB.class);
+	Logger logger = (Logger) LogManager.getLogger(PromotionFeeTypeDiscountEJB.class);
 
 	@Resource(lookup = "java:jboss/datasources/db_billing")
 	private DataSource ds;
@@ -47,28 +51,37 @@ public class PromotionFeeTypeEJB implements PromotionFeeTypeEJBLocal {
     /**
      * Default constructor. 
      */
-    public PromotionFeeTypeEJB() {
+    public PromotionFeeTypeDiscountEJB() {
         // TODO Auto-generated constructor stub
     }
 
 	@Override
 	public List<CtFeeType> findEntityTypeCandidates(Integer parentId) throws BillingWebDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);		
-		List<CtFeeType> result = null;		
+		List<CtFeeType> result = null;
+		Map<CtFeeType, List<CtPromotionType>> record;  	
 		String errorMessage;
 		// aliases of tables		
 		com.billingweb.model.tables.CtFeeType ft = CT_FEE_TYPE.as("ft");
+		com.billingweb.model.tables.CtPromotionType pt = CT_PROMOTION_TYPE.as("pt");
 		com.billingweb.model.tables.CtPromoFeeTypeDiscount pft = CT_PROMO_FEE_TYPE_DISCOUNT.as("pft");
 		
 		try {
-			result = create.select()
-					.from(ft)												
-					.whereNotExists(create.selectOne()
+			record = create.select()
+					.from(pt).join(ft)
+					.on(pt.APPLICATION_LEVEL_ID.eq(ft.APPLICATION_LEVEL_ID))
+					.where(pt.PROMOTION_TYPE_ID.eq(val(parentId)))
+					.andNotExists(create.selectOne()
 							.from(pft)
 							.where(ft.FEE_TYPE_ID.eq(pft.FEE_TYPE_ID).and(pft.PROMOTION_TYPE_ID.eq(parentId)).
 									and (ft.APPLICATION_LEVEL_ID.eq(pft.APPLICATION_LEVEL_ID))))
-					        .orderBy(ft.CODE).fetch().into(CtFeeType.class);
-			
+					        .orderBy(ft.CODE).fetchGroups(r-> r.into(ft).into(CtFeeType.class),
+					        		r -> r.into(pt).into(CtPromotionType.class)
+					        		);
+					        
+					        
+			result =  new ArrayList<CtFeeType>();  
+			result.addAll(record.keySet());
 						
 			
 		} catch (DataAccessException e) {
@@ -84,21 +97,31 @@ public class PromotionFeeTypeEJB implements PromotionFeeTypeEJBLocal {
 	@Override
 	public List<CtFeeType> findEntityTypeCandidates(Integer parentId, String statusCode) throws BillingWebDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);		
-		List<CtFeeType> result = null;		
+		List<CtFeeType> result = null;
+		Map<CtFeeType, List<CtPromotionType>> record;  		
 		String errorMessage;
 		// aliases of tables
 		com.billingweb.model.tables.PtStatus st = PT_STATUS.as("st");
 		com.billingweb.model.tables.CtFeeType ft = CT_FEE_TYPE.as("ft");
+		com.billingweb.model.tables.CtPromotionType pt = CT_PROMOTION_TYPE.as("pt");
 		com.billingweb.model.tables.CtPromoFeeTypeDiscount pft = CT_PROMO_FEE_TYPE_DISCOUNT.as("pft");
 		
 		try {
-			result = create.select()
-					.from(ft)												
-					.whereNotExists(create.selectOne()
+			record = create.select()
+					.from(pt).join(ft)
+					.on(pt.APPLICATION_LEVEL_ID.eq(ft.APPLICATION_LEVEL_ID))
+					.where(pt.PROMOTION_TYPE_ID.eq(val(parentId)))
+					.andNotExists(create.selectOne()
 							.from(pft.join(st).on(pft.STATUS_ID.eq(st.STATUS_ID).and(st.CODE.eq(val(statusCode)))))
 							.where(ft.FEE_TYPE_ID.eq(pft.FEE_TYPE_ID).and(pft.PROMOTION_TYPE_ID.eq(parentId)).
 									and (ft.APPLICATION_LEVEL_ID.eq(pft.APPLICATION_LEVEL_ID))))
-					        .orderBy(ft.CODE).fetch().into(CtFeeType.class);
+					        .orderBy(ft.CODE).fetchGroups(r-> r.into(ft).into(CtFeeType.class),
+					        		r -> r.into(pt).into(CtPromotionType.class)
+					        		);
+					        
+					        
+			result =  new ArrayList<CtFeeType>();  
+			result.addAll(record.keySet());			
 			
 						
 			

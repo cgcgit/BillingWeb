@@ -28,10 +28,11 @@ import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.RowEditEvent;
 
 import com.billingweb.ejb.catalog.type.ConsumptionTypeEJBLocal;
+import com.billingweb.ejb.parameterization.ConsumptionClassEJBLocal;
 import com.billingweb.generalClass.SimpleTableBasicClassWithLists;
 import com.billingweb.interfaces.IGeneralController;
 import com.billingweb.model.tables.pojos.CtConsumptionType;
-import com.billingweb.model.tables.pojos.VwEntityTypeConsumptions;
+import com.billingweb.model.tables.pojos.PtConsumptionClass;
 import com.billingweb.model.tables.pojos.VwUsers;
 
 
@@ -62,6 +63,9 @@ public class ConsumptionTypeController extends SimpleTableBasicClassWithLists im
 
 	@EJB
 	private ConsumptionTypeEJBLocal consumptionTypeEJB;
+	
+	@EJB
+	private ConsumptionClassEJBLocal consumptionClassEJB;
 
 
 	/**
@@ -598,11 +602,11 @@ public class ConsumptionTypeController extends SimpleTableBasicClassWithLists im
 	}
 	
 	/*
-	 * Return the list of select items with the application level data
+	 * Return the list of select items with the consumption class data
 	 */
 	public List<SelectItem> consumptionClassSelectItems() {
 		List<SelectItem> selectItem = new ArrayList<>();
-		List<VwEntityTypeConsumptions> list = consumptionTypeEJB.findEntityTypeForConsumptions();
+		List<PtConsumptionClass> list = consumptionClassEJB.findAllData();
 
 		SelectItem nullItem = new SelectItem();
 		nullItem.setLabel("Select One... ");
@@ -610,12 +614,12 @@ public class ConsumptionTypeController extends SimpleTableBasicClassWithLists im
 		selectItem.add(nullItem);
 
 		if (list.isEmpty()) {
-			logger.error("ERROR - Not find application level list");
+			logger.error("ERROR - Not find consumption class list");
 		} else {
-			for (VwEntityTypeConsumptions p : list) {
+			for (PtConsumptionClass p : list) {
 				SelectItem item = new SelectItem();
 				item.setLabel(p.getCode());
-				item.setValue(p.getEntityTypeId());
+				item.setValue(p.getConsumptionClassId());
 				item.setDescription(p.getDescription());
 				selectItem.add(item);
 			}

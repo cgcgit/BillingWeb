@@ -7,6 +7,7 @@ package com.billingweb.model.tables.daos;
 import com.billingweb.model.tables.CtPromotionType;
 import com.billingweb.model.tables.records.CtPromotionTypeRecord;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -161,14 +162,14 @@ public class CtPromotionTypeDao extends DAOImpl<CtPromotionTypeRecord, com.billi
     /**
      * Fetch records that have <code>discount_value BETWEEN lowerInclusive AND upperInclusive</code>
      */
-    public List<com.billingweb.model.tables.pojos.CtPromotionType> fetchRangeOfDiscountValue(Integer lowerInclusive, Integer upperInclusive) {
+    public List<com.billingweb.model.tables.pojos.CtPromotionType> fetchRangeOfDiscountValue(BigDecimal lowerInclusive, BigDecimal upperInclusive) {
         return fetchRange(CtPromotionType.CT_PROMOTION_TYPE.DISCOUNT_VALUE, lowerInclusive, upperInclusive);
     }
 
     /**
      * Fetch records that have <code>discount_value IN (values)</code>
      */
-    public List<com.billingweb.model.tables.pojos.CtPromotionType> fetchByDiscountValue(Integer... values) {
+    public List<com.billingweb.model.tables.pojos.CtPromotionType> fetchByDiscountValue(BigDecimal... values) {
         return fetch(CtPromotionType.CT_PROMOTION_TYPE.DISCOUNT_VALUE, values);
     }
 

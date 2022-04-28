@@ -2,7 +2,7 @@ package com.billingweb.ejb.catalog.type;
 
 
 import static com.billingweb.model.Tables.CT_CONSUMPTION_TYPE;
-import static com.billingweb.model.Tables.VW_ENTITY_TYPE_CONSUMPTIONS;
+import static com.billingweb.model.Tables.PT_CONSUMPTION_CLASS;
 import static org.jooq.impl.DSL.val;
 
 import java.util.List;
@@ -23,7 +23,7 @@ import org.jooq.impl.DefaultConfiguration;
 import com.billingweb.exception.BillingWebDataAccessException;
 import com.billingweb.model.tables.daos.CtConsumptionTypeDao;
 import com.billingweb.model.tables.pojos.CtConsumptionType;
-import com.billingweb.model.tables.pojos.VwEntityTypeConsumptions;
+import com.billingweb.model.tables.pojos.PtConsumptionClass;
 
 /**
  * Session Bean implementation class ConsumptionTypeEJB
@@ -66,19 +66,19 @@ public class ConsumptionTypeEJB implements ConsumptionTypeEJBLocal {
 	}
 	
 	@Override
-	public List <VwEntityTypeConsumptions> findEntityTypeForConsumptions () throws BillingWebDataAccessException{
+	public List<PtConsumptionClass> findEntityTypeForConsumptions () throws BillingWebDataAccessException{
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
-		List<VwEntityTypeConsumptions> result = null;
+		List<PtConsumptionClass> result = null;
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(VW_ENTITY_TYPE_CONSUMPTIONS)
-					.orderBy(VW_ENTITY_TYPE_CONSUMPTIONS.CODE)
+			result = create.selectFrom(PT_CONSUMPTION_CLASS)
+					.orderBy(PT_CONSUMPTION_CLASS.CODE)
 					.fetch()
-					.into(VwEntityTypeConsumptions.class);		
+					.into(PtConsumptionClass.class);		
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find all the entity types for the consumption types - " + e.getMessage();
+			errorMessage = "Error while try to find all the consumption class for the consumption types - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new BillingWebDataAccessException(errorMessage, e);
 		}

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>db_billing Database</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <link rel="icon" type="image/png" sizes="16x16" href="favicon.png">
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="bower/admin-lte/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="bower/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="bower/ionicons/css/ionicons.min.css">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="bower/datatables.net-bs/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="bower/datatables.net-buttons-bs/css/buttons.bootstrap.min.css">
+        <!-- Code Mirror -->
+        <link rel="stylesheet" href="bower/codemirror/codemirror.css">
+        <!-- Fonts -->
+        <link href='fonts/indieflower/indie-flower.css' rel='stylesheet' type='text/css'>
+        <link href='fonts/source-sans-pro/source-sans-pro.css' rel='stylesheet' type='text/css'>
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="bower/admin-lte/dist/css/AdminLTE.min.css">
+        <!-- Salvattore -->
+        <link rel="stylesheet" href="bower/salvattore/salvattore.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+           folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="bower/admin-lte/dist/css/skins/_all-skins.min.css">
+        <!-- SchemaSpy -->
+        <link rel="stylesheet" href="schemaSpy.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="bower/html5shiv/html5shiv.min.js"></script>
+        <script src="bower/respond/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+    <body class="hold-transition skin-blue layout-top-nav">
+        <div class="wrapper">
+            <header class="main-header">
+                <nav class="navbar navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <a href="index.html" class="navbar-brand"><b>db_billing</b> Database</a>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"><i class="fa fa-bars"></i></button>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="index.html">Tables <span class="sr-only">(current)</span></a></li>
+                                <li><a href="columns.html" title="All of the columns in the schema">Columns</a></li>
+                                <li><a href="constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
+                                <li><a href="relationships.html" title="Diagram of table relationships">Relationships</a></li>
+                                <li><a href="orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>
+                                <li><a href="anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+                                <li><a href="routines.html" title="Procedures and functions">Routines</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                        <!-- Navbar Right Menu -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </nav>
+            </header>
+            <!-- Main content -->
+            <!-- Full Width Column -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>All Relationships</h1>
+                </section>
+                <!-- Main content -->
+                <section class="content">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-code-fork"></i>
+                            <h3 class="box-title">Diagrams</h3>
+                        </div>
+                        <div class="box-body">
+                            <div class="nav-tabs-custom">
+                                <!-- Tabs within a box -->
+                                <h5>By default only columns that are primary keys, foreign keys or indexes are shown.</h5>
+                                <ul class="nav nav-tabs pull-left ui-sortable-handle">
+                                    <li class="active"><a href="#compactDegreeImg-chart" data-toggle="tab" aria-expanded="true">Compact</a></li>
+                                    <li class=""><a href="#largeDegreeImg-chart" data-toggle="tab" aria-expanded="true">Large</a></li>
+                                    <li class=""><a href="#compactimpliedDegreeImg-chart" data-toggle="tab" aria-expanded="true">Compact Implied</a></li>
+                                    <li class=""><a href="#largeimpliedDegreeImg-chart" data-toggle="tab" aria-expanded="true">Large Implied</a></li>
+                                </ul>
+                                <div class="tab-content no-padding">
+                                    <div class="chart tab-pane active" id="compactDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="compactRelationshipsDiagram" name="compactRelationshipsDiagram">
+<area shape="rect" id="node1" href="tables/ct_account_type.html" target="_top" title="ct_account_type" alt="" coords="651,387,953,680">
+<area shape="rect" id="node2" href="tables/ct_bill_cycle_type.html" target="_top" title="ct_bill_cycle_type" alt="" coords="333,500,565,764">
+<area shape="rect" id="node23" href="tables/pt_entity_type.html" target="_top" title="pt_entity_type" alt="" coords="36,1423,243,1599">
+<area shape="rect" id="node24" href="tables/pt_status.html" target="_top" title="pt_status" alt="" coords="56,1792,223,1968">
+<area shape="rect" id="node20" href="tables/pt_billing_period.html" target="_top" title="pt_billing_period" alt="" coords="28,588,251,764">
+<area shape="rect" id="node3" href="tables/ct_consumption_type.html" target="_top" title="ct_consumption_type" alt="" coords="317,2345,580,2609">
+<area shape="rect" id="node21" href="tables/pt_consumption_class.html" target="_top" title="pt_consumption_class" alt="" coords="5,2492,273,2668">
+<area shape="rect" id="node4" href="tables/ct_customer_type.html" target="_top" title="ct_customer_type" alt="" coords="331,781,566,1016">
+<area shape="rect" id="node5" href="tables/ct_fee_type.html" target="_top" title="ct_fee_type" alt="" coords="336,1645,561,1909">
+<area shape="rect" id="node19" href="tables/pt_application_level.html" target="_top" title="pt_application_level" alt="" coords="13,2047,265,2223">
+<area shape="rect" id="node6" href="tables/ct_prod_fee_type.html" target="_top" title="ct_prod_fee_type" alt="" coords="689,1560,915,1765">
+<area shape="rect" id="node8" href="tables/ct_product_type.html" target="_top" title="ct_product_type" alt="" coords="339,1393,559,1628">
+<area shape="rect" id="node7" href="tables/ct_prod_serv_type.html" target="_top" title="ct_prod_serv_type" alt="" coords="683,1027,921,1232">
+<area shape="rect" id="node15" href="tables/ct_service_type.html" target="_top" title="ct_service_type" alt="" coords="340,1105,557,1340">
+<area shape="rect" id="node9" href="tables/ct_promo_consum_type_discount.html" target="_top" title="ct_promo_consum_type_discount" alt="" coords="624,2283,980,2488">
+<area shape="rect" id="node13" href="tables/ct_promotion_type.html" target="_top" title="ct_promotion_type" alt="" coords="328,2035,569,2328">
+<area shape="rect" id="node10" href="tables/ct_promo_fee_type_discount.html" target="_top" title="ct_promo_fee_type_discount" alt="" coords="643,2505,961,2740">
+<area shape="rect" id="node11" href="tables/ct_promo_prod_type.html" target="_top" title="ct_promo_prod_type" alt="" coords="675,2005,929,2211">
+<area shape="rect" id="node12" href="tables/ct_promo_serv_type.html" target="_top" title="ct_promo_serv_type" alt="" coords="676,1783,928,1988">
+<area shape="rect" id="node22" href="tables/pt_discount_type.html" target="_top" title="pt_discount_type" alt="" coords="25,2240,253,2416">
+<area shape="rect" id="node14" href="tables/ct_serv_fee_type.html" target="_top" title="ct_serv_fee_type" alt="" coords="689,1249,915,1455">
+<area shape="rect" id="node16" href="tables/it_profiles.html" target="_top" title="it_profiles" alt="" coords="363,252,534,399">
+<area shape="rect" id="node17" href="tables/it_users.html" target="_top" title="it_users" alt="" coords="712,193,892,369">
+<area shape="rect" id="node18" href="tables/mt_application_menu.html" target="_top" title="mt_application_menu" alt="" coords="652,29,952,176">
+</map>
+                                        <a name='diagram'><img id="compactDegreeImg" src="diagrams/summary/relationships.real.compact.png" usemap="#compactRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="largeDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="largeRelationshipsDiagram" name="largeRelationshipsDiagram">
+<area shape="rect" id="node1" href="tables/ct_account_type.html" target="_top" title="ct_account_type" alt="" coords="651,720,953,1136">
+<area shape="rect" id="node2" href="tables/ct_bill_cycle_type.html" target="_top" title="ct_bill_cycle_type" alt="" coords="333,856,565,1301">
+<area shape="rect" id="node23" href="tables/pt_entity_type.html" target="_top" title="pt_entity_type" alt="" coords="36,2205,243,2387">
+<area shape="rect" id="node24" href="tables/pt_status.html" target="_top" title="pt_status" alt="" coords="56,2785,223,2967">
+<area shape="rect" id="node20" href="tables/pt_billing_period.html" target="_top" title="pt_billing_period" alt="" coords="28,973,251,1184">
+<area shape="rect" id="node3" href="tables/ct_consumption_type.html" target="_top" title="ct_consumption_type" alt="" coords="317,3584,580,3971">
+<area shape="rect" id="node21" href="tables/pt_consumption_class.html" target="_top" title="pt_consumption_class" alt="" coords="5,3877,273,4059">
+<area shape="rect" id="node4" href="tables/ct_customer_type.html" target="_top" title="ct_customer_type" alt="" coords="331,1319,566,1676">
+<area shape="rect" id="node5" href="tables/ct_fee_type.html" target="_top" title="ct_fee_type" alt="" coords="336,2551,561,2996">
+<area shape="rect" id="node19" href="tables/pt_application_level.html" target="_top" title="pt_application_level" alt="" coords="13,3184,265,3365">
+<area shape="rect" id="node6" href="tables/ct_prod_fee_type.html" target="_top" title="ct_prod_fee_type" alt="" coords="689,2460,915,2759">
+<area shape="rect" id="node8" href="tables/ct_product_type.html" target="_top" title="ct_product_type" alt="" coords="339,2176,559,2533">
+<area shape="rect" id="node7" href="tables/ct_prod_serv_type.html" target="_top" title="ct_prod_serv_type" alt="" coords="683,1701,921,2000">
+<area shape="rect" id="node15" href="tables/ct_service_type.html" target="_top" title="ct_service_type" alt="" coords="340,1765,557,2123">
+<area shape="rect" id="node9" href="tables/ct_promo_consum_type_discount.html" target="_top" title="ct_promo_consum_type_discount" alt="" coords="624,3525,980,3824">
+<area shape="rect" id="node13" href="tables/ct_promotion_type.html" target="_top" title="ct_promotion_type" alt="" coords="328,3121,569,3567">
+<area shape="rect" id="node10" href="tables/ct_promo_fee_type_discount.html" target="_top" title="ct_promo_fee_type_discount" alt="" coords="643,3855,961,4183">
+<area shape="rect" id="node11" href="tables/ct_promo_prod_type.html" target="_top" title="ct_promo_prod_type" alt="" coords="675,3092,929,3391">
+<area shape="rect" id="node12" href="tables/ct_promo_serv_type.html" target="_top" title="ct_promo_serv_type" alt="" coords="676,2776,928,3075">
+<area shape="rect" id="node22" href="tables/pt_discount_type.html" target="_top" title="pt_discount_type" alt="" coords="25,3383,253,3564">
+<area shape="rect" id="node14" href="tables/ct_serv_fee_type.html" target="_top" title="ct_serv_fee_type" alt="" coords="689,2017,915,2316">
+<area shape="rect" id="node16" href="tables/it_profiles.html" target="_top" title="it_profiles" alt="" coords="363,580,534,732">
+<area shape="rect" id="node17" href="tables/it_users.html" target="_top" title="it_users" alt="" coords="712,375,892,703">
+<area shape="rect" id="node18" href="tables/mt_application_menu.html" target="_top" title="mt_application_menu" alt="" coords="652,29,952,357">
+</map>
+                                        <a name='diagram'><img id="largeDegreeImg" src="diagrams/summary/relationships.real.large.png" usemap="#largeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="compactimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="compactImpliedRelationshipsDiagram" name="compactImpliedRelationshipsDiagram">
+<area shape="rect" id="node1" href="tables/ct_account_type.html" target="_top" title="ct_account_type" alt="" coords="651,369,953,663">
+<area shape="rect" id="node2" href="tables/ct_bill_cycle_type.html" target="_top" title="ct_bill_cycle_type" alt="" coords="333,483,565,747">
+<area shape="rect" id="node23" href="tables/pt_entity_type.html" target="_top" title="pt_entity_type" alt="" coords="36,1685,243,1861">
+<area shape="rect" id="node24" href="tables/pt_status.html" target="_top" title="pt_status" alt="" coords="56,2360,223,2536">
+<area shape="rect" id="node20" href="tables/pt_billing_period.html" target="_top" title="pt_billing_period" alt="" coords="28,571,251,747">
+<area shape="rect" id="node3" href="tables/ct_consumption_type.html" target="_top" title="ct_consumption_type" alt="" coords="317,3444,580,3708">
+<area shape="rect" id="node21" href="tables/pt_consumption_class.html" target="_top" title="pt_consumption_class" alt="" coords="5,4033,273,4209">
+<area shape="rect" id="node4" href="tables/ct_customer_type.html" target="_top" title="ct_customer_type" alt="" coords="331,764,566,999">
+<area shape="rect" id="node5" href="tables/ct_fee_type.html" target="_top" title="ct_fee_type" alt="" coords="336,2525,561,2789">
+<area shape="rect" id="node19" href="tables/pt_application_level.html" target="_top" title="pt_application_level" alt="" coords="13,3064,265,3240">
+<area shape="rect" id="node6" href="tables/ct_prod_fee_type.html" target="_top" title="ct_prod_fee_type" alt="" coords="689,2097,915,2303">
+<area shape="rect" id="node8" href="tables/ct_product_type.html" target="_top" title="ct_product_type" alt="" coords="339,1052,559,1287">
+<area shape="rect" id="node7" href="tables/ct_prod_serv_type.html" target="_top" title="ct_prod_serv_type" alt="" coords="683,1069,921,1275">
+<area shape="rect" id="node15" href="tables/ct_service_type.html" target="_top" title="ct_service_type" alt="" coords="340,1656,557,1891">
+<area shape="rect" id="node9" href="tables/ct_promo_consum_type_discount.html" target="_top" title="ct_promo_consum_type_discount" alt="" coords="624,3539,980,3744">
+<area shape="rect" id="node13" href="tables/ct_promotion_type.html" target="_top" title="ct_promotion_type" alt="" coords="328,3061,569,3355">
+<area shape="rect" id="node10" href="tables/ct_promo_fee_type_discount.html" target="_top" title="ct_promo_fee_type_discount" alt="" coords="643,3107,961,3341">
+<area shape="rect" id="node11" href="tables/ct_promo_prod_type.html" target="_top" title="ct_promo_prod_type" alt="" coords="675,1400,929,1605">
+<area shape="rect" id="node12" href="tables/ct_promo_serv_type.html" target="_top" title="ct_promo_serv_type" alt="" coords="676,1803,928,2008">
+<area shape="rect" id="node22" href="tables/pt_discount_type.html" target="_top" title="pt_discount_type" alt="" coords="25,3793,253,3969">
+<area shape="rect" id="node14" href="tables/ct_serv_fee_type.html" target="_top" title="ct_serv_fee_type" alt="" coords="689,2320,915,2525">
+<area shape="rect" id="node16" href="tables/it_profiles.html" target="_top" title="it_profiles" alt="" coords="363,235,534,381">
+<area shape="rect" id="node17" href="tables/it_users.html" target="_top" title="it_users" alt="" coords="712,131,892,307">
+<area shape="rect" id="node18" href="tables/mt_application_menu.html" target="_top" title="mt_application_menu" alt="" coords="1070,29,1370,176">
+<area shape="rect" id="node25" href="tables/vw_product_fee_type.html" target="_top" title="vw_product_fee_type" alt="" coords="657,2579,947,2789">
+<area shape="rect" id="node26" href="tables/vw_product_service_type.html" target="_top" title="vw_product_service_type" alt="" coords="1069,1188,1371,1428">
+<area shape="rect" id="node27" href="tables/vw_promo_consum_type_discount.html" target="_top" title="vw_promo_consum_type_discount" alt="" coords="1024,3831,1416,4129">
+<area shape="rect" id="node28" href="tables/vw_promotion_fee_type_discount.html" target="_top" title="vw_promotion_fee_type_discount" alt="" coords="1042,3268,1398,3567">
+<area shape="rect" id="node29" href="tables/vw_promotion_product_type.html" target="_top" title="vw_promotion_product_type" alt="" coords="1060,1553,1380,1823">
+<area shape="rect" id="node30" href="tables/vw_promotion_service_type.html" target="_top" title="vw_promotion_service_type" alt="" coords="1063,1956,1377,2225">
+<area shape="rect" id="node31" href="tables/vw_service_fee_type.html" target="_top" title="vw_service_fee_type" alt="" coords="658,2879,946,3089">
+<area shape="rect" id="node32" href="tables/vw_users.html" target="_top" title="vw_users" alt="" coords="1138,193,1302,316">
+</map>
+                                        <a name='diagram'><img id="compactimpliedDegreeImg" src="diagrams/summary/relationships.implied.compact.png" usemap="#compactImpliedRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="largeimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="largeImpliedRelationshipsDiagram" name="largeImpliedRelationshipsDiagram">
+<area shape="rect" id="node1" href="tables/ct_account_type.html" target="_top" title="ct_account_type" alt="" coords="651,677,953,1093">
+<area shape="rect" id="node2" href="tables/ct_bill_cycle_type.html" target="_top" title="ct_bill_cycle_type" alt="" coords="333,813,565,1259">
+<area shape="rect" id="node23" href="tables/pt_entity_type.html" target="_top" title="pt_entity_type" alt="" coords="36,2492,243,2673">
+<area shape="rect" id="node24" href="tables/pt_status.html" target="_top" title="pt_status" alt="" coords="56,3553,223,3735">
+<area shape="rect" id="node20" href="tables/pt_billing_period.html" target="_top" title="pt_billing_period" alt="" coords="28,931,251,1141">
+<area shape="rect" id="node3" href="tables/ct_consumption_type.html" target="_top" title="ct_consumption_type" alt="" coords="317,5271,580,5657">
+<area shape="rect" id="node21" href="tables/pt_consumption_class.html" target="_top" title="pt_consumption_class" alt="" coords="5,6019,273,6200">
+<area shape="rect" id="node4" href="tables/ct_customer_type.html" target="_top" title="ct_customer_type" alt="" coords="331,1276,566,1633">
+<area shape="rect" id="node5" href="tables/ct_fee_type.html" target="_top" title="ct_fee_type" alt="" coords="336,3757,561,4203">
+<area shape="rect" id="node19" href="tables/pt_application_level.html" target="_top" title="pt_application_level" alt="" coords="13,4753,265,4935">
+<area shape="rect" id="node6" href="tables/ct_prod_fee_type.html" target="_top" title="ct_prod_fee_type" alt="" coords="689,3017,915,3316">
+<area shape="rect" id="node8" href="tables/ct_product_type.html" target="_top" title="ct_product_type" alt="" coords="339,1687,559,2044">
+<area shape="rect" id="node7" href="tables/ct_prod_serv_type.html" target="_top" title="ct_prod_serv_type" alt="" coords="683,1709,921,2008">
+<area shape="rect" id="node15" href="tables/ct_service_type.html" target="_top" title="ct_service_type" alt="" coords="340,2463,557,2820">
+<area shape="rect" id="node9" href="tables/ct_promo_consum_type_discount.html" target="_top" title="ct_promo_consum_type_discount" alt="" coords="624,5395,980,5693">
+<area shape="rect" id="node13" href="tables/ct_promotion_type.html" target="_top" title="ct_promotion_type" alt="" coords="328,4736,569,5181">
+<area shape="rect" id="node10" href="tables/ct_promo_fee_type_discount.html" target="_top" title="ct_promo_fee_type_discount" alt="" coords="643,4869,961,5197">
+<area shape="rect" id="node11" href="tables/ct_promo_prod_type.html" target="_top" title="ct_promo_prod_type" alt="" coords="675,2133,929,2432">
+<area shape="rect" id="node12" href="tables/ct_promo_serv_type.html" target="_top" title="ct_promo_serv_type" alt="" coords="676,2629,928,2928">
+<area shape="rect" id="node22" href="tables/pt_discount_type.html" target="_top" title="pt_discount_type" alt="" coords="25,5743,253,5924">
+<area shape="rect" id="node14" href="tables/ct_serv_fee_type.html" target="_top" title="ct_serv_fee_type" alt="" coords="689,3333,915,3632">
+<area shape="rect" id="node16" href="tables/it_profiles.html" target="_top" title="it_profiles" alt="" coords="363,551,534,703">
+<area shape="rect" id="node17" href="tables/it_users.html" target="_top" title="it_users" alt="" coords="712,265,892,593">
+<area shape="rect" id="node18" href="tables/mt_application_menu.html" target="_top" title="mt_application_menu" alt="" coords="1070,29,1370,357">
+<area shape="rect" id="node25" href="tables/vw_product_fee_type.html" target="_top" title="vw_product_fee_type" alt="" coords="657,3685,947,4224">
+<area shape="rect" id="node26" href="tables/vw_product_service_type.html" target="_top" title="vw_product_service_type" alt="" coords="1069,1736,1371,2216">
+<area shape="rect" id="node27" href="tables/vw_promo_consum_type_discount.html" target="_top" title="vw_promo_consum_type_discount" alt="" coords="1024,5603,1416,6347">
+<area shape="rect" id="node28" href="tables/vw_promotion_fee_type_discount.html" target="_top" title="vw_promotion_fee_type_discount" alt="" coords="1042,4812,1398,5585">
+<area shape="rect" id="node29" href="tables/vw_promotion_product_type.html" target="_top" title="vw_promotion_product_type" alt="" coords="1060,2285,1380,2912">
+<area shape="rect" id="node30" href="tables/vw_promotion_service_type.html" target="_top" title="vw_promotion_service_type" alt="" coords="1063,2929,1377,3556">
+<area shape="rect" id="node31" href="tables/vw_service_fee_type.html" target="_top" title="vw_service_fee_type" alt="" coords="658,4313,946,4852">
+<area shape="rect" id="node32" href="tables/vw_users.html" target="_top" title="vw_users" alt="" coords="1138,375,1302,561">
+</map>
+                                        <a name='diagram'><img id="largeimpliedDegreeImg" src="diagrams/summary/relationships.implied.large.png" usemap="#largeImpliedRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /.box-body -->
+                    </div>
+                </section>
+            </div>
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <div>
+                    <div class="pull-right hidden-xs">
+                        <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
+                        <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
+                    </div>
+                    <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.1.0</a></strong>
+                </div>
+                <!-- /.container -->
+            </footer>
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- jQuery 2.2.3 -->
+        <script src="bower/admin-lte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <script src="bower/admin-lte/plugins/jQueryUI/jquery-ui.min.js"></script>
+        <!-- Bootstrap 3.3.5 -->
+        <script src="bower/admin-lte/bootstrap/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <script src="bower/datatables.net/jquery.dataTables.min.js"></script>
+        <script src="bower/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <script src="bower/datatables.net-buttons/dataTables.buttons.min.js"></script>
+        <script src="bower/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+        <script src="bower/datatables.net-buttons/buttons.html5.min.js"></script>
+        <script src="bower/datatables.net-buttons/buttons.print.min.js"></script>
+        <script src="bower/datatables.net-buttons/buttons.colVis.min.js"></script>
+        <!-- SheetJS -->
+        <script src="bower/js-xlsx/xlsx.full.min.js"></script>
+        <!-- pdfmake -->
+        <script src="bower/pdfmake/pdfmake.min.js"></script>
+        <script src="bower/pdfmake/vfs_fonts.js"></script>
+        <!-- SlimScroll -->
+        <script src="bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="bower/admin-lte/plugins/fastclick/fastclick.js"></script>
+        <!-- Salvattore -->
+        <script src="bower/salvattore/salvattore.min.js"></script>
+        <!-- AnchorJS -->
+        <script src="bower/anchor-js/anchor.min.js"></script>
+        <!-- CodeMirror -->
+        <script src="bower/codemirror/codemirror.js"></script>
+        <script src="bower/codemirror/sql.js"></script>
+        <!-- AdminLTE App -->
+        <script src="bower/admin-lte/dist/js/app.min.js"></script>
+        <script src="relationships.js"></script>
+        <script src="schemaSpy.js"></script>
+    </body>
+</html>

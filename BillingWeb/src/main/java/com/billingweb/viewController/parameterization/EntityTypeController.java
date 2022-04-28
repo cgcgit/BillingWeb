@@ -192,7 +192,7 @@ public class EntityTypeController extends SimpleTableBasicClass implements Seria
 		// If we are modifing a row we can't add a new row --> Disable all the other
 		// buttons
 
-		messageDetail = "Editing application level: " + dataObject.getCode();
+		messageDetail = "Editing entity type: " + dataObject.getCode();
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
@@ -208,8 +208,6 @@ public class EntityTypeController extends SimpleTableBasicClass implements Seria
 
 		// Retrieved the data that was modified
 		dataObject = (PtEntityType) event.getObject();
-
-		DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent(DATA_TABLE_ID);		
 
 		try {
 
@@ -261,14 +259,13 @@ public class EntityTypeController extends SimpleTableBasicClass implements Seria
 	public void onRowCancel(RowEditEvent<?> event) {
 		PtEntityType dataObject;
 		String message, messageDetail;
-		boolean error = false;
-
+		
 		message = "CANCEL UPDATE ROW";
 
 		dataObject = (PtEntityType) event.getObject();
 		dataObject.from(this.backupData);
 
-		messageDetail = "Cancelled the edition of the application level";
+		messageDetail = "Cancelled the edition of the entity type";
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 

@@ -199,4 +199,18 @@ public class CtConsumptionTypeDao extends DAOImpl<CtConsumptionTypeRecord, com.b
     public List<com.billingweb.model.tables.pojos.CtConsumptionType> fetchByModifUser(String... values) {
         return fetch(CtConsumptionType.CT_CONSUMPTION_TYPE.MODIF_USER, values);
     }
+
+    /**
+     * Fetch records that have <code>consumption_class_id BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<com.billingweb.model.tables.pojos.CtConsumptionType> fetchRangeOfConsumptionClassId(Integer lowerInclusive, Integer upperInclusive) {
+        return fetchRange(CtConsumptionType.CT_CONSUMPTION_TYPE.CONSUMPTION_CLASS_ID, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>consumption_class_id IN (values)</code>
+     */
+    public List<com.billingweb.model.tables.pojos.CtConsumptionType> fetchByConsumptionClassId(Integer... values) {
+        return fetch(CtConsumptionType.CT_CONSUMPTION_TYPE.CONSUMPTION_CLASS_ID, values);
+    }
 }

@@ -33,9 +33,9 @@ import com.billingweb.model.tables.pojos.VwPromoConsumTypeDiscount;
  * Session Bean implementation class PromotionConsumptionTypeEJB
  */
 @Stateless
-public class PromotionConsumptionTypeEJB implements PromotionConsumptionTypeEJBLocal {
+public class PromotionConsumptionTypeDiscountEJB implements PromotionConsumptionTypeDiscountEJBLocal {
 	
-	Logger logger = (Logger) LogManager.getLogger(PromotionConsumptionTypeEJB.class);
+	Logger logger = (Logger) LogManager.getLogger(PromotionConsumptionTypeDiscountEJB.class);
 
 	@Resource(lookup = "java:jboss/datasources/db_billing")
 	private DataSource ds;
@@ -47,7 +47,7 @@ public class PromotionConsumptionTypeEJB implements PromotionConsumptionTypeEJBL
     /**
      * Default constructor. 
      */
-    public PromotionConsumptionTypeEJB() {
+    public PromotionConsumptionTypeDiscountEJB() {
         // TODO Auto-generated constructor stub
     }
 

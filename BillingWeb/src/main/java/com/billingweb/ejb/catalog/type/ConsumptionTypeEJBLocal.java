@@ -6,7 +6,7 @@ import javax.ejb.Local;
 
 import com.billingweb.exception.BillingWebDataAccessException;
 import com.billingweb.model.tables.pojos.CtConsumptionType;
-import com.billingweb.model.tables.pojos.VwEntityTypeConsumptions;
+import com.billingweb.model.tables.pojos.PtConsumptionClass;
 
 @Local
 public interface ConsumptionTypeEJBLocal {
@@ -25,7 +25,7 @@ public interface ConsumptionTypeEJBLocal {
 	 * @return list of all entity type for the consumption type data in the system
 	 * @throws BillingWebDataAccessException
 	 */
-	public List <VwEntityTypeConsumptions> findEntityTypeForConsumptions () throws BillingWebDataAccessException;
+	public List<PtConsumptionClass> findEntityTypeForConsumptions () throws BillingWebDataAccessException;
 
 	
 	

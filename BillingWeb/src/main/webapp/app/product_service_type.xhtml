@@ -101,6 +101,7 @@
 								form:accordionPanel:relatedTablePanel
 								form:accordionPanel:candidateTablePanel
 								form:accordionPanel:buttonPanel"
+								oncomplete="PF('searchList').hide()"								
 								actionListener="#{productServiceTypeController.pushSelectedButton()}">
 								<f:setPropertyActionListener value="#{updateSelectedTable}"
 									target="#{productServiceTypeController.selectedMainData}" />
@@ -158,7 +159,7 @@
 							filterBy="#{searchDataTable.statusId}" filterMatchMode="exact">
 							<f:facet id="statusFilter" name="filter">
 								<p:selectOneMenu id="statusFilterMenuMainData"
-									onchange="PF('parentTableWidget').filter()">
+									onchange="PF('searchTableWidget').filter()">
 									<f:selectItems id="statusFilterSelectItemsMainData"
 										value="#{productServiceTypeController.statusSelectItems()}" />
 								</p:selectOneMenu>
@@ -431,11 +432,13 @@
 							<p:commandButton id="addCandidateButton" widgetVar="addCandidateButton"
 								styleClass="ui-button-help" style="margin-left: 85px;"
 								icon="#{uiValue.rowUpIcon}" ajax="true"
+								rendered="#{productFeeTypeController.canUserModify()}"
 								actionListener="#{productServiceTypeController.pushAddButtonCandidateToRelatedData()}"
 								oncomplete="if(!args.validationFailed) {updateRelatedTable(); updateCandidateTable();}" />
 							<p:commandButton id="removeRelationButton" widgetVar="removeRelationButton"
 								styleClass="ui-button-help" style="margin-right: 85px"
 								icon="#{uiValue.rowDownIcon}" ajax="true"
+								rendered="#{productFeeTypeController.canUserModify()}"
 								actionListener="#{productServiceTypeController.pushRemoveButtonFromRelatedData()}"
 								oncomplete="if(!args.validationFailed) {updateRelatedTable(); updateCandidateTable();}" />
 						</p:panelGrid>
@@ -446,6 +449,7 @@
 				<!--  CANDIDATE DATA -->
 				<p:panel id="candidateTablePanel"
 					header="CANDIDATE SERVICES for #{productServiceTypeController.mainData.code} (#{productServiceTypeController.mainData.description}) "
+					rendered="#{productFeeTypeController.canUserModify()}"
 					visible="#{productServiceTypeController.showDependentData}">
 
 					<p:dataTable id="candidateTable" widgetVar="candidateTableWidget"

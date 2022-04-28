@@ -26,7 +26,7 @@ import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 
-import com.billingweb.ejb.catalog.relationType.PromotionFeeTypeEJBLocal;
+import com.billingweb.ejb.catalog.relationType.PromotionFeeTypeDiscountEJBLocal;
 import com.billingweb.ejb.catalog.type.PromotionTypeEJBLocal;
 import com.billingweb.ejb.parameterization.StatusEJBLocal;
 import com.billingweb.exception.BillingWebDataAccessException;
@@ -73,7 +73,7 @@ public class PromotionFeeTypeDiscountController extends SimpleRelatedTypeClass i
 	private PromotionTypeEJBLocal promotionTypeEJB;
 
 	@EJB
-	private PromotionFeeTypeEJBLocal promotionFeeTypeEJB;
+	private PromotionFeeTypeDiscountEJBLocal promotionFeeTypeEJB;
 
 	@EJB
 	private StatusEJBLocal statusEJB;
@@ -437,6 +437,9 @@ public class PromotionFeeTypeDiscountController extends SimpleRelatedTypeClass i
 			this.loadCandidateData();
 			this.loadRelatedData();
 			this.showDependentData = true;
+			
+			this.refreshCandidateDataTable();
+			this.refreshRelatedDataTable();
 
 			messageDetail = "Shown data for promotion: ";
 			logger.info(message + " - " + messageDetail + this.mainData.toString());
@@ -444,7 +447,7 @@ public class PromotionFeeTypeDiscountController extends SimpleRelatedTypeClass i
 					messageDetail + this.getSelectedMainData().getCode());
 
 			PrimeFaces.current().executeScript("PF('searchList').hide();");
-			Ajax.update(SELECTED_DATA_TABLE_ID);
+			//Ajax.update(SELECTED_DATA_TABLE_ID);
 			
 			this.refreshRelatedDataTable();
 			this.refreshCandidateDataTable();
@@ -487,6 +490,7 @@ public class PromotionFeeTypeDiscountController extends SimpleRelatedTypeClass i
 				CtPromoFeeTypeDiscount dataObject = new CtPromoFeeTypeDiscount();
 				dataObject.setPromotionTypeId(this.mainData.getPromotionTypeId());
 				dataObject.setFeeTypeId(this.selectedCandidateData.getFeeTypeId());
+				dataObject.setApplicationLevelId(this.mainData.getApplicationLevelId());
 				dataObject.setInputUser(this.loginUser.getUserCode());
 				dataObject.setInputDate(LocalDateTime.now());
 				dataObject.setStatusId(this.activeStatusId);

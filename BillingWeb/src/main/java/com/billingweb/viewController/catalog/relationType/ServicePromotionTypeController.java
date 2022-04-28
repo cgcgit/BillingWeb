@@ -436,6 +436,9 @@ public class ServicePromotionTypeController extends SimpleRelatedTypeClass imple
 			this.loadCandidateData();
 			this.loadRelatedData();
 			this.showDependentData = true;
+			
+			this.refreshCandidateDataTable();
+			this.refreshRelatedDataTable();
 
 			messageDetail = "Shown data for service: ";
 			logger.info(message + " - " + messageDetail + this.mainData.toString());
@@ -443,7 +446,7 @@ public class ServicePromotionTypeController extends SimpleRelatedTypeClass imple
 					messageDetail + this.getSelectedMainData().getCode());
 
 			PrimeFaces.current().executeScript("PF('searchList').hide();");
-			Ajax.update(SELECTED_DATA_TABLE_ID);
+			//Ajax.update(SELECTED_DATA_TABLE_ID);
 			
 			this.refreshRelatedDataTable();
 			this.refreshCandidateDataTable();

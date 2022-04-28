@@ -46,16 +46,6 @@ public interface ICtPromoConsumTypeDiscount extends Serializable {
     public Integer getConsumptionTypeId();
 
     /**
-     * Setter for <code>public.ct_promo_consum_type_discount.consum_type_discount_class_id</code>. Type id (entity_type_id) of the discount class for the promotion-consumption discount relation
-     */
-    public void setConsumTypeDiscountClassId(Integer value);
-
-    /**
-     * Getter for <code>public.ct_promo_consum_type_discount.consum_type_discount_class_id</code>. Type id (entity_type_id) of the discount class for the promotion-consumption discount relation
-     */
-    public Integer getConsumTypeDiscountClassId();
-
-    /**
      * Setter for <code>public.ct_promo_consum_type_discount.status_id</code>. Status id for the promotion-consumption discount relation type
      */
     public void setStatusId(Integer value);

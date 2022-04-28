@@ -21,7 +21,6 @@ public class CtPromoConsumTypeDiscount implements ICtPromoConsumTypeDiscount {
     private Integer       promoConsumTypeDiscountId;
     private Integer       promotionTypeId;
     private Integer       consumptionTypeId;
-    private Integer       consumTypeDiscountClassId;
     private Integer       statusId;
     private LocalDateTime inputDate;
     private String        inputUser;
@@ -34,7 +33,6 @@ public class CtPromoConsumTypeDiscount implements ICtPromoConsumTypeDiscount {
         this.promoConsumTypeDiscountId = value.getPromoConsumTypeDiscountId();
         this.promotionTypeId = value.getPromotionTypeId();
         this.consumptionTypeId = value.getConsumptionTypeId();
-        this.consumTypeDiscountClassId = value.getConsumTypeDiscountClassId();
         this.statusId = value.getStatusId();
         this.inputDate = value.getInputDate();
         this.inputUser = value.getInputUser();
@@ -46,7 +44,6 @@ public class CtPromoConsumTypeDiscount implements ICtPromoConsumTypeDiscount {
         Integer       promoConsumTypeDiscountId,
         Integer       promotionTypeId,
         Integer       consumptionTypeId,
-        Integer       consumTypeDiscountClassId,
         Integer       statusId,
         LocalDateTime inputDate,
         String        inputUser,
@@ -56,7 +53,6 @@ public class CtPromoConsumTypeDiscount implements ICtPromoConsumTypeDiscount {
         this.promoConsumTypeDiscountId = promoConsumTypeDiscountId;
         this.promotionTypeId = promotionTypeId;
         this.consumptionTypeId = consumptionTypeId;
-        this.consumTypeDiscountClassId = consumTypeDiscountClassId;
         this.statusId = statusId;
         this.inputDate = inputDate;
         this.inputUser = inputUser;
@@ -110,22 +106,6 @@ public class CtPromoConsumTypeDiscount implements ICtPromoConsumTypeDiscount {
     @Override
     public void setConsumptionTypeId(Integer consumptionTypeId) {
         this.consumptionTypeId = consumptionTypeId;
-    }
-
-    /**
-     * Getter for <code>public.ct_promo_consum_type_discount.consum_type_discount_class_id</code>. Type id (entity_type_id) of the discount class for the promotion-consumption discount relation
-     */
-    @Override
-    public Integer getConsumTypeDiscountClassId() {
-        return this.consumTypeDiscountClassId;
-    }
-
-    /**
-     * Setter for <code>public.ct_promo_consum_type_discount.consum_type_discount_class_id</code>. Type id (entity_type_id) of the discount class for the promotion-consumption discount relation
-     */
-    @Override
-    public void setConsumTypeDiscountClassId(Integer consumTypeDiscountClassId) {
-        this.consumTypeDiscountClassId = consumTypeDiscountClassId;
     }
 
     /**
@@ -215,7 +195,6 @@ public class CtPromoConsumTypeDiscount implements ICtPromoConsumTypeDiscount {
         sb.append(promoConsumTypeDiscountId);
         sb.append(", ").append(promotionTypeId);
         sb.append(", ").append(consumptionTypeId);
-        sb.append(", ").append(consumTypeDiscountClassId);
         sb.append(", ").append(statusId);
         sb.append(", ").append(inputDate);
         sb.append(", ").append(inputUser);
@@ -235,7 +214,6 @@ public class CtPromoConsumTypeDiscount implements ICtPromoConsumTypeDiscount {
         setPromoConsumTypeDiscountId(from.getPromoConsumTypeDiscountId());
         setPromotionTypeId(from.getPromotionTypeId());
         setConsumptionTypeId(from.getConsumptionTypeId());
-        setConsumTypeDiscountClassId(from.getConsumTypeDiscountClassId());
         setStatusId(from.getStatusId());
         setInputDate(from.getInputDate());
         setInputUser(from.getInputUser());

@@ -27,6 +27,7 @@ public class CtConsumptionType implements ICtConsumptionType {
     private String        inputUser;
     private LocalDateTime modifDate;
     private String        modifUser;
+    private Integer       consumptionClassId;
 
     public CtConsumptionType() {}
 
@@ -41,6 +42,7 @@ public class CtConsumptionType implements ICtConsumptionType {
         this.inputUser = value.getInputUser();
         this.modifDate = value.getModifDate();
         this.modifUser = value.getModifUser();
+        this.consumptionClassId = value.getConsumptionClassId();
     }
 
     public CtConsumptionType(
@@ -53,7 +55,8 @@ public class CtConsumptionType implements ICtConsumptionType {
         LocalDateTime inputDate,
         String        inputUser,
         LocalDateTime modifDate,
-        String        modifUser
+        String        modifUser,
+        Integer       consumptionClassId
     ) {
         this.consumptionTypeId = consumptionTypeId;
         this.entityTypeId = entityTypeId;
@@ -65,6 +68,7 @@ public class CtConsumptionType implements ICtConsumptionType {
         this.inputUser = inputUser;
         this.modifDate = modifDate;
         this.modifUser = modifUser;
+        this.consumptionClassId = consumptionClassId;
     }
 
     /**
@@ -227,6 +231,22 @@ public class CtConsumptionType implements ICtConsumptionType {
         this.modifUser = modifUser;
     }
 
+    /**
+     * Getter for <code>public.ct_consumption_type.consumption_class_id</code>. Consumption class for the consumption type
+     */
+    @Override
+    public Integer getConsumptionClassId() {
+        return this.consumptionClassId;
+    }
+
+    /**
+     * Setter for <code>public.ct_consumption_type.consumption_class_id</code>. Consumption class for the consumption type
+     */
+    @Override
+    public void setConsumptionClassId(Integer consumptionClassId) {
+        this.consumptionClassId = consumptionClassId;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("CtConsumptionType (");
@@ -241,6 +261,7 @@ public class CtConsumptionType implements ICtConsumptionType {
         sb.append(", ").append(inputUser);
         sb.append(", ").append(modifDate);
         sb.append(", ").append(modifUser);
+        sb.append(", ").append(consumptionClassId);
 
         sb.append(")");
         return sb.toString();
@@ -262,6 +283,7 @@ public class CtConsumptionType implements ICtConsumptionType {
         setInputUser(from.getInputUser());
         setModifDate(from.getModifDate());
         setModifUser(from.getModifUser());
+        setConsumptionClassId(from.getConsumptionClassId());
     }
 
     @Override

@@ -16,7 +16,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row10;
+import org.jooq.Row11;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -56,7 +56,7 @@ public class CtConsumptionType extends TableImpl<CtConsumptionTypeRecord> {
     /**
      * The column <code>public.ct_consumption_type.entity_type_id</code>. Entity_id for the consumption type
      */
-    public final TableField<CtConsumptionTypeRecord, Integer> ENTITY_TYPE_ID = createField(DSL.name("entity_type_id"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("1003", SQLDataType.INTEGER)), this, "Entity_id for the consumption type");
+    public final TableField<CtConsumptionTypeRecord, Integer> ENTITY_TYPE_ID = createField(DSL.name("entity_type_id"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("1004", SQLDataType.INTEGER)), this, "Entity_id for the consumption type");
 
     /**
      * The column <code>public.ct_consumption_type.code</code>. Code of the consumption type
@@ -97,6 +97,11 @@ public class CtConsumptionType extends TableImpl<CtConsumptionTypeRecord> {
      * The column <code>public.ct_consumption_type.modif_user</code>.
      */
     public final TableField<CtConsumptionTypeRecord, String> MODIF_USER = createField(DSL.name("modif_user"), SQLDataType.VARCHAR(10), this, "");
+
+    /**
+     * The column <code>public.ct_consumption_type.consumption_class_id</code>. Consumption class for the consumption type
+     */
+    public final TableField<CtConsumptionTypeRecord, Integer> CONSUMPTION_CLASS_ID = createField(DSL.name("consumption_class_id"), SQLDataType.INTEGER.nullable(false), this, "Consumption class for the consumption type");
 
     private CtConsumptionType(Name alias, Table<CtConsumptionTypeRecord> aliased) {
         this(alias, aliased, null);
@@ -148,11 +153,12 @@ public class CtConsumptionType extends TableImpl<CtConsumptionTypeRecord> {
 
     @Override
     public List<ForeignKey<CtConsumptionTypeRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<CtConsumptionTypeRecord, ?>>asList(Keys.CT_CONSUMPTION_TYPE__CT_CONSUMPTION_TYPE_ENTITY_FK, Keys.CT_CONSUMPTION_TYPE__CT_CONSUMPTION_TYPE_STATUS_FK);
+        return Arrays.<ForeignKey<CtConsumptionTypeRecord, ?>>asList(Keys.CT_CONSUMPTION_TYPE__CT_CONSUMPTION_TYPE_ENTITY_FK, Keys.CT_CONSUMPTION_TYPE__CT_CONSUMPTION_TYPE_STATUS_FK, Keys.CT_CONSUMPTION_TYPE__CT_CONSUMPTION_TYPE_CLASS_FK);
     }
 
     private transient PtEntityType _ptEntityType;
     private transient PtStatus _ptStatus;
+    private transient PtConsumptionClass _ptConsumptionClass;
 
     public PtEntityType ptEntityType() {
         if (_ptEntityType == null)
@@ -166,6 +172,13 @@ public class CtConsumptionType extends TableImpl<CtConsumptionTypeRecord> {
             _ptStatus = new PtStatus(this, Keys.CT_CONSUMPTION_TYPE__CT_CONSUMPTION_TYPE_STATUS_FK);
 
         return _ptStatus;
+    }
+
+    public PtConsumptionClass ptConsumptionClass() {
+        if (_ptConsumptionClass == null)
+            _ptConsumptionClass = new PtConsumptionClass(this, Keys.CT_CONSUMPTION_TYPE__CT_CONSUMPTION_TYPE_CLASS_FK);
+
+        return _ptConsumptionClass;
     }
 
     @Override
@@ -195,11 +208,11 @@ public class CtConsumptionType extends TableImpl<CtConsumptionTypeRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row10 type methods
+    // Row11 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row10<Integer, Integer, String, String, String, Integer, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
-        return (Row10) super.fieldsRow();
+    public Row11<Integer, Integer, String, String, String, Integer, LocalDateTime, String, LocalDateTime, String, Integer> fieldsRow() {
+        return (Row11) super.fieldsRow();
     }
 }

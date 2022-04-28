@@ -163,16 +163,24 @@ public class CtBillCycleType extends TableImpl<CtBillCycleTypeRecord> {
 
     @Override
     public List<ForeignKey<CtBillCycleTypeRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<CtBillCycleTypeRecord, ?>>asList(Keys.CT_BILL_CYCLE_TYPE__CT_BILL_CYCLE_TYPE_PERIOD_FK);
+        return Arrays.<ForeignKey<CtBillCycleTypeRecord, ?>>asList(Keys.CT_BILL_CYCLE_TYPE__CT_BILL_CYCLE_TYPE_PERIOD_FK, Keys.CT_BILL_CYCLE_TYPE__CT_BILL_CYCLE_TYPE_STATUS_FK);
     }
 
     private transient PtBillingPeriod _ptBillingPeriod;
+    private transient PtStatus _ptStatus;
 
     public PtBillingPeriod ptBillingPeriod() {
         if (_ptBillingPeriod == null)
             _ptBillingPeriod = new PtBillingPeriod(this, Keys.CT_BILL_CYCLE_TYPE__CT_BILL_CYCLE_TYPE_PERIOD_FK);
 
         return _ptBillingPeriod;
+    }
+
+    public PtStatus ptStatus() {
+        if (_ptStatus == null)
+            _ptStatus = new PtStatus(this, Keys.CT_BILL_CYCLE_TYPE__CT_BILL_CYCLE_TYPE_STATUS_FK);
+
+        return _ptStatus;
     }
 
     @Override

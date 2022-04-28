@@ -6,6 +6,7 @@ package com.billingweb.model.tables.pojos;
 
 import com.billingweb.model.tables.interfaces.ICtPromotionType;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 
@@ -24,7 +25,7 @@ public class CtPromotionType implements ICtPromotionType {
     private String        description;
     private Integer       applicationLevelId;
     private Integer       discountTypeId;
-    private Integer       discountValue;
+    private BigDecimal    discountValue;
     private Integer       statusId;
     private LocalDateTime inputDate;
     private String        inputUser;
@@ -57,7 +58,7 @@ public class CtPromotionType implements ICtPromotionType {
         String        description,
         Integer       applicationLevelId,
         Integer       discountTypeId,
-        Integer       discountValue,
+        BigDecimal    discountValue,
         Integer       statusId,
         LocalDateTime inputDate,
         String        inputUser,
@@ -195,7 +196,7 @@ public class CtPromotionType implements ICtPromotionType {
      * Getter for <code>public.ct_promotion_type.discount_value</code>. Value of the discount for the promotion type
      */
     @Override
-    public Integer getDiscountValue() {
+    public BigDecimal getDiscountValue() {
         return this.discountValue;
     }
 
@@ -203,7 +204,7 @@ public class CtPromotionType implements ICtPromotionType {
      * Setter for <code>public.ct_promotion_type.discount_value</code>. Value of the discount for the promotion type
      */
     @Override
-    public void setDiscountValue(Integer discountValue) {
+    public void setDiscountValue(BigDecimal discountValue) {
         this.discountValue = discountValue;
     }
 

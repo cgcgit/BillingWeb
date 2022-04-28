@@ -103,6 +103,7 @@
 								form:accordionPanel:relatedTablePanel
 								form:accordionPanel:candidateTablePanel
 								form:accordionPanel:buttonPanel"
+								oncomplete="PF('searchList').hide()"
 								actionListener="#{productFeeTypeController.pushSelectedButton()}">
 								<f:setPropertyActionListener value="#{updateSelectedTable}"
 									target="#{productFeeTypeController.selectedMainData}" />
@@ -160,7 +161,7 @@
 							filterBy="#{searchDataTable.statusId}" filterMatchMode="exact">
 							<f:facet id="statusFilter" name="filter">
 								<p:selectOneMenu id="statusFilterMenuMainData"
-									onchange="PF('parentTableWidget').filter()">
+									onchange="PF('searchTableWidget').filter()">
 									<f:selectItems id="statusFilterSelectItemsMainData"
 										value="#{productFeeTypeController.statusSelectItems()}" />
 								</p:selectOneMenu>
@@ -244,7 +245,7 @@
 			<!--  RELATION DATA AREA - related data and candidate data  -->
 			<p:tab id="relationPanel"
 				titleStyle="background: WhiteSmoke; color: black"
-				title="SERVICE TYPES">
+				title="FEE TYPES">
 
 				<!--  RELATED DATA -->
 
@@ -415,7 +416,7 @@
 								<f:selectItems
 									value="#{productFeeTypeController.booleanSelectItems()}"
 									id="selectItemsProratedOutputRelated" itemDisabled="true"
-									var="Status" itemValue="#{relatedDataTable.feeTypeStatusId}" />
+									var="Status" itemValue="#{relatedDataTable.prorate}" />
 							</p:selectOneMenu>
 						</p:column>
 
@@ -426,7 +427,7 @@
                                   width: 100px;    
                                   overflow: hidden"
 							headerText="PRICE" rendered="true"
-							sortBy="#{relatedDataTable.price}" filterBy="#{dataTable.price}"
+							filterBy="#{relatedDataTable.price}"
 							filterMatchMode="contains">
 							<h:outputText id="filterPrice" value="" />
 							<h:outputText id="priceOutput" value="#{relatedDataTable.price}" />
@@ -471,11 +472,13 @@
 							<p:commandButton id="addCandidateButton"
 								styleClass="ui-button-help" style="margin-left: 85px;"
 								icon="#{uiValue.rowUpIcon}" ajax="true"
+								rendered="#{productFeeTypeController.canUserModify()}"
 								actionListener="#{productFeeTypeController.pushAddButtonCandidateToRelatedData()}"
 								oncomplete="if(!args.validationFailed) {updateRelatedTable();updateCandidateTable();}" />
 							<p:commandButton id="removeRelationButton"
 								styleClass="ui-button-help" style="margin-right: 85px"
 								icon="#{uiValue.rowDownIcon}" ajax="true"
+								rendered="#{productFeeTypeController.canUserModify()}"
 								actionListener="#{productFeeTypeController.pushRemoveButtonFromRelatedData()}"
 								oncomplete="if(!args.validationFailed) {updateRelatedTable();updateCandidateTable();}" />
 						</p:panelGrid>
@@ -486,6 +489,7 @@
 				<!--  CANDIDATE DATA -->
 				<p:panel id="candidateTablePanel"
 					header="CANDIDATE FEES for #{productFeeTypeController.mainData.code} (#{productFeeTypeController.mainData.description}) "
+					rendered="#{productFeeTypeController.canUserModify()}"
 					visible="#{productFeeTypeController.showDependentData}">
 
 					<p:dataTable id="candidateTable" widgetVar="candidateTableWidget"

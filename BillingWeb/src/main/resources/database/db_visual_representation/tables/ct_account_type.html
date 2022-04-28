@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>ct_account_type - db_billing Database</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="../bower/admin-lte/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="../bower/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="../bower/ionicons/css/ionicons.min.css">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="../bower/datatables.net-bs/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="../bower/datatables.net-buttons-bs/css/buttons.bootstrap.min.css">
+        <!-- Code Mirror -->
+        <link rel="stylesheet" href="../bower/codemirror/codemirror.css">
+        <!-- Fonts -->
+        <link href='../fonts/indieflower/indie-flower.css' rel='stylesheet' type='text/css'>
+        <link href='../fonts/source-sans-pro/source-sans-pro.css' rel='stylesheet' type='text/css'>
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/AdminLTE.min.css">
+        <!-- Salvattore -->
+        <link rel="stylesheet" href="../bower/salvattore/salvattore.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+           folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/skins/_all-skins.min.css">
+        <!-- SchemaSpy -->
+        <link rel="stylesheet" href="../schemaSpy.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="../bower/html5shiv/html5shiv.min.js"></script>
+        <script src="../bower/respond/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+    <body class="hold-transition skin-blue layout-top-nav">
+        <div class="wrapper">
+            <header class="main-header">
+                <nav class="navbar navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <a href="../index.html" class="navbar-brand"><b>db_billing</b> Database</a>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"><i class="fa fa-bars"></i></button>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="../index.html">Tables <span class="sr-only">(current)</span></a></li>
+                                <li><a href="../columns.html" title="All of the columns in the schema">Columns</a></li>
+                                <li><a href="../constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
+                                <li><a href="../relationships.html" title="Diagram of table relationships">Relationships</a></li>
+                                <li><a href="../orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>
+                                <li><a href="../anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+                                <li><a href="../routines.html" title="Procedures and functions">Routines</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                        <!-- Navbar Right Menu -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </nav>
+            </header>
+            <!-- Main content -->
+            <!-- Full Width Column -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>ct_account_type</h1><p><span id="recordNumber">2</span> rows</p><br />
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-file-text-o"></i>
+                            <h3 id="Description" class="box-title">Description</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div><!-- /.box-header -->
+                        <div class="box-body clearfix">
+                            <p>Table that stores the account types of the catalog for the application</p>
+                        </div><!-- /.box-body -->
+                    </div>
+                </section>
+                <!-- Main content -->
+                <section class="content">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                            <h3 id="Columns" class="box-title">Columns</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <table id="standard_table" class="table table-bordered table-striped dataTable" role="grid">
+                                <thead align='left'>
+                                <tr>
+                                    <th>Column</th>
+                                    <th>Type</th>
+                                    <th>Size</th>
+                                    <th title='Are nulls allowed?'>Nulls</th>
+                                    <th title='Is column automatically updated?'>Auto</th>
+                                    <th title='Default value'>Default</th>
+                                    <th title='Columns in tables that reference this column'>Children</th>
+                                    <th title='Columns in tables that are referenced by this column'>Parents</th>
+                                    <th title='Comments' class="toggle"><span>Comments</span></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="account_type_id">account_type_id</span></td>
+                                    <td>serial</td>
+                                    <td>10</td>
+                                    <td title=''></td>
+                                    <td title='Automatically updated by the database'>√</td>
+                                    <td>nextval(&#39;seq_account_type_id&#39;::regclass)</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>Internal identifier of the account type</p></td>
+                                </tr>
+                                <tr>
+                                    <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="entity_type_id">entity_type_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>1009</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="ct_account_type.entity_type_id references pt_entity_type.entity_type_id via ct_account_type_entity_fk"><a href='pt_entity_type.html'>pt_entity_type</a><span class='relatedKey'>.entity_type_id</span></td>
+                                                <td class="constraint detail">ct_account_type_entity_fk<span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td><p>Entity_id for the account type</p></td>
+                                </tr>
+                                <tr>
+                                    <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i><span id="code">code</span></td>
+                                    <td>varchar</td>
+                                    <td>10</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>Code of the account type</p></td>
+                                </tr>
+                                <tr>
+                                    <td class='indexedColumn' title='Indexed'><i class='fa fa-sitemap fa-rotate-120' style='padding-right: 5px;'></i><span id="name">name</span></td>
+                                    <td>varchar</td>
+                                    <td>50</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>Name of the account type</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="description">description</span></td>
+                                    <td>varchar</td>
+                                    <td>500</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>Description for the account type</p></td>
+                                </tr>
+                                <tr>
+                                    <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="ordinary_bill_cycle_type_id">ordinary_bill_cycle_type_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="ct_account_type.ordinary_bill_cycle_type_id references ct_bill_cycle_type.bill_cycle_type_id via ct_account_type_obc_fk"><a href='ct_bill_cycle_type.html'>ct_bill_cycle_type</a><span class='relatedKey'>.bill_cycle_type_id</span></td>
+                                                <td class="constraint detail">ct_account_type_obc_fk<span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td><p>Ordinary cycle type id for the ordinary billing of the account</p></td>
+                                </tr>
+                                <tr>
+                                    <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="corrective_bill_cycle_type_id">corrective_bill_cycle_type_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="ct_account_type.corrective_bill_cycle_type_id references ct_bill_cycle_type.bill_cycle_type_id via ct_account_type_cbc_fk"><a href='ct_bill_cycle_type.html'>ct_bill_cycle_type</a><span class='relatedKey'>.bill_cycle_type_id</span></td>
+                                                <td class="constraint detail">ct_account_type_cbc_fk<span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td><p>Bill cycle type id for the ordinary billing of the account</p></td>
+                                </tr>
+                                <tr>
+                                    <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="status_id">status_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>1000</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="ct_account_type.status_id references pt_status.status_id via ct_account_type_status_fk"><a href='pt_status.html'>pt_status</a><span class='relatedKey'>.status_id</span></td>
+                                                <td class="constraint detail">ct_account_type_status_fk<span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td><p>Status id for the account type</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="input_date">input_date</span></td>
+                                    <td>timestamp</td>
+                                    <td>29,6</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>((&#39;now&#39;::text)::timestamp(0) with time zone)::timestamp without time zone</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>Date on which the record was created</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="input_user">input_user</span></td>
+                                    <td>varchar</td>
+                                    <td>10</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>User who was modified the record</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="modif_date">modif_date</span></td>
+                                    <td>timestamp</td>
+                                    <td>29,6</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>Date of the last modification of the record</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="modif_user">modif_user</span></td>
+                                    <td>varchar</td>
+                                    <td>10</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-sitemap"></i>
+                            <h3 id="Indexes" class="box-title">Indexes</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <table id="indexes_table" class="table table-bordered table-striped dataTable" role="grid">
+                                <thead>
+                                <tr>
+                                    <th>Constraint Name</th>
+                                    <th>Type</th>
+                                    <th>Sort</th>
+                                    <th>Column(s)</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey'></i> ct_account_type_pk</td>
+                                    <td>Primary key</td>
+                                    <td><span title='Ascending'>Asc</span></td>
+                                    <td>account_type_id</td>
+                                </tr>
+                                <tr>
+                                    <td class='uniqueKey' title='Unique Key'><i class='icon ion-key iconkey'></i> ct_account_type_code_u</td>
+                                    <td>Must be unique</td>
+                                    <td><span title='Ascending'>Asc</span></td>
+                                    <td>code</td>
+                                </tr>
+                                <tr>
+                                    <td class='uniqueKey' title='Unique Key'><i class='icon ion-key iconkey'></i> ct_account_type_name_u</td>
+                                    <td>Must be unique</td>
+                                    <td><span title='Ascending'>Asc</span></td>
+                                    <td>name</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div><!-- /.box-body -->
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-code-fork"></i>
+                            <h3 id="Relationships" class="box-title">Relationships</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="nav-tabs-custom"><!-- Tabs within a box -->
+                                <h5>Close relationships within degrees of separation</h5>
+                                <ul class="nav nav-tabs pull-left ui-sortable-handle">
+                                    <li class="active"><a href="#oneDegreeImg-chart" data-toggle="tab" aria-expanded="true">One</a></li>
+                                    <li class=""><a href="#twodegreesDegreeImg-chart" data-toggle="tab" aria-expanded="true">Two degrees</a></li>
+                                    <li class=""><a href="#oneimpliedDegreeImg-chart" data-toggle="tab" aria-expanded="true">One implied</a></li>
+                                    <li class=""><a href="#twoimpliedDegreeImg-chart" data-toggle="tab" aria-expanded="true">Two implied</a></li>
+                                </ul>
+                                <div class="tab-content no-padding">
+                                    <div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
+<area shape="rect" id="node1" href="ct_account_type.html" target="_top" title="ct_account_type" alt="" coords="492,35,932,456">
+<area shape="rect" id="node2" href="ct_bill_cycle_type.html" target="_top" title="ct_bill_cycle_type" alt="" coords="216,199,448,463">
+<area shape="rect" id="node3" href="pt_entity_type.html" target="_top" title="pt_entity_type" alt="" coords="229,5,435,181">
+<area shape="rect" id="node4" href="pt_status.html" target="_top" title="pt_status" alt="" coords="5,393,172,569">
+</map>
+                                        <a name='diagram'><img id="oneDegreeImg" src="../diagrams/tables/ct_account_type.1degree.png" usemap="#oneDegreeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
+<area shape="rect" id="node1" href="ct_account_type.html" target="_top" title="ct_account_type" alt="" coords="579,5,1019,427">
+<area shape="rect" id="node2" href="ct_bill_cycle_type.html" target="_top" title="ct_bill_cycle_type" alt="" coords="287,144,519,408">
+<area shape="rect" id="node3" href="pt_entity_type.html" target="_top" title="pt_entity_type" alt="" coords="13,687,220,863">
+<area shape="rect" id="node4" href="pt_status.html" target="_top" title="pt_status" alt="" coords="33,880,200,1056">
+<area shape="rect" id="node5" href="pt_billing_period.html" target="_top" title="pt_billing_period" alt="" coords="5,235,228,323">
+<area shape="rect" id="node6" href="ct_consumption_type.html" target="_top" title="ct_consumption_type" alt="" coords="272,1204,535,1292">
+<area shape="rect" id="node7" href="ct_customer_type.html" target="_top" title="ct_customer_type" alt="" coords="286,425,521,513">
+<area shape="rect" id="node8" href="ct_fee_type.html" target="_top" title="ct_fee_type" alt="" coords="312,744,495,832">
+<area shape="rect" id="node9" href="ct_prod_fee_type.html" target="_top" title="ct_prod_fee_type" alt="" coords="685,567,912,655">
+<area shape="rect" id="node10" href="ct_product_type.html" target="_top" title="ct_product_type" alt="" coords="293,603,513,691">
+<area shape="rect" id="node11" href="ct_prod_serv_type.html" target="_top" title="ct_prod_serv_type" alt="" coords="680,672,917,760">
+<area shape="rect" id="node12" href="ct_service_type.html" target="_top" title="ct_service_type" alt="" coords="295,849,512,937">
+<area shape="rect" id="node13" href="ct_promo_consum_type_discount.html" target="_top" title="ct_promo_consum_type_discount" alt="" coords="621,1204,977,1292">
+<area shape="rect" id="node14" href="ct_promotion_type.html" target="_top" title="ct_promotion_type" alt="" coords="283,1063,524,1151">
+<area shape="rect" id="node15" href="ct_promo_fee_type_discount.html" target="_top" title="ct_promo_fee_type_discount" alt="" coords="639,991,958,1079">
+<area shape="rect" id="node16" href="ct_promo_prod_type.html" target="_top" title="ct_promo_prod_type" alt="" coords="672,885,925,973">
+<area shape="rect" id="node17" href="ct_promo_serv_type.html" target="_top" title="ct_promo_serv_type" alt="" coords="673,1096,925,1184">
+<area shape="rect" id="node18" href="ct_serv_fee_type.html" target="_top" title="ct_serv_fee_type" alt="" coords="685,780,912,868">
+</map>
+                                        <a name='diagram'><img id="twodegreesDegreeImg" src="../diagrams/tables/ct_account_type.2degrees.png" usemap="#twoDegreesRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="oneimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="oneDegreeRelationshipsDiagramImplied" name="oneDegreeRelationshipsDiagramImplied">
+<area shape="rect" id="node1" href="ct_account_type.html" target="_top" title="ct_account_type" alt="" coords="492,35,932,456">
+<area shape="rect" id="node2" href="ct_bill_cycle_type.html" target="_top" title="ct_bill_cycle_type" alt="" coords="216,199,448,463">
+<area shape="rect" id="node3" href="pt_entity_type.html" target="_top" title="pt_entity_type" alt="" coords="229,5,435,181">
+<area shape="rect" id="node4" href="pt_status.html" target="_top" title="pt_status" alt="" coords="5,393,172,569">
+</map>
+                                        <a name='diagram'><img id="oneimpliedDegreeImg" src="../diagrams/tables/ct_account_type.implied1degrees.png" usemap="#oneDegreeRelationshipsDiagramImplied" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="twoimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="twoDegreesRelationshipsDiagramImplied" name="twoDegreesRelationshipsDiagramImplied">
+<area shape="rect" id="node1" href="ct_account_type.html" target="_top" title="ct_account_type" alt="" coords="579,5,1019,427">
+<area shape="rect" id="node2" href="ct_bill_cycle_type.html" target="_top" title="ct_bill_cycle_type" alt="" coords="287,137,519,401">
+<area shape="rect" id="node3" href="pt_entity_type.html" target="_top" title="pt_entity_type" alt="" coords="13,767,220,943">
+<area shape="rect" id="node4" href="pt_status.html" target="_top" title="pt_status" alt="" coords="33,1303,200,1479">
+<area shape="rect" id="node5" href="pt_billing_period.html" target="_top" title="pt_billing_period" alt="" coords="5,228,228,316">
+<area shape="rect" id="node6" href="ct_consumption_type.html" target="_top" title="ct_consumption_type" alt="" coords="272,560,535,648">
+<area shape="rect" id="node7" href="ct_customer_type.html" target="_top" title="ct_customer_type" alt="" coords="286,419,521,507">
+<area shape="rect" id="node8" href="ct_fee_type.html" target="_top" title="ct_fee_type" alt="" coords="312,1221,495,1309">
+<area shape="rect" id="node9" href="ct_prod_fee_type.html" target="_top" title="ct_prod_fee_type" alt="" coords="685,1665,912,1753">
+<area shape="rect" id="node10" href="ct_product_type.html" target="_top" title="ct_product_type" alt="" coords="293,1569,513,1657">
+<area shape="rect" id="node11" href="ct_prod_serv_type.html" target="_top" title="ct_prod_serv_type" alt="" coords="680,1455,917,1543">
+<area shape="rect" id="node12" href="ct_service_type.html" target="_top" title="ct_service_type" alt="" coords="295,1080,512,1168">
+<area shape="rect" id="node13" href="ct_promo_consum_type_discount.html" target="_top" title="ct_promo_consum_type_discount" alt="" coords="621,496,977,584">
+<area shape="rect" id="node14" href="ct_promotion_type.html" target="_top" title="ct_promotion_type" alt="" coords="283,769,524,857">
+<area shape="rect" id="node15" href="ct_promo_fee_type_discount.html" target="_top" title="ct_promo_fee_type_discount" alt="" coords="639,1023,958,1111">
+<area shape="rect" id="node16" href="ct_promo_prod_type.html" target="_top" title="ct_promo_prod_type" alt="" coords="672,1560,925,1648">
+<area shape="rect" id="node17" href="ct_promo_serv_type.html" target="_top" title="ct_promo_serv_type" alt="" coords="673,777,925,865">
+<area shape="rect" id="node18" href="ct_serv_fee_type.html" target="_top" title="ct_serv_fee_type" alt="" coords="685,1164,912,1252">
+<area shape="rect" id="node19" href="vw_product_fee_type.html" target="_top" title="vw_product_fee_type" alt="" coords="669,1911,928,1975">
+<area shape="rect" id="node20" href="vw_product_service_type.html" target="_top" title="vw_product_service_type" alt="" coords="1097,1772,1389,1836">
+<area shape="rect" id="node21" href="vw_promo_consum_type_discount.html" target="_top" title="vw_promo_consum_type_discount" alt="" coords="1063,580,1424,644">
+<area shape="rect" id="node22" href="vw_promotion_fee_type_discount.html" target="_top" title="vw_promotion_fee_type_discount" alt="" coords="1065,1299,1421,1363">
+<area shape="rect" id="node23" href="vw_promotion_product_type.html" target="_top" title="vw_promotion_product_type" alt="" coords="1085,1893,1401,1957">
+<area shape="rect" id="node24" href="vw_promotion_service_type.html" target="_top" title="vw_promotion_service_type" alt="" coords="1087,861,1400,925">
+<area shape="rect" id="node25" href="vw_service_fee_type.html" target="_top" title="vw_service_fee_type" alt="" coords="671,1305,927,1369">
+</map>
+                                        <a name='diagram'><img id="twoimpliedDegreeImg" src="../diagrams/tables/ct_account_type.implied2degrees.png" usemap="#twoDegreesRelationshipsDiagramImplied" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /.box-body -->
+                    </div>
+                </section>
+                <script>
+                    var config = {
+                        pagination: true
+                    }
+                </script>
+            </div>
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <div>
+                    <div class="pull-right hidden-xs">
+                        <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
+                        <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
+                    </div>
+                    <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.1.0</a></strong>
+                </div>
+                <!-- /.container -->
+            </footer>
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- jQuery 2.2.3 -->
+        <script src="../bower/admin-lte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <script src="../bower/admin-lte/plugins/jQueryUI/jquery-ui.min.js"></script>
+        <!-- Bootstrap 3.3.5 -->
+        <script src="../bower/admin-lte/bootstrap/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <script src="../bower/datatables.net/jquery.dataTables.min.js"></script>
+        <script src="../bower/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/dataTables.buttons.min.js"></script>
+        <script src="../bower/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.html5.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.print.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.colVis.min.js"></script>
+        <!-- SheetJS -->
+        <script src="../bower/js-xlsx/xlsx.full.min.js"></script>
+        <!-- pdfmake -->
+        <script src="../bower/pdfmake/pdfmake.min.js"></script>
+        <script src="../bower/pdfmake/vfs_fonts.js"></script>
+        <!-- SlimScroll -->
+        <script src="../bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="../bower/admin-lte/plugins/fastclick/fastclick.js"></script>
+        <!-- Salvattore -->
+        <script src="../bower/salvattore/salvattore.min.js"></script>
+        <!-- AnchorJS -->
+        <script src="../bower/anchor-js/anchor.min.js"></script>
+        <!-- CodeMirror -->
+        <script src="../bower/codemirror/codemirror.js"></script>
+        <script src="../bower/codemirror/sql.js"></script>
+        <!-- AdminLTE App -->
+        <script src="../bower/admin-lte/dist/js/app.min.js"></script>
+        <script src="table.js"></script>
+        <script src="../schemaSpy.js"></script>
+    </body>
+</html>

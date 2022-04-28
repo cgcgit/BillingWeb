@@ -24,10 +24,11 @@ import com.billingweb.model.tables.ItUsers;
 import com.billingweb.model.tables.MtApplicationMenu;
 import com.billingweb.model.tables.PtApplicationLevel;
 import com.billingweb.model.tables.PtBillingPeriod;
+import com.billingweb.model.tables.PtConsumptionClass;
 import com.billingweb.model.tables.PtDiscountType;
 import com.billingweb.model.tables.PtEntityType;
 import com.billingweb.model.tables.PtStatus;
-import com.billingweb.model.tables.VwEntityTypeConsumptions;
+import com.billingweb.model.tables.PtTaxType;
 import com.billingweb.model.tables.VwProductFeeType;
 import com.billingweb.model.tables.VwProductServiceType;
 import com.billingweb.model.tables.VwPromoConsumTypeDiscount;
@@ -145,6 +146,11 @@ public class Tables {
     public static final PtBillingPeriod PT_BILLING_PERIOD = PtBillingPeriod.PT_BILLING_PERIOD;
 
     /**
+     * Table that stores the consumtion class of the application
+     */
+    public static final PtConsumptionClass PT_CONSUMPTION_CLASS = PtConsumptionClass.PT_CONSUMPTION_CLASS;
+
+    /**
      * Table that stores the discount types for the application
      */
     public static final PtDiscountType PT_DISCOUNT_TYPE = PtDiscountType.PT_DISCOUNT_TYPE;
@@ -160,42 +166,42 @@ public class Tables {
     public static final PtStatus PT_STATUS = PtStatus.PT_STATUS;
 
     /**
-     * The table <code>public.vw_entity_type_consumptions</code>.
+     * Table that stores the tax type of the application
      */
-    public static final VwEntityTypeConsumptions VW_ENTITY_TYPE_CONSUMPTIONS = VwEntityTypeConsumptions.VW_ENTITY_TYPE_CONSUMPTIONS;
+    public static final PtTaxType PT_TAX_TYPE = PtTaxType.PT_TAX_TYPE;
 
     /**
-     * The table <code>public.vw_product_fee_type</code>.
+     * View showing the relationship between product types and the fee types associated with them - related to ct_prod_fee_type
      */
     public static final VwProductFeeType VW_PRODUCT_FEE_TYPE = VwProductFeeType.VW_PRODUCT_FEE_TYPE;
 
     /**
-     * The table <code>public.vw_product_service_type</code>.
+     * View showing the relationship between product types and the service types associated with them - related to ct_prod_serv_type
      */
     public static final VwProductServiceType VW_PRODUCT_SERVICE_TYPE = VwProductServiceType.VW_PRODUCT_SERVICE_TYPE;
 
     /**
-     * The table <code>public.vw_promo_consum_type_discount</code>.
+     * View showing the relationship between promotion types and the fee types that can be discount by the promotion type - related to ct_promo_consum_type_discount
      */
     public static final VwPromoConsumTypeDiscount VW_PROMO_CONSUM_TYPE_DISCOUNT = VwPromoConsumTypeDiscount.VW_PROMO_CONSUM_TYPE_DISCOUNT;
 
     /**
-     * The table <code>public.vw_promotion_fee_type_discount</code>.
+     * View showing the relationship between promotion types and the fee types that can be discount by the promotion type - related to ct_promo_fee_type_discount
      */
     public static final VwPromotionFeeTypeDiscount VW_PROMOTION_FEE_TYPE_DISCOUNT = VwPromotionFeeTypeDiscount.VW_PROMOTION_FEE_TYPE_DISCOUNT;
 
     /**
-     * The table <code>public.vw_promotion_product_type</code>.
+     * View showing the relationship between product types and the promotion types associated with them - related to ct_promo_prod_type
      */
     public static final VwPromotionProductType VW_PROMOTION_PRODUCT_TYPE = VwPromotionProductType.VW_PROMOTION_PRODUCT_TYPE;
 
     /**
-     * The table <code>public.vw_promotion_service_type</code>.
+     * View showing the relationship between service types and the promotion types associated with them - related to ct_promo_serv_type
      */
     public static final VwPromotionServiceType VW_PROMOTION_SERVICE_TYPE = VwPromotionServiceType.VW_PROMOTION_SERVICE_TYPE;
 
     /**
-     * The table <code>public.vw_service_fee_type</code>.
+     * View showing the relationship between service types and the fee types associated with them - related to ct_serv_fee_type
      */
     public static final VwServiceFeeType VW_SERVICE_FEE_TYPE = VwServiceFeeType.VW_SERVICE_FEE_TYPE;
 

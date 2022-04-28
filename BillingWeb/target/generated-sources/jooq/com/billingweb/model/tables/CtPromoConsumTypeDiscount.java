@@ -16,7 +16,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row9;
+import org.jooq.Row8;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -63,11 +63,6 @@ public class CtPromoConsumTypeDiscount extends TableImpl<CtPromoConsumTypeDiscou
      * The column <code>public.ct_promo_consum_type_discount.consumption_type_id</code>. Consumption_type_id for the promotion-consumption discount relation
      */
     public final TableField<CtPromoConsumTypeDiscountRecord, Integer> CONSUMPTION_TYPE_ID = createField(DSL.name("consumption_type_id"), SQLDataType.INTEGER.nullable(false), this, "Consumption_type_id for the promotion-consumption discount relation");
-
-    /**
-     * The column <code>public.ct_promo_consum_type_discount.consum_type_discount_class_id</code>. Type id (entity_type_id) of the discount class for the promotion-consumption discount relation
-     */
-    public final TableField<CtPromoConsumTypeDiscountRecord, Integer> CONSUM_TYPE_DISCOUNT_CLASS_ID = createField(DSL.name("consum_type_discount_class_id"), SQLDataType.INTEGER.nullable(false), this, "Type id (entity_type_id) of the discount class for the promotion-consumption discount relation");
 
     /**
      * The column <code>public.ct_promo_consum_type_discount.status_id</code>. Status id for the promotion-consumption discount relation type
@@ -144,12 +139,11 @@ public class CtPromoConsumTypeDiscount extends TableImpl<CtPromoConsumTypeDiscou
 
     @Override
     public List<ForeignKey<CtPromoConsumTypeDiscountRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<CtPromoConsumTypeDiscountRecord, ?>>asList(Keys.CT_PROMO_CONSUM_TYPE_DISCOUNT__CT_PROMO_CONSUM_TYPE_DISC_PROMO_FK, Keys.CT_PROMO_CONSUM_TYPE_DISCOUNT__CT_PROMO_CONSUM_TYPE_DISC_CONS_FK, Keys.CT_PROMO_CONSUM_TYPE_DISCOUNT__CT_PROMO_CONSUM_TYPE_DISC_CLASS_FK, Keys.CT_PROMO_CONSUM_TYPE_DISCOUNT__CT_PROMO_CONSUM_TYPE_DISCOUNT_STATUS_FK);
+        return Arrays.<ForeignKey<CtPromoConsumTypeDiscountRecord, ?>>asList(Keys.CT_PROMO_CONSUM_TYPE_DISCOUNT__CT_PROMO_CONSUM_TYPE_DISC_PROMO_FK, Keys.CT_PROMO_CONSUM_TYPE_DISCOUNT__CT_PROMO_CONSUM_TYPE_DISC_CONS_FK, Keys.CT_PROMO_CONSUM_TYPE_DISCOUNT__CT_PROMO_CONSUM_TYPE_DISCOUNT_STATUS_FK);
     }
 
     private transient CtPromotionType _ctPromotionType;
     private transient CtConsumptionType _ctConsumptionType;
-    private transient PtEntityType _ptEntityType;
     private transient PtStatus _ptStatus;
 
     public CtPromotionType ctPromotionType() {
@@ -164,13 +158,6 @@ public class CtPromoConsumTypeDiscount extends TableImpl<CtPromoConsumTypeDiscou
             _ctConsumptionType = new CtConsumptionType(this, Keys.CT_PROMO_CONSUM_TYPE_DISCOUNT__CT_PROMO_CONSUM_TYPE_DISC_CONS_FK);
 
         return _ctConsumptionType;
-    }
-
-    public PtEntityType ptEntityType() {
-        if (_ptEntityType == null)
-            _ptEntityType = new PtEntityType(this, Keys.CT_PROMO_CONSUM_TYPE_DISCOUNT__CT_PROMO_CONSUM_TYPE_DISC_CLASS_FK);
-
-        return _ptEntityType;
     }
 
     public PtStatus ptStatus() {
@@ -207,11 +194,11 @@ public class CtPromoConsumTypeDiscount extends TableImpl<CtPromoConsumTypeDiscou
     }
 
     // -------------------------------------------------------------------------
-    // Row9 type methods
+    // Row8 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<Integer, Integer, Integer, Integer, Integer, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
-        return (Row9) super.fieldsRow();
+    public Row8<Integer, Integer, Integer, Integer, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
+        return (Row8) super.fieldsRow();
     }
 }

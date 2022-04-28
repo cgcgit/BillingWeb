@@ -8,6 +8,7 @@ import com.billingweb.model.Keys;
 import com.billingweb.model.Public;
 import com.billingweb.model.tables.records.CtPromotionTypeRecord;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -86,7 +87,7 @@ public class CtPromotionType extends TableImpl<CtPromotionTypeRecord> {
     /**
      * The column <code>public.ct_promotion_type.discount_value</code>. Value of the discount for the promotion type
      */
-    public final TableField<CtPromotionTypeRecord, Integer> DISCOUNT_VALUE = createField(DSL.name("discount_value"), SQLDataType.INTEGER.nullable(false), this, "Value of the discount for the promotion type");
+    public final TableField<CtPromotionTypeRecord, BigDecimal> DISCOUNT_VALUE = createField(DSL.name("discount_value"), SQLDataType.NUMERIC(10, 4).nullable(false), this, "Value of the discount for the promotion type");
 
     /**
      * The column <code>public.ct_promotion_type.status_id</code>. Status id for the promotion type
@@ -230,7 +231,7 @@ public class CtPromotionType extends TableImpl<CtPromotionTypeRecord> {
     // -------------------------------------------------------------------------
 
     @Override
-    public Row13<Integer, Integer, String, String, String, Integer, Integer, Integer, Integer, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
+    public Row13<Integer, Integer, String, String, String, Integer, Integer, BigDecimal, Integer, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
         return (Row13) super.fieldsRow();
     }
 }

@@ -437,6 +437,9 @@ public class ProductServiceTypeController extends SimpleRelatedTypeClass impleme
 			this.loadCandidateData();
 			this.loadRelatedData();
 			this.showDependentData = true;
+			
+			this.refreshCandidateDataTable();
+			this.refreshRelatedDataTable();
 
 			messageDetail = "Shown data for product: ";
 			logger.info(message + " - " + messageDetail + this.mainData.toString());
@@ -444,7 +447,7 @@ public class ProductServiceTypeController extends SimpleRelatedTypeClass impleme
 					messageDetail + this.getSelectedMainData().getCode());
 
 			PrimeFaces.current().executeScript("PF('searchList').hide();");
-			Ajax.update(SELECTED_DATA_TABLE_ID);
+			//Ajax.update(SELECTED_DATA_TABLE_ID);
 		}
 
 	}

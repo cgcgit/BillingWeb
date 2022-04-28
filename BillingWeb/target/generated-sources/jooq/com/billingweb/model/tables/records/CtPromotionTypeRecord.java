@@ -7,6 +7,7 @@ package com.billingweb.model.tables.records;
 import com.billingweb.model.tables.CtPromotionType;
 import com.billingweb.model.tables.interfaces.ICtPromotionType;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 import org.jooq.Field;
@@ -20,7 +21,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Table that stores the promotion types of the catalog for the application
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRecord> implements Record13<Integer, Integer, String, String, String, Integer, Integer, Integer, Integer, LocalDateTime, String, LocalDateTime, String>, ICtPromotionType {
+public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRecord> implements Record13<Integer, Integer, String, String, String, Integer, Integer, BigDecimal, Integer, LocalDateTime, String, LocalDateTime, String>, ICtPromotionType {
 
     private static final long serialVersionUID = 1L;
 
@@ -140,7 +141,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
      * Setter for <code>public.ct_promotion_type.discount_value</code>. Value of the discount for the promotion type
      */
     @Override
-    public void setDiscountValue(Integer value) {
+    public void setDiscountValue(BigDecimal value) {
         set(7, value);
     }
 
@@ -148,8 +149,8 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
      * Getter for <code>public.ct_promotion_type.discount_value</code>. Value of the discount for the promotion type
      */
     @Override
-    public Integer getDiscountValue() {
-        return (Integer) get(7);
+    public BigDecimal getDiscountValue() {
+        return (BigDecimal) get(7);
     }
 
     /**
@@ -246,12 +247,12 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     // -------------------------------------------------------------------------
 
     @Override
-    public Row13<Integer, Integer, String, String, String, Integer, Integer, Integer, Integer, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
+    public Row13<Integer, Integer, String, String, String, Integer, Integer, BigDecimal, Integer, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
         return (Row13) super.fieldsRow();
     }
 
     @Override
-    public Row13<Integer, Integer, String, String, String, Integer, Integer, Integer, Integer, LocalDateTime, String, LocalDateTime, String> valuesRow() {
+    public Row13<Integer, Integer, String, String, String, Integer, Integer, BigDecimal, Integer, LocalDateTime, String, LocalDateTime, String> valuesRow() {
         return (Row13) super.valuesRow();
     }
 
@@ -291,7 +292,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     @Override
-    public Field<Integer> field8() {
+    public Field<BigDecimal> field8() {
         return CtPromotionType.CT_PROMOTION_TYPE.DISCOUNT_VALUE;
     }
 
@@ -356,7 +357,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     @Override
-    public Integer component8() {
+    public BigDecimal component8() {
         return getDiscountValue();
     }
 
@@ -421,7 +422,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     @Override
-    public Integer value8() {
+    public BigDecimal value8() {
         return getDiscountValue();
     }
 
@@ -493,7 +494,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     @Override
-    public CtPromotionTypeRecord value8(Integer value) {
+    public CtPromotionTypeRecord value8(BigDecimal value) {
         setDiscountValue(value);
         return this;
     }
@@ -529,7 +530,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     @Override
-    public CtPromotionTypeRecord values(Integer value1, Integer value2, String value3, String value4, String value5, Integer value6, Integer value7, Integer value8, Integer value9, LocalDateTime value10, String value11, LocalDateTime value12, String value13) {
+    public CtPromotionTypeRecord values(Integer value1, Integer value2, String value3, String value4, String value5, Integer value6, Integer value7, BigDecimal value8, Integer value9, LocalDateTime value10, String value11, LocalDateTime value12, String value13) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -587,7 +588,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     /**
      * Create a detached, initialised CtPromotionTypeRecord
      */
-    public CtPromotionTypeRecord(Integer promotionTypeId, Integer entityTypeId, String code, String name, String description, Integer applicationLevelId, Integer discountTypeId, Integer discountValue, Integer statusId, LocalDateTime inputDate, String inputUser, LocalDateTime modifDate, String modifUser) {
+    public CtPromotionTypeRecord(Integer promotionTypeId, Integer entityTypeId, String code, String name, String description, Integer applicationLevelId, Integer discountTypeId, BigDecimal discountValue, Integer statusId, LocalDateTime inputDate, String inputUser, LocalDateTime modifDate, String modifUser) {
         super(CtPromotionType.CT_PROMOTION_TYPE);
 
         setPromotionTypeId(promotionTypeId);

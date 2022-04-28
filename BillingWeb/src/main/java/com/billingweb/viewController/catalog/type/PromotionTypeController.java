@@ -4,8 +4,8 @@
 package com.billingweb.viewController.catalog.type;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -14,7 +14,6 @@ import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import javax.faces.validator.ValidatorException;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -28,11 +27,9 @@ import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.RowEditEvent;
 
 import com.billingweb.ejb.catalog.type.PromotionTypeEJBLocal;
-import com.billingweb.ejb.parameterization.DiscountTypeEJBLocal;
 import com.billingweb.generalClass.SimpleTableBasicClassWithLists;
 import com.billingweb.interfaces.IGeneralController;
 import com.billingweb.model.tables.pojos.CtPromotionType;
-import com.billingweb.model.tables.pojos.PtDiscountType;
 import com.billingweb.model.tables.pojos.VwUsers;
 
 @Named
@@ -576,13 +573,13 @@ public class PromotionTypeController extends SimpleTableBasicClassWithLists impl
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			}
 			
-			if (objectToValidate.getDiscountValue() == null || objectToValidate.getDiscountValue()<= 0) {
-				messageDetail = "ERROR - The discount value must be greater than 0";
+			if (objectToValidate.getDiscountValue() == null || (objectToValidate.getDiscountValue().compareTo(BigDecimal.valueOf(0)) < 0)){
+				messageDetail = "ERROR - The discount value must be a positive number";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} 
-			
+			}  
+					
 			
 			if (objectToValidate.getStatusId() == null) {
 				result = false;

@@ -90,20 +90,6 @@ public class CtPromoConsumTypeDiscountDao extends DAOImpl<CtPromoConsumTypeDisco
     }
 
     /**
-     * Fetch records that have <code>consum_type_discount_class_id BETWEEN lowerInclusive AND upperInclusive</code>
-     */
-    public List<com.billingweb.model.tables.pojos.CtPromoConsumTypeDiscount> fetchRangeOfConsumTypeDiscountClassId(Integer lowerInclusive, Integer upperInclusive) {
-        return fetchRange(CtPromoConsumTypeDiscount.CT_PROMO_CONSUM_TYPE_DISCOUNT.CONSUM_TYPE_DISCOUNT_CLASS_ID, lowerInclusive, upperInclusive);
-    }
-
-    /**
-     * Fetch records that have <code>consum_type_discount_class_id IN (values)</code>
-     */
-    public List<com.billingweb.model.tables.pojos.CtPromoConsumTypeDiscount> fetchByConsumTypeDiscountClassId(Integer... values) {
-        return fetch(CtPromoConsumTypeDiscount.CT_PROMO_CONSUM_TYPE_DISCOUNT.CONSUM_TYPE_DISCOUNT_CLASS_ID, values);
-    }
-
-    /**
      * Fetch records that have <code>status_id BETWEEN lowerInclusive AND upperInclusive</code>
      */
     public List<com.billingweb.model.tables.pojos.CtPromoConsumTypeDiscount> fetchRangeOfStatusId(Integer lowerInclusive, Integer upperInclusive) {

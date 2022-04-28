@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>ct_prod_serv_type - db_billing Database</title>
+        <!-- Tell the browser to be responsive to screen width -->
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <link rel="icon" type="image/png" sizes="16x16" href="../favicon.png">
+        <!-- Bootstrap 3.3.5 -->
+        <link rel="stylesheet" href="../bower/admin-lte/bootstrap/css/bootstrap.min.css">
+        <!-- Font Awesome -->
+        <link rel="stylesheet" href="../bower/font-awesome/css/font-awesome.min.css">
+        <!-- Ionicons -->
+        <link rel="stylesheet" href="../bower/ionicons/css/ionicons.min.css">
+        <!-- DataTables -->
+        <link rel="stylesheet" href="../bower/datatables.net-bs/css/dataTables.bootstrap.min.css">
+        <link rel="stylesheet" href="../bower/datatables.net-buttons-bs/css/buttons.bootstrap.min.css">
+        <!-- Code Mirror -->
+        <link rel="stylesheet" href="../bower/codemirror/codemirror.css">
+        <!-- Fonts -->
+        <link href='../fonts/indieflower/indie-flower.css' rel='stylesheet' type='text/css'>
+        <link href='../fonts/source-sans-pro/source-sans-pro.css' rel='stylesheet' type='text/css'>
+
+        <!-- Theme style -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/AdminLTE.min.css">
+        <!-- Salvattore -->
+        <link rel="stylesheet" href="../bower/salvattore/salvattore.css">
+        <!-- AdminLTE Skins. Choose a skin from the css/skins
+           folder instead of downloading all of them to reduce the load. -->
+        <link rel="stylesheet" href="../bower/admin-lte/dist/css/skins/_all-skins.min.css">
+        <!-- SchemaSpy -->
+        <link rel="stylesheet" href="../schemaSpy.css">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+        <script src="../bower/html5shiv/html5shiv.min.js"></script>
+        <script src="../bower/respond/respond.min.js"></script>
+        <![endif]-->
+    </head>
+    <!-- ADD THE CLASS layout-top-nav TO REMOVE THE SIDEBAR. -->
+    <body class="hold-transition skin-blue layout-top-nav">
+        <div class="wrapper">
+            <header class="main-header">
+                <nav class="navbar navbar-static-top">
+                    <div class="container">
+                        <div class="navbar-header">
+                            <a href="../index.html" class="navbar-brand"><b>db_billing</b> Database</a>
+                            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse"><i class="fa fa-bars"></i></button>
+                        </div>
+
+                        <!-- Collect the nav links, forms, and other content for toggling -->
+                        <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
+                            <ul class="nav navbar-nav">
+                                <li><a href="../index.html">Tables <span class="sr-only">(current)</span></a></li>
+                                <li><a href="../columns.html" title="All of the columns in the schema">Columns</a></li>
+                                <li><a href="../constraints.html" title="Useful for diagnosing error messages that just give constraint name or number">Constraints</a></li>
+                                <li><a href="../relationships.html" title="Diagram of table relationships">Relationships</a></li>
+                                <li><a href="../orphans.html" title="View of tables with neither parents nor children">Orphan&nbsp;Tables</a></li>
+                                <li><a href="../anomalies.html" title="Things that might not be quite right">Anomalies</a></li>
+                                <li><a href="../routines.html" title="Procedures and functions">Routines</a></li>
+                            </ul>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                        <!-- Navbar Right Menu -->
+                    </div>
+                    <!-- /.container-fluid -->
+                </nav>
+            </header>
+            <!-- Main content -->
+            <!-- Full Width Column -->
+            <div class="content-wrapper">
+                <!-- Content Header (Page header) -->
+                <section class="content-header">
+                    <h1>ct_prod_serv_type</h1><p><span id="recordNumber">6</span> rows</p><br />
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-file-text-o"></i>
+                            <h3 id="Description" class="box-title">Description</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div><!-- /.box-header -->
+                        <div class="box-body clearfix">
+                            <p>Table that stores the promotion product relation types of the catalog for the application</p>
+                        </div><!-- /.box-body -->
+                    </div>
+                </section>
+                <!-- Main content -->
+                <section class="content">
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                            <h3 id="Columns" class="box-title">Columns</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <table id="standard_table" class="table table-bordered table-striped dataTable" role="grid">
+                                <thead align='left'>
+                                <tr>
+                                    <th>Column</th>
+                                    <th>Type</th>
+                                    <th>Size</th>
+                                    <th title='Are nulls allowed?'>Nulls</th>
+                                    <th title='Is column automatically updated?'>Auto</th>
+                                    <th title='Default value'>Default</th>
+                                    <th title='Columns in tables that reference this column'>Children</th>
+                                    <th title='Columns in tables that are referenced by this column'>Parents</th>
+                                    <th title='Comments' class="toggle"><span>Comments</span></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="prod_serv_type_id">prod_serv_type_id</span></td>
+                                    <td>serial</td>
+                                    <td>10</td>
+                                    <td title=''></td>
+                                    <td title='Automatically updated by the database'>√</td>
+                                    <td>nextval(&#39;seq_prod_serv_type_id&#39;::regclass)</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="vw_product_service_type.prod_serv_type_id&#39;s name implies that it&#39;s a child of ct_prod_serv_type.prod_serv_type_id, but it doesn&#39;t reference that column."><a href='vw_product_service_type.html'>vw_product_service_type</a><span class='relatedKey'>.prod_serv_type_id</span></td>
+                                                <td class="constraint detail">Implied Constraint<span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>Internal identifier of the product-service relation type</p></td>
+                                </tr>
+                                <tr>
+                                    <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="product_type_id">product_type_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="ct_prod_serv_type.product_type_id references ct_product_type.product_type_id via ct_prod_serv_type_product_fk"><a href='ct_product_type.html'>ct_product_type</a><span class='relatedKey'>.product_type_id</span></td>
+                                                <td class="constraint detail">ct_prod_serv_type_product_fk<span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td><p>Product_type_id for the product-service relation</p></td>
+                                </tr>
+                                <tr>
+                                    <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="service_type_id">service_type_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="ct_prod_serv_type.service_type_id references ct_service_type.service_type_id via ct_prod_serv_type_service_fk"><a href='ct_service_type.html'>ct_service_type</a><span class='relatedKey'>.service_type_id</span></td>
+                                                <td class="constraint detail">ct_prod_serv_type_service_fk<span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td><p>Service_type_id for the product-service relation</p></td>
+                                </tr>
+                                <tr>
+                                    <td class='foreignKey' title='Foreign Key'><i class='icon ion-key iconkey' style='padding-left: 5px;'></i><span id="status_id">status_id</span></td>
+                                    <td>int4</td>
+                                    <td>10</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>1000</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                            <tr>
+                                                <td title="ct_prod_serv_type.status_id references pt_status.status_id via ct_prod_serv_type_status_fk"><a href='pt_status.html'>pt_status</a><span class='relatedKey'>.status_id</span></td>
+                                                <td class="constraint detail">ct_prod_serv_type_status_fk<span title='Restrict delete:&#10;Parent cannot be deleted if children exist'>R</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td><p>Status id for the product-service relation type</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="input_date">input_date</span></td>
+                                    <td>timestamp</td>
+                                    <td>29,6</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>((&#39;now&#39;::text)::timestamp(0) with time zone)::timestamp without time zone</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>Date on which the record was created</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="input_user">input_user</span></td>
+                                    <td>varchar</td>
+                                    <td>10</td>
+                                    <td title=''></td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>User who was modified the record</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="modif_date">modif_date</span></td>
+                                    <td>timestamp</td>
+                                    <td>29,6</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td><p>Date of the last modification of the record</p></td>
+                                </tr>
+                                <tr>
+                                    <td><span id="modif_user">modif_user</span></td>
+                                    <td>varchar</td>
+                                    <td>10</td>
+                                    <td title='nullable'>√</td>
+                                    <td title=''></td>
+                                    <td>null</td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td>
+                                        <table border='0' cellspacing='0' cellpadding='0'>
+                                        </table>
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-sitemap"></i>
+                            <h3 id="Indexes" class="box-title">Indexes</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <table id="indexes_table" class="table table-bordered table-striped dataTable" role="grid">
+                                <thead>
+                                <tr>
+                                    <th>Constraint Name</th>
+                                    <th>Type</th>
+                                    <th>Sort</th>
+                                    <th>Column(s)</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class='primaryKey' title='Primary Key'><i class='icon ion-key iconkey'></i> ct_prod_serv_type_pk</td>
+                                    <td>Primary key</td>
+                                    <td><span title='Ascending'>Asc</span></td>
+                                    <td>prod_serv_type_id</td>
+                                </tr>
+                                <tr>
+                                    <td class='uniqueKey' title='Unique Key'><i class='icon ion-key iconkey'></i> ct_prod_serv_type_code_u</td>
+                                    <td>Must be unique</td>
+                                    <td><span title='Ascending'>Asc</span>/<span title='Ascending'>Asc</span></td>
+                                    <td>product_type_id + service_type_id</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div><!-- /.box-body -->
+                    </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <i class="fa fa-code-fork"></i>
+                            <h3 id="Relationships" class="box-title">Relationships</h3>
+                            <div class="box-tools pull-right">
+                                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+                                <button type="button" class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div class="nav-tabs-custom"><!-- Tabs within a box -->
+                                <h5>Close relationships within degrees of separation</h5>
+                                <ul class="nav nav-tabs pull-left ui-sortable-handle">
+                                    <li class="active"><a href="#oneDegreeImg-chart" data-toggle="tab" aria-expanded="true">One</a></li>
+                                    <li class=""><a href="#twodegreesDegreeImg-chart" data-toggle="tab" aria-expanded="true">Two degrees</a></li>
+                                    <li class=""><a href="#oneimpliedDegreeImg-chart" data-toggle="tab" aria-expanded="true">One implied</a></li>
+                                    <li class=""><a href="#twoimpliedDegreeImg-chart" data-toggle="tab" aria-expanded="true">Two implied</a></li>
+                                </ul>
+                                <div class="tab-content no-padding">
+                                    <div class="chart tab-pane active" id="oneDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="oneDegreeRelationshipsDiagram" name="oneDegreeRelationshipsDiagram">
+<area shape="rect" id="node1" href="ct_prod_serv_type.html" target="_top" title="ct_prod_serv_type" alt="" coords="480,196,828,500">
+<area shape="rect" id="node2" href="ct_product_type.html" target="_top" title="ct_product_type" alt="" coords="216,5,436,240">
+<area shape="rect" id="node3" href="ct_service_type.html" target="_top" title="ct_service_type" alt="" coords="217,257,435,492">
+<area shape="rect" id="node4" href="pt_status.html" target="_top" title="pt_status" alt="" coords="5,375,172,551">
+</map>
+                                        <a name='diagram'><img id="oneDegreeImg" src="../diagrams/tables/ct_prod_serv_type.1degree.png" usemap="#oneDegreeRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="twodegreesDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="twoDegreesRelationshipsDiagram" name="twoDegreesRelationshipsDiagram">
+<area shape="rect" id="node1" href="ct_account_type.html" target="_top" title="ct_account_type" alt="" coords="629,1219,852,1307">
+<area shape="rect" id="node2" href="ct_bill_cycle_type.html" target="_top" title="ct_bill_cycle_type" alt="" coords="271,1219,503,1307">
+<area shape="rect" id="node3" href="pt_entity_type.html" target="_top" title="pt_entity_type" alt="" coords="5,608,212,696">
+<area shape="rect" id="node4" href="pt_status.html" target="_top" title="pt_status" alt="" coords="25,788,192,964">
+<area shape="rect" id="node5" href="ct_consumption_type.html" target="_top" title="ct_consumption_type" alt="" coords="256,1041,519,1129">
+<area shape="rect" id="node6" href="ct_customer_type.html" target="_top" title="ct_customer_type" alt="" coords="270,5,505,93">
+<area shape="rect" id="node7" href="ct_fee_type.html" target="_top" title="ct_fee_type" alt="" coords="296,147,479,235">
+<area shape="rect" id="node8" href="ct_prod_fee_type.html" target="_top" title="ct_prod_fee_type" alt="" coords="627,109,854,197">
+<area shape="rect" id="node9" href="ct_product_type.html" target="_top" title="ct_product_type" alt="" coords="277,324,497,559">
+<area shape="rect" id="node10" href="ct_prod_serv_type.html" target="_top" title="ct_prod_serv_type" alt="" coords="567,505,915,809">
+<area shape="rect" id="node11" href="ct_service_type.html" target="_top" title="ct_service_type" alt="" coords="279,576,496,811">
+<area shape="rect" id="node12" href="ct_promo_consum_type_discount.html" target="_top" title="ct_promo_consum_type_discount" alt="" coords="563,1041,919,1129">
+<area shape="rect" id="node13" href="ct_promotion_type.html" target="_top" title="ct_promotion_type" alt="" coords="267,900,508,988">
+<area shape="rect" id="node14" href="ct_promo_fee_type_discount.html" target="_top" title="ct_promo_fee_type_discount" alt="" coords="581,320,900,408">
+<area shape="rect" id="node15" href="ct_promo_prod_type.html" target="_top" title="ct_promo_prod_type" alt="" coords="614,827,867,915">
+<area shape="rect" id="node16" href="ct_promo_serv_type.html" target="_top" title="ct_promo_serv_type" alt="" coords="615,932,867,1020">
+<area shape="rect" id="node17" href="ct_serv_fee_type.html" target="_top" title="ct_serv_fee_type" alt="" coords="627,215,854,303">
+</map>
+                                        <a name='diagram'><img id="twodegreesDegreeImg" src="../diagrams/tables/ct_prod_serv_type.2degrees.png" usemap="#twoDegreesRelationshipsDiagram" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="oneimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="oneDegreeRelationshipsDiagramImplied" name="oneDegreeRelationshipsDiagramImplied">
+<area shape="rect" id="node1" href="ct_prod_serv_type.html" target="_top" title="ct_prod_serv_type" alt="" coords="480,82,828,386">
+<area shape="rect" id="node2" href="ct_product_type.html" target="_top" title="ct_product_type" alt="" coords="216,114,436,349">
+<area shape="rect" id="node3" href="ct_service_type.html" target="_top" title="ct_service_type" alt="" coords="217,438,435,673">
+<area shape="rect" id="node4" href="pt_status.html" target="_top" title="pt_status" alt="" coords="5,460,172,636">
+<area shape="rect" id="node5" href="vw_product_service_type.html" target="_top" title="vw_product_service_type" alt="" coords="872,332,1173,572">
+</map>
+                                        <a name='diagram'><img id="oneimpliedDegreeImg" src="../diagrams/tables/ct_prod_serv_type.implied1degrees.png" usemap="#oneDegreeRelationshipsDiagramImplied" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                    <div class="chart tab-pane " id="twoimpliedDegreeImg-chart" style="position: relative; overflow-x:auto;">
+                                        <map id="twoDegreesRelationshipsDiagramImplied" name="twoDegreesRelationshipsDiagramImplied">
+<area shape="rect" id="node1" href="ct_account_type.html" target="_top" title="ct_account_type" alt="" coords="629,170,852,258">
+<area shape="rect" id="node2" href="ct_bill_cycle_type.html" target="_top" title="ct_bill_cycle_type" alt="" coords="271,170,503,258">
+<area shape="rect" id="node3" href="pt_entity_type.html" target="_top" title="pt_entity_type" alt="" coords="5,625,212,713">
+<area shape="rect" id="node4" href="pt_status.html" target="_top" title="pt_status" alt="" coords="25,1135,192,1311">
+<area shape="rect" id="node5" href="ct_consumption_type.html" target="_top" title="ct_consumption_type" alt="" coords="256,379,519,467">
+<area shape="rect" id="node6" href="ct_customer_type.html" target="_top" title="ct_customer_type" alt="" coords="270,65,505,153">
+<area shape="rect" id="node7" href="ct_fee_type.html" target="_top" title="ct_fee_type" alt="" coords="296,730,479,818">
+<area shape="rect" id="node8" href="ct_prod_fee_type.html" target="_top" title="ct_prod_fee_type" alt="" coords="627,629,854,717">
+<area shape="rect" id="node9" href="ct_product_type.html" target="_top" title="ct_product_type" alt="" coords="277,871,497,1106">
+<area shape="rect" id="node10" href="ct_prod_serv_type.html" target="_top" title="ct_prod_serv_type" alt="" coords="567,1543,915,1847">
+<area shape="rect" id="node11" href="ct_service_type.html" target="_top" title="ct_service_type" alt="" coords="279,1331,496,1566">
+<area shape="rect" id="node12" href="ct_promo_consum_type_discount.html" target="_top" title="ct_promo_consum_type_discount" alt="" coords="563,383,919,471">
+<area shape="rect" id="node13" href="ct_promotion_type.html" target="_top" title="ct_promotion_type" alt="" coords="267,625,508,713">
+<area shape="rect" id="node14" href="ct_promo_fee_type_discount.html" target="_top" title="ct_promo_fee_type_discount" alt="" coords="581,806,900,894">
+<area shape="rect" id="node15" href="ct_promo_prod_type.html" target="_top" title="ct_promo_prod_type" alt="" coords="614,947,867,1035">
+<area shape="rect" id="node16" href="ct_promo_serv_type.html" target="_top" title="ct_promo_serv_type" alt="" coords="615,1225,867,1313">
+<area shape="rect" id="node17" href="ct_serv_fee_type.html" target="_top" title="ct_serv_fee_type" alt="" coords="627,1366,854,1454">
+<area shape="rect" id="node18" href="vw_product_fee_type.html" target="_top" title="vw_product_fee_type" alt="" coords="611,2054,870,2118">
+<area shape="rect" id="node19" href="vw_product_service_type.html" target="_top" title="vw_product_service_type" alt="" coords="993,1641,1294,1881">
+<area shape="rect" id="node20" href="vw_promo_consum_type_discount.html" target="_top" title="vw_promo_consum_type_discount" alt="" coords="963,285,1324,349">
+<area shape="rect" id="node21" href="vw_promotion_fee_type_discount.html" target="_top" title="vw_promotion_fee_type_discount" alt="" coords="965,529,1321,593">
+<area shape="rect" id="node22" href="vw_promotion_product_type.html" target="_top" title="vw_promotion_product_type" alt="" coords="985,989,1301,1053">
+<area shape="rect" id="node23" href="vw_promotion_service_type.html" target="_top" title="vw_promotion_service_type" alt="" coords="987,1135,1300,1199">
+<area shape="rect" id="node24" href="vw_service_fee_type.html" target="_top" title="vw_service_fee_type" alt="" coords="613,1973,869,2037">
+</map>
+                                        <a name='diagram'><img id="twoimpliedDegreeImg" src="../diagrams/tables/ct_prod_serv_type.implied2degrees.png" usemap="#twoDegreesRelationshipsDiagramImplied" class="diagram" border="0" align="left"></a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div><!-- /.box-body -->
+                    </div>
+                </section>
+                <script>
+                    var config = {
+                        pagination: true
+                    }
+                </script>
+            </div>
+            <!-- /.content-wrapper -->
+            <footer class="main-footer">
+                <div>
+                    <div class="pull-right hidden-xs">
+                        <a href="https://github.com/schemaspy/schemaspy" title="GitHub for SchemaSpy"><i class="fa fa-github-square fa-2x"></i></a>
+                        <a href="http://stackoverflow.com/questions/tagged/schemaspy" title="StackOverflow for SchemaSpy"><i class="fa fa-stack-overflow fa-2x"></i></a>
+                    </div>
+                    <strong>Generated by <a href="http://schemaspy.org/" class="logo-text"><i class="fa fa-database"></i> SchemaSpy 6.1.0</a></strong>
+                </div>
+                <!-- /.container -->
+            </footer>
+        </div>
+        <!-- ./wrapper -->
+
+        <!-- jQuery 2.2.3 -->
+        <script src="../bower/admin-lte/plugins/jQuery/jquery-2.2.3.min.js"></script>
+        <script src="../bower/admin-lte/plugins/jQueryUI/jquery-ui.min.js"></script>
+        <!-- Bootstrap 3.3.5 -->
+        <script src="../bower/admin-lte/bootstrap/js/bootstrap.min.js"></script>
+        <!-- DataTables -->
+        <script src="../bower/datatables.net/jquery.dataTables.min.js"></script>
+        <script src="../bower/datatables.net-bs/js/dataTables.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/dataTables.buttons.min.js"></script>
+        <script src="../bower/datatables.net-buttons-bs/js/buttons.bootstrap.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.html5.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.print.min.js"></script>
+        <script src="../bower/datatables.net-buttons/buttons.colVis.min.js"></script>
+        <!-- SheetJS -->
+        <script src="../bower/js-xlsx/xlsx.full.min.js"></script>
+        <!-- pdfmake -->
+        <script src="../bower/pdfmake/pdfmake.min.js"></script>
+        <script src="../bower/pdfmake/vfs_fonts.js"></script>
+        <!-- SlimScroll -->
+        <script src="../bower/admin-lte/plugins/slimScroll/jquery.slimscroll.min.js"></script>
+        <!-- FastClick -->
+        <script src="../bower/admin-lte/plugins/fastclick/fastclick.js"></script>
+        <!-- Salvattore -->
+        <script src="../bower/salvattore/salvattore.min.js"></script>
+        <!-- AnchorJS -->
+        <script src="../bower/anchor-js/anchor.min.js"></script>
+        <!-- CodeMirror -->
+        <script src="../bower/codemirror/codemirror.js"></script>
+        <script src="../bower/codemirror/sql.js"></script>
+        <!-- AdminLTE App -->
+        <script src="../bower/admin-lte/dist/js/app.min.js"></script>
+        <script src="table.js"></script>
+        <script src="../schemaSpy.js"></script>
+    </body>
+</html>

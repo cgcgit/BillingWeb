@@ -1,0 +1,970 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<database name="db_billing" schema="public" type="PostgreSQL - 13.6 (Ubuntu 13.6-1.pgdg20.04+1+b1)">
+   <sequences>
+      <sequence increment="1" name="seq_account_type_id" startValue="1000"/>
+      <sequence increment="1" name="seq_application_level_id" startValue="1000"/>
+      <sequence increment="1" name="seq_application_menu_id" startValue="1000"/>
+      <sequence increment="1" name="seq_bill_cycle_type_id" startValue="1000"/>
+      <sequence increment="1" name="seq_billing_period_id" startValue="1000"/>
+      <sequence increment="1" name="seq_consumption_class_id" startValue="1000"/>
+      <sequence increment="1" name="seq_consumption_type" startValue="1000"/>
+      <sequence increment="1" name="seq_customer_type_id" startValue="1000"/>
+      <sequence increment="1" name="seq_discount_type_id" startValue="1000"/>
+      <sequence increment="1" name="seq_entity_type_id" startValue="1000"/>
+      <sequence increment="1" name="seq_fee_type_id" startValue="1000"/>
+      <sequence increment="1" name="seq_prod_fee_type_id" startValue="1000"/>
+      <sequence increment="1" name="seq_prod_serv_type_id" startValue="1000"/>
+      <sequence increment="1" name="seq_product_type_id" startValue="1000"/>
+      <sequence increment="1" name="seq_profile_id" startValue="1000"/>
+      <sequence increment="1" name="seq_promo_consum_type_disc_id" startValue="1000"/>
+      <sequence increment="1" name="seq_promo_fee_type_disc_id" startValue="1000"/>
+      <sequence increment="1" name="seq_promo_prod_type_id" startValue="1000"/>
+      <sequence increment="1" name="seq_promo_serv_type_id" startValue="1000"/>
+      <sequence increment="1" name="seq_promotion_type_id" startValue="1000"/>
+      <sequence increment="1" name="seq_serv_fee_type_id" startValue="1000"/>
+      <sequence increment="1" name="seq_service_type_id" startValue="1000"/>
+      <sequence increment="1" name="seq_status_id" startValue="1000"/>
+      <sequence increment="1" name="seq_tax_type_id" startValue="1000"/>
+      <sequence increment="1" name="seq_user_id" startValue="1000"/>
+   </sequences>
+   <tables>
+      <table name="ct_account_type" numRows="2" remarks="Table that stores the account types of the catalog for the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_account_type_id'::regclass)" digits="0" id="0" name="account_type_id" nullable="false" remarks="Internal identifier of the account type" size="10" type="serial" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="1009" digits="0" id="1" name="entity_type_id" nullable="false" remarks="Entity_id for the account type" size="10" type="int4" typeCode="4">
+            <parent column="entity_type_id" foreignKey="ct_account_type_entity_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_entity_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="code" nullable="false" remarks="Code of the account type" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="name" nullable="false" remarks="Name of the account type" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="description" nullable="false" remarks="Description for the account type" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="ordinary_bill_cycle_type_id" nullable="false" remarks="Ordinary cycle type id for the ordinary billing of the account" size="10" type="int4" typeCode="4">
+            <parent column="bill_cycle_type_id" foreignKey="ct_account_type_obc_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_bill_cycle_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="corrective_bill_cycle_type_id" nullable="false" remarks="Bill cycle type id for the ordinary billing of the account" size="10" type="int4" typeCode="4">
+            <parent column="bill_cycle_type_id" foreignKey="ct_account_type_cbc_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_bill_cycle_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="1000" digits="0" id="7" name="status_id" nullable="false" remarks="Status id for the account type" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="ct_account_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="(('now'::text)::timestamp(0) with time zone)::timestamp without time zone" digits="6" id="8" name="input_date" nullable="false" remarks="Date on which the record was created" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="input_user" nullable="false" remarks="User who was modified the record" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="10" name="modif_date" nullable="true" remarks="Date of the last modification of the record" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="modif_user" nullable="true" remarks="" size="10" type="varchar" typeCode="12"/>
+         <primaryKey column="account_type_id" sequenceNumberInPK="1"/>
+         <index name="ct_account_type_pk" unique="true">
+            <column ascending="true" name="account_type_id"/>
+         </index>
+         <index name="ct_account_type_code_u" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="ct_account_type_name_u" unique="true">
+            <column ascending="true" name="name"/>
+         </index>
+      </table>
+      <table name="ct_bill_cycle_type" numRows="2" remarks="Table that stores the bill cycle type of the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_bill_cycle_type_id'::regclass)" digits="0" id="0" name="bill_cycle_type_id" nullable="false" remarks="Internal identifier of the bill cycle type" size="10" type="serial" typeCode="4">
+            <child column="corrective_bill_cycle_type_id" foreignKey="ct_account_type_cbc_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_account_type"/>
+            <child column="ordinary_bill_cycle_type_id" foreignKey="ct_account_type_obc_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_account_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="code" nullable="false" remarks="Code of the bill cycle type" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="name" nullable="false" remarks="Name of the bill cycle type" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="description" nullable="false" remarks="Description for the bill cycle type" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="billing_period_id" nullable="false" remarks="Billing period for the bill cycle type" size="10" type="int4" typeCode="4">
+            <parent column="billing_period_id" foreignKey="ct_bill_cycle_type_period_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_billing_period"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="bill_cycle_day" nullable="false" remarks="" size="2" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="bill_cycle_codenum" nullable="false" remarks="Billing numbering code with which the invoice number is composed" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="1000" digits="0" id="7" name="status_id" nullable="false" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="ct_bill_cycle_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="(('now'::text)::timestamp(0) with time zone)::timestamp without time zone" digits="6" id="8" name="input_date" nullable="false" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="input_user" nullable="false" remarks="" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="10" name="modif_date" nullable="true" remarks="" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="modif_user" nullable="true" remarks="" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="12" name="corrective" nullable="false" remarks="Flag for corrective cycle (true: corrective cycle, false: ordinary cycle)" size="1" type="bool" typeCode="-7"/>
+         <primaryKey column="bill_cycle_type_id" sequenceNumberInPK="1"/>
+         <index name="ct_bill_cycle_type_pk" unique="true">
+            <column ascending="true" name="bill_cycle_type_id"/>
+         </index>
+         <index name="ct_bill_cycle_type_code_u" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="ct_bill_cycle_type_codnum_u" unique="true">
+            <column ascending="true" name="bill_cycle_codenum"/>
+         </index>
+         <index name="ct_bill_cycle_type_name_u" unique="true">
+            <column ascending="true" name="name"/>
+         </index>
+      </table>
+      <table name="ct_consumption_type" numRows="24" remarks="Table that stores the consumption types of the catalog for the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_consumption_type'::regclass)" digits="0" id="0" name="consumption_type_id" nullable="false" remarks="Internal identifier of the consumption type" size="10" type="serial" typeCode="4">
+            <child column="consumption_type_id" foreignKey="ct_promo_consum_type_disc_cons_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_promo_consum_type_discount"/>
+            <child column="consumption_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promo_consum_type_discount"/>
+         </column>
+         <column autoUpdated="false" defaultValue="1004" digits="0" id="1" name="entity_type_id" nullable="false" remarks="Entity_id for the consumption type" size="10" type="int4" typeCode="4">
+            <parent column="entity_type_id" foreignKey="ct_consumption_type_entity_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_entity_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="code" nullable="false" remarks="Code of the consumption type" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="name" nullable="false" remarks="Name of the consumption type" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="description" nullable="false" remarks="Description for the consumption type" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="1000" digits="0" id="5" name="status_id" nullable="false" remarks="Status id for the consumption type" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="ct_consumption_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="(('now'::text)::timestamp(0) with time zone)::timestamp without time zone" digits="6" id="6" name="input_date" nullable="false" remarks="Date on which the record was created" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="input_user" nullable="false" remarks="User who was modified the record" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="8" name="modif_date" nullable="true" remarks="Date of the last modification of the record" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="modif_user" nullable="true" remarks="" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="consumption_class_id" nullable="false" remarks="Consumption class for the consumption type" size="10" type="int4" typeCode="4">
+            <parent column="consumption_class_id" foreignKey="ct_consumption_type_class_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_consumption_class"/>
+         </column>
+         <primaryKey column="consumption_type_id" sequenceNumberInPK="1"/>
+         <index name="ct_consumption_type_pk" unique="true">
+            <column ascending="true" name="consumption_type_id"/>
+         </index>
+         <index name="ct_consumption_type_code_u" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="ct_consumption_type_name_u" unique="true">
+            <column ascending="true" name="name"/>
+         </index>
+      </table>
+      <table name="ct_customer_type" numRows="2" remarks="Table that stores the customer types of the catalog for the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_customer_type_id'::regclass)" digits="0" id="0" name="customer_type_id" nullable="false" remarks="Internal identifier of the customer type" size="10" type="serial" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="1008" digits="0" id="1" name="entity_type_id" nullable="false" remarks="Entity_id for the customer type" size="10" type="int4" typeCode="4">
+            <parent column="entity_type_id" foreignKey="ct_customer_type_entity_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_entity_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="code" nullable="false" remarks="Code of the customer type" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="name" nullable="false" remarks="Name of the customer type" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="description" nullable="false" remarks="Description for the customer type" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="1000" digits="0" id="5" name="status_id" nullable="false" remarks="Status id for the customer type" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="ct_customer_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="(('now'::text)::timestamp(0) with time zone)::timestamp without time zone" digits="6" id="6" name="input_date" nullable="false" remarks="Date on which the record was created" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="input_user" nullable="false" remarks="User who was modified the record" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="8" name="modif_date" nullable="true" remarks="Date of the last modification of the record" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="modif_user" nullable="true" remarks="" size="10" type="varchar" typeCode="12"/>
+         <primaryKey column="customer_type_id" sequenceNumberInPK="1"/>
+         <index name="ct_customer_type_pk" unique="true">
+            <column ascending="true" name="customer_type_id"/>
+         </index>
+         <index name="ct_customer_type_code_u" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="ct_customer_type_name_u" unique="true">
+            <column ascending="true" name="name"/>
+         </index>
+      </table>
+      <table name="ct_fee_type" numRows="11" remarks="Table that stores the fee types of the catalog for the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_fee_type_id'::regclass)" digits="0" id="0" name="fee_type_id" nullable="false" remarks="Internal identifier of the fee type" size="10" type="serial" typeCode="4">
+            <child column="fee_type_id" foreignKey="ct_prod_fee_type_fee_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_prod_fee_type"/>
+            <child column="fee_type_id" foreignKey="ct_promo_fee_type_discount_fee_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_promo_fee_type_discount"/>
+            <child column="fee_type_id" foreignKey="ct_serv_fee_type_fee_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_serv_fee_type"/>
+            <child column="fee_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_product_fee_type"/>
+            <child column="fee_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_fee_type_discount"/>
+            <child column="fee_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_service_fee_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="1003" digits="0" id="1" name="entity_type_id" nullable="false" remarks="Entity_id for the fee type" size="10" type="int4" typeCode="4">
+            <parent column="entity_type_id" foreignKey="ct_fee_type_entity_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_entity_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="code" nullable="false" remarks="Code of the fee type" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="name" nullable="false" remarks="Name of the fee type" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="description" nullable="false" remarks="Description for the fee type" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="application_level_id" nullable="false" remarks="Application level id for the fee type" size="10" type="int4" typeCode="4">
+            <parent column="application_level_id" foreignKey="ct_fee_type_level_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_application_level"/>
+         </column>
+         <column autoUpdated="false" defaultValue="false" digits="0" id="6" name="prorate" nullable="false" remarks="Flag for prorate (true: prorated fee)" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="4" id="7" name="price" nullable="false" remarks="Price for the fee type" size="10" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="1000" digits="0" id="8" name="status_id" nullable="false" remarks="Status id for the fee type" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="ct_fee_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="(('now'::text)::timestamp(0) with time zone)::timestamp without time zone" digits="6" id="9" name="input_date" nullable="false" remarks="Date on which the record was created" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="input_user" nullable="false" remarks="User who was modified the record" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="11" name="modif_date" nullable="true" remarks="Date of the last modification of the record" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="12" name="modif_user" nullable="true" remarks="" size="10" type="varchar" typeCode="12"/>
+         <primaryKey column="fee_type_id" sequenceNumberInPK="1"/>
+         <index name="ct_fee_type_pk" unique="true">
+            <column ascending="true" name="fee_type_id"/>
+         </index>
+         <index name="ct_fee_type_code_u" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="ct_fee_type_name_u" unique="true">
+            <column ascending="true" name="name"/>
+         </index>
+      </table>
+      <table name="ct_prod_fee_type" numRows="9" remarks="Table that stores the fee product relation types of the catalog for the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_prod_fee_type_id'::regclass)" digits="0" id="0" name="prod_fee_type_id" nullable="false" remarks="Internal identifier of the product-fee relation type" size="10" type="serial" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="product_type_id" nullable="false" remarks="Product_type_id for the product-fee relation" size="10" type="int4" typeCode="4">
+            <parent column="product_type_id" foreignKey="ct_prod_fee_type_product_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_product_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="fee_type_id" nullable="false" remarks="Service_type_id for the product-fee relation" size="10" type="int4" typeCode="4">
+            <parent column="fee_type_id" foreignKey="ct_prod_fee_type_fee_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_fee_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="1000" digits="0" id="3" name="status_id" nullable="false" remarks="Status id for the product-fee relation type" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="ct_prod_fee_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="(('now'::text)::timestamp(0) with time zone)::timestamp without time zone" digits="6" id="4" name="input_date" nullable="false" remarks="Date on which the record was created" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="input_user" nullable="false" remarks="User who was modified the record" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="6" name="modif_date" nullable="true" remarks="Date of the last modification of the record" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="modif_user" nullable="true" remarks="" size="10" type="varchar" typeCode="12"/>
+         <primaryKey column="prod_fee_type_id" sequenceNumberInPK="1"/>
+         <index name="ct_prod_fee_type_pk" unique="true">
+            <column ascending="true" name="prod_fee_type_id"/>
+         </index>
+         <index name="ct_prod_fee_type_code_u" unique="true">
+            <column ascending="true" name="product_type_id"/>
+            <column ascending="true" name="fee_type_id"/>
+         </index>
+      </table>
+      <table name="ct_prod_serv_type" numRows="6" remarks="Table that stores the promotion product relation types of the catalog for the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_prod_serv_type_id'::regclass)" digits="0" id="0" name="prod_serv_type_id" nullable="false" remarks="Internal identifier of the product-service relation type" size="10" type="serial" typeCode="4">
+            <child column="prod_serv_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_product_service_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="product_type_id" nullable="false" remarks="Product_type_id for the product-service relation" size="10" type="int4" typeCode="4">
+            <parent column="product_type_id" foreignKey="ct_prod_serv_type_product_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_product_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="service_type_id" nullable="false" remarks="Service_type_id for the product-service relation" size="10" type="int4" typeCode="4">
+            <parent column="service_type_id" foreignKey="ct_prod_serv_type_service_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_service_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="1000" digits="0" id="3" name="status_id" nullable="false" remarks="Status id for the product-service relation type" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="ct_prod_serv_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="(('now'::text)::timestamp(0) with time zone)::timestamp without time zone" digits="6" id="4" name="input_date" nullable="false" remarks="Date on which the record was created" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="input_user" nullable="false" remarks="User who was modified the record" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="6" name="modif_date" nullable="true" remarks="Date of the last modification of the record" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="modif_user" nullable="true" remarks="" size="10" type="varchar" typeCode="12"/>
+         <primaryKey column="prod_serv_type_id" sequenceNumberInPK="1"/>
+         <index name="ct_prod_serv_type_pk" unique="true">
+            <column ascending="true" name="prod_serv_type_id"/>
+         </index>
+         <index name="ct_prod_serv_type_code_u" unique="true">
+            <column ascending="true" name="product_type_id"/>
+            <column ascending="true" name="service_type_id"/>
+         </index>
+      </table>
+      <table name="ct_product_type" numRows="4" remarks="Table that stores the product types of the catalog for the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_product_type_id'::regclass)" digits="0" id="0" name="product_type_id" nullable="false" remarks="Internal identifier of the product type" size="10" type="serial" typeCode="4">
+            <child column="product_type_id" foreignKey="ct_prod_fee_type_product_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_prod_fee_type"/>
+            <child column="product_type_id" foreignKey="ct_prod_serv_type_product_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_prod_serv_type"/>
+            <child column="product_type_id" foreignKey="ct_promo_prod_type_prod_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_promo_prod_type"/>
+            <child column="product_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_product_fee_type"/>
+            <child column="product_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_product_service_type"/>
+            <child column="product_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_product_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="1000" digits="0" id="1" name="entity_type_id" nullable="false" remarks="Entity_id for the product type" size="10" type="int4" typeCode="4">
+            <parent column="entity_type_id" foreignKey="ct_product_type_entity_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_entity_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="code" nullable="false" remarks="Code of the product type" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="name" nullable="false" remarks="Name of the product type" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="description" nullable="false" remarks="Description for the product type" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="1000" digits="0" id="5" name="status_id" nullable="false" remarks="Status id for the product type" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="ct_product_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="(('now'::text)::timestamp(0) with time zone)::timestamp without time zone" digits="6" id="6" name="input_date" nullable="false" remarks="Date on which the record was created" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="input_user" nullable="false" remarks="User who was modified the record" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="8" name="modif_date" nullable="true" remarks="Date of the last modification of the record" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="modif_user" nullable="true" remarks="" size="10" type="varchar" typeCode="12"/>
+         <primaryKey column="product_type_id" sequenceNumberInPK="1"/>
+         <index name="ct_product_type_pk" unique="true">
+            <column ascending="true" name="product_type_id"/>
+         </index>
+         <index name="ct_product_type_code_u" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="ct_product_type_name_u" unique="true">
+            <column ascending="true" name="name"/>
+         </index>
+      </table>
+      <table name="ct_promo_consum_type_discount" numRows="5" remarks="Table that stores the promotion fee discount relation types of the catalog for the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_promo_consum_type_disc_id'::regclass)" digits="0" id="0" name="promo_consum_type_discount_id" nullable="false" remarks="Internal identifier of the promotion-consumption discount relation type" size="10" type="serial" typeCode="4">
+            <child column="promo_consum_type_discount_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promo_consum_type_discount"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="promotion_type_id" nullable="false" remarks="Promotion_type_id for the promotion-consumption discount relation" size="10" type="int4" typeCode="4">
+            <parent column="promotion_type_id" foreignKey="ct_promo_consum_type_disc_promo_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_promotion_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="consumption_type_id" nullable="false" remarks="Consumption_type_id for the promotion-consumption discount relation" size="10" type="int4" typeCode="4">
+            <parent column="consumption_type_id" foreignKey="ct_promo_consum_type_disc_cons_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_consumption_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="1000" digits="0" id="3" name="status_id" nullable="false" remarks="Status id for the promotion-consumption discount relation type" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="ct_promo_consum_type_discount_status_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="(('now'::text)::timestamp(0) with time zone)::timestamp without time zone" digits="6" id="4" name="input_date" nullable="false" remarks="Date on which the record was created" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="input_user" nullable="false" remarks="User who was modified the record" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="6" name="modif_date" nullable="true" remarks="Date of the last modification of the record" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="modif_user" nullable="true" remarks="" size="10" type="varchar" typeCode="12"/>
+         <primaryKey column="promo_consum_type_discount_id" sequenceNumberInPK="1"/>
+         <index name="ct_promo_consum_type_discount_pk" unique="true">
+            <column ascending="true" name="promo_consum_type_discount_id"/>
+         </index>
+         <index name="ct_promo_consum_type_discount_code_u" unique="true">
+            <column ascending="true" name="promotion_type_id"/>
+            <column ascending="true" name="consumption_type_id"/>
+         </index>
+      </table>
+      <table name="ct_promo_fee_type_discount" numRows="11" remarks="Table that stores the promotion fee discount relation types of the catalog for the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_promo_fee_type_disc_id'::regclass)" digits="0" id="0" name="promo_fee_type_discount_id" nullable="false" remarks="Internal identifier of the promotion-fee discount relation type" size="10" type="serial" typeCode="4">
+            <child column="promo_fee_type_discount_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_fee_type_discount"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="promotion_type_id" nullable="false" remarks="Promotion_type_id for the promotion-fee discount relation" size="10" type="int4" typeCode="4">
+            <parent column="promotion_type_id" foreignKey="ct_promo_fee_type_discount_promo_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_promotion_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="fee_type_id" nullable="false" remarks="Fee_type_id for the promotion-fee discount relation" size="10" type="int4" typeCode="4">
+            <parent column="fee_type_id" foreignKey="ct_promo_fee_type_discount_fee_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_fee_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="application_level_id" nullable="false" remarks="Application_level_id for the promotion-fee discount relation" size="10" type="int4" typeCode="4">
+            <parent column="application_level_id" foreignKey="ct_promo_fee_type_discount_lev_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_application_level"/>
+         </column>
+         <column autoUpdated="false" defaultValue="1000" digits="0" id="4" name="status_id" nullable="false" remarks="Status id for the promotion-fee discount relation type" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="ct_promo_fee_type_discount_status_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="(('now'::text)::timestamp(0) with time zone)::timestamp without time zone" digits="6" id="5" name="input_date" nullable="false" remarks="Date on which the record was created" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="input_user" nullable="false" remarks="User who was modified the record" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="7" name="modif_date" nullable="true" remarks="Date of the last modification of the record" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="modif_user" nullable="true" remarks="" size="10" type="varchar" typeCode="12"/>
+         <primaryKey column="promo_fee_type_discount_id" sequenceNumberInPK="1"/>
+         <index name="ct_promo_fee_type_discount_pk" unique="true">
+            <column ascending="true" name="promo_fee_type_discount_id"/>
+         </index>
+         <index name="ct_promo_fee_type_discount_code_u" unique="true">
+            <column ascending="true" name="promotion_type_id"/>
+            <column ascending="true" name="fee_type_id"/>
+         </index>
+      </table>
+      <table name="ct_promo_prod_type" numRows="5" remarks="Table that stores the promotion product relation types of the catalog for the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_promo_prod_type_id'::regclass)" digits="0" id="0" name="promo_prod_type_id" nullable="false" remarks="Internal identifier of the promotion-product relation type" size="10" type="serial" typeCode="4">
+            <child column="promo_prod_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_product_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="promotion_type_id" nullable="false" remarks="Promotion_type_id for the promotion-product relation" size="10" type="int4" typeCode="4">
+            <parent column="promotion_type_id" foreignKey="ct_promo_prod_type_promo_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_promotion_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="product_type_id" nullable="false" remarks="Product_type_id for the promotion-product relation" size="10" type="int4" typeCode="4">
+            <parent column="product_type_id" foreignKey="ct_promo_prod_type_prod_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_product_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="1000" digits="0" id="3" name="status_id" nullable="false" remarks="Status id for the promotion-product relation type" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="ct_promo_prod_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="(('now'::text)::timestamp(0) with time zone)::timestamp without time zone" digits="6" id="4" name="input_date" nullable="false" remarks="Date on which the record was created" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="input_user" nullable="false" remarks="User who was modified the record" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="6" name="modif_date" nullable="true" remarks="Date of the last modification of the record" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="modif_user" nullable="true" remarks="" size="10" type="varchar" typeCode="12"/>
+         <primaryKey column="promo_prod_type_id" sequenceNumberInPK="1"/>
+         <index name="ct_promo_prod_type_pk" unique="true">
+            <column ascending="true" name="promo_prod_type_id"/>
+         </index>
+         <index name="ct_promo_prod_type_code_u" unique="true">
+            <column ascending="true" name="promotion_type_id"/>
+            <column ascending="true" name="product_type_id"/>
+         </index>
+      </table>
+      <table name="ct_promo_serv_type" numRows="6" remarks="Table that stores the promotion service relation types of the catalog for the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_promo_serv_type_id'::regclass)" digits="0" id="0" name="promo_serv_type_id" nullable="false" remarks="Internal identifier of the promotion-service relation type" size="10" type="serial" typeCode="4">
+            <child column="promo_serv_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_service_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="promotion_type_id" nullable="false" remarks="Promotion_type_id for the promotion-service relation" size="10" type="int4" typeCode="4">
+            <parent column="promotion_type_id" foreignKey="ct_promo_serv_type_promo_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_promotion_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="service_type_id" nullable="false" remarks="Service_type_id for the promotion-service relation" size="10" type="int4" typeCode="4">
+            <parent column="service_type_id" foreignKey="ct_promo_serv_type_serv_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_service_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="1000" digits="0" id="3" name="status_id" nullable="false" remarks="Status id for the promotion-service relation type" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="ct_promo_serv_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="(('now'::text)::timestamp(0) with time zone)::timestamp without time zone" digits="6" id="4" name="input_date" nullable="false" remarks="Date on which the record was created" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="input_user" nullable="false" remarks="User who was modified the record" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="6" name="modif_date" nullable="true" remarks="Date of the last modification of the record" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="modif_user" nullable="true" remarks="" size="10" type="varchar" typeCode="12"/>
+         <primaryKey column="promo_serv_type_id" sequenceNumberInPK="1"/>
+         <index name="ct_promo_serv_type_pk" unique="true">
+            <column ascending="true" name="promo_serv_type_id"/>
+         </index>
+         <index name="ct_promo_serv_type_code_u" unique="true">
+            <column ascending="true" name="promotion_type_id"/>
+            <column ascending="true" name="service_type_id"/>
+         </index>
+      </table>
+      <table name="ct_promotion_type" numRows="7" remarks="Table that stores the promotion types of the catalog for the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_promotion_type_id'::regclass)" digits="0" id="0" name="promotion_type_id" nullable="false" remarks="Internal identifier of the promotion type" size="10" type="serial" typeCode="4">
+            <child column="promotion_type_id" foreignKey="ct_promo_consum_type_disc_promo_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_promo_consum_type_discount"/>
+            <child column="promotion_type_id" foreignKey="ct_promo_fee_type_discount_promo_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_promo_fee_type_discount"/>
+            <child column="promotion_type_id" foreignKey="ct_promo_prod_type_promo_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_promo_prod_type"/>
+            <child column="promotion_type_id" foreignKey="ct_promo_serv_type_promo_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_promo_serv_type"/>
+            <child column="promotion_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promo_consum_type_discount"/>
+            <child column="promotion_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_fee_type_discount"/>
+            <child column="promotion_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_product_type"/>
+            <child column="promotion_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_service_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="1002" digits="0" id="1" name="entity_type_id" nullable="false" remarks="Entity_id for the promotion type" size="10" type="int4" typeCode="4">
+            <parent column="entity_type_id" foreignKey="ct_promotion_type_entity_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_entity_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="code" nullable="false" remarks="Code of the promotion type" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="name" nullable="false" remarks="Name of the promotion type" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="description" nullable="false" remarks="Description for the promotion type" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="application_level_id" nullable="false" remarks="Application level id for the promotion type" size="10" type="int4" typeCode="4">
+            <parent column="application_level_id" foreignKey="ct_promotion_type_discount_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_application_level"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="discount_type_id" nullable="false" remarks="Type of the discount for the promotion type (percent, minutes, units, etc)" size="10" type="int4" typeCode="4">
+            <parent column="discount_type_id" foreignKey="ct_promotion_type_level_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_discount_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="4" id="7" name="discount_value" nullable="false" remarks="Value of the discount for the promotion type" size="10" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="1000" digits="0" id="8" name="status_id" nullable="false" remarks="Status id for the promotion type" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="ct_promotion_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="(('now'::text)::timestamp(0) with time zone)::timestamp without time zone" digits="6" id="9" name="input_date" nullable="false" remarks="Date on which the record was created" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="input_user" nullable="false" remarks="User who was modified the record" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="11" name="modif_date" nullable="true" remarks="Date of the last modification of the record" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="12" name="modif_user" nullable="true" remarks="" size="10" type="varchar" typeCode="12"/>
+         <primaryKey column="promotion_type_id" sequenceNumberInPK="1"/>
+         <index name="ct_promotion_type_pk" unique="true">
+            <column ascending="true" name="promotion_type_id"/>
+         </index>
+         <index name="ct_promotion_type_code_u" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="ct_promotion_type_name_u" unique="true">
+            <column ascending="true" name="name"/>
+         </index>
+      </table>
+      <table name="ct_serv_fee_type" numRows="7" remarks="Table that stores the fee service relation types of the catalog for the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_serv_fee_type_id'::regclass)" digits="0" id="0" name="serv_fee_type_id" nullable="false" remarks="Internal identifier of the service-fee relation type" size="10" type="serial" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="service_type_id" nullable="false" remarks="Product_type_id for the service-fee relation" size="10" type="int4" typeCode="4">
+            <parent column="service_type_id" foreignKey="ct_serv_fee_type_service_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_service_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="fee_type_id" nullable="false" remarks="Service_type_id for the service-fee relation" size="10" type="int4" typeCode="4">
+            <parent column="fee_type_id" foreignKey="ct_serv_fee_type_fee_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_fee_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="1000" digits="0" id="3" name="status_id" nullable="false" remarks="Status id for the service-fee relation type" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="ct_serv_fee_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="(('now'::text)::timestamp(0) with time zone)::timestamp without time zone" digits="6" id="4" name="input_date" nullable="false" remarks="Date on which the record was created" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="input_user" nullable="false" remarks="User who was modified the record" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="6" name="modif_date" nullable="true" remarks="Date of the last modification of the record" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="modif_user" nullable="true" remarks="" size="10" type="varchar" typeCode="12"/>
+         <primaryKey column="serv_fee_type_id" sequenceNumberInPK="1"/>
+         <index name="ct_serv_fee_type_pk" unique="true">
+            <column ascending="true" name="serv_fee_type_id"/>
+         </index>
+         <index name="ct_serv_fee_type_code_u" unique="true">
+            <column ascending="true" name="service_type_id"/>
+            <column ascending="true" name="fee_type_id"/>
+         </index>
+      </table>
+      <table name="ct_service_type" numRows="3" remarks="Table that stores the service types of the catalog for the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_service_type_id'::regclass)" digits="0" id="0" name="service_type_id" nullable="false" remarks="Internal identifier of the service type" size="10" type="serial" typeCode="4">
+            <child column="service_type_id" foreignKey="ct_prod_serv_type_service_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_prod_serv_type"/>
+            <child column="service_type_id" foreignKey="ct_promo_serv_type_serv_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_promo_serv_type"/>
+            <child column="service_type_id" foreignKey="ct_serv_fee_type_service_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_serv_fee_type"/>
+            <child column="service_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_product_service_type"/>
+            <child column="service_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_service_type"/>
+            <child column="service_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_service_fee_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="1001" digits="0" id="1" name="entity_type_id" nullable="false" remarks="Entity_id for the service type" size="10" type="int4" typeCode="4">
+            <parent column="entity_type_id" foreignKey="ct_service_type_entity_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_entity_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="code" nullable="false" remarks="Code of the service type" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="name" nullable="false" remarks="Name of the service type" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="description" nullable="false" remarks="Description for the service type" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="1000" digits="0" id="5" name="status_id" nullable="false" remarks="Status id for the service type" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="ct_service_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="(('now'::text)::timestamp(0) with time zone)::timestamp without time zone" digits="6" id="6" name="input_date" nullable="false" remarks="Date on which the record was created" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="input_user" nullable="false" remarks="User who was modified the record" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="6" id="8" name="modif_date" nullable="true" remarks="Date of the last modification of the record" size="29" type="timestamp" typeCode="93"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="modif_user" nullable="true" remarks="" size="10" type="varchar" typeCode="12"/>
+         <primaryKey column="service_type_id" sequenceNumberInPK="1"/>
+         <index name="ct_service_type_pk" unique="true">
+            <column ascending="true" name="service_type_id"/>
+         </index>
+         <index name="ct_service_type_code_u" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="ct_service_type_name_u" unique="true">
+            <column ascending="true" name="name"/>
+         </index>
+      </table>
+      <table name="it_profiles" numRows="4" remarks="Table that stores application profiles" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_profile_id'::regclass)" digits="0" id="0" name="profile_id" nullable="false" remarks="InternaL identifier of the profile" size="10" type="serial" typeCode="4">
+            <child column="profile_id" foreignKey="it_users_profile_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="it_users"/>
+            <child column="profile_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="profile_code" nullable="false" remarks="Code of the profile" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="description" nullable="false" remarks="Description for the profile" size="500" type="varchar" typeCode="12"/>
+         <primaryKey column="profile_id" sequenceNumberInPK="1"/>
+         <index name="it_profiles_pkey" unique="true">
+            <column ascending="true" name="profile_id"/>
+         </index>
+         <index name="it_profiles_profile_code_key" unique="true">
+            <column ascending="true" name="profile_code"/>
+         </index>
+      </table>
+      <table name="it_users" numRows="4" remarks="Table that stores application users" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_user_id'::regclass)" digits="0" id="0" name="user_id" nullable="false" remarks="InternaL identifier of the user" size="10" type="serial" typeCode="4">
+            <child column="user_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="name" nullable="false" remarks="Name of the user" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="surname" nullable="false" remarks="Surname of the user" size="100" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="email" nullable="false" remarks="Email of the user" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="phone_contact" nullable="true" remarks="Phone contact of the user" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="user_code" nullable="false" remarks="Code of the user (to login)" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="password" nullable="false" remarks="Password for the user - md5 encrypted" size="32" type="bpchar" typeCode="1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="profile_id" nullable="false" remarks="Internal identifier for the profile of the user" size="10" type="int4" typeCode="4">
+            <parent column="profile_id" foreignKey="it_users_profile_id_fkey" implied="false" onDeleteCascade="false" schema="public" table="it_profiles"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="active" nullable="false" remarks="" size="1" type="bool" typeCode="-7"/>
+         <primaryKey column="user_id" sequenceNumberInPK="1"/>
+         <index name="it_users_pkey" unique="true">
+            <column ascending="true" name="user_id"/>
+         </index>
+         <index name="it_users_user_code_key" unique="true">
+            <column ascending="true" name="user_code"/>
+         </index>
+      </table>
+      <table name="mt_application_menu" numRows="27" remarks="Table that stores the application's menu" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_application_menu_id'::regclass)" digits="0" id="0" name="application_menu_id" nullable="false" remarks="Internal identifier of the menu item" size="10" type="serial" typeCode="4">
+            <child column="application_parent_menu_id" foreignKey="mt_application_menu_fk" implied="false" onDeleteCascade="false" schema="public" table="mt_application_menu"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="application_parent_menu_id" nullable="true" remarks="Internal identifier of the parent menu item, if exists" size="10" type="int4" typeCode="4">
+            <parent column="application_menu_id" foreignKey="mt_application_menu_fk" implied="false" onDeleteCascade="false" schema="public" table="mt_application_menu"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="has_children" nullable="false" remarks="Flag that indicates if the item menu has children (true or false)" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="menu_level" nullable="false" remarks="Level of the menu item in the menu hierarchy" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="position" nullable="false" remarks="Position of the menu item in the menu level" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="name" nullable="false" remarks="Name to shown in the menu application" size="100" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="description" nullable="false" remarks="Description of the menu item" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="profile_code" nullable="true" remarks="Profiles authoriced to see the menu item" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="page" nullable="false" remarks="JSF to redirect when the menu item is selected" size="500" type="varchar" typeCode="12"/>
+         <primaryKey column="application_menu_id" sequenceNumberInPK="1"/>
+         <index name="mt_application_menu_pk" unique="true">
+            <column ascending="true" name="application_menu_id"/>
+         </index>
+      </table>
+      <table name="pt_application_level" numRows="3" remarks="Table that stores the application level for the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_application_level_id'::regclass)" digits="0" id="0" name="application_level_id" nullable="false" remarks="Internal identifier of the application level" size="10" type="serial" typeCode="4">
+            <child column="application_level_id" foreignKey="ct_fee_type_level_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_fee_type"/>
+            <child column="application_level_id" foreignKey="ct_promo_fee_type_discount_lev_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_promo_fee_type_discount"/>
+            <child column="application_level_id" foreignKey="ct_promotion_type_discount_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_promotion_type"/>
+            <child column="application_level_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_fee_type_discount"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="code" nullable="false" remarks="Code of the application level" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="name" nullable="false" remarks="Name of the application level" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="description" nullable="false" remarks="Description for the application level" size="500" type="varchar" typeCode="12"/>
+         <primaryKey column="application_level_id" sequenceNumberInPK="1"/>
+         <index name="pt_application_level_pk" unique="true">
+            <column ascending="true" name="application_level_id"/>
+         </index>
+         <index name="pt_application_level_code_u" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="pt_application_level_name_u" unique="true">
+            <column ascending="true" name="name"/>
+         </index>
+      </table>
+      <table name="pt_billing_period" numRows="2" remarks="Table that stores the billing period types for the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_billing_period_id'::regclass)" digits="0" id="0" name="billing_period_id" nullable="false" remarks="Internal identifier of the billing period type" size="10" type="serial" typeCode="4">
+            <child column="billing_period_id" foreignKey="ct_bill_cycle_type_period_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_bill_cycle_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="code" nullable="false" remarks="Code of the billing period type" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="name" nullable="false" remarks="Name of the billing period type" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="description" nullable="false" remarks="Description for the billing period type" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="billing_period_days" nullable="false" remarks="Number of days that defines the billing period" size="3" type="numeric" typeCode="2"/>
+         <primaryKey column="billing_period_id" sequenceNumberInPK="1"/>
+         <index name="pt_billing_period_pk" unique="true">
+            <column ascending="true" name="billing_period_id"/>
+         </index>
+         <index name="pt_billing_period_code_u" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="pt_billing_period_name_u" unique="true">
+            <column ascending="true" name="name"/>
+         </index>
+      </table>
+      <table name="pt_consumption_class" numRows="4" remarks="Table that stores the consumtion class of the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_consumption_class_id'::regclass)" digits="0" id="0" name="consumption_class_id" nullable="false" remarks="Internal identifier of the consumption class" size="10" type="serial" typeCode="4">
+            <child column="consumption_class_id" foreignKey="ct_consumption_type_class_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_consumption_type"/>
+            <child column="consumption_class_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promo_consum_type_discount"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="code" nullable="false" remarks="Code of the consumption class" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="name" nullable="false" remarks="Name of the consumption class" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="description" nullable="false" remarks="Description for the consumption class" size="500" type="varchar" typeCode="12"/>
+         <primaryKey column="consumption_class_id" sequenceNumberInPK="1"/>
+         <index name="pt_consumption_class_pk" unique="true">
+            <column ascending="true" name="consumption_class_id"/>
+         </index>
+         <index name="pt_consumption_class_code_u" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="pt_consumption_class_name_u" unique="true">
+            <column ascending="true" name="name"/>
+         </index>
+      </table>
+      <table name="pt_discount_type" numRows="4" remarks="Table that stores the discount types for the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_discount_type_id'::regclass)" digits="0" id="0" name="discount_type_id" nullable="false" remarks="Internal identifier of the discount type" size="10" type="serial" typeCode="4">
+            <child column="discount_type_id" foreignKey="ct_promotion_type_level_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_promotion_type"/>
+            <child column="discount_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promo_consum_type_discount"/>
+            <child column="discount_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_fee_type_discount"/>
+            <child column="discount_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_product_type"/>
+            <child column="discount_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_service_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="code" nullable="false" remarks="Code of the discount type" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="name" nullable="false" remarks="Name of the discount type" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="description" nullable="false" remarks="Description for the discount type" size="500" type="varchar" typeCode="12"/>
+         <primaryKey column="discount_type_id" sequenceNumberInPK="1"/>
+         <index name="pt_discount_type_pk" unique="true">
+            <column ascending="true" name="discount_type_id"/>
+         </index>
+         <index name="pt_discount_type_code_u" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="pt_discount_type_name_u" unique="true">
+            <column ascending="true" name="name"/>
+         </index>
+      </table>
+      <table name="pt_entity_type" numRows="7" remarks="Table that stores the entity type of the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_entity_type_id'::regclass)" digits="0" id="0" name="entity_type_id" nullable="false" remarks="Internal identifier of the entity type" size="10" type="serial" typeCode="4">
+            <child column="entity_type_id" foreignKey="ct_account_type_entity_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_account_type"/>
+            <child column="entity_type_id" foreignKey="ct_consumption_type_entity_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_consumption_type"/>
+            <child column="entity_type_id" foreignKey="ct_customer_type_entity_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_customer_type"/>
+            <child column="entity_type_id" foreignKey="ct_fee_type_entity_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_fee_type"/>
+            <child column="entity_type_id" foreignKey="ct_product_type_entity_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_product_type"/>
+            <child column="entity_type_id" foreignKey="ct_promotion_type_entity_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_promotion_type"/>
+            <child column="entity_type_id" foreignKey="ct_service_type_entity_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_service_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="code" nullable="false" remarks="Code of the entity type" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="name" nullable="false" remarks="Name of the entity type" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="description" nullable="false" remarks="Description for the entity type" size="500" type="varchar" typeCode="12"/>
+         <primaryKey column="entity_type_id" sequenceNumberInPK="1"/>
+         <index name="pt_entity_type_PK" unique="true">
+            <column ascending="true" name="entity_type_id"/>
+         </index>
+         <index name="pt_entity_type_code_U" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="pt_entity_type_name_U" unique="true">
+            <column ascending="true" name="name"/>
+         </index>
+      </table>
+      <table name="pt_status" numRows="4" remarks="Table that stores the status for the entities of the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_status_id'::regclass)" digits="0" id="0" name="status_id" nullable="false" remarks="Internal identifier of the status" size="10" type="serial" typeCode="4">
+            <child column="status_id" foreignKey="ct_account_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_account_type"/>
+            <child column="status_id" foreignKey="ct_bill_cycle_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_bill_cycle_type"/>
+            <child column="status_id" foreignKey="ct_consumption_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_consumption_type"/>
+            <child column="status_id" foreignKey="ct_customer_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_customer_type"/>
+            <child column="status_id" foreignKey="ct_fee_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_fee_type"/>
+            <child column="status_id" foreignKey="ct_prod_fee_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_prod_fee_type"/>
+            <child column="status_id" foreignKey="ct_prod_serv_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_prod_serv_type"/>
+            <child column="status_id" foreignKey="ct_product_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_product_type"/>
+            <child column="status_id" foreignKey="ct_promo_consum_type_discount_status_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_promo_consum_type_discount"/>
+            <child column="status_id" foreignKey="ct_promo_fee_type_discount_status_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_promo_fee_type_discount"/>
+            <child column="status_id" foreignKey="ct_promo_prod_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_promo_prod_type"/>
+            <child column="status_id" foreignKey="ct_promo_serv_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_promo_serv_type"/>
+            <child column="status_id" foreignKey="ct_promotion_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_promotion_type"/>
+            <child column="status_id" foreignKey="ct_serv_fee_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_serv_fee_type"/>
+            <child column="status_id" foreignKey="ct_service_type_status_fk" implied="false" onDeleteCascade="false" schema="public" table="ct_service_type"/>
+            <child column="fee_type_status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_product_fee_type"/>
+            <child column="prod_fee_type_status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_product_fee_type"/>
+            <child column="product_type_status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_product_fee_type"/>
+            <child column="prod_serv_type_status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_product_service_type"/>
+            <child column="product_type_status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_product_service_type"/>
+            <child column="service_type_status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_product_service_type"/>
+            <child column="consumption_type_status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promo_consum_type_discount"/>
+            <child column="promo_consum_type_disc_status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promo_consum_type_discount"/>
+            <child column="promotion_type_status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promo_consum_type_discount"/>
+            <child column="fee_type_status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_fee_type_discount"/>
+            <child column="promo_fee_type_disc_status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_fee_type_discount"/>
+            <child column="promotion_type_status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_fee_type_discount"/>
+            <child column="product_type_status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_product_type"/>
+            <child column="promo_prod_type_status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_product_type"/>
+            <child column="promotion_type_status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_product_type"/>
+            <child column="prom_serv_type_status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_service_type"/>
+            <child column="promotion_type_status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_service_type"/>
+            <child column="service_type_status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_promotion_service_type"/>
+            <child column="fee_type_status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_service_fee_type"/>
+            <child column="serv_fee_type_status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_service_fee_type"/>
+            <child column="service_type_status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="vw_service_fee_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="code" nullable="false" remarks="Code of the status" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="name" nullable="false" remarks="Name of the status" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="description" nullable="false" remarks="Description for the status" size="500" type="varchar" typeCode="12"/>
+         <primaryKey column="status_id" sequenceNumberInPK="1"/>
+         <index name="pt_status_pk" unique="true">
+            <column ascending="true" name="status_id"/>
+         </index>
+         <index name="pt_status_code_u" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="pt_status_name_u" unique="true">
+            <column ascending="true" name="name"/>
+         </index>
+      </table>
+      <table name="pt_tax_type" numRows="3" remarks="Table that stores the tax type of the application" schema="public" type="TABLE">
+         <column autoUpdated="true" defaultValue="nextval('seq_tax_type_id'::regclass)" digits="0" id="0" name="tax_type_id" nullable="false" remarks="Internal identifier of the tax type" size="10" type="serial" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="code" nullable="false" remarks="Code of the tax type" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="name" nullable="false" remarks="Name of the tax type" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="description" nullable="false" remarks="Description for the tax type" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="4" id="4" name="percent_value" nullable="false" remarks="Percent value for the tax type" size="10" type="numeric" typeCode="2"/>
+         <primaryKey column="tax_type_id" sequenceNumberInPK="1"/>
+         <index name="pt_tax_type_pk" unique="true">
+            <column ascending="true" name="tax_type_id"/>
+         </index>
+         <index name="pt_tax_type_code_u" unique="true">
+            <column ascending="true" name="code"/>
+         </index>
+         <index name="pt_tax_type_name_u" unique="true">
+            <column ascending="true" name="name"/>
+         </index>
+      </table>
+      <table name="vw_product_fee_type" numRows="0" remarks="View showing the relationship between product types and the fee types associated with them - related to ct_prod_fee_type" schema="public" type="VIEW" viewSql=" SELECT cpft.prod_fee_type_id,&#10;    cpft.status_id AS prod_fee_type_status_id,&#10;    psr.code AS prod_fee_type_status_code,&#10;    cpt.product_type_id,&#10;    cpt.code AS product_type_code,&#10;    cpt.name AS product_type_name,&#10;    cpt.description AS product_type_description,&#10;    cpt.status_id AS product_type_status_id,&#10;    psp.code AS product_type_status_code,&#10;    cft.fee_type_id,&#10;    cft.code AS fee_type_code,&#10;    cft.name AS fee_type_name,&#10;    cft.description AS fee_type_description,&#10;    cft.prorate,&#10;    cft.price,&#10;    cft.status_id AS fee_type_status_id,&#10;    psf.code AS fee_type_status_code&#10;   FROM (((((ct_product_type cpt&#10;     JOIN pt_status psp ON ((cpt.status_id = psp.status_id)))&#10;     JOIN ct_prod_fee_type cpft ON ((cpt.product_type_id = cpft.product_type_id)))&#10;     JOIN pt_status psr ON ((cpft.status_id = psr.status_id)))&#10;     JOIN ct_fee_type cft ON ((cft.fee_type_id = cpft.fee_type_id)))&#10;     JOIN pt_status psf ON ((cpft.status_id = psf.status_id)));">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="prod_fee_type_id" nullable="true" remarks="prod_fee_type_id identifier of the product-fee type relation (field prod_fee_type_id from ct_prod_fee_type table)" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="prod_fee_type_status_id" nullable="true" remarks="Status id of the product-fee type relation (field status_id from ct_prod_fee_type table)" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="prod_fee_type_status_code" nullable="true" remarks="Status code of the product-fee type relation" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="product_type_id" nullable="true" remarks="Product_type_id for the product-fee type relation (field product_type_id from ct_product_type table)" size="10" type="int4" typeCode="4">
+            <parent column="product_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="ct_product_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="product_type_code" nullable="true" remarks="Code for the product type (field code from ct_product_type table)" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="product_type_name" nullable="true" remarks="Name for the product type (field name from ct_product_type table)" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="product_type_description" nullable="true" remarks="Description for the product type (field description from ct_product_type table)" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="product_type_status_id" nullable="true" remarks="Status_id for the product type (field status_id from ct_product_type table)" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="product_type_status_code" nullable="true" remarks="Status code for the product_type" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="fee_type_id" nullable="true" remarks="Fee_type_id for the product-fee type relation (field fee_type_id from ct_fee_type table)" size="10" type="int4" typeCode="4">
+            <parent column="fee_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="ct_fee_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="fee_type_code" nullable="true" remarks="Code for the fee type (field code from ct_fee_type table)" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="fee_type_name" nullable="true" remarks="Name for the fee type (field name from ct_fee_type table)" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="12" name="fee_type_description" nullable="true" remarks="Description for the fee type (field description from ct_fee_type table)" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="13" name="prorate" nullable="true" remarks="Flag that indicates if the fee type is prorated (true) or not (false)(field prorate from ct_fee_type table)" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="4" id="14" name="price" nullable="true" remarks="Price for the fee type (field price from ct_fee_type table)" size="10" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="15" name="fee_type_status_id" nullable="true" remarks="Status_id for the fee type (field status_id from ct_fee_type table)" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="16" name="fee_type_status_code" nullable="true" remarks="Status code for the fee type" size="10" type="varchar" typeCode="12"/>
+      </table>
+      <table name="vw_product_service_type" numRows="0" remarks="View showing the relationship between product types and the service types associated with them - related to ct_prod_serv_type" schema="public" type="VIEW" viewSql=" SELECT cpst.prod_serv_type_id,&#10;    cpst.status_id AS prod_serv_type_status_id,&#10;    psr.code AS prod_serv_type_status_code,&#10;    cpt.product_type_id,&#10;    cpt.code AS product_type_code,&#10;    cpt.name AS product_type_name,&#10;    cpt.description AS product_type_description,&#10;    cpt.status_id AS product_type_status_id,&#10;    psp.code AS product_type_status_code,&#10;    cst.service_type_id,&#10;    cst.code AS service_type_code,&#10;    cst.name AS service_type_name,&#10;    cst.description AS service_type_description,&#10;    cst.status_id AS service_type_status_id,&#10;    pss.code AS service_type_status_code&#10;   FROM (((((ct_product_type cpt&#10;     JOIN pt_status psp ON ((cpt.status_id = psp.status_id)))&#10;     JOIN ct_prod_serv_type cpst ON ((cpt.product_type_id = cpst.product_type_id)))&#10;     JOIN pt_status psr ON ((cpst.status_id = psr.status_id)))&#10;     JOIN ct_service_type cst ON ((cst.service_type_id = cpst.service_type_id)))&#10;     JOIN pt_status pss ON ((cst.status_id = pss.status_id)));">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="prod_serv_type_id" nullable="true" remarks="prod_serv_type_id identifier of the product-service type relation (field prod_serv_type_id from ct_prod_serv_type table)" size="10" type="int4" typeCode="4">
+            <parent column="prod_serv_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="ct_prod_serv_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="prod_serv_type_status_id" nullable="true" remarks="Status id of the product-service type relation (field status_id from ct_prod_serv_type table)" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="prod_serv_type_status_code" nullable="true" remarks="Status code of the product-service type relation" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="product_type_id" nullable="true" remarks="Product_type_id for the product-service type relation (field product_type_id from ct_product_type table)" size="10" type="int4" typeCode="4">
+            <parent column="product_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="ct_product_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="product_type_code" nullable="true" remarks="Code for the product type (field code from ct_product_type table)" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="product_type_name" nullable="true" remarks="Name for the product type (field name from ct_product_type table)" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="product_type_description" nullable="true" remarks="Description for the product type (field description from ct_product_type table)" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="product_type_status_id" nullable="true" remarks="Status_id for the product type (field status_id from ct_product_type table)" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="product_type_status_code" nullable="true" remarks="Status code for the product_type" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="service_type_id" nullable="true" remarks="Service_type_id for the product-service type relation (field service_type_id from ct_service_type table)" size="10" type="int4" typeCode="4">
+            <parent column="service_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="ct_service_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="service_type_code" nullable="true" remarks="Code for the service type (field code from ct_service_type table)" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="service_type_name" nullable="true" remarks="Name for the service type (field name from ct_service_type table)" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="12" name="service_type_description" nullable="true" remarks="Description for the service type (field description from ct_service_type table)" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="13" name="service_type_status_id" nullable="true" remarks="Status_id for the service type (field status_id from ct_service_type table)" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="14" name="service_type_status_code" nullable="true" remarks="Status code for the service type" size="10" type="varchar" typeCode="12"/>
+      </table>
+      <table name="vw_promo_consum_type_discount" numRows="0" remarks="View showing the relationship between promotion types and the fee types that can be discount by the promotion type - related to ct_promo_consum_type_discount" schema="public" type="VIEW" viewSql=" SELECT cpctd.promo_consum_type_discount_id,&#10;    cpctd.status_id AS promo_consum_type_disc_status_id,&#10;    psr.code AS promo_consum_type_disc_status_code,&#10;    cpctd.promotion_type_id,&#10;    cpt.code AS promotion_type_code,&#10;    cpt.name AS promotion_type_name,&#10;    cpt.description AS promotion_type_description,&#10;    cpt.discount_type_id,&#10;    pdt.code AS discount_type_code,&#10;    pdt.name AS discount_type_name,&#10;    pdt.description AS discount_type_description,&#10;    cpt.discount_value AS promotion_type_discount_value,&#10;    cpt.status_id AS promotion_type_status_id,&#10;    psp.code AS promotion_type_status_code,&#10;    cpctd.consumption_type_id,&#10;    cct.code AS consumption_type_code,&#10;    cct.name AS consumption_type_name,&#10;    cct.description AS consumption_type_description,&#10;    cct.consumption_class_id,&#10;    pcc.code AS consumption_class_code,&#10;    pcc.name AS consumption_class_name,&#10;    pcc.description AS consumption_class_description,&#10;    cct.status_id AS consumption_type_status_id,&#10;    psc.code AS consumption_type_status_code&#10;   FROM (((((((ct_promotion_type cpt&#10;     JOIN pt_status psp ON ((psp.status_id = cpt.status_id)))&#10;     JOIN ct_promo_consum_type_discount cpctd ON ((cpt.promotion_type_id = cpctd.promotion_type_id)))&#10;     JOIN pt_status psr ON ((cpctd.status_id = psr.status_id)))&#10;     JOIN pt_discount_type pdt ON ((pdt.discount_type_id = cpt.discount_type_id)))&#10;     JOIN ct_consumption_type cct ON ((cct.consumption_type_id = cpctd.consumption_type_id)))&#10;     JOIN pt_consumption_class pcc ON ((pcc.consumption_class_id = cct.consumption_class_id)))&#10;     JOIN pt_status psc ON ((psc.status_id = cct.status_id)))&#10;  WHERE (cpt.application_level_id IN ( SELECT pal2.application_level_id&#10;           FROM pt_application_level pal2&#10;          WHERE ((pal2.code)::text = 'SERV'::text)));">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="promo_consum_type_discount_id" nullable="true" remarks="promo_consum_type_discount_id identifier of the promotion-consumption discount type relation (field promo_consum_type_discount_id from ct_promo_consum_type_discount table)" size="10" type="int4" typeCode="4">
+            <parent column="promo_consum_type_discount_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="ct_promo_consum_type_discount"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="promo_consum_type_disc_status_id" nullable="true" remarks="Status id of the promotion-consumption discount type relation (field status_id from ct_prod_prom_type table)" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="promo_consum_type_disc_status_code" nullable="true" remarks="Status code of the promotion-consumption discount type relation" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="promotion_type_id" nullable="true" remarks="Promotion_type_id for the promotion-consumption discount type relation (field promotion_type_id from ct_promotion_type table)" size="10" type="int4" typeCode="4">
+            <parent column="promotion_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="ct_promotion_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="promotion_type_code" nullable="true" remarks="Code for the promotion type (field code from ct_promotion_type table)" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="promotion_type_name" nullable="true" remarks="Name for the promotion type (field name from ct_promotion_type table)" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="promotion_type_description" nullable="true" remarks="Description for the promotion type (field description from ct_promotion_type table)" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="discount_type_id" nullable="true" remarks="Discount_type_id for the promotion type (field discount_type_id from ct_promotion_type table)" size="10" type="int4" typeCode="4">
+            <parent column="discount_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_discount_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="discount_type_code" nullable="true" remarks="Code for the discount type for the promotion type (field code from pt_discount_type table)" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="discount_type_name" nullable="true" remarks="Name for the discount type for the promotion type (field name from pt_discount_type table)" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="discount_type_description" nullable="true" remarks="Description for the discount type for the promotion type (field description from pt_discount_type table)" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="4" id="11" name="promotion_type_discount_value" nullable="true" remarks="discount_value for the discount type for the promotion type (field discount_value from ct_promotion_type table)" size="10" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="12" name="promotion_type_status_id" nullable="true" remarks="Status_id for the promotion type (field status_id from ct_promotion_type table)" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="13" name="promotion_type_status_code" nullable="true" remarks="Status code for the promotion_type" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="14" name="consumption_type_id" nullable="true" remarks="Consumption_type_id for the promotion-consumption discount type relation (field fee_type_id from ct_consumption_type table)" size="10" type="int4" typeCode="4">
+            <parent column="consumption_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="ct_consumption_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="15" name="consumption_type_code" nullable="true" remarks="Code for the consumption type (field code from ct_consumption_type table)" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="16" name="consumption_type_name" nullable="true" remarks="Name for the consumption type (field name from ct_consumption_type table)" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="17" name="consumption_type_description" nullable="true" remarks="Description for the consumption type (field description from ct_consumption_type table)" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="18" name="consumption_class_id" nullable="true" remarks="Consumption_class_id for the consumption type (field consumption_class_id from pt_consumption_class table)" size="10" type="int4" typeCode="4">
+            <parent column="consumption_class_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_consumption_class"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="19" name="consumption_class_code" nullable="true" remarks="Code for the consumption type (field code from pt_consumption_class table)" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="20" name="consumption_class_name" nullable="true" remarks="Name for the consumption type (field name from pt_consumption_class table)" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="21" name="consumption_class_description" nullable="true" remarks="Description for the consumption type (field description from pt_consumption_class table)" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="22" name="consumption_type_status_id" nullable="true" remarks="Status_id for the consumption type (field status_id from ct_consumption_type table)" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="23" name="consumption_type_status_code" nullable="true" remarks="Status code for the consumption type" size="10" type="varchar" typeCode="12"/>
+      </table>
+      <table name="vw_promotion_fee_type_discount" numRows="0" remarks="View showing the relationship between promotion types and the fee types that can be discount by the promotion type - related to ct_promo_fee_type_discount" schema="public" type="VIEW" viewSql=" SELECT cpfdt.promo_fee_type_discount_id,&#10;    cpfdt.status_id AS promo_fee_type_disc_status_id,&#10;    psr.code AS promo_fee_type_disc_status_code,&#10;    cpt.promotion_type_id,&#10;    cpt.code AS promotion_type_code,&#10;    cpt.name AS promotion_type_name,&#10;    cpt.description AS promotion_type_description,&#10;    cpt.application_level_id,&#10;    pal.code AS application_level_code,&#10;    cpt.discount_type_id,&#10;    pdt.code AS discount_type_code,&#10;    pdt.name AS discount_type_name,&#10;    pdt.description AS discount_type_description,&#10;    pal.description AS application_level_description,&#10;    cpt.discount_value AS promotion_type_discount_value,&#10;    cpt.status_id AS promotion_type_status_id,&#10;    psp.code AS promotion_type_status_code,&#10;    cft.fee_type_id,&#10;    cft.code AS fee_type_code,&#10;    cft.name AS fee_type_name,&#10;    cft.description AS fee_type_description,&#10;    cft.prorate,&#10;    cft.price,&#10;    cft.status_id AS fee_type_status_id,&#10;    psf.code AS fee_type_status_code&#10;   FROM (((((((ct_promotion_type cpt&#10;     JOIN pt_status psp ON ((cpt.status_id = psp.status_id)))&#10;     JOIN pt_application_level pal ON ((cpt.application_level_id = pal.application_level_id)))&#10;     JOIN pt_discount_type pdt ON ((pdt.discount_type_id = cpt.discount_type_id)))&#10;     JOIN ct_promo_fee_type_discount cpfdt ON ((cpt.promotion_type_id = cpfdt.promotion_type_id)))&#10;     JOIN pt_status psr ON (((cpfdt.status_id = psr.status_id) AND (cpt.application_level_id = cpfdt.application_level_id))))&#10;     JOIN ct_fee_type cft ON (((cft.fee_type_id = cpfdt.fee_type_id) AND (cft.application_level_id = cpfdt.application_level_id))))&#10;     JOIN pt_status psf ON ((cft.status_id = psf.status_id)));">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="promo_fee_type_discount_id" nullable="true" remarks="promo_fee_type_discount_id identifier of the promotion-fee discount type relation (field promo_fee_type_discount_id from ct_promo_fee_type_discount table)" size="10" type="int4" typeCode="4">
+            <parent column="promo_fee_type_discount_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="ct_promo_fee_type_discount"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="promo_fee_type_disc_status_id" nullable="true" remarks="Status id of the promotion-fee discount type relation (field status_id from ct_prod_prom_type table)" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="promo_fee_type_disc_status_code" nullable="true" remarks="Status code of the promotion-fee discount type relation" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="promotion_type_id" nullable="true" remarks="Promotion_type_id for the promotion-fee discount type relation (field promotion_type_id from ct_promotion_type table)" size="10" type="int4" typeCode="4">
+            <parent column="promotion_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="ct_promotion_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="promotion_type_code" nullable="true" remarks="Code for the promotion type (field code from ct_promotion_type table)" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="promotion_type_name" nullable="true" remarks="Name for the promotion type (field name from ct_promotion_type table)" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="promotion_type_description" nullable="true" remarks="Description for the promotion type (field description from ct_promotion_type table)" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="application_level_id" nullable="true" remarks="Application_level_id for the promotion type (field application_level_id from ct_promotion_type table)" size="10" type="int4" typeCode="4">
+            <parent column="application_level_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_application_level"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="application_level_code" nullable="true" remarks="Code for the application level of the promotion type (field code from pt_application_level table)" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="discount_type_id" nullable="true" remarks="Discount_type_id for the promotion type (field discount_type_id from ct_promotion_type table)" size="10" type="int4" typeCode="4">
+            <parent column="discount_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_discount_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="discount_type_code" nullable="true" remarks="Code for the discount type for the promotion type (field code from pt_discount_type table)" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="discount_type_name" nullable="true" remarks="Name for the discount type for the promotion type (field name from pt_discount_type table)" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="12" name="discount_type_description" nullable="true" remarks="Description for the discount type for the promotion type (field description from pt_discount_type table)" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="13" name="application_level_description" nullable="true" remarks="Description for the application level of the promotion type (field description from pt_application_level table)" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="4" id="14" name="promotion_type_discount_value" nullable="true" remarks="discount_value for the discount type for the promotion type (field discount_value from ct_promotion_type table)" size="10" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="15" name="promotion_type_status_id" nullable="true" remarks="Status_id for the promotion type (field status_id from ct_promotion_type table)" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="16" name="promotion_type_status_code" nullable="true" remarks="Status code for the promotion_type" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="17" name="fee_type_id" nullable="true" remarks="Fee_type_id for the promotion-fee discount type relation (field fee_type_id from ct_fee_type table)" size="10" type="int4" typeCode="4">
+            <parent column="fee_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="ct_fee_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="18" name="fee_type_code" nullable="true" remarks="Code for the fee type (field code from ct_fee_type table)" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="19" name="fee_type_name" nullable="true" remarks="Name for the fee type (field name from ct_fee_type table)" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="20" name="fee_type_description" nullable="true" remarks="Description for the fee type (field description from ct_fee_type table)" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="21" name="prorate" nullable="true" remarks="" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="4" id="22" name="price" nullable="true" remarks="" size="10" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="23" name="fee_type_status_id" nullable="true" remarks="Status_id for the fee type (field status_id from ct_fee_type table)" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="24" name="fee_type_status_code" nullable="true" remarks="Status code for the fee type" size="10" type="varchar" typeCode="12"/>
+      </table>
+      <table name="vw_promotion_product_type" numRows="0" remarks="View showing the relationship between product types and the promotion types associated with them - related to ct_promo_prod_type" schema="public" type="VIEW" viewSql=" SELECT cppt.promo_prod_type_id,&#10;    cppt.status_id AS promo_prod_type_status_id,&#10;    psr.code AS promo_prod_type_status_code,&#10;    cpt.product_type_id,&#10;    cpt.code AS product_type_code,&#10;    cpt.name AS product_type_name,&#10;    cpt.description AS product_type_description,&#10;    cpt.status_id AS product_type_status_id,&#10;    psp.code AS product_type_status_code,&#10;    cpt2.promotion_type_id,&#10;    cpt2.code AS promotion_type_code,&#10;    cpt2.name AS promotion_type_name,&#10;    cpt2.description AS promotion_type_description,&#10;    cpt2.discount_type_id,&#10;    pdt.code AS discount_code,&#10;    pdt.name AS discount_name,&#10;    pdt.description AS discount_description,&#10;    cpt2.discount_value,&#10;    cpt2.status_id AS promotion_type_status_id,&#10;    psp2.code AS promotion_type_status_code&#10;   FROM ((((((ct_product_type cpt&#10;     JOIN pt_status psp ON ((cpt.status_id = psp.status_id)))&#10;     JOIN ct_promo_prod_type cppt ON ((cpt.product_type_id = cppt.product_type_id)))&#10;     JOIN pt_status psr ON ((cppt.status_id = psr.status_id)))&#10;     JOIN ct_promotion_type cpt2 ON ((cppt.promotion_type_id = cpt2.promotion_type_id)))&#10;     JOIN pt_status psp2 ON ((cpt2.status_id = psp2.status_id)))&#10;     JOIN pt_discount_type pdt ON ((pdt.discount_type_id = cpt2.discount_type_id)));">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="promo_prod_type_id" nullable="true" remarks="promo_prod_type_id identifier of the product-promotion type relation (field promo_prod_type_id from ct_promo_prod_type table)" size="10" type="int4" typeCode="4">
+            <parent column="promo_prod_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="ct_promo_prod_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="promo_prod_type_status_id" nullable="true" remarks="Status id of the product-promotion type relation (field status_id from ct_prod_prom_type table)" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="promo_prod_type_status_code" nullable="true" remarks="Status code of the product-promotion type relation" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="product_type_id" nullable="true" remarks="Product_type_id for the product-promotion type relation (field product_type_id from ct_product_type table)" size="10" type="int4" typeCode="4">
+            <parent column="product_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="ct_product_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="product_type_code" nullable="true" remarks="Code for the product type (field code from ct_product_type table)" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="product_type_name" nullable="true" remarks="Name for the product type (field name from ct_product_type table)" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="product_type_description" nullable="true" remarks="Description for the product type (field description from ct_product_type table)" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="product_type_status_id" nullable="true" remarks="Status_id for the product type (field status_id from ct_product_type table)" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="product_type_status_code" nullable="true" remarks="Status code for the product_type" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="promotion_type_id" nullable="true" remarks="Service_type_id for the product-promotion type relation (field promotion_type_id from ct_promotion_type table)" size="10" type="int4" typeCode="4">
+            <parent column="promotion_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="ct_promotion_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="promotion_type_code" nullable="true" remarks="Code for the promotion type (field code from ct_promotion_type table)" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="promotion_type_name" nullable="true" remarks="Name for the promotion type (field name from ct_promotion_type table)" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="12" name="promotion_type_description" nullable="true" remarks="Description for the promotion type (field description from ct_promotion_type table)" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="13" name="discount_type_id" nullable="true" remarks="Discount_type_id for the promotion type (field discount_type_id from ct_promotion_type table)" size="10" type="int4" typeCode="4">
+            <parent column="discount_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_discount_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="14" name="discount_code" nullable="true" remarks="Code for the discount type for the promotion type (field code from pt_discount_type table)" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="15" name="discount_name" nullable="true" remarks="Name for the discount type for the promotion type (field name from pt_discount_type table)" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="16" name="discount_description" nullable="true" remarks="Description for the discount type for the promotion type (field description from pt_discount_type table)" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="4" id="17" name="discount_value" nullable="true" remarks="discount_value for the discount type for the promotion type (field discount_value from ct_promotion_type table)" size="10" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="18" name="promotion_type_status_id" nullable="true" remarks="Status_id for the promotion type (field status_id from ct_promotion_type table)" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="19" name="promotion_type_status_code" nullable="true" remarks="Status code for the promotion type" size="10" type="varchar" typeCode="12"/>
+      </table>
+      <table name="vw_promotion_service_type" numRows="0" remarks="View showing the relationship between service types and the promotion types associated with them - related to ct_promo_serv_type" schema="public" type="VIEW" viewSql=" SELECT cpst.promo_serv_type_id,&#10;    cpst.status_id AS prom_serv_type_status_id,&#10;    psr.code AS prom_serv_type_status_code,&#10;    cst.service_type_id,&#10;    cst.code AS service_type_code,&#10;    cst.name AS service_type_name,&#10;    cst.description AS service_type_description,&#10;    cst.status_id AS service_type_status_id,&#10;    psp.code AS service_type_status_code,&#10;    cpt.promotion_type_id,&#10;    cpt.code AS promotion_type_code,&#10;    cpt.name AS promotion_type_name,&#10;    cpt.description AS promotion_type_description,&#10;    cpt.discount_type_id,&#10;    pdt.code AS discount_code,&#10;    pdt.name AS discount_name,&#10;    pdt.description AS discount_description,&#10;    cpt.discount_value,&#10;    cpt.status_id AS promotion_type_status_id,&#10;    psp.code AS promotion_type_status_code&#10;   FROM ((((((ct_service_type cst&#10;     JOIN pt_status pss ON ((cst.status_id = pss.status_id)))&#10;     JOIN ct_promo_serv_type cpst ON ((cst.service_type_id = cpst.service_type_id)))&#10;     JOIN pt_status psr ON ((cpst.status_id = psr.status_id)))&#10;     JOIN ct_promotion_type cpt ON ((cpst.promotion_type_id = cpt.promotion_type_id)))&#10;     JOIN pt_status psp ON ((cpt.status_id = psp.status_id)))&#10;     JOIN pt_discount_type pdt ON ((pdt.discount_type_id = cpt.discount_type_id)));">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="promo_serv_type_id" nullable="true" remarks="promo_serv_type_id identifier of the service-promotion type relation (field promo_serv_type_id from ct_promo_serv_type table)" size="10" type="int4" typeCode="4">
+            <parent column="promo_serv_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="ct_promo_serv_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="prom_serv_type_status_id" nullable="true" remarks="Status id of the service-promotion type relation (field status_id from ct_prod_prom_type table)" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="prom_serv_type_status_code" nullable="true" remarks="Status code of the service-promotion type relation" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="service_type_id" nullable="true" remarks="Service_type_id for the service-promotion type relation (field service_type_id from ct_service_type table)" size="10" type="int4" typeCode="4">
+            <parent column="service_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="ct_service_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="service_type_code" nullable="true" remarks="Code for the service type (field code from ct_service_type table)" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="service_type_name" nullable="true" remarks="Name for the service type (field name from ct_service_type table)" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="service_type_description" nullable="true" remarks="Description for the service type (field description from ct_service_type table)" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="service_type_status_id" nullable="true" remarks="Status_id for the service type (field status_id from ct_service_type table)" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="service_type_status_code" nullable="true" remarks="Status code for the service_type" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="promotion_type_id" nullable="true" remarks="Promotion_type_id for the service-promotion type relation (field promotion_type_id from ct_promotion_type table)" size="10" type="int4" typeCode="4">
+            <parent column="promotion_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="ct_promotion_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="promotion_type_code" nullable="true" remarks="Code for the promotion type (field code from ct_promotion_type table)" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="promotion_type_name" nullable="true" remarks="Name for the promotion type (field name from ct_promotion_type table)" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="12" name="promotion_type_description" nullable="true" remarks="Description for the promotion type (field description from ct_promotion_type table)" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="13" name="discount_type_id" nullable="true" remarks="Discount_type_id for the promotion type (field discount_type_id from ct_promotion_type table)" size="10" type="int4" typeCode="4">
+            <parent column="discount_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_discount_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="14" name="discount_code" nullable="true" remarks="Code for the discount type for the promotion type (field code from pt_discount_type table)" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="15" name="discount_name" nullable="true" remarks="Name for the discount type for the promotion type (field name from pt_discount_type table)" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="16" name="discount_description" nullable="true" remarks="Description for the discount type for the promotion type (field description from pt_discount_type table)" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="4" id="17" name="discount_value" nullable="true" remarks="discount_value for the discount type for the promotion type (field discount_value from ct_promotion_type table)" size="10" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="18" name="promotion_type_status_id" nullable="true" remarks="Status_id for the promotion type (field status_id from ct_promotion_type table)" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="19" name="promotion_type_status_code" nullable="true" remarks="Status code for the promotion type" size="10" type="varchar" typeCode="12"/>
+      </table>
+      <table name="vw_service_fee_type" numRows="0" remarks="View showing the relationship between service types and the fee types associated with them - related to ct_serv_fee_type" schema="public" type="VIEW" viewSql=" SELECT csft.serv_fee_type_id,&#10;    csft.status_id AS serv_fee_type_status_id,&#10;    psr.code AS serv_fee_type_status_code,&#10;    cst.service_type_id,&#10;    cst.code AS service_type_code,&#10;    cst.name AS service_type_name,&#10;    cst.description AS service_type_description,&#10;    cst.status_id AS service_type_status_id,&#10;    pss.code AS service_type_status_code,&#10;    cft.fee_type_id,&#10;    cft.code AS fee_type_code,&#10;    cft.name AS fee_type_name,&#10;    cft.description AS fee_type_description,&#10;    cft.prorate,&#10;    cft.price,&#10;    cft.status_id AS fee_type_status_id,&#10;    psf.code AS fee_type_status_code&#10;   FROM (((((ct_service_type cst&#10;     JOIN pt_status pss ON ((cst.status_id = pss.status_id)))&#10;     JOIN ct_serv_fee_type csft ON ((cst.service_type_id = csft.service_type_id)))&#10;     JOIN pt_status psr ON ((csft.status_id = psr.status_id)))&#10;     JOIN ct_fee_type cft ON ((cft.fee_type_id = csft.fee_type_id)))&#10;     JOIN pt_status psf ON ((cst.status_id = psf.status_id)));">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="serv_fee_type_id" nullable="true" remarks="serv_fee_type_id identifier of the service-fee type relation (field prod_fee_type_id from ct_service_type table)" size="10" type="int4" typeCode="4"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="serv_fee_type_status_id" nullable="true" remarks="Status id of the service-fee type relation (field status_id from ct_serv_fee_type table)" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="serv_fee_type_status_code" nullable="true" remarks="Status code of the service-fee type relation" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="service_type_id" nullable="true" remarks="Service_type_id for the service-fee type relation (field service_type_id from ct_service_type table)" size="10" type="int4" typeCode="4">
+            <parent column="service_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="ct_service_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="service_type_code" nullable="true" remarks="Code for the service type (field code from ct_service_type table)" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="5" name="service_type_name" nullable="true" remarks="Name for the service type (field name from ct_service_type table)" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="6" name="service_type_description" nullable="true" remarks="Description for the service type (field description from ct_service_type table)" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="7" name="service_type_status_id" nullable="true" remarks="Status_id for the service type (field status_id from ct_service_type table)" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="8" name="service_type_status_code" nullable="true" remarks="Status code for the service_type" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="9" name="fee_type_id" nullable="true" remarks="Fee_type_id for the service-fee type relation (field fee_type_id from ct_fee_type table)" size="10" type="int4" typeCode="4">
+            <parent column="fee_type_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="ct_fee_type"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="10" name="fee_type_code" nullable="true" remarks="Code for the fee type (field code from ct_fee_type table)" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="11" name="fee_type_name" nullable="true" remarks="Name for the fee type (field name from ct_fee_type table)" size="50" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="12" name="fee_type_description" nullable="true" remarks="Description for the fee type (field description from ct_fee_type table)" size="500" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="13" name="prorate" nullable="true" remarks="Flag that indicates if the fee type is prorated (true) or not (false)(field prorate from ct_fee_type table)" size="1" type="bool" typeCode="-7"/>
+         <column autoUpdated="false" defaultValue="null" digits="4" id="14" name="price" nullable="true" remarks="Price for the fee type (field price from ct_fee_type table)" size="10" type="numeric" typeCode="2"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="15" name="fee_type_status_id" nullable="true" remarks="Status_id for the fee type (field status_id from ct_fee_type table)" size="10" type="int4" typeCode="4">
+            <parent column="status_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="pt_status"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="16" name="fee_type_status_code" nullable="true" remarks="Status code for the fee type" size="10" type="varchar" typeCode="12"/>
+      </table>
+      <table name="vw_users" numRows="0" remarks="" schema="public" type="VIEW" viewSql=" SELECT u.user_id,&#10;    u.user_code,&#10;    u.password,&#10;    u.profile_id,&#10;    p.profile_code&#10;   FROM (it_users u&#10;     JOIN it_profiles p ON ((u.profile_id = p.profile_id)))&#10;  WHERE (u.active = true);">
+         <column autoUpdated="false" defaultValue="null" digits="0" id="0" name="user_id" nullable="true" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="user_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="it_users"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="1" name="user_code" nullable="true" remarks="" size="10" type="varchar" typeCode="12"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="2" name="password" nullable="true" remarks="" size="32" type="bpchar" typeCode="1"/>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="3" name="profile_id" nullable="true" remarks="" size="10" type="int4" typeCode="4">
+            <parent column="profile_id" foreignKey="Implied Constraint" implied="true" onDeleteCascade="false" schema="public" table="it_profiles"/>
+         </column>
+         <column autoUpdated="false" defaultValue="null" digits="0" id="4" name="profile_code" nullable="true" remarks="" size="10" type="varchar" typeCode="12"/>
+      </table>
+   </tables>
+</database>

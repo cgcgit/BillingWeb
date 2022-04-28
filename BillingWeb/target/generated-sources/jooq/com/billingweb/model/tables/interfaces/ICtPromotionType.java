@@ -5,6 +5,7 @@ package com.billingweb.model.tables.interfaces;
 
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 
@@ -87,12 +88,12 @@ public interface ICtPromotionType extends Serializable {
     /**
      * Setter for <code>public.ct_promotion_type.discount_value</code>. Value of the discount for the promotion type
      */
-    public void setDiscountValue(Integer value);
+    public void setDiscountValue(BigDecimal value);
 
     /**
      * Getter for <code>public.ct_promotion_type.discount_value</code>. Value of the discount for the promotion type
      */
-    public Integer getDiscountValue();
+    public BigDecimal getDiscountValue();
 
     /**
      * Setter for <code>public.ct_promotion_type.status_id</code>. Status id for the promotion type

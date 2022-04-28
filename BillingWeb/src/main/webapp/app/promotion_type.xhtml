@@ -305,7 +305,7 @@
 					</f:facet>
 					<f:facet id="facetDiscountValue" name="input">
 						<p:inputNumber id="discountValueInput"
-							label="DiscountValue" decimalPlaces="0"
+							label="DiscountValue" decimalPlaces="4"
 							value="#{dataTable.discountValue}" style="width:96%">
 							<p:ajax event="change" update="discountValueOutput" />
 						</p:inputNumber>
@@ -403,7 +403,7 @@
 				<p:outputLabel id="newDiscountValueLabel"
 					value="Discount Value: " />
 				<p:inputNumber id="newDiscountValueInput" 
-					label="DiscountValue" decimalPlaces="0"
+					label="DiscountValue" decimalPlaces="4"
 					value="#{promotionTypeController.selectedData.discountValue}">
 				</p:inputNumber>
 				

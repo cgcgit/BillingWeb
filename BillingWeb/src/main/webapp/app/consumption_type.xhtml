@@ -140,42 +140,42 @@
 				<h:outputText value="#{dataTable.consumptionTypeId}" />
 			</p:column>
 			
-			<p:column id="entityTypeId"
+			<p:column id="consumptionClassId"
 				style="font-family:Arial Black;
                                   text-align: left;
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
 				headerText="CONSUMPTION CLASS" rendered="true"
-				filterBy="#{dataTable.entityTypeId}" filterMatchMode="exact">
-				<f:facet id="entityTypeFilter" name="filter">
-					<p:selectOneMenu id="entityTypeFilterMenu"
+				filterBy="#{dataTable.consumptionClassId}" filterMatchMode="exact">
+				<f:facet id="consumptionClassFilter" name="filter">
+					<p:selectOneMenu id="consumptionClassFilterMenu"
 						onchange="PF('mainTableWidget').filter()">
-						<f:selectItems id="entityTypeFilterSelectItems"
+						<f:selectItems id="consumptionClassFilterSelectItems"
 							value="#{consumptionTypeController.consumptionClassSelectItems()}" />
 					</p:selectOneMenu>
 				</f:facet>
-				<p:cellEditor id="entityTypeCellEditor">
-					<f:facet id="entityTypeOutputFacet" name="output">
-						<p:selectOneMenu id="entityTypeOutput" editable="false"
-							disabled="true" immediate="true" value="#{dataTable.entityTypeId}">
+				<p:cellEditor id="consumptionClassCellEditor">
+					<f:facet id="consumptionClassOutputFacet" name="output">
+						<p:selectOneMenu id="consumptionClassOutput" editable="false"
+							disabled="true" immediate="true" value="#{dataTable.consumptionClassId}">
 							<f:selectItems
 								value="#{consumptionTypeController.consumptionClassSelectItems()}"
-								id="selectItemsEntityTypeOutput" itemDisabled="true"
-								var="EntityType" itemValue="#{dataTable.entityTypeId}" />
+								id="selectItemsConsumptionClassOutput" itemDisabled="true"
+								var="ConsumptionClass" itemValue="#{dataTable.consumptionClassId}" />
 						</p:selectOneMenu>
 					</f:facet>
-					<f:facet id="entityTypeInputFacet" name="input">
-						<p:selectOneMenu id="entityTypeInput"
-							value="#{dataTable.entityTypeId}" immediate="true">
+					<f:facet id="consumptionClassInputFacet" name="input">
+						<p:selectOneMenu id="consumptionClassInput"
+							value="#{dataTable.consumptionClassId}" immediate="true">
 							<f:selectItems
 								value="#{consumptionTypeController.consumptionClassSelectItems()}"
-								id="selectItemsEntityTypeInput" var="EntityType"
-								itemValue="#{dataTable.entityTypeId}">
+								id="selectItemsConsumptionClassInput" var="ConsumptionClass"
+								itemValue="#{dataTable.consumptionClassId}">
 							</f:selectItems>
-							<f:param id="currentRowEntityType" name="currentRow"
+							<f:param id="currentRowConsumptionClass" name="currentRow"
 								value="#{rowIndexMainTable}" />
-							<p:ajax event="change" immediate="true" update="entityTypeOutput" />
+							<p:ajax event="change" immediate="true" update="consumptionClassOutput" />
 						</p:selectOneMenu>
 					</f:facet>
 				</p:cellEditor>

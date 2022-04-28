@@ -436,6 +436,9 @@ public class ProductPromotionTypeController extends SimpleRelatedTypeClass imple
 			this.loadCandidateData();
 			this.loadRelatedData();
 			this.showDependentData = true;
+		
+			this.refreshCandidateDataTable();
+			this.refreshRelatedDataTable();
 
 			messageDetail = "Shown data for product: ";
 			logger.info(message + " - " + messageDetail + this.mainData.toString());
@@ -443,7 +446,7 @@ public class ProductPromotionTypeController extends SimpleRelatedTypeClass imple
 					messageDetail + this.getSelectedMainData().getCode());
 
 			PrimeFaces.current().executeScript("PF('searchList').hide();");
-			Ajax.update(SELECTED_DATA_TABLE_ID);
+			//Ajax.update(SELECTED_DATA_TABLE_ID);
 			
 			this.refreshRelatedDataTable();
 			this.refreshCandidateDataTable();
@@ -626,7 +629,7 @@ public class ProductPromotionTypeController extends SimpleRelatedTypeClass imple
 		// Retrieved the data that was modified
 		dataObjectView = (VwPromotionProductType) event.getObject();
 		dataObject = productPromotionTypeEJB.findEntityRelationType(dataObjectView.getPromoProdTypeId());
-		dataObject.setStatusId(dataObjectView.getPromProdTypeStatusId());
+		dataObject.setStatusId(dataObjectView.getPromoProdTypeId());
 
 		try {
 

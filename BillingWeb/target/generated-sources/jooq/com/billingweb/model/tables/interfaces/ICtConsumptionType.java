@@ -114,6 +114,16 @@ public interface ICtConsumptionType extends Serializable {
      */
     public String getModifUser();
 
+    /**
+     * Setter for <code>public.ct_consumption_type.consumption_class_id</code>. Consumption class for the consumption type
+     */
+    public void setConsumptionClassId(Integer value);
+
+    /**
+     * Getter for <code>public.ct_consumption_type.consumption_class_id</code>. Consumption class for the consumption type
+     */
+    public Integer getConsumptionClassId();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------

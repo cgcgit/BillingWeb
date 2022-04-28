@@ -103,6 +103,7 @@
 								form:accordionPanel:relatedTablePanel
 								form:accordionPanel:candidateTablePanel
 								form:accordionPanel:buttonPanel"
+								oncomplete="PF('searchList').hide()"
 								actionListener="#{productPromotionTypeController.pushSelectedButton()}">
 								<f:setPropertyActionListener value="#{updateSelectedTable}"
 									target="#{productPromotionTypeController.selectedMainData}" />
@@ -160,7 +161,7 @@
 							filterBy="#{searchDataTable.statusId}" filterMatchMode="exact">
 							<f:facet id="statusFilter" name="filter">
 								<p:selectOneMenu id="statusFilterMenuMainData"
-									onchange="PF('parentTableWidget').filter()">
+									onchange="PF('searchTableWidget').filter()">
 									<f:selectItems id="statusFilterSelectItemsMainData"
 										value="#{productPromotionTypeController.statusSelectItems()}" />
 								</p:selectOneMenu>
@@ -314,7 +315,7 @@
                                   width: 100px;    
                                   overflow: hidden"
 							headerText="RELATION STATUS" rendered="true"
-							filterBy="#{relatedDataTable.promProdTypeStatusCode}"
+							filterBy="#{relatedDataTable.promProdTypeStatusId}"
 							filterMatchMode="exact">
 							<f:facet id="statusRelatedEntityFilter" name="filter">
 								<p:selectOneMenu id="statusRelatedEntityFilterMenu"
@@ -328,23 +329,23 @@
 								<f:facet id="statusRelatedEntityDataOutputFacet" name="output">
 									<p:selectOneMenu id="statusRelatedEntityDataOutput"
 										editable="false" disabled="true" immediate="true"
-										value="#{relatedDataTable.promProdTypeStatusCode}">
+										value="#{relatedDataTable.promProdTypeStatusId}">
 										<f:selectItems
 											value="#{productPromotionTypeController.statusSelectItems()}"
 											id="selectItemsStatusOutputRelatedEntityData"
 											itemDisabled="true" var="StatusOutput"
-											itemValue="#{relatedDataTable.promProdTypeStatusCode}" />
+											itemValue="#{relatedDataTable.promProdTypeStatusId}" />
 									</p:selectOneMenu>
 								</f:facet>
 								<f:facet id="statusRelatedEntityDataInputFacet" name="input">
 									<p:selectOneMenu id="statusRelatedEntityDataInput"
-										value="#{relatedDataTable.promProdTypeStatusCode}"
+										value="#{relatedDataTable.promProdTypeStatusId}"
 										immediate="true">
 										<f:selectItems
 											value="#{productPromotionTypeController.statusSelectItems()}"
 											id="selectItemsStatusInputRelatedEntityData"
 											var="StatusInput"
-											itemValue="#{relatedDataTable.promProdTypeStatusCode}">
+											itemValue="#{relatedDataTable.promProdTypeStatusId}">
 										</f:selectItems>
 										<f:param id="currentRowStatusRelatedEntityData"
 											name="currentRow" value="#{rowIndexRelatedTable}" />
@@ -472,11 +473,13 @@
 							<p:commandButton id="addCandidateButton"
 								styleClass="ui-button-help" style="margin-left: 85px;"
 								icon="#{uiValue.rowUpIcon}" ajax="true"
+								rendered="#{productFeeTypeController.canUserModify()}"
 								actionListener="#{productPromotionTypeController.pushAddButtonCandidateToRelatedData()}"
 								oncomplete="if(!args.validationFailed) {updateRelatedTable();updateCandidateTable();}" />
 							<p:commandButton id="removeRelationButton"
 								styleClass="ui-button-help" style="margin-right: 85px"
 								icon="#{uiValue.rowDownIcon}" ajax="true"
+								rendered="#{productFeeTypeController.canUserModify()}"
 								actionListener="#{productPromotionTypeController.pushRemoveButtonFromRelatedData()}"
 								oncomplete="if(!args.validationFailed) {updateRelatedTable();updateCandidateTable();}" />
 						</p:panelGrid>
@@ -487,6 +490,7 @@
 				<!--  CANDIDATE DATA -->
 				<p:panel id="candidateTablePanel"
 					header="CANDIDATE PROMOTIONS for #{productPromotionTypeController.mainData.code} (#{productPromotionTypeController.mainData.description}) "
+					rendered="#{productFeeTypeController.canUserModify()}"
 					visible="#{productPromotionTypeController.showDependentData}">
 
 					<p:dataTable id="candidateTable" widgetVar="candidateTableWidget"

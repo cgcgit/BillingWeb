@@ -11,7 +11,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.ValidatorException;
+import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
@@ -21,7 +23,7 @@ import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.RowEditEvent;
 import org.primefaces.event.SelectEvent;
 
-import com.billingweb.ejb.catalog.relationType.PromotionConsumptionTypeEJB;
+import com.billingweb.ejb.catalog.relationType.PromotionConsumptionTypeDiscountEJBLocal;
 import com.billingweb.ejb.catalog.type.PromotionTypeEJBLocal;
 import com.billingweb.ejb.parameterization.StatusEJBLocal;
 import com.billingweb.exception.BillingWebDataAccessException;
@@ -33,7 +35,9 @@ import com.billingweb.model.tables.pojos.CtPromotionType;
 import com.billingweb.model.tables.pojos.VwPromoConsumTypeDiscount;
 import com.billingweb.model.tables.pojos.VwUsers;
 
-public class PromotionConsumpTypeDiscController extends SimpleRelatedTypeClass implements Serializable, IRelatedCatalogType {
+@Named
+@ViewScoped
+public class PromotionConsumptionTypeDiscController extends SimpleRelatedTypeClass implements Serializable, IRelatedCatalogType {
 
 	/**
 	 * 
@@ -41,7 +45,7 @@ public class PromotionConsumpTypeDiscController extends SimpleRelatedTypeClass i
 	private static final long serialVersionUID = -3651939438629827251L;
 
 	
-	Logger logger = (Logger) LogManager.getLogger(PromotionConsumpTypeDiscController.class);
+	Logger logger = (Logger) LogManager.getLogger(PromotionConsumptionTypeDiscController.class);
 
 	protected static String ACTIVE_STATUS_CODE = dbDefinitions.getString("STATUS_CODE_ACT");
 
@@ -62,7 +66,7 @@ public class PromotionConsumpTypeDiscController extends SimpleRelatedTypeClass i
 	private PromotionTypeEJBLocal promotionTypeEJB;
 
 	@EJB
-	private PromotionConsumptionTypeEJB promotionConsumptionTypeEJB;
+	private PromotionConsumptionTypeDiscountEJBLocal promotionConsumptionTypeEJB;
 
 	@EJB
 	private StatusEJBLocal statusEJB;
@@ -310,7 +314,7 @@ public class PromotionConsumpTypeDiscController extends SimpleRelatedTypeClass i
 
 
 	
-	public PromotionConsumpTypeDiscController() {
+	public PromotionConsumptionTypeDiscController() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -424,6 +428,9 @@ public class PromotionConsumpTypeDiscController extends SimpleRelatedTypeClass i
 			this.loadCandidateData();
 			this.loadRelatedData();
 			this.showDependentData = true;
+			
+			this.refreshCandidateDataTable();
+			this.refreshRelatedDataTable();
 
 			messageDetail = "Shown data for promotion: ";
 			logger.info(message + " - " + messageDetail + this.mainData.toString());
@@ -431,7 +438,7 @@ public class PromotionConsumpTypeDiscController extends SimpleRelatedTypeClass i
 					messageDetail + this.getSelectedMainData().getCode());
 
 			PrimeFaces.current().executeScript("PF('searchList').hide();");
-			Ajax.update(SELECTED_DATA_TABLE_ID);
+			//Ajax.update(SELECTED_DATA_TABLE_ID);
 			
 			this.refreshRelatedDataTable();
 			this.refreshCandidateDataTable();

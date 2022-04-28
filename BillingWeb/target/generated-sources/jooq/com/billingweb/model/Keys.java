@@ -24,9 +24,11 @@ import com.billingweb.model.tables.ItUsers;
 import com.billingweb.model.tables.MtApplicationMenu;
 import com.billingweb.model.tables.PtApplicationLevel;
 import com.billingweb.model.tables.PtBillingPeriod;
+import com.billingweb.model.tables.PtConsumptionClass;
 import com.billingweb.model.tables.PtDiscountType;
 import com.billingweb.model.tables.PtEntityType;
 import com.billingweb.model.tables.PtStatus;
+import com.billingweb.model.tables.PtTaxType;
 import com.billingweb.model.tables.records.CtAccountTypeRecord;
 import com.billingweb.model.tables.records.CtBillCycleTypeRecord;
 import com.billingweb.model.tables.records.CtConsumptionTypeRecord;
@@ -47,9 +49,11 @@ import com.billingweb.model.tables.records.ItUsersRecord;
 import com.billingweb.model.tables.records.MtApplicationMenuRecord;
 import com.billingweb.model.tables.records.PtApplicationLevelRecord;
 import com.billingweb.model.tables.records.PtBillingPeriodRecord;
+import com.billingweb.model.tables.records.PtConsumptionClassRecord;
 import com.billingweb.model.tables.records.PtDiscountTypeRecord;
 import com.billingweb.model.tables.records.PtEntityTypeRecord;
 import com.billingweb.model.tables.records.PtStatusRecord;
+import com.billingweb.model.tables.records.PtTaxTypeRecord;
 
 import org.jooq.ForeignKey;
 import org.jooq.TableField;
@@ -119,6 +123,9 @@ public class Keys {
     public static final UniqueKey<PtBillingPeriodRecord> PT_BILLING_PERIOD_CODE_U = Internal.createUniqueKey(PtBillingPeriod.PT_BILLING_PERIOD, DSL.name("pt_billing_period_code_u"), new TableField[] { PtBillingPeriod.PT_BILLING_PERIOD.CODE }, true);
     public static final UniqueKey<PtBillingPeriodRecord> PT_BILLING_PERIOD_NAME_U = Internal.createUniqueKey(PtBillingPeriod.PT_BILLING_PERIOD, DSL.name("pt_billing_period_name_u"), new TableField[] { PtBillingPeriod.PT_BILLING_PERIOD.NAME }, true);
     public static final UniqueKey<PtBillingPeriodRecord> PT_BILLING_PERIOD_PK = Internal.createUniqueKey(PtBillingPeriod.PT_BILLING_PERIOD, DSL.name("pt_billing_period_pk"), new TableField[] { PtBillingPeriod.PT_BILLING_PERIOD.BILLING_PERIOD_ID }, true);
+    public static final UniqueKey<PtConsumptionClassRecord> PT_CONSUMPTION_CLASS_CODE_U = Internal.createUniqueKey(PtConsumptionClass.PT_CONSUMPTION_CLASS, DSL.name("pt_consumption_class_code_u"), new TableField[] { PtConsumptionClass.PT_CONSUMPTION_CLASS.CODE }, true);
+    public static final UniqueKey<PtConsumptionClassRecord> PT_CONSUMPTION_CLASS_NAME_U = Internal.createUniqueKey(PtConsumptionClass.PT_CONSUMPTION_CLASS, DSL.name("pt_consumption_class_name_u"), new TableField[] { PtConsumptionClass.PT_CONSUMPTION_CLASS.NAME }, true);
+    public static final UniqueKey<PtConsumptionClassRecord> PT_CONSUMPTION_CLASS_PK = Internal.createUniqueKey(PtConsumptionClass.PT_CONSUMPTION_CLASS, DSL.name("pt_consumption_class_pk"), new TableField[] { PtConsumptionClass.PT_CONSUMPTION_CLASS.CONSUMPTION_CLASS_ID }, true);
     public static final UniqueKey<PtDiscountTypeRecord> PT_DISCOUNT_TYPE_CODE_U = Internal.createUniqueKey(PtDiscountType.PT_DISCOUNT_TYPE, DSL.name("pt_discount_type_code_u"), new TableField[] { PtDiscountType.PT_DISCOUNT_TYPE.CODE }, true);
     public static final UniqueKey<PtDiscountTypeRecord> PT_DISCOUNT_TYPE_NAME_U = Internal.createUniqueKey(PtDiscountType.PT_DISCOUNT_TYPE, DSL.name("pt_discount_type_name_u"), new TableField[] { PtDiscountType.PT_DISCOUNT_TYPE.NAME }, true);
     public static final UniqueKey<PtDiscountTypeRecord> PT_DISCOUNT_TYPE_PK = Internal.createUniqueKey(PtDiscountType.PT_DISCOUNT_TYPE, DSL.name("pt_discount_type_pk"), new TableField[] { PtDiscountType.PT_DISCOUNT_TYPE.DISCOUNT_TYPE_ID }, true);
@@ -128,6 +135,9 @@ public class Keys {
     public static final UniqueKey<PtStatusRecord> PT_STATUS_CODE_U = Internal.createUniqueKey(PtStatus.PT_STATUS, DSL.name("pt_status_code_u"), new TableField[] { PtStatus.PT_STATUS.CODE }, true);
     public static final UniqueKey<PtStatusRecord> PT_STATUS_NAME_U = Internal.createUniqueKey(PtStatus.PT_STATUS, DSL.name("pt_status_name_u"), new TableField[] { PtStatus.PT_STATUS.NAME }, true);
     public static final UniqueKey<PtStatusRecord> PT_STATUS_PK = Internal.createUniqueKey(PtStatus.PT_STATUS, DSL.name("pt_status_pk"), new TableField[] { PtStatus.PT_STATUS.STATUS_ID }, true);
+    public static final UniqueKey<PtTaxTypeRecord> PT_TAX_TYPE_CODE_U = Internal.createUniqueKey(PtTaxType.PT_TAX_TYPE, DSL.name("pt_tax_type_code_u"), new TableField[] { PtTaxType.PT_TAX_TYPE.CODE }, true);
+    public static final UniqueKey<PtTaxTypeRecord> PT_TAX_TYPE_NAME_U = Internal.createUniqueKey(PtTaxType.PT_TAX_TYPE, DSL.name("pt_tax_type_name_u"), new TableField[] { PtTaxType.PT_TAX_TYPE.NAME }, true);
+    public static final UniqueKey<PtTaxTypeRecord> PT_TAX_TYPE_PK = Internal.createUniqueKey(PtTaxType.PT_TAX_TYPE, DSL.name("pt_tax_type_pk"), new TableField[] { PtTaxType.PT_TAX_TYPE.TAX_TYPE_ID }, true);
 
     // -------------------------------------------------------------------------
     // FOREIGN KEY definitions
@@ -138,6 +148,8 @@ public class Keys {
     public static final ForeignKey<CtAccountTypeRecord, CtBillCycleTypeRecord> CT_ACCOUNT_TYPE__CT_ACCOUNT_TYPE_OBC_FK = Internal.createForeignKey(CtAccountType.CT_ACCOUNT_TYPE, DSL.name("ct_account_type_obc_fk"), new TableField[] { CtAccountType.CT_ACCOUNT_TYPE.ORDINARY_BILL_CYCLE_TYPE_ID }, Keys.CT_BILL_CYCLE_TYPE_PK, new TableField[] { CtBillCycleType.CT_BILL_CYCLE_TYPE.BILL_CYCLE_TYPE_ID }, true);
     public static final ForeignKey<CtAccountTypeRecord, PtStatusRecord> CT_ACCOUNT_TYPE__CT_ACCOUNT_TYPE_STATUS_FK = Internal.createForeignKey(CtAccountType.CT_ACCOUNT_TYPE, DSL.name("ct_account_type_status_fk"), new TableField[] { CtAccountType.CT_ACCOUNT_TYPE.STATUS_ID }, Keys.PT_STATUS_PK, new TableField[] { PtStatus.PT_STATUS.STATUS_ID }, true);
     public static final ForeignKey<CtBillCycleTypeRecord, PtBillingPeriodRecord> CT_BILL_CYCLE_TYPE__CT_BILL_CYCLE_TYPE_PERIOD_FK = Internal.createForeignKey(CtBillCycleType.CT_BILL_CYCLE_TYPE, DSL.name("ct_bill_cycle_type_period_fk"), new TableField[] { CtBillCycleType.CT_BILL_CYCLE_TYPE.BILLING_PERIOD_ID }, Keys.PT_BILLING_PERIOD_PK, new TableField[] { PtBillingPeriod.PT_BILLING_PERIOD.BILLING_PERIOD_ID }, true);
+    public static final ForeignKey<CtBillCycleTypeRecord, PtStatusRecord> CT_BILL_CYCLE_TYPE__CT_BILL_CYCLE_TYPE_STATUS_FK = Internal.createForeignKey(CtBillCycleType.CT_BILL_CYCLE_TYPE, DSL.name("ct_bill_cycle_type_status_fk"), new TableField[] { CtBillCycleType.CT_BILL_CYCLE_TYPE.STATUS_ID }, Keys.PT_STATUS_PK, new TableField[] { PtStatus.PT_STATUS.STATUS_ID }, true);
+    public static final ForeignKey<CtConsumptionTypeRecord, PtConsumptionClassRecord> CT_CONSUMPTION_TYPE__CT_CONSUMPTION_TYPE_CLASS_FK = Internal.createForeignKey(CtConsumptionType.CT_CONSUMPTION_TYPE, DSL.name("ct_consumption_type_class_fk"), new TableField[] { CtConsumptionType.CT_CONSUMPTION_TYPE.CONSUMPTION_CLASS_ID }, Keys.PT_CONSUMPTION_CLASS_PK, new TableField[] { PtConsumptionClass.PT_CONSUMPTION_CLASS.CONSUMPTION_CLASS_ID }, true);
     public static final ForeignKey<CtConsumptionTypeRecord, PtEntityTypeRecord> CT_CONSUMPTION_TYPE__CT_CONSUMPTION_TYPE_ENTITY_FK = Internal.createForeignKey(CtConsumptionType.CT_CONSUMPTION_TYPE, DSL.name("ct_consumption_type_entity_fk"), new TableField[] { CtConsumptionType.CT_CONSUMPTION_TYPE.ENTITY_TYPE_ID }, Keys.PT_ENTITY_TYPE_PK, new TableField[] { PtEntityType.PT_ENTITY_TYPE.ENTITY_TYPE_ID }, true);
     public static final ForeignKey<CtConsumptionTypeRecord, PtStatusRecord> CT_CONSUMPTION_TYPE__CT_CONSUMPTION_TYPE_STATUS_FK = Internal.createForeignKey(CtConsumptionType.CT_CONSUMPTION_TYPE, DSL.name("ct_consumption_type_status_fk"), new TableField[] { CtConsumptionType.CT_CONSUMPTION_TYPE.STATUS_ID }, Keys.PT_STATUS_PK, new TableField[] { PtStatus.PT_STATUS.STATUS_ID }, true);
     public static final ForeignKey<CtCustomerTypeRecord, PtEntityTypeRecord> CT_CUSTOMER_TYPE__CT_CUSTOMER_TYPE_ENTITY_FK = Internal.createForeignKey(CtCustomerType.CT_CUSTOMER_TYPE, DSL.name("ct_customer_type_entity_fk"), new TableField[] { CtCustomerType.CT_CUSTOMER_TYPE.ENTITY_TYPE_ID }, Keys.PT_ENTITY_TYPE_PK, new TableField[] { PtEntityType.PT_ENTITY_TYPE.ENTITY_TYPE_ID }, true);
@@ -153,7 +165,6 @@ public class Keys {
     public static final ForeignKey<CtProdServTypeRecord, PtStatusRecord> CT_PROD_SERV_TYPE__CT_PROD_SERV_TYPE_STATUS_FK = Internal.createForeignKey(CtProdServType.CT_PROD_SERV_TYPE, DSL.name("ct_prod_serv_type_status_fk"), new TableField[] { CtProdServType.CT_PROD_SERV_TYPE.STATUS_ID }, Keys.PT_STATUS_PK, new TableField[] { PtStatus.PT_STATUS.STATUS_ID }, true);
     public static final ForeignKey<CtProductTypeRecord, PtEntityTypeRecord> CT_PRODUCT_TYPE__CT_PRODUCT_TYPE_ENTITY_FK = Internal.createForeignKey(CtProductType.CT_PRODUCT_TYPE, DSL.name("ct_product_type_entity_fk"), new TableField[] { CtProductType.CT_PRODUCT_TYPE.ENTITY_TYPE_ID }, Keys.PT_ENTITY_TYPE_PK, new TableField[] { PtEntityType.PT_ENTITY_TYPE.ENTITY_TYPE_ID }, true);
     public static final ForeignKey<CtProductTypeRecord, PtStatusRecord> CT_PRODUCT_TYPE__CT_PRODUCT_TYPE_STATUS_FK = Internal.createForeignKey(CtProductType.CT_PRODUCT_TYPE, DSL.name("ct_product_type_status_fk"), new TableField[] { CtProductType.CT_PRODUCT_TYPE.STATUS_ID }, Keys.PT_STATUS_PK, new TableField[] { PtStatus.PT_STATUS.STATUS_ID }, true);
-    public static final ForeignKey<CtPromoConsumTypeDiscountRecord, PtEntityTypeRecord> CT_PROMO_CONSUM_TYPE_DISCOUNT__CT_PROMO_CONSUM_TYPE_DISC_CLASS_FK = Internal.createForeignKey(CtPromoConsumTypeDiscount.CT_PROMO_CONSUM_TYPE_DISCOUNT, DSL.name("ct_promo_consum_type_disc_class_fk"), new TableField[] { CtPromoConsumTypeDiscount.CT_PROMO_CONSUM_TYPE_DISCOUNT.CONSUM_TYPE_DISCOUNT_CLASS_ID }, Keys.PT_ENTITY_TYPE_PK, new TableField[] { PtEntityType.PT_ENTITY_TYPE.ENTITY_TYPE_ID }, true);
     public static final ForeignKey<CtPromoConsumTypeDiscountRecord, CtConsumptionTypeRecord> CT_PROMO_CONSUM_TYPE_DISCOUNT__CT_PROMO_CONSUM_TYPE_DISC_CONS_FK = Internal.createForeignKey(CtPromoConsumTypeDiscount.CT_PROMO_CONSUM_TYPE_DISCOUNT, DSL.name("ct_promo_consum_type_disc_cons_fk"), new TableField[] { CtPromoConsumTypeDiscount.CT_PROMO_CONSUM_TYPE_DISCOUNT.CONSUMPTION_TYPE_ID }, Keys.CT_CONSUMPTION_TYPE_PK, new TableField[] { CtConsumptionType.CT_CONSUMPTION_TYPE.CONSUMPTION_TYPE_ID }, true);
     public static final ForeignKey<CtPromoConsumTypeDiscountRecord, CtPromotionTypeRecord> CT_PROMO_CONSUM_TYPE_DISCOUNT__CT_PROMO_CONSUM_TYPE_DISC_PROMO_FK = Internal.createForeignKey(CtPromoConsumTypeDiscount.CT_PROMO_CONSUM_TYPE_DISCOUNT, DSL.name("ct_promo_consum_type_disc_promo_fk"), new TableField[] { CtPromoConsumTypeDiscount.CT_PROMO_CONSUM_TYPE_DISCOUNT.PROMOTION_TYPE_ID }, Keys.CT_PROMOTION_TYPE_PK, new TableField[] { CtPromotionType.CT_PROMOTION_TYPE.PROMOTION_TYPE_ID }, true);
     public static final ForeignKey<CtPromoConsumTypeDiscountRecord, PtStatusRecord> CT_PROMO_CONSUM_TYPE_DISCOUNT__CT_PROMO_CONSUM_TYPE_DISCOUNT_STATUS_FK = Internal.createForeignKey(CtPromoConsumTypeDiscount.CT_PROMO_CONSUM_TYPE_DISCOUNT, DSL.name("ct_promo_consum_type_discount_status_fk"), new TableField[] { CtPromoConsumTypeDiscount.CT_PROMO_CONSUM_TYPE_DISCOUNT.STATUS_ID }, Keys.PT_STATUS_PK, new TableField[] { PtStatus.PT_STATUS.STATUS_ID }, true);

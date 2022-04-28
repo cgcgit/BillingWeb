@@ -10,7 +10,7 @@ import com.billingweb.model.tables.pojos.CtPromoFeeTypeDiscount;
 import com.billingweb.model.tables.pojos.VwPromotionFeeTypeDiscount;
 
 @Local
-public interface PromotionFeeTypeEJBLocal {
+public interface PromotionFeeTypeDiscountEJBLocal {
 	
 
 

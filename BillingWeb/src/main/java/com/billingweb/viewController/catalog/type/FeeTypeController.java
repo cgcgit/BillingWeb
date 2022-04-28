@@ -3,9 +3,7 @@ package com.billingweb.viewController.catalog.type;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
-import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -14,7 +12,6 @@ import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import javax.faces.validator.ValidatorException;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -27,13 +24,9 @@ import org.primefaces.PrimeFaces;
 import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.RowEditEvent;
 
-import com.billingweb.ejb.catalog.type.AccountTypeEJBLocal;
-import com.billingweb.ejb.catalog.type.BillCycleTypeEJBLocal;
 import com.billingweb.ejb.catalog.type.FeeTypeEJBLocal;
 import com.billingweb.generalClass.SimpleTableBasicClassWithLists;
 import com.billingweb.interfaces.IGeneralController;
-import com.billingweb.model.tables.pojos.CtAccountType;
-import com.billingweb.model.tables.pojos.CtBillCycleType;
 import com.billingweb.model.tables.pojos.CtFeeType;
 import com.billingweb.model.tables.pojos.VwUsers;
 

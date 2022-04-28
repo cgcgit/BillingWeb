@@ -1,0 +1,736 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+<f:metadata>
+
+	<f:viewAction id="loadParentData"
+		action="#{promotionFeeTypeDiscountController.loadSearchData()}"
+		phase="INVOKE_APPLICATION">
+	</f:viewAction>
+	<f:viewAction id="defaultControlVariables"
+		action="#{promotionFeeTypeDiscountController.setInitVariablesToDefault()}"
+		phase="INVOKE_APPLICATION">
+	</f:viewAction>
+</f:metadata>
+
+
+<title>#{pageTitle.promotionFeeTypeDiscountPage}</title>
+
+
+<body>
+
+	<h:outputStylesheet library="webjars"
+		name="primeflex/2.0.0/primeflex.min.css" />
+
+
+	<header>
+		<ui:include id="mainTemplate"
+			src="/WEB-INF/templates/mainTemplate.xhtml">
+			<ui:param name="title" value="PROMOTION-FEE TYPE DISCOUNT RELATION" />
+		</ui:include>
+	</header>
+	<h:form id="form">
+		<p:growl id="growlMessage" showDetail="true" keepAlive="true">
+			<p:autoUpdate />
+		</p:growl>
+
+
+		<!--  Remote commands to update dataTables -->
+
+		<p:remoteCommand id="remoteCommandUpdateMainTable"
+			name="updateMainTable" process="@this"
+			update="form:accordionPanel:searchTable" />
+
+		<p:remoteCommand id="remoteCommandUpdateSelectedTable"
+			name="updateSelectedTable" process="@this"
+			update="form:accordionPanel:selectedTable" />
+
+		<p:remoteCommand id="remoteCommandUpdateRelatedTable"
+			name="updateRelatedTable" process="@this"
+			update="form:accordionPanel:relatedTable" />
+
+		<p:remoteCommand id="remoteCommandUpdateCandidateTable"
+			name="updateCandidateTable" process="@this"
+			update="form:accordionPanel:candidateTable" />
+
+
+
+		<p:accordionPanel id="accordionPanel" multiple="true"
+			widgetVar="multipleAccordionPanel">
+
+			<!--  MAIN DATA AREA  -->
+			<p:tab id="searchPanel"
+				titleStyle="background: WhiteSmoke; color: black"
+				title="PROMOTION TYPE">
+				<p:button id="searchButton" value="search"
+					icon="#{uiValue.searchIcon}"
+					styleClass="rounded-button ui-button-success"
+					onclick="#{promotionFeeTypeDiscountController.pushSearchButton()}" />
+
+				<p:overlayPanel id="searchList" for="searchButton"
+					showCloseIcon="true" dismissable="true" widgetVar="searchList">
+					<p />
+					Promotion Type Data - Click on row button to see the promotion fee type discount relations
+					<p />
+					<p:dataTable id="searchTable" widgetVar="searchTableWidget"
+						var="searchDataTable"
+						value="#{promotionFeeTypeDiscountController.searchDataList}"
+						rowIndexVar="rowIndexMainTable"
+						rowKey="#{searchDataTable.promotionTypeId}" selectionMode="single"
+						selection="#{promotionFeeTypeDiscountController.selectedMainData}"
+						filteredValue="#{promotionFeeTypeDiscountController.filteredSearchDataList}"
+						showGridlines="true" stripedRows="true" scrollable="true"
+						emptyMessage="No data to show" paginator="true" rows="4" 
+						size="small" paginatorPosition="bottom">
+
+						<p:column id="showRelation"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 20px;    
+                                  overflow: hidden"
+							headerText="Show Data" rendered="true">
+							<p:commandButton id="viewRowButton"
+								styleClass="ui-button-warning rounded-button"
+								icon="#{uiValue.viewIcon}" immediate="true"
+								update="form:accordionPanel:selectedTablePanel 
+								form:accordionPanel:relatedTablePanel
+								form:accordionPanel:candidateTablePanel
+								form:accordionPanel:buttonPanel"
+								oncomplete="PF('searchList').hide()"
+								actionListener="#{promotionFeeTypeDiscountController.pushSelectedButton()}">
+								<f:setPropertyActionListener value="#{updateSelectedTable}"
+									target="#{promotionFeeTypeDiscountController.selectedMainData}" />
+							</p:commandButton>
+						</p:column>
+
+						<p:column id="code"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CODE" rendered="true"
+							sortBy="#{searchDataTable.code}"
+							filterBy="#{searchDataTable.code}" filterMatchMode="contains">
+							<h:outputText id="filterCode" value="" />
+							<h:outputText id="codeOutput" value="#{searchDataTable.code}" />
+						</p:column>
+
+						<p:column id="name"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="NAME" rendered="true"
+							sortBy="#{searchDataTable.name}"
+							filterBy="#{searchDataTable.name}" filterMatchMode="contains">
+							<h:outputText id="filterName" value="" />
+							<h:outputText id="nameOutput" value="#{searchDataTable.name}" />
+						</p:column>
+
+						<p:column id="description"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DESCRIPTION" rendered="true"
+							sortBy="#{searchDataTable.description}"
+							filterBy="#{searchDataTable.description}"
+							filterMatchMode="contains">
+							<h:outputText id="filterDescription" value="" />
+							<h:outputText id="descriptionOutput"
+								value="#{searchDataTable.description}" />
+						</p:column>
+						
+						<p:column id="applicationLevel"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="APPLICATION LEVEL" rendered="true"
+							filterBy="#{searchDataTable.applicationLevelId}" filterMatchMode="exact">
+							<f:facet id="applicationLevelFilter" name="filter">
+								<p:selectOneMenu id="applicationLevelFilterMenuMainData"
+									onchange="PF('searchTableWidget').filter()">
+									<f:selectItems id="applicationLevelFilterSelectItemsMainData"
+										value="#{promotionFeeTypeDiscountController.applicationLevelSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:selectOneMenu id="applicationLevelMainDataOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{searchDataTable.applicationLevelId}">
+								<f:selectItems
+									value="#{promotionFeeTypeDiscountController.applicationLevelSelectItems()}"
+									id="selectItemsApplicationLevelOutputMainData" itemDisabled="true"
+									var="ApplicationLevel" itemValue="#{searchDataTable.applicationLevelId}" />
+							</p:selectOneMenu>
+						</p:column>
+						
+						<p:column id="discountTypeId"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DISCOUNT TYPE" rendered="true"
+							filterBy="#{searchDataTable.discountTypeId}" filterMatchMode="exact">
+							<f:facet id="discountTypeFilter" name="filter">
+								<p:selectOneMenu id="discountTypeFilterMenuMainData"
+									onchange="PF('searchTableWidget').filter()">
+									<f:selectItems id="discountTypeFilterSelectItemsMainData"
+										value="#{promotionFeeTypeDiscountController.discountTypeSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:selectOneMenu id="discountTypeMainDataOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{searchDataTable.discountTypeId}">
+								<f:selectItems
+									value="#{promotionFeeTypeDiscountController.discountTypeSelectItems()}"
+									id="selectItemsDiscountTypeOutputMainData" itemDisabled="true"
+									var="DiscountType" itemValue="#{searchDataTable.discountTypeId}" />
+							</p:selectOneMenu>
+						</p:column>
+						
+						<p:column id="discountValue"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DISCOUNT VALUE" rendered="true"							
+							filterBy="#{searchDataTable.discountValue}"
+							filterMatchMode="contains">
+							<h:outputText id="filterDiscountValue" value="" />
+							<h:outputText id="discountValueOutput"
+								value="#{searchDataTable.discountValue}" />
+						</p:column>
+
+						<p:column id="status"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="STATUS" rendered="true"
+							filterBy="#{searchDataTable.statusId}" filterMatchMode="exact">
+							<f:facet id="statusFilter" name="filter">
+								<p:selectOneMenu id="statusFilterMenuMainData"
+									onchange="PF('searchTableWidget').filter()">
+									<f:selectItems id="statusFilterSelectItemsMainData"
+										value="#{promotionFeeTypeDiscountController.statusSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:selectOneMenu id="statusMainDataOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{searchDataTable.statusId}">
+								<f:selectItems
+									value="#{promotionFeeTypeDiscountController.statusSelectItems()}"
+									id="selectItemsStatusOutputMainData" itemDisabled="true"
+									var="Status" itemValue="#{searchDataTable.statusId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+
+					</p:dataTable>
+				</p:overlayPanel>
+
+				<p:panel id="selectedTablePanel"
+					visible="#{promotionFeeTypeDiscountController.showDependentData}">
+
+					<p:dataTable id="selectedTable" widgetVar="selectedTableWidget"
+						var="selectedDataTable"
+						value="#{promotionFeeTypeDiscountController.mainData}" rendered="true"
+						size="small" scrollable="true" emptyMessage="No data to show"
+						showGridlines="true" paginatorPosition="bottom">
+
+
+						<p:column id="code"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CODE" rendered="true">
+							<h:outputText id="codeOutput" value="#{selectedDataTable.code}" />
+						</p:column>
+
+						<p:column id="name"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="NAME" rendered="true">
+							<h:outputText id="nameOutput" value="#{selectedDataTable.name}" />
+						</p:column>
+
+						<p:column id="description"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DESCRIPTION" rendered="true">
+							<h:outputText id="descriptionOutput"
+								value="#{selectedDataTable.description}" />
+						</p:column>						
+						
+						<p:column id="applicationLevel"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="APPLICATION LEVEL" rendered="true">							
+							<p:selectOneMenu id="applicationLevelSelectedDataOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{selectedDataTable.applicationLevelId}">
+								<f:selectItems
+									value="#{promotionFeeTypeDiscountController.applicationLevelSelectItems()}"
+									id="selectItemsApplicationLevelOutputSelectedData" itemDisabled="true"
+									var="ApplicationLevel" itemValue="#{selectedDataTable.applicationLevelId}" />
+							</p:selectOneMenu>
+						</p:column>
+						
+						<p:column id="discountTypeId"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DISCOUNT TYPE" rendered="true" >							
+							<p:selectOneMenu id="discountTypeMainDataOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{selectedDataTable.discountTypeId}">
+								<f:selectItems
+									value="#{promotionFeeTypeDiscountController.discountTypeSelectItems()}"
+									id="selectItemsDiscountTypeOutputMainData" itemDisabled="true"
+									var="DiscountType" itemValue="#{selectedDataTable.discountTypeId}" />
+							</p:selectOneMenu>
+						</p:column>
+						
+						<p:column id="discountValue"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DISCOUNT VALUE" rendered="true" >
+							<h:outputText id="filterDiscountValue" value="" />
+							<h:outputText id="discountValueOutput"
+								value="#{selectedDataTable.discountValue}" />
+						</p:column>						
+						
+
+						<p:column id="status"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="STATUS" rendered="true">
+							<p:selectOneMenu id="statusSelectedDataOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{selectedDataTable.statusId}">
+								<f:selectItems
+									value="#{promotionFeeTypeDiscountController.statusSelectItems()}"
+									id="selectItemsStatusOutputSelectedData" itemDisabled="true"
+									var="Status" itemValue="#{selectedDataTable.statusId}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+
+			</p:tab>
+
+			<!--  RELATION DATA AREA - related data and candidate data  -->
+			<p:tab id="relationPanel"
+				titleStyle="background: WhiteSmoke; color: black"
+				title="FEE TYPES">
+
+				<!--  RELATED DATA -->
+
+				<p:panel id="relatedTablePanel"
+					header="RELATED DISCOUNT FEE TYPES for #{promotionFeeTypeDiscountController.mainData.code} (#{promotionFeeTypeDiscountController.mainData.description}) "
+					menuTitle="the relation status can be modified"
+					visible="#{promotionFeeTypeDiscountController.showDependentData}">
+
+					<p:dataTable id="relatedTable" widgetVar="relatedTableWidget"
+						var="relatedDataTable"
+						value="#{promotionFeeTypeDiscountController.relatedDataList}"
+						rowIndexVar="rowIndexRelatedTable"
+						rowKey="#{relatedDataTable.promoFeeTypeDiscountId}" selectionMode="single"
+						selection="#{promotionFeeTypeDiscountController.selectedRelatedData}"
+						filteredValue="#{promotionFeeTypeDiscountController.filteredRelatedDataList}"
+						showGridlines="true" stripedRows="true" scrollable="true"
+						emptyMessage="No data to show" size="small" paginator="true"
+						rows="4" paginatorPosition="bottom" editable="true">
+						
+						<f:facet name="header">
+							<p:commandButton id="refreshRelatedTable"
+								value="refresh data table" icon="#{uiValue.refreshIcon}"
+								ajax="true"
+								actionListener="#{promotionFeeTypeDiscountController.refreshRelatedDataTable}"
+								onclick="{updateRelatedTable()}" styleClass="ui-button-success"
+								style="margin-right: .5rem">
+							</p:commandButton>
+						</f:facet>
+
+
+						<!--  DATA TABLE - MANAGE EDIT EVENTS -->
+						<p:ajax id="ajaxRelatedRowSelect" event="rowSelect"
+							listener="#{promotionFeeTypeDiscountController.onRelatedRowSelect}"
+							update="form:growlMessage">
+						</p:ajax>
+						<p:ajax id="ajaxRelatedRowEditInit" event="rowEditInit"
+							listener="#{promotionFeeTypeDiscountController.onRelatedRowInit}"
+							update="form:growlMessage">
+						</p:ajax>
+						<p:ajax id="ajaxRelatedRowEdit" event="rowEdit"
+							listener="#{promotionFeeTypeDiscountController.onRelatedRowEdit}"
+							update="form:growlMessage"
+							oncomplete="if (!args.validationFailed) {updateRelatedTable();}">
+						</p:ajax>
+
+						<p:ajax id="ajaxRelatedRowEditCancel" event="rowEditCancel"
+							listener="#{promotionFeeTypeDiscountController.onRelatedRowCancel}"
+							update="form:growlMessage" oncomplete="{updateRelatedTable();}">
+						</p:ajax>
+
+						<p:column id="editRelatedRow"
+							style="font-family:Arial Black;
+                                  text-align: center;
+                                  font-size: 11px;
+                                  width: 60px;    
+                                  overflow: hidden"
+							rendered="#{promotionFeeTypeDiscountController.canUserModify()}">
+							<p:rowEditor id="relatedRowEditor"
+								editTitle="Edit Relation Status" cancelTitle="Cancel Edit"
+								saveTitle="Save Row" />
+						</p:column>
+
+						<p:column id="relatedStatus"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="RELATION STATUS" rendered="true"
+							filterBy="#{relatedDataTable.promoFeeTypeDiscStatusId}"
+							filterMatchMode="exact">
+							<f:facet id="statusRelatedEntityFilter" name="filter">
+								<p:selectOneMenu id="statusRelatedEntityFilterMenu"
+									onchange="PF('relatedTableWidget').filter()">
+									<f:selectItems id="statusRelatedEntityFilterSelectItems"
+										value="#{promotionFeeTypeDiscountController.statusSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:cellEditor id="statusRelatedEntityDataCellEditor">
+								<f:facet id="statusRelatedEntityDataOutputFacet" name="output">
+									<p:selectOneMenu id="statusRelatedEntityDataOutput"
+										editable="false" disabled="true" immediate="true"
+										value="#{relatedDataTable.promoFeeTypeDiscStatusId}">
+										<f:selectItems
+											value="#{promotionFeeTypeDiscountController.statusSelectItems()}"
+											id="selectItemsStatusOutputRelatedEntityData"
+											itemDisabled="true" var="StatusOutput"
+											itemValue="#{relatedDataTable.promoFeeTypeDiscStatusId}" />
+									</p:selectOneMenu>
+								</f:facet>
+								<f:facet id="statusRelatedEntityDataInputFacet" name="input">
+									<p:selectOneMenu id="statusRelatedEntityDataInput"
+										value="#{relatedDataTable.promoFeeTypeDiscStatusId}"
+										immediate="true">
+										<f:selectItems
+											value="#{promotionFeeTypeDiscountController.statusSelectItems()}"
+											id="selectItemsStatusInputRelatedEntityData"
+											var="StatusInput"
+											itemValue="#{relatedDataTable.promoFeeTypeDiscStatusId}">
+										</f:selectItems>
+										<f:param id="currentRowStatusRelatedEntityData"
+											name="currentRow" value="#{rowIndexRelatedTable}" />
+										<p:ajax event="change" immediate="true"
+											update="statusRelatedEntityDataOutput" />
+									</p:selectOneMenu>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+
+						<p:column id="relatedCode"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CODE" rendered="true"
+							filterBy="#{relatedDataTable.feeTypeCode}"
+							filterMatchMode="contains">
+							<h:outputText id="codeOutput"
+								value="#{relatedDataTable.feeTypeCode}" />
+						</p:column>
+
+						<p:column id="relatedName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="NAME" rendered="true"
+							filterBy="#{relatedDataTable.feeTypeName}"
+							filterMatchMode="contains">
+							<h:outputText id="nameOutput"
+								value="#{relatedDataTable.feeTypeName}" />
+						</p:column>
+
+						<p:column id="relatedDescription"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DESCRIPTION" rendered="true"
+							filterBy="#{relatedDataTable.feeTypeDescription}"
+							filterMatchMode="contains">
+							<h:outputText id="descriptionOutput"
+								value="#{relatedDataTable.feeTypeDescription}" />
+						</p:column>
+
+						<p:column id="relatedProrated"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="PRORATED?" rendered="true"
+							filterBy="#{relatedDataTable.prorate}" filterMatchMode="exact">
+							<f:facet id="relatedProratedFilter" name="filter">
+								<p:selectOneMenu id="relatedProratedFilterMenu"
+									onchange="PF('relatedTableWidget').filter()">
+									<f:selectItems id="relatedProratedFilterSelectItems"
+										value="#{promotionFeeTypeDiscountController.booleanSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:selectOneMenu id="relatedProratedDataOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{relatedDataTable.prorate}">
+								<f:selectItems
+									value="#{promotionFeeTypeDiscountController.booleanSelectItems()}"
+									id="selectItemsProratedOutputRelated" itemDisabled="true"
+									var="Status" itemValue="#{relatedDataTable.prorate}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="relatedPrice"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="PRICE" rendered="true" filterBy="#{relatedDataTable.price}"
+							filterMatchMode="contains">
+							<h:outputText id="filterPrice" value="" />
+							<h:outputText id="priceOutput" value="#{relatedDataTable.price}" />
+						</p:column>
+
+						<p:column id="relatedDependantStatus"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="FEE STATUS" rendered="true"
+							filterBy="#{relatedDataTable.feeTypeStatusId}"
+							filterMatchMode="exact">
+							<f:facet id="statusRelatedDependantFilter" name="filter">
+								<p:selectOneMenu id="statusDependandFilterMenu"
+									onchange="PF('relatedTableWidget').filter()">
+									<f:selectItems id="statusRelatedDependantFilterSelectItems"
+										value="#{promotionFeeTypeDiscountController.statusSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:selectOneMenu id="statusRelatedDependantDataOutput"
+								editable="false" disabled="true" immediate="true"
+								value="#{relatedDataTable.feeTypeStatusId}">
+								<f:selectItems
+									value="#{promotionFeeTypeDiscountController.statusSelectItems()}"
+									id="selectItemsStatusOutputRelatedDependantData"
+									itemDisabled="true" var="Status"
+									itemValue="#{relatedDataTable.feeTypeStatusId}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+
+				<!--  ADD/REMOVE BUTTONS -->
+				<div id="divActionButtons" align="center">
+					<p:panel id="buttonPanel"
+						visible="#{promotionFeeTypeDiscountController.showDependentData}">
+						<p:panelGrid id="actionButtonsPanelGrid" columns="2"
+							style=" width: 10%; height: 10%;  margin-bottom: 5px;  margin-top: 5px; "
+							styleClass="ui-noborder">
+							<p:commandButton id="addCandidateButton"
+								styleClass="ui-button-help" style="margin-left: 85px;"
+								icon="#{uiValue.rowUpIcon}" ajax="true"
+								rendered="#{productFeeTypeController.canUserModify()}"
+								actionListener="#{promotionFeeTypeDiscountController.pushAddButtonCandidateToRelatedData()}"
+								oncomplete="if(!args.validationFailed) {updateRelatedTable();updateCandidateTable();}" />
+							<p:commandButton id="removeRelationButton"
+								styleClass="ui-button-help" style="margin-right: 85px"
+								icon="#{uiValue.rowDownIcon}" ajax="true"
+								rendered="#{productFeeTypeController.canUserModify()}"
+								actionListener="#{promotionFeeTypeDiscountController.pushRemoveButtonFromRelatedData()}"
+								oncomplete="if(!args.validationFailed) {updateRelatedTable();updateCandidateTable();}" />
+						</p:panelGrid>
+					</p:panel>
+				</div>
+
+
+				<!--  CANDIDATE DATA -->
+				<p:panel id="candidateTablePanel"
+					header="CANDIDATE FEES TO DISCOUNT for #{promotionFeeTypeDiscountController.mainData.code} (#{promotionFeeTypeDiscountController.mainData.description}) "
+					rendered="#{productFeeTypeController.canUserModify()}"
+					visible="#{promotionFeeTypeDiscountController.showDependentData}">
+
+					<p:dataTable id="candidateTable" widgetVar="candidateTableWidget"
+						var="candidateDataTable"
+						value="#{promotionFeeTypeDiscountController.candidateDataList}"
+						rowIndexVar="rowIndexCandidateTable"
+						rowKey="#{candidateDataTable.feeTypeId}" selectionMode="single"
+						selection="#{promotionFeeTypeDiscountController.selectedCandidateData}"
+						filteredValue="#{promotionFeeTypeDiscountController.filteredCandidateDataList}"
+						showGridlines="true" stripedRows="true" scrollable="true"
+						emptyMessage="No data to show" size="small" paginator="true"
+						rows="4" paginatorPosition="bottom">
+
+						<f:facet name="header">
+							<p:commandButton id="refreshCandidateTable"
+								value="refresh data table" icon="#{uiValue.refreshIcon}"
+								ajax="true"
+								actionListener="#{promotionFeeTypeDiscountController.refreshCandidateDataTable}"
+								onclick="{updateCandidateTable()}" styleClass="ui-button-success"
+								style="margin-right: .5rem">
+							</p:commandButton>
+						</f:facet>
+
+
+						<p:column id="candidateCode"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CODE" rendered="true"
+							filterBy="#{candidateDataTable.code}" filterMatchMode="contains">
+							<h:outputText id="codeOutput" value="#{candidateDataTable.code}" />
+						</p:column>
+
+						<p:column id="candidateName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="NAME" rendered="true"
+							filterBy="#{candidateDataTable.name}" filterMatchMode="contains">
+							<h:outputText id="nameOutput" value="#{candidateDataTable.name}" />
+						</p:column>
+
+						<p:column id="candidateDescription"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DESCRIPTION" rendered="true"
+							filterBy="#{candidateDataTable.description}"
+							filterMatchMode="contains">
+							<h:outputText id="descriptionOutput"
+								value="#{candidateDataTable.description}" />
+						</p:column>
+
+						<p:column id="candidateProrated"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="PRORATED?" rendered="true"
+							filterBy="#{candidateDataTable.prorate}" filterMatchMode="exact">
+							<f:facet id="candidateProratedFilter" name="filter">
+								<p:selectOneMenu id="candidateProratedFilterMenu"
+									onchange="PF('candidateTableWidget').filter()">
+									<f:selectItems id="candidateProratedFilterSelectItems"
+										value="#{promotionFeeTypeDiscountController.booleanSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:selectOneMenu id="candidateProratedDataOutput"
+								editable="false" disabled="true" immediate="true"
+								value="#{candidateDataTable.prorate}">
+								<f:selectItems
+									value="#{promotionFeeTypeDiscountController.booleanSelectItems()}"
+									id="selectItemsProratedOutputCandidate" itemDisabled="true"
+									var="Status" itemValue="#{candidateDataTable.prorate}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="candidatePrice"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="PRICE" rendered="true"
+							sortBy="#{candidateDataTable.price}"
+							filterBy="#{dataTable.price}" filterMatchMode="contains">
+							<h:outputText id="filterPrice" value="" />
+							<h:outputText id="priceOutput"
+								value="#{candidateDataTable.price}" />
+						</p:column>
+
+						<p:column id="candidateStatus"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="STATUS" rendered="true"
+							filterBy="#{candidateDataTable.statusId}" filterMatchMode="exact">
+							<f:facet id="statusCandidateFilter" name="filter">
+								<p:selectOneMenu id="statusCandidateMenu"
+									onchange="PF('candidateTableWidget').filter()">
+									<f:selectItems id="statusCandidateFilterSelectItems"
+										value="#{promotionFeeTypeDiscountController.statusSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:selectOneMenu id="statusCandidateDataOutput"
+								editable="false" disabled="true" immediate="true"
+								value="#{candidateDataTable.statusId}">
+								<f:selectItems
+									value="#{promotionFeeTypeDiscountController.statusSelectItems()}"
+									id="selectItemsStatusOutputCandidateData"
+									itemDisabled="true" var="Status"
+									itemValue="#{candidateDataTable.statusId}" />
+							</p:selectOneMenu>						
+							
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+			</p:tab>
+
+		</p:accordionPanel>
+
+
+	</h:form>
+</body>
+</html>

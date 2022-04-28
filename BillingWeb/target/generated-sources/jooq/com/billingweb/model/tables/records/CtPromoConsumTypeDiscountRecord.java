@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record9;
-import org.jooq.Row9;
+import org.jooq.Record8;
+import org.jooq.Row8;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -21,7 +21,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * for the application
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class CtPromoConsumTypeDiscountRecord extends UpdatableRecordImpl<CtPromoConsumTypeDiscountRecord> implements Record9<Integer, Integer, Integer, Integer, Integer, LocalDateTime, String, LocalDateTime, String>, ICtPromoConsumTypeDiscount {
+public class CtPromoConsumTypeDiscountRecord extends UpdatableRecordImpl<CtPromoConsumTypeDiscountRecord> implements Record8<Integer, Integer, Integer, Integer, LocalDateTime, String, LocalDateTime, String>, ICtPromoConsumTypeDiscount {
 
     private static final long serialVersionUID = 1L;
 
@@ -74,27 +74,11 @@ public class CtPromoConsumTypeDiscountRecord extends UpdatableRecordImpl<CtPromo
     }
 
     /**
-     * Setter for <code>public.ct_promo_consum_type_discount.consum_type_discount_class_id</code>. Type id (entity_type_id) of the discount class for the promotion-consumption discount relation
-     */
-    @Override
-    public void setConsumTypeDiscountClassId(Integer value) {
-        set(3, value);
-    }
-
-    /**
-     * Getter for <code>public.ct_promo_consum_type_discount.consum_type_discount_class_id</code>. Type id (entity_type_id) of the discount class for the promotion-consumption discount relation
-     */
-    @Override
-    public Integer getConsumTypeDiscountClassId() {
-        return (Integer) get(3);
-    }
-
-    /**
      * Setter for <code>public.ct_promo_consum_type_discount.status_id</code>. Status id for the promotion-consumption discount relation type
      */
     @Override
     public void setStatusId(Integer value) {
-        set(4, value);
+        set(3, value);
     }
 
     /**
@@ -102,7 +86,7 @@ public class CtPromoConsumTypeDiscountRecord extends UpdatableRecordImpl<CtPromo
      */
     @Override
     public Integer getStatusId() {
-        return (Integer) get(4);
+        return (Integer) get(3);
     }
 
     /**
@@ -110,7 +94,7 @@ public class CtPromoConsumTypeDiscountRecord extends UpdatableRecordImpl<CtPromo
      */
     @Override
     public void setInputDate(LocalDateTime value) {
-        set(5, value);
+        set(4, value);
     }
 
     /**
@@ -118,7 +102,7 @@ public class CtPromoConsumTypeDiscountRecord extends UpdatableRecordImpl<CtPromo
      */
     @Override
     public LocalDateTime getInputDate() {
-        return (LocalDateTime) get(5);
+        return (LocalDateTime) get(4);
     }
 
     /**
@@ -126,7 +110,7 @@ public class CtPromoConsumTypeDiscountRecord extends UpdatableRecordImpl<CtPromo
      */
     @Override
     public void setInputUser(String value) {
-        set(6, value);
+        set(5, value);
     }
 
     /**
@@ -134,7 +118,7 @@ public class CtPromoConsumTypeDiscountRecord extends UpdatableRecordImpl<CtPromo
      */
     @Override
     public String getInputUser() {
-        return (String) get(6);
+        return (String) get(5);
     }
 
     /**
@@ -142,7 +126,7 @@ public class CtPromoConsumTypeDiscountRecord extends UpdatableRecordImpl<CtPromo
      */
     @Override
     public void setModifDate(LocalDateTime value) {
-        set(7, value);
+        set(6, value);
     }
 
     /**
@@ -150,7 +134,7 @@ public class CtPromoConsumTypeDiscountRecord extends UpdatableRecordImpl<CtPromo
      */
     @Override
     public LocalDateTime getModifDate() {
-        return (LocalDateTime) get(7);
+        return (LocalDateTime) get(6);
     }
 
     /**
@@ -158,7 +142,7 @@ public class CtPromoConsumTypeDiscountRecord extends UpdatableRecordImpl<CtPromo
      */
     @Override
     public void setModifUser(String value) {
-        set(8, value);
+        set(7, value);
     }
 
     /**
@@ -166,7 +150,7 @@ public class CtPromoConsumTypeDiscountRecord extends UpdatableRecordImpl<CtPromo
      */
     @Override
     public String getModifUser() {
-        return (String) get(8);
+        return (String) get(7);
     }
 
     // -------------------------------------------------------------------------
@@ -179,17 +163,17 @@ public class CtPromoConsumTypeDiscountRecord extends UpdatableRecordImpl<CtPromo
     }
 
     // -------------------------------------------------------------------------
-    // Record9 type implementation
+    // Record8 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row9<Integer, Integer, Integer, Integer, Integer, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
-        return (Row9) super.fieldsRow();
+    public Row8<Integer, Integer, Integer, Integer, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
+        return (Row8) super.fieldsRow();
     }
 
     @Override
-    public Row9<Integer, Integer, Integer, Integer, Integer, LocalDateTime, String, LocalDateTime, String> valuesRow() {
-        return (Row9) super.valuesRow();
+    public Row8<Integer, Integer, Integer, Integer, LocalDateTime, String, LocalDateTime, String> valuesRow() {
+        return (Row8) super.valuesRow();
     }
 
     @Override
@@ -209,31 +193,26 @@ public class CtPromoConsumTypeDiscountRecord extends UpdatableRecordImpl<CtPromo
 
     @Override
     public Field<Integer> field4() {
-        return CtPromoConsumTypeDiscount.CT_PROMO_CONSUM_TYPE_DISCOUNT.CONSUM_TYPE_DISCOUNT_CLASS_ID;
-    }
-
-    @Override
-    public Field<Integer> field5() {
         return CtPromoConsumTypeDiscount.CT_PROMO_CONSUM_TYPE_DISCOUNT.STATUS_ID;
     }
 
     @Override
-    public Field<LocalDateTime> field6() {
+    public Field<LocalDateTime> field5() {
         return CtPromoConsumTypeDiscount.CT_PROMO_CONSUM_TYPE_DISCOUNT.INPUT_DATE;
     }
 
     @Override
-    public Field<String> field7() {
+    public Field<String> field6() {
         return CtPromoConsumTypeDiscount.CT_PROMO_CONSUM_TYPE_DISCOUNT.INPUT_USER;
     }
 
     @Override
-    public Field<LocalDateTime> field8() {
+    public Field<LocalDateTime> field7() {
         return CtPromoConsumTypeDiscount.CT_PROMO_CONSUM_TYPE_DISCOUNT.MODIF_DATE;
     }
 
     @Override
-    public Field<String> field9() {
+    public Field<String> field8() {
         return CtPromoConsumTypeDiscount.CT_PROMO_CONSUM_TYPE_DISCOUNT.MODIF_USER;
     }
 
@@ -254,31 +233,26 @@ public class CtPromoConsumTypeDiscountRecord extends UpdatableRecordImpl<CtPromo
 
     @Override
     public Integer component4() {
-        return getConsumTypeDiscountClassId();
-    }
-
-    @Override
-    public Integer component5() {
         return getStatusId();
     }
 
     @Override
-    public LocalDateTime component6() {
+    public LocalDateTime component5() {
         return getInputDate();
     }
 
     @Override
-    public String component7() {
+    public String component6() {
         return getInputUser();
     }
 
     @Override
-    public LocalDateTime component8() {
+    public LocalDateTime component7() {
         return getModifDate();
     }
 
     @Override
-    public String component9() {
+    public String component8() {
         return getModifUser();
     }
 
@@ -299,31 +273,26 @@ public class CtPromoConsumTypeDiscountRecord extends UpdatableRecordImpl<CtPromo
 
     @Override
     public Integer value4() {
-        return getConsumTypeDiscountClassId();
-    }
-
-    @Override
-    public Integer value5() {
         return getStatusId();
     }
 
     @Override
-    public LocalDateTime value6() {
+    public LocalDateTime value5() {
         return getInputDate();
     }
 
     @Override
-    public String value7() {
+    public String value6() {
         return getInputUser();
     }
 
     @Override
-    public LocalDateTime value8() {
+    public LocalDateTime value7() {
         return getModifDate();
     }
 
     @Override
-    public String value9() {
+    public String value8() {
         return getModifUser();
     }
 
@@ -347,42 +316,36 @@ public class CtPromoConsumTypeDiscountRecord extends UpdatableRecordImpl<CtPromo
 
     @Override
     public CtPromoConsumTypeDiscountRecord value4(Integer value) {
-        setConsumTypeDiscountClassId(value);
-        return this;
-    }
-
-    @Override
-    public CtPromoConsumTypeDiscountRecord value5(Integer value) {
         setStatusId(value);
         return this;
     }
 
     @Override
-    public CtPromoConsumTypeDiscountRecord value6(LocalDateTime value) {
+    public CtPromoConsumTypeDiscountRecord value5(LocalDateTime value) {
         setInputDate(value);
         return this;
     }
 
     @Override
-    public CtPromoConsumTypeDiscountRecord value7(String value) {
+    public CtPromoConsumTypeDiscountRecord value6(String value) {
         setInputUser(value);
         return this;
     }
 
     @Override
-    public CtPromoConsumTypeDiscountRecord value8(LocalDateTime value) {
+    public CtPromoConsumTypeDiscountRecord value7(LocalDateTime value) {
         setModifDate(value);
         return this;
     }
 
     @Override
-    public CtPromoConsumTypeDiscountRecord value9(String value) {
+    public CtPromoConsumTypeDiscountRecord value8(String value) {
         setModifUser(value);
         return this;
     }
 
     @Override
-    public CtPromoConsumTypeDiscountRecord values(Integer value1, Integer value2, Integer value3, Integer value4, Integer value5, LocalDateTime value6, String value7, LocalDateTime value8, String value9) {
+    public CtPromoConsumTypeDiscountRecord values(Integer value1, Integer value2, Integer value3, Integer value4, LocalDateTime value5, String value6, LocalDateTime value7, String value8) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -391,7 +354,6 @@ public class CtPromoConsumTypeDiscountRecord extends UpdatableRecordImpl<CtPromo
         value6(value6);
         value7(value7);
         value8(value8);
-        value9(value9);
         return this;
     }
 
@@ -404,7 +366,6 @@ public class CtPromoConsumTypeDiscountRecord extends UpdatableRecordImpl<CtPromo
         setPromoConsumTypeDiscountId(from.getPromoConsumTypeDiscountId());
         setPromotionTypeId(from.getPromotionTypeId());
         setConsumptionTypeId(from.getConsumptionTypeId());
-        setConsumTypeDiscountClassId(from.getConsumTypeDiscountClassId());
         setStatusId(from.getStatusId());
         setInputDate(from.getInputDate());
         setInputUser(from.getInputUser());
@@ -432,13 +393,12 @@ public class CtPromoConsumTypeDiscountRecord extends UpdatableRecordImpl<CtPromo
     /**
      * Create a detached, initialised CtPromoConsumTypeDiscountRecord
      */
-    public CtPromoConsumTypeDiscountRecord(Integer promoConsumTypeDiscountId, Integer promotionTypeId, Integer consumptionTypeId, Integer consumTypeDiscountClassId, Integer statusId, LocalDateTime inputDate, String inputUser, LocalDateTime modifDate, String modifUser) {
+    public CtPromoConsumTypeDiscountRecord(Integer promoConsumTypeDiscountId, Integer promotionTypeId, Integer consumptionTypeId, Integer statusId, LocalDateTime inputDate, String inputUser, LocalDateTime modifDate, String modifUser) {
         super(CtPromoConsumTypeDiscount.CT_PROMO_CONSUM_TYPE_DISCOUNT);
 
         setPromoConsumTypeDiscountId(promoConsumTypeDiscountId);
         setPromotionTypeId(promotionTypeId);
         setConsumptionTypeId(consumptionTypeId);
-        setConsumTypeDiscountClassId(consumTypeDiscountClassId);
         setStatusId(statusId);
         setInputDate(inputDate);
         setInputUser(inputUser);
