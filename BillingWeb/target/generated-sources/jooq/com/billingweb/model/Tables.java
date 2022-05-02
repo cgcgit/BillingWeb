@@ -27,6 +27,7 @@ import com.billingweb.model.tables.PtBillingPeriod;
 import com.billingweb.model.tables.PtConsumptionClass;
 import com.billingweb.model.tables.PtDiscountType;
 import com.billingweb.model.tables.PtEntityType;
+import com.billingweb.model.tables.PtPaymentMethod;
 import com.billingweb.model.tables.PtStatus;
 import com.billingweb.model.tables.PtTaxType;
 import com.billingweb.model.tables.VwProductFeeType;
@@ -159,6 +160,11 @@ public class Tables {
      * Table that stores the entity type of the application
      */
     public static final PtEntityType PT_ENTITY_TYPE = PtEntityType.PT_ENTITY_TYPE;
+
+    /**
+     * Table that stores the payment types for the application
+     */
+    public static final PtPaymentMethod PT_PAYMENT_METHOD = PtPaymentMethod.PT_PAYMENT_METHOD;
 
     /**
      * Table that stores the status for the entities of the application

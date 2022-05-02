@@ -27,6 +27,7 @@ import com.billingweb.model.tables.PtBillingPeriod;
 import com.billingweb.model.tables.PtConsumptionClass;
 import com.billingweb.model.tables.PtDiscountType;
 import com.billingweb.model.tables.PtEntityType;
+import com.billingweb.model.tables.PtPaymentMethod;
 import com.billingweb.model.tables.PtStatus;
 import com.billingweb.model.tables.PtTaxType;
 import com.billingweb.model.tables.VwProductFeeType;
@@ -176,6 +177,11 @@ public class Public extends SchemaImpl {
     public final PtEntityType PT_ENTITY_TYPE = PtEntityType.PT_ENTITY_TYPE;
 
     /**
+     * Table that stores the payment types for the application
+     */
+    public final PtPaymentMethod PT_PAYMENT_METHOD = PtPaymentMethod.PT_PAYMENT_METHOD;
+
+    /**
      * Table that stores the status for the entities of the application
      */
     public final PtStatus PT_STATUS = PtStatus.PT_STATUS;
@@ -252,6 +258,7 @@ public class Public extends SchemaImpl {
             Sequences.SEQ_DISCOUNT_TYPE_ID,
             Sequences.SEQ_ENTITY_TYPE_ID,
             Sequences.SEQ_FEE_TYPE_ID,
+            Sequences.SEQ_PAYMENT_METHOD_ID,
             Sequences.SEQ_PROD_FEE_TYPE_ID,
             Sequences.SEQ_PROD_SERV_TYPE_ID,
             Sequences.SEQ_PRODUCT_TYPE_ID,
@@ -294,6 +301,7 @@ public class Public extends SchemaImpl {
             PtConsumptionClass.PT_CONSUMPTION_CLASS,
             PtDiscountType.PT_DISCOUNT_TYPE,
             PtEntityType.PT_ENTITY_TYPE,
+            PtPaymentMethod.PT_PAYMENT_METHOD,
             PtStatus.PT_STATUS,
             PtTaxType.PT_TAX_TYPE,
             VwProductFeeType.VW_PRODUCT_FEE_TYPE,

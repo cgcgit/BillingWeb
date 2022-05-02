@@ -227,4 +227,18 @@ public class CtAccountTypeDao extends DAOImpl<CtAccountTypeRecord, com.billingwe
     public List<com.billingweb.model.tables.pojos.CtAccountType> fetchByModifUser(String... values) {
         return fetch(CtAccountType.CT_ACCOUNT_TYPE.MODIF_USER, values);
     }
+
+    /**
+     * Fetch records that have <code>payment_method_id BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<com.billingweb.model.tables.pojos.CtAccountType> fetchRangeOfPaymentMethodId(Integer lowerInclusive, Integer upperInclusive) {
+        return fetchRange(CtAccountType.CT_ACCOUNT_TYPE.PAYMENT_METHOD_ID, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>payment_method_id IN (values)</code>
+     */
+    public List<com.billingweb.model.tables.pojos.CtAccountType> fetchByPaymentMethodId(Integer... values) {
+        return fetch(CtAccountType.CT_ACCOUNT_TYPE.PAYMENT_METHOD_ID, values);
+    }
 }

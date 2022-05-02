@@ -125,14 +125,24 @@ public interface ICtAccountType extends Serializable {
     public LocalDateTime getModifDate();
 
     /**
-     * Setter for <code>public.ct_account_type.modif_user</code>.
+     * Setter for <code>public.ct_account_type.modif_user</code>. User who was modified the record
      */
     public void setModifUser(String value);
 
     /**
-     * Getter for <code>public.ct_account_type.modif_user</code>.
+     * Getter for <code>public.ct_account_type.modif_user</code>. User who was modified the record
      */
     public String getModifUser();
+
+    /**
+     * Setter for <code>public.ct_account_type.payment_method_id</code>. Payment method associated with the account type
+     */
+    public void setPaymentMethodId(Integer value);
+
+    /**
+     * Getter for <code>public.ct_account_type.payment_method_id</code>. Payment method associated with the account type
+     */
+    public Integer getPaymentMethodId();
 
     // -------------------------------------------------------------------------
     // FROM and INTO

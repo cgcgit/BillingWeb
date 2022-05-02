@@ -27,6 +27,7 @@ import com.billingweb.model.tables.PtBillingPeriod;
 import com.billingweb.model.tables.PtConsumptionClass;
 import com.billingweb.model.tables.PtDiscountType;
 import com.billingweb.model.tables.PtEntityType;
+import com.billingweb.model.tables.PtPaymentMethod;
 import com.billingweb.model.tables.PtStatus;
 import com.billingweb.model.tables.PtTaxType;
 import com.billingweb.model.tables.records.CtAccountTypeRecord;
@@ -52,6 +53,7 @@ import com.billingweb.model.tables.records.PtBillingPeriodRecord;
 import com.billingweb.model.tables.records.PtConsumptionClassRecord;
 import com.billingweb.model.tables.records.PtDiscountTypeRecord;
 import com.billingweb.model.tables.records.PtEntityTypeRecord;
+import com.billingweb.model.tables.records.PtPaymentMethodRecord;
 import com.billingweb.model.tables.records.PtStatusRecord;
 import com.billingweb.model.tables.records.PtTaxTypeRecord;
 
@@ -132,6 +134,9 @@ public class Keys {
     public static final UniqueKey<PtEntityTypeRecord> PT_ENTITY_TYPE_CODE_U = Internal.createUniqueKey(PtEntityType.PT_ENTITY_TYPE, DSL.name("pt_entity_type_code_U"), new TableField[] { PtEntityType.PT_ENTITY_TYPE.CODE }, true);
     public static final UniqueKey<PtEntityTypeRecord> PT_ENTITY_TYPE_NAME_U = Internal.createUniqueKey(PtEntityType.PT_ENTITY_TYPE, DSL.name("pt_entity_type_name_U"), new TableField[] { PtEntityType.PT_ENTITY_TYPE.NAME }, true);
     public static final UniqueKey<PtEntityTypeRecord> PT_ENTITY_TYPE_PK = Internal.createUniqueKey(PtEntityType.PT_ENTITY_TYPE, DSL.name("pt_entity_type_PK"), new TableField[] { PtEntityType.PT_ENTITY_TYPE.ENTITY_TYPE_ID }, true);
+    public static final UniqueKey<PtPaymentMethodRecord> PT_PAYMENT_METHOD_CODE_U = Internal.createUniqueKey(PtPaymentMethod.PT_PAYMENT_METHOD, DSL.name("pt_payment_method_code_u"), new TableField[] { PtPaymentMethod.PT_PAYMENT_METHOD.CODE }, true);
+    public static final UniqueKey<PtPaymentMethodRecord> PT_PAYMENT_METHOD_NAME_U = Internal.createUniqueKey(PtPaymentMethod.PT_PAYMENT_METHOD, DSL.name("pt_payment_method_name_u"), new TableField[] { PtPaymentMethod.PT_PAYMENT_METHOD.NAME }, true);
+    public static final UniqueKey<PtPaymentMethodRecord> PT_PAYMENT_METHOD_PK = Internal.createUniqueKey(PtPaymentMethod.PT_PAYMENT_METHOD, DSL.name("pt_payment_method_pk"), new TableField[] { PtPaymentMethod.PT_PAYMENT_METHOD.PAYMENT_METHOD_ID }, true);
     public static final UniqueKey<PtStatusRecord> PT_STATUS_CODE_U = Internal.createUniqueKey(PtStatus.PT_STATUS, DSL.name("pt_status_code_u"), new TableField[] { PtStatus.PT_STATUS.CODE }, true);
     public static final UniqueKey<PtStatusRecord> PT_STATUS_NAME_U = Internal.createUniqueKey(PtStatus.PT_STATUS, DSL.name("pt_status_name_u"), new TableField[] { PtStatus.PT_STATUS.NAME }, true);
     public static final UniqueKey<PtStatusRecord> PT_STATUS_PK = Internal.createUniqueKey(PtStatus.PT_STATUS, DSL.name("pt_status_pk"), new TableField[] { PtStatus.PT_STATUS.STATUS_ID }, true);
@@ -146,6 +151,7 @@ public class Keys {
     public static final ForeignKey<CtAccountTypeRecord, CtBillCycleTypeRecord> CT_ACCOUNT_TYPE__CT_ACCOUNT_TYPE_CBC_FK = Internal.createForeignKey(CtAccountType.CT_ACCOUNT_TYPE, DSL.name("ct_account_type_cbc_fk"), new TableField[] { CtAccountType.CT_ACCOUNT_TYPE.CORRECTIVE_BILL_CYCLE_TYPE_ID }, Keys.CT_BILL_CYCLE_TYPE_PK, new TableField[] { CtBillCycleType.CT_BILL_CYCLE_TYPE.BILL_CYCLE_TYPE_ID }, true);
     public static final ForeignKey<CtAccountTypeRecord, PtEntityTypeRecord> CT_ACCOUNT_TYPE__CT_ACCOUNT_TYPE_ENTITY_FK = Internal.createForeignKey(CtAccountType.CT_ACCOUNT_TYPE, DSL.name("ct_account_type_entity_fk"), new TableField[] { CtAccountType.CT_ACCOUNT_TYPE.ENTITY_TYPE_ID }, Keys.PT_ENTITY_TYPE_PK, new TableField[] { PtEntityType.PT_ENTITY_TYPE.ENTITY_TYPE_ID }, true);
     public static final ForeignKey<CtAccountTypeRecord, CtBillCycleTypeRecord> CT_ACCOUNT_TYPE__CT_ACCOUNT_TYPE_OBC_FK = Internal.createForeignKey(CtAccountType.CT_ACCOUNT_TYPE, DSL.name("ct_account_type_obc_fk"), new TableField[] { CtAccountType.CT_ACCOUNT_TYPE.ORDINARY_BILL_CYCLE_TYPE_ID }, Keys.CT_BILL_CYCLE_TYPE_PK, new TableField[] { CtBillCycleType.CT_BILL_CYCLE_TYPE.BILL_CYCLE_TYPE_ID }, true);
+    public static final ForeignKey<CtAccountTypeRecord, PtPaymentMethodRecord> CT_ACCOUNT_TYPE__CT_ACCOUNT_TYPE_PAYMENT_FK = Internal.createForeignKey(CtAccountType.CT_ACCOUNT_TYPE, DSL.name("ct_account_type_payment_fk"), new TableField[] { CtAccountType.CT_ACCOUNT_TYPE.PAYMENT_METHOD_ID }, Keys.PT_PAYMENT_METHOD_PK, new TableField[] { PtPaymentMethod.PT_PAYMENT_METHOD.PAYMENT_METHOD_ID }, true);
     public static final ForeignKey<CtAccountTypeRecord, PtStatusRecord> CT_ACCOUNT_TYPE__CT_ACCOUNT_TYPE_STATUS_FK = Internal.createForeignKey(CtAccountType.CT_ACCOUNT_TYPE, DSL.name("ct_account_type_status_fk"), new TableField[] { CtAccountType.CT_ACCOUNT_TYPE.STATUS_ID }, Keys.PT_STATUS_PK, new TableField[] { PtStatus.PT_STATUS.STATUS_ID }, true);
     public static final ForeignKey<CtBillCycleTypeRecord, PtBillingPeriodRecord> CT_BILL_CYCLE_TYPE__CT_BILL_CYCLE_TYPE_PERIOD_FK = Internal.createForeignKey(CtBillCycleType.CT_BILL_CYCLE_TYPE, DSL.name("ct_bill_cycle_type_period_fk"), new TableField[] { CtBillCycleType.CT_BILL_CYCLE_TYPE.BILLING_PERIOD_ID }, Keys.PT_BILLING_PERIOD_PK, new TableField[] { PtBillingPeriod.PT_BILLING_PERIOD.BILLING_PERIOD_ID }, true);
     public static final ForeignKey<CtBillCycleTypeRecord, PtStatusRecord> CT_BILL_CYCLE_TYPE__CT_BILL_CYCLE_TYPE_STATUS_FK = Internal.createForeignKey(CtBillCycleType.CT_BILL_CYCLE_TYPE, DSL.name("ct_bill_cycle_type_status_fk"), new TableField[] { CtBillCycleType.CT_BILL_CYCLE_TYPE.STATUS_ID }, Keys.PT_STATUS_PK, new TableField[] { PtStatus.PT_STATUS.STATUS_ID }, true);

@@ -16,7 +16,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row12;
+import org.jooq.Row13;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -104,9 +104,14 @@ public class CtAccountType extends TableImpl<CtAccountTypeRecord> {
     public final TableField<CtAccountTypeRecord, LocalDateTime> MODIF_DATE = createField(DSL.name("modif_date"), SQLDataType.LOCALDATETIME(6), this, "Date of the last modification of the record");
 
     /**
-     * The column <code>public.ct_account_type.modif_user</code>.
+     * The column <code>public.ct_account_type.modif_user</code>. User who was modified the record
      */
-    public final TableField<CtAccountTypeRecord, String> MODIF_USER = createField(DSL.name("modif_user"), SQLDataType.VARCHAR(10), this, "");
+    public final TableField<CtAccountTypeRecord, String> MODIF_USER = createField(DSL.name("modif_user"), SQLDataType.VARCHAR(10), this, "User who was modified the record");
+
+    /**
+     * The column <code>public.ct_account_type.payment_method_id</code>. Payment method associated with the account type
+     */
+    public final TableField<CtAccountTypeRecord, Integer> PAYMENT_METHOD_ID = createField(DSL.name("payment_method_id"), SQLDataType.INTEGER, this, "Payment method associated with the account type");
 
     private CtAccountType(Name alias, Table<CtAccountTypeRecord> aliased) {
         this(alias, aliased, null);
@@ -158,13 +163,14 @@ public class CtAccountType extends TableImpl<CtAccountTypeRecord> {
 
     @Override
     public List<ForeignKey<CtAccountTypeRecord, ?>> getReferences() {
-        return Arrays.<ForeignKey<CtAccountTypeRecord, ?>>asList(Keys.CT_ACCOUNT_TYPE__CT_ACCOUNT_TYPE_ENTITY_FK, Keys.CT_ACCOUNT_TYPE__CT_ACCOUNT_TYPE_OBC_FK, Keys.CT_ACCOUNT_TYPE__CT_ACCOUNT_TYPE_CBC_FK, Keys.CT_ACCOUNT_TYPE__CT_ACCOUNT_TYPE_STATUS_FK);
+        return Arrays.<ForeignKey<CtAccountTypeRecord, ?>>asList(Keys.CT_ACCOUNT_TYPE__CT_ACCOUNT_TYPE_ENTITY_FK, Keys.CT_ACCOUNT_TYPE__CT_ACCOUNT_TYPE_OBC_FK, Keys.CT_ACCOUNT_TYPE__CT_ACCOUNT_TYPE_CBC_FK, Keys.CT_ACCOUNT_TYPE__CT_ACCOUNT_TYPE_STATUS_FK, Keys.CT_ACCOUNT_TYPE__CT_ACCOUNT_TYPE_PAYMENT_FK);
     }
 
     private transient PtEntityType _ptEntityType;
     private transient CtBillCycleType _ctAccountTypeObcFk;
     private transient CtBillCycleType _ctAccountTypeCbcFk;
     private transient PtStatus _ptStatus;
+    private transient PtPaymentMethod _ptPaymentMethod;
 
     public PtEntityType ptEntityType() {
         if (_ptEntityType == null)
@@ -194,6 +200,13 @@ public class CtAccountType extends TableImpl<CtAccountTypeRecord> {
         return _ptStatus;
     }
 
+    public PtPaymentMethod ptPaymentMethod() {
+        if (_ptPaymentMethod == null)
+            _ptPaymentMethod = new PtPaymentMethod(this, Keys.CT_ACCOUNT_TYPE__CT_ACCOUNT_TYPE_PAYMENT_FK);
+
+        return _ptPaymentMethod;
+    }
+
     @Override
     public CtAccountType as(String alias) {
         return new CtAccountType(DSL.name(alias), this);
@@ -221,11 +234,11 @@ public class CtAccountType extends TableImpl<CtAccountTypeRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row12 type methods
+    // Row13 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row12<Integer, Integer, String, String, String, Integer, Integer, Integer, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
-        return (Row12) super.fieldsRow();
+    public Row13<Integer, Integer, String, String, String, Integer, Integer, Integer, LocalDateTime, String, LocalDateTime, String, Integer> fieldsRow() {
+        return (Row13) super.fieldsRow();
     }
 }

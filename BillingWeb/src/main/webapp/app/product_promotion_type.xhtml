@@ -315,7 +315,7 @@
                                   width: 100px;    
                                   overflow: hidden"
 							headerText="RELATION STATUS" rendered="true"
-							filterBy="#{relatedDataTable.promProdTypeStatusId}"
+							filterBy="#{relatedDataTable.promoProdTypeStatusId}"
 							filterMatchMode="exact">
 							<f:facet id="statusRelatedEntityFilter" name="filter">
 								<p:selectOneMenu id="statusRelatedEntityFilterMenu"
@@ -329,23 +329,23 @@
 								<f:facet id="statusRelatedEntityDataOutputFacet" name="output">
 									<p:selectOneMenu id="statusRelatedEntityDataOutput"
 										editable="false" disabled="true" immediate="true"
-										value="#{relatedDataTable.promProdTypeStatusId}">
+										value="#{relatedDataTable.promoProdTypeStatusId}">
 										<f:selectItems
 											value="#{productPromotionTypeController.statusSelectItems()}"
 											id="selectItemsStatusOutputRelatedEntityData"
 											itemDisabled="true" var="StatusOutput"
-											itemValue="#{relatedDataTable.promProdTypeStatusId}" />
+											itemValue="#{relatedDataTable.promoProdTypeStatusId}" />
 									</p:selectOneMenu>
 								</f:facet>
 								<f:facet id="statusRelatedEntityDataInputFacet" name="input">
 									<p:selectOneMenu id="statusRelatedEntityDataInput"
-										value="#{relatedDataTable.promProdTypeStatusId}"
+										value="#{relatedDataTable.promoProdTypeStatusId}"
 										immediate="true">
 										<f:selectItems
 											value="#{productPromotionTypeController.statusSelectItems()}"
 											id="selectItemsStatusInputRelatedEntityData"
 											var="StatusInput"
-											itemValue="#{relatedDataTable.promProdTypeStatusId}">
+											itemValue="#{relatedDataTable.promoProdTypeStatusId}">
 										</f:selectItems>
 										<f:param id="currentRowStatusRelatedEntityData"
 											name="currentRow" value="#{rowIndexRelatedTable}" />

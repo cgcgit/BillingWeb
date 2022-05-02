@@ -12,12 +12,10 @@ import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.context.Flash;
 import javax.faces.validator.ValidatorException;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
-import javax.security.enterprise.SecurityContext;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
@@ -31,7 +29,6 @@ import com.billingweb.ejb.parameterization.ApplicationLevelEJBLocal;
 import com.billingweb.generalClass.SimpleTableBasicClass;
 import com.billingweb.interfaces.IGeneralController;
 import com.billingweb.model.tables.pojos.PtApplicationLevel;
-import com.billingweb.utilities.Messages;
 
 @Named("applicationLevelController")
 @ViewScoped
@@ -250,8 +247,7 @@ public class ApplicationLevelController extends SimpleTableBasicClass implements
 	public void onRowCancel(RowEditEvent<?> event) {
 		PtApplicationLevel dataObject;
 		String message, messageDetail;
-		boolean error = false;
-
+		
 		message = "CANCEL UPDATE ROW";
 
 		dataObject = (PtApplicationLevel) event.getObject();
@@ -366,12 +362,12 @@ public class ApplicationLevelController extends SimpleTableBasicClass implements
 				applicationLevelEJB.deleteData(this.selectedData);
 				// this.selectedData = null;
 				messageDetail = "Data deletes succesfully";
-				logger.info("Delete application data: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Delete application level data: " + this.selectedData.toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;
 				messageDetail = "ERROR - Selected data is null";
-				logger.fatal("Delete application data: " + this.selectedData.getCode() + " - " + messageDetail);
+				logger.fatal("Delete application level data: " + this.selectedData.getCode() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_FATAL, message, messageDetail);
 
 			}

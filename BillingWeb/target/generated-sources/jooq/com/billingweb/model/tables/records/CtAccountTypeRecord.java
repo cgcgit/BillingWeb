@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record12;
-import org.jooq.Row12;
+import org.jooq.Record13;
+import org.jooq.Row13;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -20,7 +20,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Table that stores the account types of the catalog for the application
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class CtAccountTypeRecord extends UpdatableRecordImpl<CtAccountTypeRecord> implements Record12<Integer, Integer, String, String, String, Integer, Integer, Integer, LocalDateTime, String, LocalDateTime, String>, ICtAccountType {
+public class CtAccountTypeRecord extends UpdatableRecordImpl<CtAccountTypeRecord> implements Record13<Integer, Integer, String, String, String, Integer, Integer, Integer, LocalDateTime, String, LocalDateTime, String, Integer>, ICtAccountType {
 
     private static final long serialVersionUID = 1L;
 
@@ -201,7 +201,7 @@ public class CtAccountTypeRecord extends UpdatableRecordImpl<CtAccountTypeRecord
     }
 
     /**
-     * Setter for <code>public.ct_account_type.modif_user</code>.
+     * Setter for <code>public.ct_account_type.modif_user</code>. User who was modified the record
      */
     @Override
     public void setModifUser(String value) {
@@ -209,11 +209,27 @@ public class CtAccountTypeRecord extends UpdatableRecordImpl<CtAccountTypeRecord
     }
 
     /**
-     * Getter for <code>public.ct_account_type.modif_user</code>.
+     * Getter for <code>public.ct_account_type.modif_user</code>. User who was modified the record
      */
     @Override
     public String getModifUser() {
         return (String) get(11);
+    }
+
+    /**
+     * Setter for <code>public.ct_account_type.payment_method_id</code>. Payment method associated with the account type
+     */
+    @Override
+    public void setPaymentMethodId(Integer value) {
+        set(12, value);
+    }
+
+    /**
+     * Getter for <code>public.ct_account_type.payment_method_id</code>. Payment method associated with the account type
+     */
+    @Override
+    public Integer getPaymentMethodId() {
+        return (Integer) get(12);
     }
 
     // -------------------------------------------------------------------------
@@ -226,17 +242,17 @@ public class CtAccountTypeRecord extends UpdatableRecordImpl<CtAccountTypeRecord
     }
 
     // -------------------------------------------------------------------------
-    // Record12 type implementation
+    // Record13 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row12<Integer, Integer, String, String, String, Integer, Integer, Integer, LocalDateTime, String, LocalDateTime, String> fieldsRow() {
-        return (Row12) super.fieldsRow();
+    public Row13<Integer, Integer, String, String, String, Integer, Integer, Integer, LocalDateTime, String, LocalDateTime, String, Integer> fieldsRow() {
+        return (Row13) super.fieldsRow();
     }
 
     @Override
-    public Row12<Integer, Integer, String, String, String, Integer, Integer, Integer, LocalDateTime, String, LocalDateTime, String> valuesRow() {
-        return (Row12) super.valuesRow();
+    public Row13<Integer, Integer, String, String, String, Integer, Integer, Integer, LocalDateTime, String, LocalDateTime, String, Integer> valuesRow() {
+        return (Row13) super.valuesRow();
     }
 
     @Override
@@ -300,6 +316,11 @@ public class CtAccountTypeRecord extends UpdatableRecordImpl<CtAccountTypeRecord
     }
 
     @Override
+    public Field<Integer> field13() {
+        return CtAccountType.CT_ACCOUNT_TYPE.PAYMENT_METHOD_ID;
+    }
+
+    @Override
     public Integer component1() {
         return getAccountTypeId();
     }
@@ -360,6 +381,11 @@ public class CtAccountTypeRecord extends UpdatableRecordImpl<CtAccountTypeRecord
     }
 
     @Override
+    public Integer component13() {
+        return getPaymentMethodId();
+    }
+
+    @Override
     public Integer value1() {
         return getAccountTypeId();
     }
@@ -417,6 +443,11 @@ public class CtAccountTypeRecord extends UpdatableRecordImpl<CtAccountTypeRecord
     @Override
     public String value12() {
         return getModifUser();
+    }
+
+    @Override
+    public Integer value13() {
+        return getPaymentMethodId();
     }
 
     @Override
@@ -492,7 +523,13 @@ public class CtAccountTypeRecord extends UpdatableRecordImpl<CtAccountTypeRecord
     }
 
     @Override
-    public CtAccountTypeRecord values(Integer value1, Integer value2, String value3, String value4, String value5, Integer value6, Integer value7, Integer value8, LocalDateTime value9, String value10, LocalDateTime value11, String value12) {
+    public CtAccountTypeRecord value13(Integer value) {
+        setPaymentMethodId(value);
+        return this;
+    }
+
+    @Override
+    public CtAccountTypeRecord values(Integer value1, Integer value2, String value3, String value4, String value5, Integer value6, Integer value7, Integer value8, LocalDateTime value9, String value10, LocalDateTime value11, String value12, Integer value13) {
         value1(value1);
         value2(value2);
         value3(value3);
@@ -505,6 +542,7 @@ public class CtAccountTypeRecord extends UpdatableRecordImpl<CtAccountTypeRecord
         value10(value10);
         value11(value11);
         value12(value12);
+        value13(value13);
         return this;
     }
 
@@ -526,6 +564,7 @@ public class CtAccountTypeRecord extends UpdatableRecordImpl<CtAccountTypeRecord
         setInputUser(from.getInputUser());
         setModifDate(from.getModifDate());
         setModifUser(from.getModifUser());
+        setPaymentMethodId(from.getPaymentMethodId());
     }
 
     @Override
@@ -548,7 +587,7 @@ public class CtAccountTypeRecord extends UpdatableRecordImpl<CtAccountTypeRecord
     /**
      * Create a detached, initialised CtAccountTypeRecord
      */
-    public CtAccountTypeRecord(Integer accountTypeId, Integer entityTypeId, String code, String name, String description, Integer ordinaryBillCycleTypeId, Integer correctiveBillCycleTypeId, Integer statusId, LocalDateTime inputDate, String inputUser, LocalDateTime modifDate, String modifUser) {
+    public CtAccountTypeRecord(Integer accountTypeId, Integer entityTypeId, String code, String name, String description, Integer ordinaryBillCycleTypeId, Integer correctiveBillCycleTypeId, Integer statusId, LocalDateTime inputDate, String inputUser, LocalDateTime modifDate, String modifUser, Integer paymentMethodId) {
         super(CtAccountType.CT_ACCOUNT_TYPE);
 
         setAccountTypeId(accountTypeId);
@@ -563,5 +602,6 @@ public class CtAccountTypeRecord extends UpdatableRecordImpl<CtAccountTypeRecord
         setInputUser(inputUser);
         setModifDate(modifDate);
         setModifUser(modifUser);
+        setPaymentMethodId(paymentMethodId);
     }
 }

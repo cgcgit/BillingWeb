@@ -205,6 +205,51 @@
 					</f:facet>
 				</p:cellEditor>
 			</p:column>
+			<p:column id="paymentMethod"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="PAYMENT METHOD" rendered="true"
+				filterBy="#{dataTable.paymentMethodId}"
+				filterMatchMode="exact">
+				<f:facet id="paymentMethodFilter" name="filter">
+					<p:selectOneMenu id="paymentMethodFilterMenu"
+						onchange="PF('mainTableWidget').filter()">
+						<f:selectItems id="paymentMethodFilterSelectItems"
+							value="#{accountTypeController.paymentMethodSelectItems()}" />
+					</p:selectOneMenu>
+				</f:facet>
+				<p:cellEditor id="paymentMethodCellEditor">
+					<f:facet id="paymentMethodOutputFacet" name="output">
+						<p:selectOneMenu id="paymentMethodOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{dataTable.paymentMethodId}">
+							<f:selectItems
+								value="#{accountTypeController.paymentMethodSelectItems()}"
+								id="selectItemsPaymentMethodOutput" itemDisabled="true"
+								var="OrdinaryCycle"
+								itemValue="#{dataTable.paymentMethodId}" />
+						</p:selectOneMenu>
+					</f:facet>
+					<f:facet id="paymentMethodInputFacet" name="input">
+						<p:selectOneMenu id="paymentMethodInput"
+							value="#{dataTable.paymentMethodId}" immediate="true">
+							<f:selectItems
+								value="#{accountTypeController.paymentMethodSelectItems()}"
+								id="selectItemsPaymentMethodInput" var="PaymentMethod"
+								itemValue="#{dataTable.paymentMethodId}">
+							</f:selectItems>
+							<f:param id="currentRowPaymentMethod" name="currentRow"
+								value="#{rowIndexMainTable}" />
+							<p:ajax event="change" immediate="true"
+								update="paymentMethodOutput" />
+						</p:selectOneMenu>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			
 			<p:column id="ordinaryCycle"
 				style="font-family:Arial Black;
                                   text-align: left;
@@ -356,6 +401,18 @@
 				<p:inputText id="newDescriptionInput" label="Description"
 					value="#{accountTypeController.selectedData.description}">
 				</p:inputText>
+				
+				<p:outputLabel id="newPaymentMethodLabel"
+					value="Payment Method " />
+				<p:selectOneMenu id="paymentMethodInput"
+					value="#{accountTypeController.selectedData.paymentMethodId}"
+					immediate="true">
+					<f:selectItems
+						value="#{accountTypeController.paymentMethodSelectItems()}"
+						id="selectItemsPaymentMethodInput" var="PaymentMethod"
+						itemValue="#{accountTypeController.selectedData.paymentMethodId}">
+					</f:selectItems>
+				</p:selectOneMenu>
 
 				<p:outputLabel id="newOrdinaryBillCycleLabel"
 					value="Ordinary Bill Cycle Type " />

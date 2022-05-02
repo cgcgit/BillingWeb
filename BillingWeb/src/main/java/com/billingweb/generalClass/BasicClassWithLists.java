@@ -12,10 +12,12 @@ import org.apache.logging.log4j.core.Logger;
 import com.billingweb.ejb.parameterization.ApplicationLevelEJBLocal;
 import com.billingweb.ejb.parameterization.ConsumptionClassEJBLocal;
 import com.billingweb.ejb.parameterization.DiscountTypeEJBLocal;
+import com.billingweb.ejb.parameterization.PaymentMethodEJBLocal;
 import com.billingweb.ejb.parameterization.StatusEJBLocal;
 import com.billingweb.model.tables.pojos.PtApplicationLevel;
 import com.billingweb.model.tables.pojos.PtConsumptionClass;
 import com.billingweb.model.tables.pojos.PtDiscountType;
+import com.billingweb.model.tables.pojos.PtPaymentMethod;
 import com.billingweb.model.tables.pojos.PtStatus;
 
 public class BasicClassWithLists extends BasicClass {
@@ -38,6 +40,8 @@ public class BasicClassWithLists extends BasicClass {
 	@EJB
 	private ConsumptionClassEJBLocal consumptionClassEJB;
 	
+	@EJB
+	private PaymentMethodEJBLocal paymentMethodEJB;
 	
 	/*
 	 * Return a boolean list
@@ -170,6 +174,31 @@ public class BasicClassWithLists extends BasicClass {
 		return selectItem;
 	}
 	
+	/*
+	 * Return the list of select items with the consumption class data
+	 */
+	public List<SelectItem> paymentMethodSelectItems() {
+		List<SelectItem> selectItem = new ArrayList<>();
+		List<PtPaymentMethod> list = paymentMethodEJB.findAllData();
+
+		SelectItem nullItem = new SelectItem();
+		nullItem.setLabel("Select One... ");
+		nullItem.setValue(null);
+		selectItem.add(nullItem);
+
+		if (list.isEmpty()) {
+			logger.error("ERROR - Not find paymebt method list");
+		} else {
+			for (PtPaymentMethod p : list) {
+				SelectItem item = new SelectItem();
+				item.setLabel(p.getCode());
+				item.setValue(p.getPaymentMethodId());
+				item.setDescription(p.getDescription());
+				selectItem.add(item);
+			}
+		}
+		return selectItem;
+	}
 	
 
 }

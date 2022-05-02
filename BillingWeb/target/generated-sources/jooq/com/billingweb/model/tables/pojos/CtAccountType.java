@@ -29,6 +29,7 @@ public class CtAccountType implements ICtAccountType {
     private String        inputUser;
     private LocalDateTime modifDate;
     private String        modifUser;
+    private Integer       paymentMethodId;
 
     public CtAccountType() {}
 
@@ -45,6 +46,7 @@ public class CtAccountType implements ICtAccountType {
         this.inputUser = value.getInputUser();
         this.modifDate = value.getModifDate();
         this.modifUser = value.getModifUser();
+        this.paymentMethodId = value.getPaymentMethodId();
     }
 
     public CtAccountType(
@@ -59,7 +61,8 @@ public class CtAccountType implements ICtAccountType {
         LocalDateTime inputDate,
         String        inputUser,
         LocalDateTime modifDate,
-        String        modifUser
+        String        modifUser,
+        Integer       paymentMethodId
     ) {
         this.accountTypeId = accountTypeId;
         this.entityTypeId = entityTypeId;
@@ -73,6 +76,7 @@ public class CtAccountType implements ICtAccountType {
         this.inputUser = inputUser;
         this.modifDate = modifDate;
         this.modifUser = modifUser;
+        this.paymentMethodId = paymentMethodId;
     }
 
     /**
@@ -252,7 +256,7 @@ public class CtAccountType implements ICtAccountType {
     }
 
     /**
-     * Getter for <code>public.ct_account_type.modif_user</code>.
+     * Getter for <code>public.ct_account_type.modif_user</code>. User who was modified the record
      */
     @Override
     public String getModifUser() {
@@ -260,11 +264,27 @@ public class CtAccountType implements ICtAccountType {
     }
 
     /**
-     * Setter for <code>public.ct_account_type.modif_user</code>.
+     * Setter for <code>public.ct_account_type.modif_user</code>. User who was modified the record
      */
     @Override
     public void setModifUser(String modifUser) {
         this.modifUser = modifUser;
+    }
+
+    /**
+     * Getter for <code>public.ct_account_type.payment_method_id</code>. Payment method associated with the account type
+     */
+    @Override
+    public Integer getPaymentMethodId() {
+        return this.paymentMethodId;
+    }
+
+    /**
+     * Setter for <code>public.ct_account_type.payment_method_id</code>. Payment method associated with the account type
+     */
+    @Override
+    public void setPaymentMethodId(Integer paymentMethodId) {
+        this.paymentMethodId = paymentMethodId;
     }
 
     @Override
@@ -283,6 +303,7 @@ public class CtAccountType implements ICtAccountType {
         sb.append(", ").append(inputUser);
         sb.append(", ").append(modifDate);
         sb.append(", ").append(modifUser);
+        sb.append(", ").append(paymentMethodId);
 
         sb.append(")");
         return sb.toString();
@@ -306,6 +327,7 @@ public class CtAccountType implements ICtAccountType {
         setInputUser(from.getInputUser());
         setModifDate(from.getModifDate());
         setModifUser(from.getModifUser());
+        setPaymentMethodId(from.getPaymentMethodId());
     }
 
     @Override
