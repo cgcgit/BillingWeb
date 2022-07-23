@@ -1,0 +1,978 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+<f:metadata>
+	<f:viewAction id="loadData"
+		action="#{feeTypeController.loadDataList()}"
+		phase="INVOKE_APPLICATION">
+	</f:viewAction>
+	<f:viewAction id="defaultControlVariables"
+		action="#{feeTypeController.setInitVariablesToDefault()}"
+		phase="INVOKE_APPLICATION">
+	</f:viewAction>
+
+</f:metadata>
+
+
+<title>#{pageTitle.feeTypePage}</title>
+
+<body>
+	<h:outputStylesheet library="webjars"
+		name="primeflex/2.0.0/primeflex.min.css" />
+
+
+	<header>
+		<ui:include id="mainTemplate"
+			src="/WEB-INF/templates/mainTemplate.xhtml">
+			<ui:param name="title" value="FEE TYPE" />
+		</ui:include>
+	</header>
+	<h:form id="form">
+		<p:growl id="growlMessage" showDetail="true" keepAlive="true">
+			<p:autoUpdate />
+		</p:growl>
+
+		<p:remoteCommand id="remoteCommandUpdateDataTable"
+			name="updateDataTable" process="@this"
+			update="form:accordionPanel:dataTable" />
+
+		<p:remoteCommand id="remoteCommandUpdateSelectedTable"
+			name="updateSelectedTable" process="@this"
+			update="form:accordionPanel:selectedTable" />
+
+		<p:remoteCommand id="remoteCommandUpdateHistoricTable"
+			name="updateHistoricTable" process="@this"
+			update="form:accordionPanel:historicTable" />
+
+
+		<p:accordionPanel id="accordionPanel" multiple="true"
+			widgetVar="multipleAccordionPanelWidget">
+
+			<!--  MAIN DATA AREA  -->
+			<p:tab id="searchPanel"
+				titleStyle="background: WhiteSmoke; color: black" title="FEE TYPE">
+				<p:panelGrid columns="2" layout="grid"
+					style="text-align: center; align-items: center;">
+					<p:panel header="Search Fee Type">
+						<p:outputLabel id="dateSearchLabel" for="searchDate"
+							value="Search Date: " />
+
+						<p:inputMask id="searchDate" required="true" immediate="true"
+							value="#{feeTypeController.searchDate}" mask="99/99/9999"
+							style="width:10rem" styleClass="p-mx-3"
+							valueChangeListener="#{feeTypeController.changeSearchDate}"
+							requiredMessage="The date value to search is null. Please fill the search date field">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</p:inputMask>
+
+						<p:commandButton id="searchDataButton" value="Search"
+							icon="#{uiValue.searchIcon}"
+							actionListener="#{feeTypeController.pushSearchButton()}"
+							ajax="true" immediate="true" update=":form:growlMessage"
+							style="width:7rem" oncomplete="#{updateDataTable}"
+							styleClass="p-mx-3" class="ui-button-success rounded-button">
+						</p:commandButton>
+					</p:panel>
+
+					<p:panel header="Create New Fee Type"
+						rendered="#{feeTypeController.canUserModify()}">
+						<p:commandButton id="createNewButton" value="New data"
+							icon="#{uiValue.addIcon}" immediate="true" ajax="true"
+							actionListener="#{feeTypeController.pushCreateNewButton()}"
+							rendered="#{feeTypeController.canUserModify()}"
+							update=":form:createNewDialog :form:createNewDialogPanelData"
+							class="ui-button-primary" style="margin-right: .5rem">
+							<p:resetInput target=":form:createNewDialogPanelData" />
+						</p:commandButton>
+					</p:panel>
+				</p:panelGrid>
+
+				<p:overlayPanel id="searchList" for="searchDataButton"
+					my="center top" at="center bottom" showCloseIcon="true"
+					dismissable="false" widgetVar="searchListWidget">
+						<!--  DATA SEARCH TABLE -->
+						<p:dataTable id="dataTable" widgetVar="dataTableWidget"
+							var="dataTable" value="#{feeTypeController.dataList}"
+							filteredValue="#{feeTypeController.filteredDataList}"
+							showGridlines="true" stripedRows="true" scrollable="true"
+							reflow="true" editable="true" rowIndexVar="rowIndexSearchTable"
+							rowKey="(#{dataTable.feeTypeId} #{dataTable.startDate} #{dataTable.endDate})"
+							selection="#{feeTypeController.injectSelectedData}"
+							selectionMode="single" paginator="true" rows="5" size="small"
+							paginatorPosition="bottom">
+
+							<!--  DATA TABLE - HEADER -->
+							<f:facet name="header">
+							<p:outputLabel id="title"
+								value="Fee Type Data - Click on row button to see the historic records of the fee type" />
+							</f:facet>
+
+							<!--  DATA TABLE - FOOTER -->
+							<f:facet id="facetFooter" name="footer">
+							</f:facet>
+
+							<!--  DATA TABLE - ACTION COLUMNS -->
+							<p:column id="showHistoricData" headerText="Show Historic"
+								style="font-family:Arial Black;
+                                  text-align: center;
+                                  font-size: 11px;
+                                  width: 30px;    
+                                  overflow: hidden">
+
+								<p:commandButton id="historicButton"
+									styleClass="ui-button-warning rounded-button"
+									icon="#{uiValue.viewIcon}" immediate="true" ajax="true"
+									actionListener="#{feeTypeController.pushShowDetailRowButton()}"
+									update="form:accordionPanel:selectedTablePanel
+								form:accordionPanel:emptyHistoricTablePanel
+								form:accordionPanel:historicTablePanel"
+									oncomplete="{updateHistoricTable()}">
+								</p:commandButton>
+							</p:column>
+
+							<!--  DATA TABLE - DATA COLUMNS -->
+
+							<p:column id="searchCode"
+								style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+								headerText="CODE" rendered="true" sortBy="#{dataTable.code}"
+								filterBy="#{dataTable.code}" filterMatchMode="contains">
+								<h:outputText id="searchCodeText" value="#{dataTable.code}" />
+							</p:column>
+
+							<p:column id="searchStartDate"
+								style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+								headerText="START DATE" rendered="true"
+								sortBy="#{dataTable.startDate}"
+								filterBy="#{dataTable.startDate}" filterMatchMode="exact">
+								<f:facet id="searchStartDateFilter" name="filter">
+									<p:datePicker id="searchStartDateFilterPicker"
+										onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
+										monthNavigator="true" yearNavigator="true" mask="true"
+										pattern="dd/MM/yyyy">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+									</p:datePicker>
+								</f:facet>
+								<h:outputText id="searchStartDateText"
+									value="#{dataTable.startDate}">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</h:outputText>
+							</p:column>
+
+							<p:column id="searchEndDate"
+								style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+								headerText="END DATE" rendered="true"
+								sortBy="#{dataTable.endDate}" filterBy="#{dataTable.endDate}"
+								filterMatchMode="exact">
+								<f:facet id="searchEndDateFilter" name="filter">
+									<p:datePicker id="searchEndDateFilterPicker"
+										onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
+										monthNavigator="true" yearNavigator="true" mask="true"
+										pattern="dd/MM/yyyy">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+									</p:datePicker>
+								</f:facet>
+								<h:outputText id="searchEndDateText"
+									value="#{dataTable.endDate}">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</h:outputText>
+							</p:column>
+
+							<p:column id="searchName"
+								style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+								headerText="NAME" rendered="true" sortBy="#{dataTable.name}"
+								filterBy="#{dataTable.name}" filterMatchMode="contains">
+								<h:outputText id="searchNameText" value="#{dataTable.name}" />
+							</p:column>
+
+							<p:column id="searchDescription"
+								style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+								headerText="DESCRIPTION" rendered="true"
+								sortBy="#{dataTable.description}"
+								filterBy="#{dataTable.description}" filterMatchMode="contains">
+								<h:outputText id="searchDescriptionText"
+									value="#{dataTable.description}" />
+							</p:column>
+							<p:column id="searchApplicationLevel"
+								style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+								headerText="APPLICATION LEVEL" rendered="true"
+								filterBy="#{dataTable.applicationLevelId}"
+								filterMatchMode="exact">
+								<f:facet id="searchApplicationLevelFilter" name="filter">
+									<p:selectOneMenu id="searchApplicationLevelFilterMenu"
+										onchange="PF('dataTableWidget').filter()">
+										<f:selectItems id="searchApplicationLevelFilterSelectItems"
+											value="#{feeTypeController.applicationLevelSelectItems()}" />
+									</p:selectOneMenu>
+								</f:facet>
+								<p:selectOneMenu id="searchApplicationLevelOutput"
+									editable="false" disabled="true" immediate="true"
+									value="#{dataTable.applicationLevelId}">
+									<f:selectItems id="selectItemsSearchApplicationLevelOutput"
+										itemDisabled="true" var="SearchApplicationLevel"
+										value="#{feeTypeController.applicationLevelSelectItems()}"
+										itemValue="#{dataTable.applicationLevelId}" />
+								</p:selectOneMenu>
+							</p:column>
+
+							<p:column id="searchProrate"
+								style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+								headerText="PRORATE" rendered="true"
+								filterBy="#{dataTable.prorate}" filterMatchMode="exact">
+
+								<f:facet id="searchProrateFilter" name="filter">
+									<p:selectOneMenu id="searchProrateFilterMenu"
+										onchange="PF('dataTableWidget').filter()">
+										<f:selectItems id="searchProrateFilterSelectItems"
+											value="#{feeTypeController.booleanSelectItems()}" />
+									</p:selectOneMenu>
+								</f:facet>
+								<p:selectOneMenu id="searhcProrateOutput" editable="false"
+									disabled="true" immediate="true" value="#{dataTable.prorate}">
+									<f:selectItems id="selectItemsSearchProrateOutput"
+										itemDisabled="true" var="Prorate"
+										value="#{feeTypeController.booleanSelectItems()}"
+										itemValue="#{dataTable.prorate}" />
+								</p:selectOneMenu>
+							</p:column>
+
+							<p:column id="searchPrice"
+								style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+								headerText="PRICE" rendered="true" sortBy="#{dataTable.price}"
+								filterBy="#{dataTable.price}" filterMatchMode="contains">
+								<h:outputText id="searchPriceText" value="#{dataTable.price}" />
+							</p:column>
+
+							<p:column id="searchStatus"
+								style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+								headerText="STATUS" rendered="true"
+								filterBy="#{dataTable.statusId}" filterMatchMode="exact">
+								<f:facet id="searchStatusFilter" name="filter">
+									<p:selectOneMenu id="statusFilterMenu"
+										onchange="PF('dataTableWidget').filter()">
+										<f:selectItems id="searchStatusFilterSelectItems"
+											value="#{feeTypeController.statusSelectItems()}" />
+									</p:selectOneMenu>
+								</f:facet>
+
+								<p:selectOneMenu id="searchStatusOutput" editable="false"
+									disabled="true" immediate="true" value="#{dataTable.statusId}">
+									<f:selectItems id="selectItemsSearchStatusOutput"
+										itemDisabled="true" var="Status"
+										value="#{feeTypeController.statusSelectItems()}"
+										itemValue="#{dataTable.statusId}" />
+								</p:selectOneMenu>
+							</p:column>
+						</p:dataTable>					
+				</p:overlayPanel>
+
+				<p:panel id="selectedTablePanel"
+					visible="#{feeTypeController.showSelectedData}">
+
+					<p:dataTable id="selectedTable" widgetVar="selectedTableWidget"
+						var="selectedDataTable" value="#{feeTypeController.selectedData}"
+						rendered="true" size="small" scrollable="true"
+						emptyMessage="No data to show" showGridlines="true"
+						paginatorPosition="bottom">
+
+						<p:column id="code"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CODE" rendered="true">
+							<h:outputText id="codeText" value="#{selectedDataTable.code}" />
+						</p:column>
+
+						<p:column id="startDate"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="START DATE" rendered="true">
+							<h:outputText id="startDateText"
+								value="#{selectedDataTable.startDate}">
+								<f:converter
+									converterId="com.comasw.converter.localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="endDate"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="END DATE" rendered="true">
+							<h:outputText id="endDateText"
+								value="#{selectedDataTable.endDate}">
+								<f:converter
+									converterId="com.comasw.converter.localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="name"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="NAME" rendered="true">
+							<h:outputText id="nameText" value="#{selectedDataTable.name}" />
+						</p:column>
+
+						<p:column id="description"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DESCRIPTION" rendered="true">
+							<h:outputText id="descriptionText"
+								value="#{selectedDataTable.description}" />
+						</p:column>
+						<p:column id="applicationLevel"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="APPLICATION LEVEL" rendered="true">
+							<p:selectOneMenu id="applicationLevelOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{selectedDataTable.applicationLevelId}">
+								<f:selectItems id="selectItemsApplicationLevelOutput"
+									itemDisabled="true" var="ApplicationLevel"
+									value="#{feeTypeController.applicationLevelSelectItems()}"
+									itemValue="#{selectedDataTable.applicationLevelId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="prorate"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="PRORATE" rendered="true">
+							<p:selectOneMenu id="searhcProrateOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{selectedDataTable.prorate}">
+								<f:selectItems id="selectItemsProrateOutput" itemDisabled="true"
+									var="Prorate" value="#{feeTypeController.booleanSelectItems()}"
+									itemValue="#{selectedDataTable.prorate}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="price"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="PRICE" rendered="true">
+							<h:outputText id="priceText" value="#{selectedDataTable.price}" />
+						</p:column>
+
+						<p:column id="status"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="STATUS" rendered="true">
+							<p:selectOneMenu id="StatusOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{selectedDataTable.statusId}">
+								<f:selectItems id="selectItemsStatusOutput" itemDisabled="true"
+									var="Status" value="#{feeTypeController.statusSelectItems()}"
+									itemValue="#{selectedDataTable.statusId}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+
+			</p:tab>
+
+			<!--  HISTORIC DATA AREA   -->
+			<p:tab id="historicPanel"
+				titleStyle="background: WhiteSmoke; color: black"
+				title="FEE TYPE HISTORIC RECORDS">
+
+				<p:panel id="emptyHistoricTablePanel"
+					visible="#{!feeTypeController.showSelectedData}">
+					No data to show. Please push the search button of the Search Fee Type area and selecte one of the fee types.
+				</p:panel>
+
+				<p:panel id="historicTablePanel"
+					visible="#{feeTypeController.showSelectedData}">
+
+
+					<p:dataTable id="historicTable" widgetVar="historicTableWidget"
+						styleClass="historicTable" var="historicDataTable"
+						value="#{feeTypeController.historicDataList}"
+						rowKey="(#{historicDataTable.feeTypeId} #{historicDataTable.startDate} #{historicDataTable.endDate})"
+						rowIndexVar="rowIndexHistoricTable" selectionMode="single"
+						selection="#{feeTypeController.injectSelectedHistoricData}"
+						filteredValue="#{feeTypeController.filteredHistoricDataList}"
+						showGridlines="true" stripedRows="true" scrollable="true"
+						emptyMessage="No data to show" size="small" paginator="true"
+						rows="4" paginatorPosition="bottom" editable="true">
+						<f:facet name="header">
+							<f:facet name="header">
+							HISTORIC FEE TYPE DATA for #{feeTypeController.selectedData.code}							
+								<p:commandButton id="refreshHistoricTable"
+									style="margin-left: 1rem; margin-right: .5rem"
+									icon="#{uiValue.refreshIcon}" ajax="true"
+									actionListener="#{feeTypeController.refreshHistoricDataTable()}"
+									onclick="{updateHistoricTable()}"
+									styleClass="ui-button-warning rounded-button">
+								</p:commandButton>
+								<p:tooltip for="refreshHistoricTable"
+									value="Refresh historic data" />
+							</f:facet>
+						</f:facet>
+
+						<!--  DATA TABLE - MANAGE EDIT EVENTS -->
+						<p:ajax id="ajaxRowEditInit" event="rowEditInit"
+							listener="#{feeTypeController.onRowInit}"
+							update="form:growlMessage">
+						</p:ajax>
+						<p:ajax id="ajaxRowEdit" event="rowEdit"
+							listener="#{feeTypeController.onRowEdit}"
+							update="form:growlMessage"
+							oncomplete="if (!args.validationFailed) {updateHistoricTable()}">
+						</p:ajax>
+						<p:ajax id="ajaxRowEditCancel" event="rowEditCancel"
+							listener="#{feeTypeController.onRowCancel}"
+							update="form:growlMessage" oncomplete="{updateHistoricTable()}">
+						</p:ajax>
+
+
+
+						<!--  DATA TABLE - EDITABLE COLUMNS -->
+						<p:column id="deleteHistoricRow" exportable="false"
+							style="font-family:Arial Black;
+                                   text-align: center;
+                                   font-size: 11px;
+                                   width: 60px;    
+                                   overflow: hidden"
+							headerText="DEL ROW"
+							rendered="#{feeTypeController.canUserModify()}">
+							<p:commandButton id="deleteHistoricRowButton"
+								class="ui-button-warning rounded-button"
+								icon="#{uiValue.deleteIcon}" ajax="true"
+								actionListener="#{feeTypeController.pushDeleteRowButton()}"
+								rendered="#{feeTypeController.canUserModify()}"
+								update=":form:deleteConfirmDialog">
+								<f:setPropertyActionListener value="#{rowIndexHistoricTable}"
+									target="#{feeTypeController.rowHistoricSelected}" />
+
+								<f:setPropertyActionListener value="#{historicDataTable}"
+									target="#{feeTypeController.injectSelectedHistoricData}" />
+							</p:commandButton>
+						</p:column>
+
+						<p:column id="addHistoricRow" exportable="false"
+							style="font-family:Arial Black;
+                                   text-align: center;
+                                   font-size: 11px;
+                                   width: 60px;    
+                                   overflow: hidden"
+							headerText="ADD ROW"
+							rendered="#{feeTypeController.canUserModify()}">
+							<p:commandButton id="addHistoricRowButton"
+								class="ui-button-success rounded-button"
+								icon="#{uiValue.addIcon}" ajax="true"
+								actionListener="#{feeTypeController.pushAddNewRowButton()}"
+								rendered="#{feeTypeController.canUserModify()}"
+								update=":form:createNewDialog :form:createNewDialogPanelData">
+								<p:resetInput target=":form:createNewDialogPanelData" />
+								<f:param name="currentHistoricalRow"
+									value="#{rowIndexHistoricTable}" />
+							</p:commandButton>
+						</p:column>
+
+						<p:column id="editHistoricRow"
+							style="font-family:Arial Black;
+                                  text-align: center;
+                                  font-size: 11px;
+                                  width: 60px;    
+                                  overflow: hidden"
+							headerText="EDIT ROW"
+							rendered="#{feeTypeController.canUserModify()}">
+							<p:rowEditor id="editHistoricRowButton" editTitle="Edit Row"
+								cancelTitle="Cancel Edit" saveTitle="Save Row">
+							</p:rowEditor>
+						</p:column>
+
+
+						<!--  DATA TABLE - DATA COLUMNS -->
+						<p:column id="feeTypeIdHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 40px;    
+                                  overflow: hidden;
+                                  visibility: hidden"
+							headerText="FEE_TYPE_ID" rendered="false">
+							<h:outputText value="#{historicDataTable.feeTypeId}" />
+						</p:column>
+
+						<p:column id="codeHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CODE" rendered="true"
+							sortBy="#{historicDataTable.code}"
+							filterBy="#{historicDataTable.code}" filterMatchMode="contains">
+							<h:outputText id="codeOutputHist"
+								value="#{historicDataTable.code}" />
+						</p:column>
+
+
+						<p:column id="startDateHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="START DATE" rendered="true"
+							sortBy="#{historicDataTable.startDate}"
+							filterBy="#{historicDataTable.startDate}"
+							filterMatchMode="contains">
+							<f:facet id="historicStartDateFilter" name="filter">
+								<p:datePicker id="historicStartDateFilterPicker"
+									onchange="PF('historicTableWidget').filter()"
+									focusOnSelect="true" monthNavigator="true" yearNavigator="true"
+									mask="true" pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<p:cellEditor id="cellEditorStartDateHist">
+								<f:facet id="facetStartDateOutputHist" name="output">
+									<h:outputText id="startDateOutputHist"
+										value="#{historicDataTable.startDate}">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+									</h:outputText>
+								</f:facet>
+								<f:facet id="facetStartDateInputHist" name="input">
+									<p:inputMask id="startDateInputHist"
+										value="#{historicDataTable.startDate}" mask="99/99/9999"
+										validator="startDateValidator" style="width:96%">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+										<p:ajax event="change" update="startDateOutputHist" />
+									</p:inputMask>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="endDateHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="END DATE" rendered="true"
+							sortBy="#{historicDataTable.endDate}"
+							filterBy="#{historicDataTable.endDate}"
+							filterMatchMode="contains">
+							<f:facet id="historicEndDateFilter" name="filter">
+								<p:datePicker id="historicEndDateFilterPicker"
+									onchange="PF('historicTableWidget').filter()"
+									focusOnSelect="true" monthNavigator="true" yearNavigator="true"
+									mask="true" pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<p:cellEditor id="cellEditorEndDateHist">
+								<f:facet id="facetEndDateOutputHist" name="output">
+									<h:outputText id="endDateOutputHist"
+										value="#{historicDataTable.endDate}">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+									</h:outputText>
+								</f:facet>
+								<f:facet id="facetEndDateInputHist" name="input">
+									<p:inputMask id="endDateInputHist"
+										value="#{historicDataTable.endDate}" mask="99/99/9999"
+										validator="endDateValidator" style="width:96%">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+										<p:ajax event="change" update="endDateOutputHist" />
+									</p:inputMask>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+
+						<p:column id="nameHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="NAME" rendered="true"
+							sortBy="#{historicDataTable.name}"
+							filterBy="#{historicDataTable.name}" filterMatchMode="contains">
+							<h:outputText id="nameOutputHist"
+								value="#{historicDataTable.name}" />
+						</p:column>
+
+						<p:column id="descriptionHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DESCRIPTION" rendered="true"
+							sortBy="#{historicDataTable.description}"
+							filterBy="#{historicDataTable.description}"
+							filterMatchMode="contains">
+							<p:cellEditor id="cellEditorDescriptionHist">
+								<f:facet id="facetDescriptionOutputHist" name="output">
+									<h:outputText id="descriptionOutputHist"
+										value="#{historicDataTable.description}" />
+								</f:facet>
+								<f:facet id="facetDescriptionInputHist" name="input">
+									<p:inputText id="descriptionInputHist" label="Desription"
+										value="#{historicDataTable.description}" style="width:96%">
+										<p:ajax event="change" update="descriptionOutputHist" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="applicationLevelHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="APPLICATION LEVEL" rendered="true"
+							filterBy="#{historicDataTable.applicationLevelId}"
+							filterMatchMode="exact">
+							<f:facet id="applicationLevelFilterHist" name="filter">
+								<p:selectOneMenu id="applicationLevelFilterMenuHist"
+									onchange="PF('historicTableWidget').filter()">
+									<f:selectItems id="applicationLevelFilterSelectItemsHist"
+										value="#{feeTypeController.applicationLevelSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:selectOneMenu id="applicationLevelHistOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{historicDataTable.applicationLevelId}">
+								<f:selectItems
+									value="#{feeTypeController.applicationLevelSelectItems()}"
+									id="selectItemsApplicationLevelHistOutput" itemDisabled="true"
+									var="ApplicationLevel"
+									itemValue="#{historicDataTable.applicationLevelId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="prorateHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="PRORATE" rendered="true"
+							filterBy="#{historicDataTable.prorate}" filterMatchMode="exact">
+							<f:facet id="prorateFilterHist" name="filter">
+								<p:selectOneMenu id="prorateFilterMenuHist"
+									onchange="PF('historicTableWidget').filter()">
+									<f:selectItems id="prorateFilterSelectItemsHist"
+										value="#{feeTypeController.booleanSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:cellEditor id="prorateHistCellEditor">
+								<f:facet id="prorateHistOutputFacet" name="output">
+									<p:selectOneMenu id="prorateHistOutput" editable="false"
+										disabled="true" immediate="true"
+										value="#{historicDataTable.prorate}">
+										<f:selectItems
+											value="#{feeTypeController.booleanSelectItems()}"
+											id="selectItemsProrateHistOutput" itemDisabled="true"
+											var="Prorate" itemValue="#{historicDataTable.prorate}" />
+									</p:selectOneMenu>
+								</f:facet>
+								<f:facet id="prorateHistInputFacet" name="input">
+									<p:selectOneMenu id="prorateHistInput"
+										value="#{historicDataTable.prorate}" immediate="true">
+										<f:selectItems
+											value="#{feeTypeController.booleanSelectItems()}"
+											id="selectItemsProrateHistInput" var="Prorrate"
+											itemValue="#{historicDataTable.prorate}">
+										</f:selectItems>
+										<f:param id="currentRowProrrateHist"
+											name="currentHistoricalRow" value="#{rowIndexHistoricTable}" />
+										<p:ajax event="change" immediate="true"
+											update="prorateHistOutput" />
+									</p:selectOneMenu>
+								</f:facet>
+							</p:cellEditor>
+
+						</p:column>
+						<p:column id="priceHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="PRICE" rendered="true"
+							sortBy="#{historicDataTable.price}"
+							filterBy="#{historicDataTable.price}" filterMatchMode="contains">
+							<h:outputText id="filterPriceHist"
+								value="#{historicDataTable.price}" />
+						</p:column>
+
+						<p:column id="statusHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="STATUS" rendered="true"
+							filterBy="#{historicDataTable.statusId}" filterMatchMode="exact">
+							<f:facet id="statusFilter" name="filter">
+								<p:selectOneMenu id="statusFilterMenuHist"
+									onchange="PF('historicTableWidget').filter()">
+									<f:selectItems id="statusFilterSelectItemsHist"
+										value="#{feeTypeController.statusSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:cellEditor id="statusHistCellEditor">
+								<f:facet id="statusHistOutputFacet" name="output">
+									<p:selectOneMenu id="statusHistOutput" editable="false"
+										disabled="true" immediate="true"
+										value="#{historicDataTable.statusId}">
+										<f:selectItems
+											value="#{feeTypeController.statusSelectItems()}"
+											id="selectItemsStatusHistOutput" itemDisabled="true"
+											var="Status" itemValue="#{historicDataTable.statusId}" />
+									</p:selectOneMenu>
+								</f:facet>
+								<f:facet id="statusHistInputFacet" name="input">
+									<p:selectOneMenu id="statusHistInput"
+										valueChangeListener="#{feeTypeController.changeStatus}"
+										value="#{historicDataTable.statusId}" immediate="true">
+										<f:selectItems
+											value="#{feeTypeController.statusSelectItems()}"
+											id="selectItemsStatusHistInput" var="Status"
+											itemValue="#{historicDataTable.statusId}">
+										</f:selectItems>
+										<p:ajax event="change" immediate="true"
+											update="statusHistOutput :form:cancelStatusDialog" />
+
+										<f:param id="currentRowStatusHist" name="currentHistoricalRow"
+											value="#{rowIndexHistoricTable}" />
+									</p:selectOneMenu>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+			</p:tab>
+
+		</p:accordionPanel>
+
+		<!--  CREATE NEW DIALOG -->
+		<p:dialog id="createNewDialog"
+			header="#{feeTypeController.dialogHeaderText}" showEffect="fade"
+			responsive="true" widgetVar="createNewDialogWidget">
+
+			<h:panelGrid id="createNewDialogPanelData" columns="2"
+				cellpadding="5">
+
+				<p:outputLabel id="newStartDateLabel" value="StartDate " />
+				<p:inputMask id="newStartDateInput"
+					value="#{feeTypeController.injectNewData.startDate}" mask="99/99/9999"
+					style="width:96%">
+					<f:converter
+						converterId="com.comasw.converter.localDateTimeConverter" />
+					<p:ajax event="change" update="newStartDateInput" />
+				</p:inputMask>
+
+				<p:outputLabel id="newEndDateLabel" value="StartDate " />
+				<p:inputMask id="newEndDateInput"
+					value="#{feeTypeController.injectNewData.endDate}" mask="99/99/9999"
+					style="width:96%">
+					<f:converter
+						converterId="com.comasw.converter.localDateTimeConverter" />
+					<p:ajax event="change" update="newEndDateInput" />
+				</p:inputMask>
+
+				<p:outputLabel id="newCodeLabel" value="Code: " />
+				<p:inputText id="newCodeInput" label="Code"
+					disabled="#{feeTypeController.fromAddingRow}"
+					value="#{feeTypeController.injectNewData.code}">
+				</p:inputText>
+
+				<p:outputLabel id="newNameLabel" value="Name: " />
+				<p:inputText id="newNameInput" label="Name"
+					disabled="#{feeTypeController.fromAddingRow}"
+					value="#{feeTypeController.injectNewData.name}">
+				</p:inputText>
+
+				<p:outputLabel id="newDescriptionLabel" value="Description: " />
+				<p:inputText id="newDescriptionInput" label="Description"
+					value="#{feeTypeController.injectNewData.description}">
+				</p:inputText>
+
+				<p:outputLabel id="newApplicationLevelLabel"
+					value="Application Level: " />
+				<p:selectOneMenu id="applicationLevelInput"
+					value="#{feeTypeController.injectNewData.applicationLevelId}"
+					disabled="#{feeTypeController.fromAddingRow}" immediate="true">
+					<f:selectItems
+						value="#{feeTypeController.applicationLevelSelectItems()}"
+						id="selectItemsApplicationLevelInput" var="ApplicationLevel"
+						itemValue="#{feeTypeController.injectNewData.applicationLevelId}">
+					</f:selectItems>
+				</p:selectOneMenu>
+
+				<p:outputLabel id="newProrateLabel" value="Prorate: " />
+				<p:selectOneMenu id="prorateInput"
+					value="#{feeTypeController.injectNewData.prorate}" immediate="true">
+					<f:selectItems value="#{feeTypeController.booleanSelectItems()}"
+						id="selectItemsProrateInput" var="Prorate"
+						itemValue="#{feeTypeController.injectNewData.prorate}">
+					</f:selectItems>
+				</p:selectOneMenu>
+
+				<p:outputLabel id="newPriceLabel" value="Price: " />
+				<p:inputNumber id="newPriceInput" label="Price" decimalPlaces="4"
+					value="#{feeTypeController.injectNewData.price}">
+				</p:inputNumber>
+
+				<p:outputLabel id="newStatusLabel" value="Status: " />
+				<p:selectOneMenu id="statusInput"
+					value="#{feeTypeController.injectNewData.statusId}" immediate="true">
+					<f:selectItems value="#{feeTypeController.statusSelectItems()}"
+						id="selectItemsStatusInput" var="Status"
+						itemValue="#{feeTypeController.injectNewData.statusId}">
+					</f:selectItems>
+				</p:selectOneMenu>
+
+			</h:panelGrid>
+			<h:panelGrid id="createNewDialogPanelButtons" columns="3"
+				cellpadding="5">
+				<p:commandButton id="createNewDialogConfirm"
+					value="#{uiValue.okLabel}" update="form:growlMessage"
+					actionListener="#{feeTypeController.pushConfirmButtonCreateNewDialog()}"
+					styleClass="ui-confirmdialog-yes" icon="#{uiValue.okCircleIcon}"
+					oncomplete="if (!args.validationFailed) {updateSelectedTable(); updateHistoricTable()}">
+				</p:commandButton>
+				<p:commandButton id="createNewDialogCancel"
+					value="#{uiValue.cancelLabel}" icon="#{uiValue.cancelCircleIcon}"
+					actionListener="#{feeTypeController.pushCancelButtonCreateNewDialog()}"
+					update="form:growlMessage"
+					onclick="PF('createNewDialogWidget').hide()"
+					class="ui-button-secondary" />
+				<p:commandButton id="createNewDialogClean"
+					value="#{uiValue.cleanLabel}" icon="#{uiValue.cleanCircleIcon}"
+					update="createNewDialogPanelData form:growlMessage" process="@this"
+					class="ui-button-secondary">
+					<p:resetInput target="createNewDialogPanelData" />
+				</p:commandButton>
+			</h:panelGrid>
+		</p:dialog>
+
+
+		<!--  DELETE ROW DIALOG -->
+		<p:confirmDialog global="true" id="deleteConfirmDialog"
+			styleClass="change-position" showEffect="fade" responsive="true"
+			widgetVar="deleteRowDialogWidget" header="DELETE ROW"
+			message="#{feeTypeController.deleteMessageDialog}">
+			<p:commandButton id="deleteDialogConfirm" value="#{uiValue.okLabel}"
+				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
+				actionListener="#{feeTypeController.pushConfirmButtonDeleteDialog()}"
+				immediate="true"
+				oncomplete="{updateSelectedTable(); updateHistoricTable()}; PF('deleteRowDialogWidget').hide()"
+				process="@this" icon="#{uiValue.okCircleIcon}" />
+			<p:commandButton id="deleteDialogCancel"
+				value="#{uiValue.cancelLabel}" styleClass="ui-confirmdialog-no"
+				update="form:growlMessage"
+				oncomplete="PF('deleteDialogConfirm').hide()" type="button"
+				process="@this" icon="#{uiValue.cancelCircleIcon}" />
+		</p:confirmDialog>
+
+
+
+		<!-- Confirm dialog to cancel records -->
+		<p:confirmDialog global="true" id="cancelStatusDialog"
+			styleClass="change-position" widgetVar="cancelStatusDialogWidget"
+			header="CANCEL RECORDS"
+			message="#{feeTypeController.cancelMessageDialog}">
+
+			<p:commandButton value="#{uiValue.okLabel}"
+				update="form:growlMessage"
+				actionListener="#{feeTypeController.pushConfirmButtonChangeStatus()}"
+				styleClass="ui-confirmdialog-yes" icon="#{uiValue.okCircleIcon}"
+				process="@this" oncomplete="PF('cancelStatusDialogWidget').hide()" />
+			<p:commandButton value="#{uiValue.cancelLabel}"
+				icon="#{uiValue.cancelCircleIcon}" update="form:growlMessage"
+				onclick="PF('cancelStatusDialogWidget').hide()" process="@this"
+				class="ui-button-secondary" />
+
+		</p:confirmDialog>
+
+
+	</h:form>
+
+</body>
+</html>

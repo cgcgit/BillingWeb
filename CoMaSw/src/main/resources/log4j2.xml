@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="WARN" name="CoMaSw" packages="">
+
+	<Properties>
+		<!-- Directorio de almacenamiento del registro Log -->
+		<Property name="path">/home/catuxa/TFG/eclipse-workspace/CoMaSwLog</Property>
+	</Properties>
+	<Appenders>
+		<!-- Salida por consola -->
+		<Console name="STDOUT" target="SYSTEM_OUT">
+			<!-- Nivel fecha hora nombre clase (archivo:metodo:linea) - mensaje -->
+			<PatternLayout
+				pattern="%highlight{%p %d %c{-10}(%F:%M:%L)-%m%n}" />
+		</Console>
+
+		<RollingFile name="RollingFile"
+			fileName="${path}/comasw.log"
+			filePattern="${path}/comasw-%d{yyyy.MM-dd-HH}.log">
+			<!-- Nivel fecha hora nombre clase (archivo:metodo:linea) - mensaje -->
+			<PatternLayout pattern="%p %d [%C](%F:%M:%L)-%m%n" />
+			<Policies>
+				<!-- Log diario -->
+				<CronTriggeringPolicy schedule="0 0 0 * * ?" />
+				<!-- Tamaño máximo de archivo -->
+				<SizeBasedTriggeringPolicy size="1 MB" />
+			</Policies>
+		</RollingFile>
+
+	</Appenders>
+	<Loggers>
+		<Root level="debug">
+			<AppenderRef ref="STDOUT" />
+			<AppenderRef ref="RollingFile" />
+		</Root>
+	</Loggers>
+
+
+
+</Configuration>

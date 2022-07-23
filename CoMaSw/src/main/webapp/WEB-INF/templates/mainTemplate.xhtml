@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+
+
+<h:form id="mainFormTop">
+
+	<h:head id="maintTemplateHead">
+		<meta charset="UTF-8" />
+		<!--  check if the user is logged -->
+		<f:event type="preRenderView"
+			listener="#{mainTemplateController.verifySession()}" />
+		<title>#{pageTitle.templatePage}</title>
+
+
+		<p:toolbar>
+			<p:toolbarGroup>
+				<p:commandButton id="menu" value="menu"
+					icon="#{uiValue.arrowMenuIcon}" type="button"
+					onclick="PF('sidebar').show()"
+					styleClass="p-mr-2 ui-button-success" />
+			</p:toolbarGroup>
+			<p:toolbarGroup>
+				<p:outputLabel id="title" value="#{title}" style="font-weight: bold"></p:outputLabel>
+			</p:toolbarGroup>
+			<p:toolbarGroup>
+				<p:commandButton id="configuration" value="Configuration"
+					rendered="#{applicationMenuController.viewEditUserProfilesOption()}"
+					icon="#{uiValue.adjustItem}" type="button" />
+				<p:menu label="adminConfiguration" overlay="true"
+					trigger="configuration" my="right top" at="right bottom">
+					<p:submenu id="configurations">
+						<p:menuitem value="Manage Users" icon="pi pi-users"
+							action="#{applicationMenuController.goToManageUser()}"
+							ajax="false" />
+					</p:submenu>
+				</p:menu>
+				<p:divider layout="vertical" />
+				<p:commandButton id="profile" value="#{request.userPrincipal.name}"
+					icon="#{uiValue.userItem}" type="button" />
+				<p:menu label="Options" overlay="true" trigger="profile"
+					my="right top" at="right bottom">
+					<p:submenu id="userInfoSubmenu">
+						<p:menuitem value="View User Info"
+							icon="#{uiValue.identityCardItem}" update="@form"
+							action="#{applicationMenuController.goToUserProfile()}"
+							ajax="false" />
+					</p:submenu>
+					<p:submenu id="logoutSubmenu">
+						<p:menuitem id="logout" update="@form" value="logout"
+							styleClass="ui-button-danger" icon="#{uiValue.logoutItem}"
+							action="#{logoutController.submit()}" />
+					</p:submenu>
+				</p:menu>
+			</p:toolbarGroup>
+		</p:toolbar>
+
+
+	</h:head>
+
+	<h:body id="mainTemplateBody">
+
+	<p:sidebar widgetVar="sidebar" position="top"  style="height:20%" >
+			<p />
+			<ui:insert id="topPanel" name="top">
+				<ui:insert id="topTemplate" name="top">
+					<ui:include id="includeApplicationMenu"
+						src="../includes/layout/applicationMenu.xhtml">
+					</ui:include>
+				</ui:insert>
+			</ui:insert>
+
+		</p:sidebar>
+	</h:body>
+
+</h:form>
+</html>

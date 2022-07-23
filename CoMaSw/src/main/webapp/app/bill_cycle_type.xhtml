@@ -1,0 +1,475 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+<f:metadata>
+	<f:viewAction id="loadData"
+		action="#{billCycleTypeController.loadDataList()}"
+		phase="INVOKE_APPLICATION">
+	</f:viewAction>
+	<f:viewAction id="defaultControlVariables"
+		action="#{billCycleTypeController.setInitVariablesToDefault()}"
+		phase="INVOKE_APPLICATION">
+	</f:viewAction>
+</f:metadata>
+
+
+<title>#{pageTitle.billCycleTypePage}</title>
+
+<body>
+	<h:outputStylesheet library="webjars"
+		name="primeflex/2.0.0/primeflex.min.css" />
+
+	<header>
+		<ui:include id="mainTemplate"
+			src="/WEB-INF/templates/mainTemplate.xhtml">
+			<ui:param name="title" value="BILL CYCLE TYPE" />
+		</ui:include>
+	</header>
+	<h:form id="form">
+		<p:growl id="growlMessage" showDetail="true" keepAlive="true">
+			<p:autoUpdate />
+		</p:growl>
+
+
+
+		<!--  DATA TABLE -->
+
+		<p:remoteCommand id="remoteCommandUpdateDataTable"
+			name="updateDataTable" process="@this" update="form:dataTable" />
+
+		<p:dataTable id="dataTable" widgetVar="dataTableWidget"
+			var="dataTable" value="#{billCycleTypeController.dataList}"
+			filteredValue="#{billCycleTypeController.filteredDataList}"
+			showGridlines="true" stripedRows="true" scrollable="true"
+			reflow="true" editable="true" rowIndexVar="rowIndexDataTable"
+			paginator="true" rows="10" size="small" paginatorPosition="bottom">
+
+			<!--  DATA TABLE - HEADER -->
+			<f:facet name="header">
+				<p:toolbar>
+					<p:toolbarGroup>
+						<h3>BILL CYCLE TYPE DATA TABLE</h3>
+						<p:divider layout="vertical">
+						</p:divider>
+						<p:commandButton id="createNewButton" value="New data"
+							icon="#{uiValue.addIcon}" ajax="true"
+							actionListener="#{billCycleTypeController.pushCreateNewButton()}"
+							rendered="#{billCycleTypeController.canUserModify()}"
+							disabled="#{billCycleTypeController.editingMode}"
+							update=":form:createNewDialogPanelData"
+							styleClass="ui-button-info" style="margin-right: .5rem">
+							<p:resetInput target=":form:createNewDialogPanelData" />
+						</p:commandButton>
+					</p:toolbarGroup>
+				</p:toolbar>
+			</f:facet>
+
+			<!--  DATA TABLE - FOOTER -->
+			<f:facet id="facetFooter" name="footer">
+			</f:facet>
+
+			<!--  DATA TABLE - MANAGE EDIT EVENTS -->
+			<p:ajax id="ajaxRowEditInit" event="rowEditInit"
+				listener="#{billCycleTypeController.onRowInit}"
+				disabled="#{billCycleTypeController.editingMode}"
+				update="form:growlMessage createNewButton  form:dataTable">
+			</p:ajax>
+			<p:ajax id="ajaxRowEdit" event="rowEdit"
+				listener="#{billCycleTypeController.onRowEdit}"
+				update="form:growlMessage"
+				oncomplete="if (!args.validationFailed) {updateDataTable()}">
+			</p:ajax>
+			<p:ajax id="ajaxRowEditCancel" event="rowEditCancel"
+				listener="#{billCycleTypeController.onRowCancel}"
+				update="form:growlMessage" oncomplete="updateDataTable()">
+			</p:ajax>
+
+
+			<!--  DATA TABLE - EDITABLE COLUMNS -->
+			<p:column id="deleteRow" exportable="false"
+				style="font-family:Arial Black;
+                                   text-align: center;
+                                   font-size: 11px;
+                                   width: 60px;    
+                                   overflow: hidden"
+				headerText="DEL ROW"
+				rendered="#{billCycleTypeController.canUserModify()}">
+				<p:commandButton id="deleteRowButton"
+					class="ui-button-warning rounded-button"
+					icon="#{uiValue.deleteIcon}"
+					actionListener="#{billCycleTypeController.pushDeleteRowButton()}"
+					immediate="true" onclick="PF('deleteRowDialogWidget').show()"
+					disabled="#{billCycleTypeController.editingMode}"
+					oncomplete="if(!args.validationFailed) {updateDataTable()}"
+					rendered="#{billCycleTypeController.canUserModify()}">
+					<f:setPropertyActionListener value="#{dataTable}"
+						target="#{billCycleTypeController.selectedData}" />
+				</p:commandButton>
+			</p:column>
+
+			<p:column id="editRow"
+				style="font-family:Arial Black;
+                                  text-align: center;
+                                  font-size: 11px;
+                                  width: 60px;    
+                                  overflow: hidden"
+				headerText="EDIT ROW"
+				rendered="#{billCycleTypeController.canUserModify()}">
+				<p:rowEditor id="editRowButton" editTitle="Edit Row"
+					cancelTitle="Cancel Edit" saveTitle="Save Row"
+					rendered="#{billCycleTypeController.canUserModify()}">
+				</p:rowEditor>
+			</p:column>
+
+
+			<!--  DATA TABLE - DATA COLUMNS -->
+
+			<p:column id="code"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="CODE" rendered="true" sortBy="#{dataTable.code}"
+				filterBy="#{dataTable.code}" filterMatchMode="contains">
+				<h:outputText id="codeOutput" value="#{dataTable.code}" />
+			</p:column>
+			
+			<p:column id="name"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="NAME" rendered="true" sortBy="#{dataTable.name}"
+				filterBy="#{dataTable.name}" filterMatchMode="contains">
+				<p:cellEditor id="cellEditorName">
+					<f:facet id="facetNameOutput" name="output">
+						<h:outputText id="nameOutput" value="#{dataTable.name}" />
+					</f:facet>
+					<f:facet id="facetNameInput" name="input">
+						<p:inputText id="nameInput" label="Name" value="#{dataTable.name}"
+							style="width:96%">
+							<p:ajax event="change" update="nameOutput" />
+						</p:inputText>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			
+			<p:column id="description"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="DESCRIPTION" rendered="true"
+				sortBy="#{dataTable.description}"
+				filterBy="#{dataTable.description}" filterMatchMode="contains">
+				<p:cellEditor id="cellEditorDescription">
+					<f:facet id="facetDescriptionOutput" name="output">
+						<h:outputText id="descriptionOutput"
+							value="#{dataTable.description}" />
+					</f:facet>
+					<f:facet id="facetDescriptionInput" name="input">
+						<p:inputText id="descriptionInput" label="Description"
+							value="#{dataTable.description}" style="width:96%">
+							<p:ajax event="change" update="descriptionOutput" />
+						</p:inputText>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			
+			<p:column id="corrective"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="CORRECTIVE?" rendered="true"
+				filterBy="#{dataTable.corrective}" filterMatchMode="exact">
+				<f:facet id="correctiveFilter" name="filter">
+					<p:selectOneMenu id="correctiveFilterMenu"
+						onchange="PF('dataTableWidget').filter()">
+						<f:selectItems id="correctiveFilterSelectItems"
+							value="#{billCycleTypeController.booleanSelectItems()}" />
+					</p:selectOneMenu>
+				</f:facet>
+				<p:cellEditor id="correctiveCellEditor">
+					<f:facet id="correctiveOutputFacet" name="output">
+						<p:selectOneMenu id="correctiveOutput" editable="false"
+							disabled="true" immediate="true" value="#{dataTable.corrective}">
+							<f:selectItems
+								value="#{billCycleTypeController.booleanSelectItems()}"
+								id="selectItemsCorrectiveOutput" itemDisabled="true"
+								var="Corrective" itemValue="#{dataTable.corrective}" />
+						</p:selectOneMenu>
+					</f:facet>
+					<f:facet id="correctiveInputFacet" name="input">
+						<p:selectOneMenu id="correctiveInput"
+							value="#{dataTable.corrective}" immediate="true">
+							<f:selectItems
+								value="#{billCycleTypeController.booleanSelectItems()}"
+								id="selectItemsCorrectiveInput" var="Corrective"
+								itemValue="#{dataTable.corrective}">
+							</f:selectItems>
+							<f:param id="currentRowActive" name="currentRow"
+								value="#{rowIndexDataTable}" />
+							<p:ajax event="change" immediate="true" update="correctiveOutput" />
+						</p:selectOneMenu>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column id="billingPeriod"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="BILLING PERIOD" rendered="true"
+				filterBy="#{dataTable.billingPeriodId}" filterMatchMode="exact">
+				<f:facet id="billingPeriodFilter" name="filter">
+					<p:selectOneMenu id="billingPeriodFilterMenu"
+						onchange="PF('dataTableWidget').filter()">
+						<f:selectItems id="billingPeriodFilterSelectItems"
+							value="#{billCycleTypeController.billingPeriodSelectItems()}" />
+					</p:selectOneMenu>
+				</f:facet>
+				<p:cellEditor id="billingPeriodIdCellEditor">
+					<f:facet id="billingPeriodIdOutputFacet" name="output">
+						<p:selectOneMenu id="billingPeriodOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{dataTable.billingPeriodId}">
+							<f:selectItems
+								value="#{billCycleTypeController.billingPeriodSelectItems()}"
+								id="selectItemsBillingPeriodOutput" itemDisabled="true"
+								var="BillingPeriod" itemValue="#{dataTable.billingPeriodId}" />
+						</p:selectOneMenu>
+					</f:facet>
+					<f:facet id="billingPeriodIdInputFacet" name="input">
+						<p:selectOneMenu id="billingPeriodInput"
+							value="#{dataTable.billingPeriodId}" immediate="true">
+							<f:selectItems
+								value="#{billCycleTypeController.billingPeriodSelectItems()}"
+								id="selectItemsBillingPeriodInput" var="BillingPeriod"
+								itemValue="#{dataTable.billingPeriodId}">
+
+							</f:selectItems>
+							<f:param id="currentRowBillingPeriod" name="currentRow"
+								value="#{rowIndexDataTable}" />
+							<p:ajax event="change" immediate="true"
+								update="billingPeriodOutput" />
+						</p:selectOneMenu>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column id="billCycleDay"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="BILL CICLE DAY" rendered="true"
+				sortBy="#{dataTable.billCycleDay}"
+				filterBy="#{dataTable.billCycleDay}" filterMatchMode="contains">
+				<h:outputText id="filterBillCycleDay" value="" />
+				<p:cellEditor id="cellEditorBillCycleDays">
+					<f:facet id="facetBillCycleDayOutput" name="output">
+						<h:outputText id="billCycleDayOutput"
+							value="#{dataTable.billCycleDay}" />
+					</f:facet>
+					<f:facet id="facetBillCycleDayInput" name="input">
+						<p:inputNumber id="billCycleDayInput" label="BillCycleDay"
+							decimalPlaces="0" value="#{dataTable.billCycleDay}"
+							style="width:96%">
+							<p:ajax event="change" update="billCycleDayOutput" />
+						</p:inputNumber>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column id="codenum"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="CODENUM" rendered="true"
+				sortBy="#{dataTable.billCycleCodenum}"
+				filterBy="#{dataTable.billCycleCodenum}" filterMatchMode="contains">
+				<h:outputText id="filterCodeNum" value="" />
+				<p:cellEditor id="cellEditorCodeNum">
+					<f:facet id="facetCodeNumOutput" name="output">
+						<h:outputText id="codeNumOutput"
+							value="#{dataTable.billCycleCodenum}" />
+					</f:facet>
+					<f:facet id="facetCodeNumInput" name="input">
+						<p:inputText id="codeNumInput" label="CodeNum"
+							value="#{dataTable.billCycleCodenum}" style="width:96%">
+							<p:ajax event="change" update="codeNumOutput" />
+						</p:inputText>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column id="status"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="STATUS" rendered="true" filterBy="#{dataTable.statusId}"
+				filterMatchMode="exact">
+				<f:facet id="statusFilter" name="filter">
+					<p:selectOneMenu id="statusFilterMenu"
+						onchange="PF('dataTableWidget').filter()">
+						<f:selectItems id="statusFilterSelectItems"
+							value="#{billCycleTypeController.statusSelectItems()}" />
+					</p:selectOneMenu>
+				</f:facet>
+				<p:cellEditor id="statusIdCellEditor">
+					<f:facet id="statusIdOutputFacet" name="output">
+						<p:selectOneMenu id="statusOutput" editable="false"
+							disabled="true" immediate="true" value="#{dataTable.statusId}">
+							<f:selectItems
+								value="#{billCycleTypeController.statusSelectItems()}"
+								id="selectItemsStatusOutput" itemDisabled="true" var="Status"
+								itemValue="#{dataTable.statusId}" />
+						</p:selectOneMenu>
+					</f:facet>
+					<f:facet id="statusIdInputFacet" name="input">
+						<p:selectOneMenu id="statusnput" value="#{dataTable.statusId}"
+							immediate="true">
+							<f:selectItems
+								value="#{billCycleTypeController.statusSelectItems()}"
+								id="selectItemsStatusInput" var="Status"
+								itemValue="#{dataTable.statusId}">
+
+							</f:selectItems>
+							<f:param id="currentRowStatus" name="currentRow"
+								value="#{rowIndexDataTable}" />
+							<p:ajax event="change" immediate="true" update="statusOutput" />
+						</p:selectOneMenu>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+		</p:dataTable>
+
+		<!--  CREATE NEW DIALOG -->
+		<p:dialog id="createNewDialog" header="Create new Bill Cycle Type"
+			showEffect="fade" responsive="true" widgetVar="createNewDialogWidget">
+
+			<h:panelGrid id="createNewDialogPanelData" columns="2"
+				cellpadding="5">
+				<p:outputLabel id="newCodeLabel" value="Code: " />
+				<p:inputText id="newCodeInput" label="Code"
+					value="#{billCycleTypeController.selectedData.code}">
+				</p:inputText>
+
+				<p:outputLabel id="newNameLabel" value="Name: " />
+				<p:inputText id="newNameInput" label="Name"
+					value="#{billCycleTypeController.selectedData.name}">
+				</p:inputText>
+
+				<p:outputLabel id="newDescriptionLabel" value="Description: " />
+				<p:inputText id="newDescriptionInput" label="Description"
+					value="#{billCycleTypeController.selectedData.description}">
+				</p:inputText>
+
+				<p:outputLabel id="newCorrectiveLabel" value="Corrective?: " />
+				<p:selectOneMenu id="correctiveInput"
+					value="#{billCycleTypeController.selectedData.corrective}"
+					immediate="true">
+					<f:selectItems
+						value="#{billCycleTypeController.booleanSelectItems()}"
+						id="selectItemsCorrectiveInput" var="Corrective"
+						itemValue="#{billCycleTypeController.selectedData.corrective}">
+					</f:selectItems>
+				</p:selectOneMenu>
+
+				<p:outputLabel id="newBillingPeriodLabel" value="Billing Period: " />
+				<p:selectOneMenu id="billingPeriodInput"
+					value="#{billCycleTypeController.selectedData.billingPeriodId}"
+					immediate="true">
+					<f:selectItems
+						value="#{billCycleTypeController.billingPeriodSelectItems()}"
+						id="selectItemsBillingPeriodInput" var="BillingPeriod"
+						itemValue="#{billCycleTypeController.selectedData.billingPeriodId}">
+					</f:selectItems>
+				</p:selectOneMenu>
+
+				<p:outputLabel id="newBillCycleDayLabel"
+					value="Bill Cycle Day (1-31): " />
+				<p:inputNumber id="newBillCycleDayInput" label="BillCycleDay"
+					decimalPlaces="0"
+					value="#{billCycleTypeController.selectedData.billCycleDay}">
+				</p:inputNumber>
+
+				<p:outputLabel id="newCodeNumLabel" value="CodeNum: " />
+				<p:inputText id="newCodeNumInput" label="CodeNum"
+					value="#{billCycleTypeController.selectedData.billCycleCodenum}">
+				</p:inputText>
+
+				<p:outputLabel id="newStatusLabel" value="Status: " />
+				<p:selectOneMenu id="statusInput"
+					value="#{billCycleTypeController.selectedData.statusId}"
+					immediate="true">
+					<f:selectItems
+						value="#{billCycleTypeController.statusSelectItems()}"
+						id="selectItemsStatusInput" var="Status"
+						itemValue="#{billCycleTypeController.selectedData.statusId}">
+					</f:selectItems>
+				</p:selectOneMenu>
+
+
+			</h:panelGrid>
+			<h:panelGrid id="createNewDialogPanelButtons" columns="3"
+				cellpadding="5">
+				<p:commandButton id="createNewDialogConfirm"
+					value="#{uiValue.okLabel}" update="form:growlMessage"
+					actionListener="#{billCycleTypeController.pushConfirmButtonCreateNewDialog()}"
+					styleClass="ui-confirmdialog-yes" icon="#{uiValue.okCircleIcon}"
+					oncomplete="if (!args.validationFailed) {updateDataTable()}">
+				</p:commandButton>
+				<p:commandButton id="createNewDialogCancel"
+					value="#{uiValue.cancelLabel}" icon="#{uiValue.cancelCircleIcon}"
+					update="form:growlMessage"
+					onclick="PF('createNewDialogWidget').hide()"
+					class="ui-button-secondary" />
+				<p:commandButton id="createNewDialogClean"
+					value="#{uiValue.cleanLabel}" icon="#{uiValue.cleanCircleIcon}"
+					update="createNewDialogPanelData form:growlMessage" process="@this"
+					class="ui-button-secondary">
+					<p:resetInput target="createNewDialogPanelData" />
+				</p:commandButton>
+			</h:panelGrid>
+		</p:dialog>
+
+		<!--  DELETE ROW DIALOG -->
+		<p:confirmDialog global="true" styleClass="change-position"
+			showEffect="fade" responsive="true" widgetVar="deleteRowDialogWidget"
+			header="DELETE ROW"
+			message="Do you really want to delete this row?">
+			<p:commandButton id="deleteDialogConfirm" value="#{uiValue.okLabel}"
+				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
+				actionListener="#{billCycleTypeController.pushConfirmButtonDeleteDialog()}"
+				oncomplete="updateDataTable(); PF('deleteRowDialogWidget').hide()"
+				process="@this" icon="#{uiValue.okCircleIcon}" />
+			<p:commandButton id="deleteDialogCancel"
+				value="#{uiValue.cancelLabel}" styleClass="ui-confirmdialog-no"
+				update="form:growlMessage"
+				oncomplete="PF('deleteDialogConfirm').hide()" type="button"
+				process="@this" icon="#{uiValue.cancelCircleIcon}" />
+		</p:confirmDialog>
+
+	</h:form>
+
+</body>
+</html>

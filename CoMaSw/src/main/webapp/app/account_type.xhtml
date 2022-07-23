@@ -1,0 +1,474 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+<f:metadata>
+	<f:viewAction id="loadData"
+		action="#{accountTypeController.loadDataList()}"
+		phase="INVOKE_APPLICATION">
+	</f:viewAction>
+	<f:viewAction id="defaultControlVariables"
+		action="#{accountTypeController.setInitVariablesToDefault()}"
+		phase="INVOKE_APPLICATION">
+	</f:viewAction>
+</f:metadata>
+
+
+<title>#{pageTitle.accountTypePage}</title>
+
+<body>
+	<h:outputStylesheet library="webjars"
+		name="primeflex/2.0.0/primeflex.min.css" />
+
+	<header>
+		<ui:include id="mainTemplate"
+			src="/WEB-INF/templates/mainTemplate.xhtml">
+			<ui:param name="title" value="ACCOUNT TYPE" />
+		</ui:include>
+	</header>
+	<h:form id="form">
+		<p:growl id="growlMessage" showDetail="true" keepAlive="true">
+			<p:autoUpdate />
+		</p:growl>
+
+
+
+		<!--  DATA TABLE -->
+
+		<p:remoteCommand id="remoteCommandUpdateDataTable"
+			name="updateDataTable" process="@this" update="form:dataTable" />
+
+		<p:dataTable id="dataTable" widgetVar="dataTableWidget"
+			var="dataTable" value="#{accountTypeController.dataList}"
+			filteredValue="#{accountTypeController.filteredDataList}"
+			showGridlines="true" stripedRows="true" scrollable="true"
+			reflow="true" editable="true" rowIndexVar="rowIndexDataTable"
+			paginator="true" rows="10" size="small" paginatorPosition="bottom">
+
+			<!--  DATA TABLE - HEADER -->
+			<f:facet name="header">
+				<p:toolbar>
+					<p:toolbarGroup>
+						<h3>ACCOUNT TYPE DATA TABLE</h3>
+						<p:divider layout="vertical">
+						</p:divider>
+						<p:commandButton id="createNewButton" value="New data"
+							icon="#{uiValue.addIcon}" ajax="true"
+							actionListener="#{accountTypeController.pushCreateNewButton()}"
+							rendered="#{accountTypeController.canUserModify()}"
+							disabled="#{accountTypeController.editingMode}"
+							update=":form:createNewDialogPanelData"
+							styleClass="ui-button-info" style="margin-right: .5rem">
+							<p:resetInput target=":form:createNewDialogPanelData" />
+						</p:commandButton>
+					</p:toolbarGroup>
+				</p:toolbar>
+			</f:facet>
+
+			<!--  DATA TABLE - FOOTER -->
+			<f:facet id="facetFooter" name="footer">
+			</f:facet>
+
+			<!--  DATA TABLE - MANAGE EDIT EVENTS -->
+			<p:ajax id="ajaxRowEditInit" event="rowEditInit"
+				listener="#{accountTypeController.onRowInit}"
+				disabled="#{accountTypeController.editingMode}"
+				update="form:growlMessage createNewButton  form:dataTable">
+			</p:ajax>
+			<p:ajax id="ajaxRowEdit" event="rowEdit"
+				listener="#{accountTypeController.onRowEdit}"
+				update="form:growlMessage"
+				oncomplete="if (!args.validationFailed) {updateDataTable()}">
+			</p:ajax>
+			<p:ajax id="ajaxRowEditCancel" event="rowEditCancel"
+				listener="#{accountTypeController.onRowCancel}"
+				update="form:growlMessage" oncomplete="updateDataTable()">
+			</p:ajax>
+
+
+			<!--  DATA TABLE - EDITABLE COLUMNS -->
+			<p:column id="deleteRow" exportable="false"
+				style="font-family:Arial Black;
+                                   text-align: center;
+                                   font-size: 11px;
+                                   width: 60px;    
+                                   overflow: hidden"
+				headerText="DEL ROW"
+				rendered="#{accountTypeController.canUserModify()}">
+				<p:commandButton id="deleteRowButton"
+					class="ui-button-warning rounded-button"
+					icon="#{uiValue.deleteIcon}"
+					actionListener="#{accountTypeController.pushDeleteRowButton()}"
+					immediate="true" onclick="PF('deleteRowDialogWidget').show()"
+					disabled="#{accountTypeController.editingMode}"
+					oncomplete="if(!args.validationFailed) {updateDataTable()}"
+					rendered="#{accountTypeController.canUserModify()}">
+					<f:setPropertyActionListener value="#{dataTable}"
+						target="#{accountTypeController.selectedData}" />
+				</p:commandButton>
+			</p:column>
+			<p:column id="editRow"
+				style="font-family:Arial Black;
+                                  text-align: center;
+                                  font-size: 11px;
+                                  width: 60px;    
+                                  overflow: hidden"
+				headerText="EDIT ROW"
+				rendered="#{accountTypeController.canUserModify()}">
+				<p:rowEditor id="editRowButton" editTitle="Edit Row"
+					cancelTitle="Cancel Edit" saveTitle="Save Row"
+					rendered="#{accountTypeController.canUserModify()}">
+				</p:rowEditor>
+			</p:column>
+
+
+			<!--  DATA TABLE - DATA COLUMNS -->
+
+			<p:column id="code"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="CODE" rendered="true" sortBy="#{dataTable.code}"
+				filterBy="#{dataTable.code}" filterMatchMode="contains">
+				<h:outputText id="codeOutput" value="#{dataTable.code}" />
+			</p:column>
+
+			<p:column id="name"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="NAME" rendered="true" sortBy="#{dataTable.name}"
+				filterBy="#{dataTable.name}" filterMatchMode="contains">
+				<h:outputText id="filterName" value="" />
+				<p:cellEditor id="cellEditorName">
+					<f:facet id="facetNameOutput" name="output">
+						<h:outputText id="nameOutput" value="#{dataTable.name}" />
+					</f:facet>
+					<f:facet id="facetNameInput" name="input">
+						<p:inputText id="nameInput" label="Name" value="#{dataTable.name}"
+							style="width:96%">
+							<p:ajax event="change" update="nameOutput" />
+						</p:inputText>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column id="description"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="DESCRIPTION" rendered="true"
+				sortBy="#{dataTable.description}"
+				filterBy="#{dataTable.description}" filterMatchMode="contains">
+				<p:cellEditor id="cellEditorDescription">
+					<f:facet id="facetDescriptionOutput" name="output">
+						<h:outputText id="descriptionOutput"
+							value="#{dataTable.description}" />
+					</f:facet>
+					<f:facet id="facetDescriptionInput" name="input">
+						<p:inputText id="descriptionInput" label="Description"
+							value="#{dataTable.description}" style="width:96%">
+							<p:ajax event="change" update="descriptionOutput" />
+						</p:inputText>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column id="paymentMethod"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="PAYMENT METHOD" rendered="true"
+				filterBy="#{dataTable.paymentMethodId}" filterMatchMode="exact">
+				<f:facet id="paymentMethodFilter" name="filter">
+					<p:selectOneMenu id="paymentMethodFilterMenu"
+						onchange="PF('dataTableWidget').filter()">
+						<f:selectItems id="paymentMethodFilterSelectItems"
+							value="#{accountTypeController.paymentMethodSelectItems()}" />
+					</p:selectOneMenu>
+				</f:facet>
+				<p:cellEditor id="paymentMethodCellEditor">
+					<f:facet id="paymentMethodOutputFacet" name="output">
+						<p:selectOneMenu id="paymentMethodOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{dataTable.paymentMethodId}">
+							<f:selectItems
+								value="#{accountTypeController.paymentMethodSelectItems()}"
+								id="selectItemsPaymentMethodOutput" itemDisabled="true"
+								var="OrdinaryCycle" itemValue="#{dataTable.paymentMethodId}" />
+						</p:selectOneMenu>
+					</f:facet>
+					<f:facet id="paymentMethodInputFacet" name="input">
+						<p:selectOneMenu id="paymentMethodInput"
+							value="#{dataTable.paymentMethodId}" immediate="true">
+							<f:selectItems
+								value="#{accountTypeController.paymentMethodSelectItems()}"
+								id="selectItemsPaymentMethodInput" var="PaymentMethod"
+								itemValue="#{dataTable.paymentMethodId}">
+							</f:selectItems>
+							<f:param id="currentRowPaymentMethod" name="currentRow"
+								value="#{rowIndexDataTable}" />
+							<p:ajax event="change" immediate="true"
+								update="paymentMethodOutput" />
+						</p:selectOneMenu>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column id="ordinaryCycle"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="ORDINARY CYCLE" rendered="true"
+				filterBy="#{dataTable.ordinaryBillCycleTypeId}"
+				filterMatchMode="exact">
+				<f:facet id="ordinaryFilter" name="filter">
+					<p:selectOneMenu id="ordinaryFilterMenu"
+						onchange="PF('dataTableWidget').filter()">
+						<f:selectItems id="ordinaryFilterSelectItems"
+							value="#{accountTypeController.ordinaryBillCycleSelectItemsMenu()}" />
+					</p:selectOneMenu>
+				</f:facet>
+				<p:cellEditor id="ordinaryCycleCellEditor">
+					<f:facet id="ordinaryCycleOutputFacet" name="output">
+						<p:selectOneMenu id="ordinaryCycleOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{dataTable.ordinaryBillCycleTypeId}">
+							<f:selectItems
+								value="#{accountTypeController.ordinaryBillCycleSelectItemsMenu()}"
+								id="selectItemsOrdinaryCycleOutput" itemDisabled="true"
+								var="OrdinaryCycle"
+								itemValue="#{dataTable.ordinaryBillCycleTypeId}" />
+						</p:selectOneMenu>
+					</f:facet>
+					<f:facet id="ordinaryCycleInputFacet" name="input">
+						<p:selectOneMenu id="ordinaryCycleInput"
+							value="#{dataTable.ordinaryBillCycleTypeId}" immediate="true">
+							<f:selectItems
+								value="#{accountTypeController.ordinaryBillCycleSelectItemsMenu()}"
+								id="selectItemsOrdinaryCycleInput" var="OrdinaryCycle"
+								itemValue="#{dataTable.ordinaryBillCycleTypeId}">
+							</f:selectItems>
+							<f:param id="currentRowOrdinaryCycle" name="currentRow"
+								value="#{rowIndexDataTable}" />
+							<p:ajax event="change" immediate="true"
+								update="ordinaryCycleOutput" />
+						</p:selectOneMenu>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column id="correctiveCycle"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="CORRECTIVE CYCLE" rendered="true"
+				filterBy="#{dataTable.correctiveBillCycleTypeId}"
+				filterMatchMode="exact">
+				<f:facet id="correctiveFilter" name="filter">
+					<p:selectOneMenu id="correctiveFilterMenu"
+						onchange="PF('dataTableWidget').filter()">
+						<f:selectItems id="correctiveFilterSelectItems"
+							value="#{accountTypeController.correctiveBillCycleSelectItemsMenu()}" />
+					</p:selectOneMenu>
+				</f:facet>
+				<p:cellEditor id="correctiveCycleCellEditor">
+					<f:facet id="correctiveCycleOutputFacet" name="output">
+						<p:selectOneMenu id="correctiveCycleOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{dataTable.correctiveBillCycleTypeId}">
+							<f:selectItems
+								value="#{accountTypeController.correctiveBillCycleSelectItemsMenu()}"
+								id="selectItemsCorrectiveCycleOutput" itemDisabled="true"
+								var="CorrectiveCycle"
+								itemValue="#{dataTable.correctiveBillCycleTypeId}" />
+						</p:selectOneMenu>
+					</f:facet>
+					<f:facet id="correctiveCycleInputFacet" name="input">
+						<p:selectOneMenu id="correctiveCycleInput"
+							value="#{dataTable.correctiveBillCycleTypeId}" immediate="true">
+							<f:selectItems
+								value="#{accountTypeController.correctiveBillCycleSelectItemsMenu()}"
+								id="selectItemsCorrectiveCycleInput" var="CorrectiveCycle"
+								itemValue="#{dataTable.correctiveBillCycleTypeId}">
+							</f:selectItems>
+							<f:param id="currentRowCorrectiveCycle" name="currentRow"
+								value="#{rowIndexDataTable}" />
+							<p:ajax event="change" immediate="true"
+								update="correctiveCycleOutput" />
+						</p:selectOneMenu>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column id="status"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="STATUS" rendered="true" filterBy="#{dataTable.statusId}"
+				filterMatchMode="exact">
+				<f:facet id="statusFilter" name="filter">
+					<p:selectOneMenu id="statusFilterMenu"
+						onchange="PF('dataTableWidget').filter()">
+						<f:selectItems id="statusFilterSelectItems"
+							value="#{accountTypeController.statusSelectItems()}" />
+					</p:selectOneMenu>
+				</f:facet>
+				<p:cellEditor id="statusIdCellEditor">
+					<f:facet id="statusIdOutputFacet" name="output">
+						<p:selectOneMenu id="statusOutput" editable="false"
+							disabled="true" immediate="true" value="#{dataTable.statusId}">
+							<f:selectItems
+								value="#{accountTypeController.statusSelectItems()}"
+								id="selectItemsStatusOutput" itemDisabled="true" var="Status"
+								itemValue="#{dataTable.statusId}" />
+						</p:selectOneMenu>
+					</f:facet>
+					<f:facet id="statusIdInputFacet" name="input">
+						<p:selectOneMenu id="statusnput" value="#{dataTable.statusId}"
+							immediate="true">
+							<f:selectItems
+								value="#{accountTypeController.statusSelectItems()}"
+								id="selectItemsStatusInput" var="Status"
+								itemValue="#{dataTable.statusId}">
+
+							</f:selectItems>
+							<f:param id="currentRowStatus" name="currentRow"
+								value="#{rowIndexDataTable}" />
+							<p:ajax event="change" immediate="true" update="statusOutput" />
+						</p:selectOneMenu>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+		</p:dataTable>
+
+		<!--  CREATE NEW DIALOG -->
+		<p:dialog id="createNewDialog" header="Create new Account Type"
+			showEffect="fade" responsive="true" widgetVar="createNewDialogWidget">
+
+			<h:panelGrid id="createNewDialogPanelData" columns="2"
+				cellpadding="5">
+				<p:outputLabel id="newCodeLabel" value="Code: " />
+				<p:inputText id="newCodeInput" label="Code"
+					value="#{accountTypeController.selectedData.code}">
+				</p:inputText>
+
+				<p:outputLabel id="newNameLabel" value="Name: " />
+				<p:inputText id="newNameInput" label="Name"
+					value="#{accountTypeController.selectedData.name}">
+				</p:inputText>
+
+				<p:outputLabel id="newDescriptionLabel" value="Description: " />
+				<p:inputText id="newDescriptionInput" label="Description"
+					value="#{accountTypeController.selectedData.description}">
+				</p:inputText>
+
+				<p:outputLabel id="newPaymentMethodLabel" value="Payment Method " />
+				<p:selectOneMenu id="paymentMethodInput"
+					value="#{accountTypeController.selectedData.paymentMethodId}"
+					immediate="true">
+					<f:selectItems
+						value="#{accountTypeController.paymentMethodSelectItems()}"
+						id="selectItemsPaymentMethodInput" var="PaymentMethod"
+						itemValue="#{accountTypeController.selectedData.paymentMethodId}">
+					</f:selectItems>
+				</p:selectOneMenu>
+
+				<p:outputLabel id="newOrdinaryBillCycleLabel"
+					value="Ordinary Bill Cycle Type " />
+				<p:selectOneMenu id="ordinaryBillCycleInput"
+					value="#{accountTypeController.selectedData.ordinaryBillCycleTypeId}"
+					immediate="true">
+					<f:selectItems
+						value="#{accountTypeController.ordinaryBillCycleSelectItemsMenu()}"
+						id="selectItemsOrdinaryBillCycleInput" var="OrdinaryBillCycle"
+						itemValue="#{accountTypeController.selectedData.ordinaryBillCycleTypeId}">
+					</f:selectItems>
+				</p:selectOneMenu>
+
+				<p:outputLabel id="newCorrectiveBillCycleLabel"
+					value="Corrective Bill Cycle Type " />
+				<p:selectOneMenu id="correctiveBillCycleInput"
+					value="#{accountTypeController.selectedData.correctiveBillCycleTypeId}"
+					immediate="true">
+					<f:selectItems
+						value="#{accountTypeController.correctiveBillCycleSelectItemsMenu()}"
+						id="selectItemsCorrectiveBillCycleInput" var="CorrectiveBillCycle"
+						itemValue="#{accountTypeController.selectedData.correctiveBillCycleTypeId}">
+					</f:selectItems>
+				</p:selectOneMenu>
+
+				<p:outputLabel id="newStatusLabel" value="Status: " />
+				<p:selectOneMenu id="statusInput"
+					value="#{accountTypeController.selectedData.statusId}"
+					immediate="true">
+					<f:selectItems value="#{accountTypeController.statusSelectItems()}"
+						id="selectItemsStatusInput" var="Status"
+						itemValue="#{accountTypeController.selectedData.statusId}">
+					</f:selectItems>
+				</p:selectOneMenu>
+
+
+			</h:panelGrid>
+			<h:panelGrid id="createNewDialogPanelButtons" columns="3"
+				cellpadding="5">
+				<p:commandButton id="createNewDialogConfirm"
+					value="#{uiValue.okLabel}" update="form:growlMessage"
+					actionListener="#{accountTypeController.pushConfirmButtonCreateNewDialog()}"
+					styleClass="ui-confirmdialog-yes" icon="#{uiValue.okCircleIcon}"
+					oncomplete="if (!args.validationFailed) {updateDataTable()}">
+				</p:commandButton>
+				<p:commandButton id="createNewDialogCancel"
+					value="#{uiValue.cancelLabel}" icon="#{uiValue.cancelCircleIcon}"
+					update="form:growlMessage"
+					onclick="PF('createNewDialogWidget').hide()"
+					class="ui-button-secondary" />
+				<p:commandButton id="createNewDialogClean"
+					value="#{uiValue.cleanLabel}" icon="#{uiValue.cleanCircleIcon}"
+					update="createNewDialogPanelData form:growlMessage" process="@this"
+					class="ui-button-secondary">
+					<p:resetInput target="createNewDialogPanelData" />
+				</p:commandButton>
+			</h:panelGrid>
+		</p:dialog>
+
+		<!--  DELETE ROW DIALOG -->
+		<p:confirmDialog global="true" styleClass="change-position"
+			showEffect="fade" responsive="true" widgetVar="deleteRowDialogWidget"
+			header="DELETE ROW"
+			message="Do you really want to delete this row?">
+			<p:commandButton id="deleteDialogConfirm" value="#{uiValue.okLabel}"
+				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
+				actionListener="#{accountTypeController.pushConfirmButtonDeleteDialog()}"
+				oncomplete="updateDataTable(); PF('deleteRowDialogWidget').hide()"
+				process="@this" icon="#{uiValue.okCircleIcon}" />
+			<p:commandButton id="deleteDialogCancel"
+				value="#{uiValue.cancelLabel}" styleClass="ui-confirmdialog-no"
+				update="form:growlMessage"
+				oncomplete="PF('deleteDialogConfirm').hide()" type="button"
+				process="@this" icon="#{uiValue.cancelCircleIcon}" />
+		</p:confirmDialog>
+
+	</h:form>
+
+</body>
+</html>

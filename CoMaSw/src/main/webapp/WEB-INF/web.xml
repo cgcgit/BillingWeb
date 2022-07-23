@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="4.0"
+	xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+        http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd">
+
+	<display-name>CoMaSw</display-name>
+
+	<!-- to debug errors: value Development -->
+	<context-param>
+		<param-name>javax.faces.PROJECT_STAGE</param-name>
+	<!-- 	<param-value>Development</param-value> -->
+		 <param-value>Production</param-value> 
+	</context-param>
+
+	<!-- increase buffer size to avoid JSF1095 errors -->
+	<context-param>
+		<param-name>javax.faces.FACELETS_BUFFER_SIZE</param-name>
+		<param-value>131072</param-value>
+	</context-param>
+
+
+	<context-param>
+		<param-name>javax.faces.INTERPRET_EMPTY_STRING_SUBMITTED_VALUES_AS_NULL</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+<context-param>
+    <param-name>primefaces.THEME</param-name>
+    <param-value>nova-light</param-value>
+</context-param>
+
+<context-param>
+    <param-name>primefaces.FLEX</param-name>
+    <param-value>true</param-value>
+</context-param>
+
+	<servlet>
+		<servlet-name>facesServlet</servlet-name>
+		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>facesServlet</servlet-name>
+		<url-pattern>*.xhtml</url-pattern>
+	</servlet-mapping>
+	<context-param>
+		<param-name>javax.faces.WEBAPP_RESOURCES_DIRECTORY</param-name>
+		<param-value>WEB-INF/resources</param-value>
+	</context-param>
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>The /resources folder</web-resource-name>
+			<url-pattern>/resources/*</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>POST</http-method>
+		</web-resource-collection>
+	</security-constraint>
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>User pages</web-resource-name>
+			<url-pattern>/app/*</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>POST</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>ADMIN</role-name>
+			<role-name>MODIFY</role-name>
+			<role-name>READ</role-name>
+		</auth-constraint>
+	</security-constraint>
+	<security-constraint>
+		<web-resource-collection>
+			<web-resource-name>Admin pages</web-resource-name>
+			<url-pattern>/admin/*</url-pattern>
+			<http-method>GET</http-method>
+			<http-method>POST</http-method>
+		</web-resource-collection>
+		<auth-constraint>
+			<role-name>ADMIN</role-name>
+		</auth-constraint>
+	</security-constraint>
+	<security-role>
+		<description>Role to read/write application's user</description>
+		<role-name>MODIFY</role-name>
+	</security-role>
+		<security-role>
+		<description>Role to only read application's user</description>
+		<role-name>READ</role-name>
+	</security-role>
+	<security-role>
+		<description>Role to application's administrator</description>
+		<role-name>ADMIN</role-name>
+	</security-role>
+	<welcome-file-list>
+		<welcome-file>app/home_page.xhtml</welcome-file>
+	</welcome-file-list>
+</web-app>

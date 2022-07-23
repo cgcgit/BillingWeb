@@ -1,0 +1,179 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+
+<f:metadata>
+	<f:viewAction id="loadData"
+		action="#{userProfileController.loadData()}"
+		phase="INVOKE_APPLICATION">
+	</f:viewAction>
+	<f:viewAction id="defaultControlVariables"
+		action="#{userProfileController.initValues()}"
+		phase="INVOKE_APPLICATION">
+	</f:viewAction>
+</f:metadata>
+
+
+<style type="text/css">
+button.ui-button {
+	margin-right: .5rem;
+}
+</style>
+
+
+<title>#{pageTitle.userProfile}</title>
+
+<body>
+
+	<h:outputStylesheet library="webjars"
+		name="primeflex/2.0.0/primeflex.min.css" />
+
+
+	<header>
+		<ui:include id="mainTemplate"
+			src="/WEB-INF/templates/mainTemplate.xhtml">
+		</ui:include>
+	</header>
+
+
+
+	<h:form>
+		<p:growl id="growlMessage" showDetail="true">
+			<p:autoUpdate />
+		</p:growl>
+
+		<p:panel id="mainPanel" class="p-mt-6"
+			header="USER: #{request.userPrincipal.name} - PROFILE: #{userProfileController.profileCode}">
+
+			<!-- CHANGE PASSWORD -->
+			<p:panel id="changePasswordPanel" header="Change Password">
+				<div class="p-formgroup-inline p-ai-center">
+					<div class="p-field">
+						<p:commandButton id="changePassword" icon="#{uiValue.editIcon}"
+							value="Change Password"
+							actionListener="#{userProfileController.pushChangePasswordButton()}"
+							update="@form" rendered="#{!userProfileController.editPassword}">
+						</p:commandButton>
+					</div>
+				</div>
+				<div class="p-flex p-field p-grid p-ml-4">
+					<div class="p-field p-formgroup-inline">
+						<p:toolbarGroup>
+							<div class="p-field p-grid">
+								<p:outputLabel for="pwd1" styleClass="p-col-fixed"
+									style="width:200px" value="New Password"
+									rendered="#{userProfileController.editPassword}" />
+								<div class="p-col">
+									<p:password id="pwd1" value="#{userProfileController.password}"
+										match="pwd2" label="Password1"
+										rendered="#{userProfileController.editPassword}"
+										validatorMessage="New password and confirm new password fields do not match" />
+										<p:tooltip for="pwd1" value="The pasword characters must be between 5 and 32 characters" position="right"/>
+										
+								</div>
+							</div>
+							<div class="p-field p-grid">
+								<p:outputLabel for="pwd2" styleClass="p-col-fixed"
+									style="width:200px" value="Confirm New Password"
+									rendered="#{userProfileController.editPassword}" />
+								<div class="p-col">
+									<p:password id="pwd2" value="#{userProfileController.password}"
+										label="Password2"
+										rendered="#{userProfileController.editPassword}"
+										validatorMessage="New password and confirm new password fields do not match" />
+										<p:tooltip for="pwd2" value="The pasword characters must be between 5 and 32 characters" position="right"/>
+								</div>
+								<p:commandButton id="savePassword" icon="#{uiValue.saveIcon}"
+									value="Save Changes" styleClass="ui-button-success"
+									actionListener="#{userProfileController.pushSavePasswordButton()}"
+									update="@form" rendered="#{userProfileController.editPassword}">
+								</p:commandButton>
+								<p:divider layout="vertical"
+									rendered="#{userProfileController.editPassword}" />
+								<p:commandButton id="cancelPassword"
+									icon="#{uiValue.cancelCircleIcon}" value="Cancel Changes"
+									styleClass="ui-button-secondary"
+									actionListener="#{userProfileController.pushCancelPasswordButton()}"
+									update="@form" rendered="#{userProfileController.editPassword}">
+								</p:commandButton>
+							</div>
+						</p:toolbarGroup>
+					</div>
+				</div>
+			</p:panel>
+
+			<!-- EDIT DATA	 -->
+			<p:panel id="userData" header="User Data">
+
+				<div class="p-field p-grid p-ml-3">
+					<p:toolbarGroup>
+						<p:commandButton id="edit" icon="#{uiValue.editIcon}"
+							value="Edit Data"
+							actionListener="#{userProfileController.pushEditButton()}"
+							update="@form" rendered="#{!userProfileController.editMode}">
+						</p:commandButton>
+						<p:divider layout="vertical" rendered="false" />
+						<p:commandButton id="save" icon="#{uiValue.saveIcon}"
+							value="Save Data" styleClass="ui-button-success"
+							actionListener="#{userProfileController.pushSaveButton()}"
+							update="@form" rendered="#{userProfileController.editMode}">
+						</p:commandButton>
+						<p:divider layout="vertical"
+							rendered="#{userProfileController.editMode}" />
+						<p:commandButton id="cancel" icon="#{uiValue.cancelCircleIcon}"
+							value="Cancel Data" styleClass="ui-button-secondary"
+							actionListener="#{userProfileController.pushCancelButton()}"
+							update="@form" rendered="#{userProfileController.editMode}">
+						</p:commandButton>
+					</p:toolbarGroup>
+				</div>
+				<div class="p-field p-grid p-mt-6">
+					<label for="name" style="width: 100px">Name</label>
+					<div class="p-col">
+						<p:inputText id="name"
+							value="#{userProfileController.userInject.name}"
+							disabled="#{!userProfileController.editMode}" />
+					</div>
+				</div>
+
+				<div class="p-field p-grid">
+					<label for="surname" style="width: 100px">Surname</label>
+					<div class="p-col">
+						<p:inputText id="surname"
+							value="#{userProfileController.userInject.surname}"
+							disabled="#{!userProfileController.editMode}" />
+					</div>
+				</div>
+
+				<div class="p-field p-grid">
+					<label for="email" style="width: 100px">Email</label>
+					<div class="p-col">
+						<p:inputText id="email"
+							value="#{userProfileController.userInject.email}"
+							disabled="#{!userProfileController.editMode}" />
+					</div>
+				</div>
+
+				<div class="p-field p-grid">
+					<label for="phone" style="width: 100px">Phone Contact</label>
+					<div class="p-col">
+						<p:inputText id="phone"
+							value="#{userProfileController.userInject.phoneContact}"
+							disabled="#{!userProfileController.editMode}" />
+					</div>
+				</div>		
+
+			</p:panel>
+
+		</p:panel>
+	</h:form>
+
+</body>
+</html>
+

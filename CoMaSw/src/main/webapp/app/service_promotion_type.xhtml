@@ -1,0 +1,893 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+<f:metadata>
+
+	<f:viewAction id="loadParentData"
+		action="#{servicePromotionTypeController.loadDataList()}"
+		phase="INVOKE_APPLICATION">
+	</f:viewAction>
+	<f:viewAction id="defaultControlVariables"
+		action="#{servicePromotionTypeController.setInitVariablesToDefault()}"
+		phase="INVOKE_APPLICATION">
+	</f:viewAction>
+</f:metadata>
+
+
+<title>#{pageTitle.servicePromotionTypePage}</title>
+
+
+<body>
+
+	<h:outputStylesheet library="webjars"
+		name="primeflex/2.0.0/primeflex.min.css" />
+
+
+	<header>
+		<ui:include id="mainTemplate"
+			src="/WEB-INF/templates/mainTemplate.xhtml">
+			<ui:param name="title" value="SERVICE-PROMOTION TYPE RELATION" />
+		</ui:include>
+	</header>
+	<h:form id="form">
+		<p:growl id="growlMessage" showDetail="true" keepAlive="true">
+			<p:autoUpdate />
+		</p:growl>
+
+
+		<!--  Remote commands to update dataTables -->
+
+		<p:remoteCommand id="remoteCommandUpdateSearchTable"
+			name="updateSearchTable" process="@this"
+			update="form:accordionPanel:dataTable" />
+
+		<p:remoteCommand id="remoteCommandUpdateSelectedTable"
+			name="updateSelectedTable" process="@this"
+			update=":form:accordionPanel:selectedTable" />
+
+		<p:remoteCommand id="remoteCommandUpdateRelatedTable"
+			name="updateRelatedTable" process="@this"
+			update=":form:accordionPanel:relatedTable" />
+
+		<p:remoteCommand id="remoteCommandUpdateCandidateTable"
+			name="updateCandidateTable" process="@this"
+			update=":form:accordionPanel:candidateTable" />
+
+		<p:remoteCommand id="remoteCommandUpdateHistoricCandidateTable"
+			name="updateHistoricCandidateTable" process="@this"
+			update=":form:accordionPanel:historicCandidateTable" />
+
+
+		<p:accordionPanel id="accordionPanel" multiple="true"
+			widgetVar="multipleAccordionPanelWidget">
+
+			<!--  MAIN DATA AREA  -->
+			<p:tab id="searchPanel"
+				titleStyle="background: WhiteSmoke; color: black"
+				title="SERVICE TYPE">
+				<p:commandButton id="searchDataButton" value="Search"
+					icon="#{uiValue.searchIcon}"
+					actionListener="#{servicePromotionTypeController.pushSearchButton()}"
+					ajax="true" immediate="true" update=":form:growlMessage"
+					style="width:7rem" oncomplete="#{updateSearchTable}"
+					styleClass="p-mx-3" class="ui-button-success rounded-button">
+				</p:commandButton>
+
+				<p:overlayPanel id="searchList" for="searchDataButton"
+					style="width:95%;" showCloseIcon="true" dismissable="true"
+					widgetVar="searchListWidget">
+					<p />
+
+					<p />
+					<p:dataTable id="dataTable" widgetVar="dataTableWidget"
+						var="dataTable"
+						value="#{servicePromotionTypeController.dataList}"
+						rowIndexVar="rowIndexMainTable"
+						rowKey="#{dataTable.serviceTypeId}" selectionMode="single"
+						selection="#{servicePromotionTypeController.injectSelectedData}"
+						filteredValue="#{servicePromotionTypeController.filteredDataList}"
+						showGridlines="true" stripedRows="true" scrollable="true"
+						emptyMessage="No data to show" paginator="true" rows="4"
+						size="small" paginatorPosition="bottom">
+
+						<!--  DATA TABLE - HEADER -->
+						<f:facet name="header">
+							<p:outputLabel id="title"
+								value="Service Type Data - Click on 'show data button' to see the service fee type relations" />
+						</f:facet>
+
+						<!--  DATA TABLE - FOOTER -->
+						<f:facet id="facetFooter" name="footer">
+						</f:facet>
+
+
+						<!--  DATA TABLE - ACTION COLUMNS -->
+						<p:column id="showRelation"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 20px;    
+                                  overflow: hidden"
+							headerText="Show Data" rendered="true">
+							<p:commandButton id="viewRowButton"
+								styleClass="ui-button-warning rounded-button"
+								icon="#{uiValue.viewIcon}" immediate="true" ajax="true"
+								actionListener="#{servicePromotionTypeController.pushSelectedButton()}"
+								update="form:accordionPanel:selectedTablePanel
+								form:accordionPanel:emptyRelationTablePanel
+								form:accordionPanel:relatedTablePanel								
+								form:accordionPanel:candidateTablePanel
+								form:accordionPanel:buttonPanel"
+								oncomplete="#{updateRelatedTable} #{updateCandidateTable}">
+							</p:commandButton>
+						</p:column>
+
+						<!--  DATA TABLE - DATA COLUMNS -->
+						<p:column id="searchCode"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CODE" rendered="true"
+							sortBy="#{dataTable.code}"
+							filterBy="#{dataTable.code}" filterMatchMode="contains">
+							<h:outputText id="searchCodeOutput"
+								value="#{dataTable.code}" />
+						</p:column>
+
+						<p:column id="searchName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="NAME" rendered="true"
+							sortBy="#{dataTable.name}"
+							filterBy="#{dataTable.name}" filterMatchMode="contains">
+							<h:outputText id="searchNameOutput"
+								value="#{dataTable.name}" />
+						</p:column>
+
+						<p:column id="searchDescription"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DESCRIPTION" rendered="true"
+							sortBy="#{dataTable.description}"
+							filterBy="#{dataTable.description}"
+							filterMatchMode="contains">
+							<h:outputText id="searchDescriptionOutput"
+								value="#{dataTable.description}" />
+						</p:column>
+
+						<p:column id="searchStatus"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="STATUS" rendered="true"
+							filterBy="#{dataTable.statusId}" filterMatchMode="exact">
+							<f:facet id="searchStatusFilter" name="filter">
+								<p:selectOneMenu id="searchStatusFilterMenu"
+									onchange="PF('dataTableWidget').filter()">
+									<f:selectItems id="searchStatusFilterSelectItems"
+										value="#{servicePromotionTypeController.statusSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+
+							<p:selectOneMenu id="searchStatusOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{dataTable.statusId}">
+								<f:selectItems
+									value="#{servicePromotionTypeController.statusSelectItems()}"
+									id="selectItemsSearchStatusOutput" itemDisabled="true"
+									var="Status" itemValue="#{dataTable.statusId}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:dataTable>
+				</p:overlayPanel>
+
+				<p:panel id="selectedTablePanel"
+					visible="#{servicePromotionTypeController.showDependentData}">
+					<p:dataTable id="selectedTable" widgetVar="selectedTableWidget"
+						var="selectedDataTable"
+						value="#{servicePromotionTypeController.selectedData}"
+						rendered="true" size="small" scrollable="true"
+						emptyMessage="No data to show" showGridlines="true"
+						paginatorPosition="bottom">
+
+
+						<p:column id="selectedCode"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CODE" rendered="true">
+							<h:outputText id="selectedCodeOutput"
+								value="#{selectedDataTable.code}" />
+						</p:column>
+
+						<p:column id="selectedName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="NAME" rendered="true">
+							<h:outputText id="selectedNameOutput"
+								value="#{selectedDataTable.name}" />
+						</p:column>
+
+						<p:column id="selectedDescription"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DESCRIPTION" rendered="true">
+							<h:outputText id="selectedDescriptionOutput"
+								value="#{selectedDataTable.description}" />
+						</p:column>
+
+						<p:column id="selectedStatus"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="STATUS" rendered="true">
+							<p:selectOneMenu id="selectedStatusDataOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{selectedDataTable.statusId}">
+								<f:selectItems
+									value="#{servicePromotionTypeController.statusSelectItems()}"
+									id="selectItemsSelectedStatusOutput" itemDisabled="true"
+									var="Status" itemValue="#{selectedDataTable.statusId}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+
+			</p:tab>
+
+			<!--  RELATION DATA AREA - related data and candidate data  -->
+			<p:tab id="relationPanel"
+				titleStyle="background: WhiteSmoke; color: black" title="PROMOTION TYPES">
+
+				<p:panel id="emptyRelationTablePanel"
+					visible="#{!servicePromotionTypeController.showDependentData}">
+					No data to show. Please push the search button of the Search Service Type area and select one of the service types.
+				</p:panel>
+
+				<!--  RELATED DATA -->
+
+				<p:panel id="relatedTablePanel"
+					visible="#{servicePromotionTypeController.showDependentData}">
+
+					<p:dataTable id="relatedTable" widgetVar="relatedTableWidget"
+						var="relatedDataTable"
+						value="#{servicePromotionTypeController.relatedDataList}"
+						rowIndexVar="rowIndexRelatedTable"
+						rowKey="#{relatedDataTable.promoServTypeId}" selectionMode="single"
+						selection="#{servicePromotionTypeController.injectSelectedRelatedData}"
+						filteredValue="#{servicePromotionTypeController.filteredRelatedDataList}"
+						showGridlines="true" stripedRows="true" scrollable="true"
+						emptyMessage="No data to show" size="small" paginator="true"
+						rows="4" paginatorPosition="bottom" editable="true">
+
+						<!--  DATA TABLE - HEADER -->
+						<f:facet name="header">
+							<p:outputLabel id="relatedTableTitle"
+								value="RELATED PROMOTIONS for #{servicePromotionTypeController.selectedData.code} (#{servicePromotionTypeController.selectedData.description}) " />
+							<p />
+							<p:outputPanel id="relatedDataCriteriaPanel">
+								<p:selectOneRadio id="historicRelatedCriteriaRowButton"
+									layout="custom"
+									value="#{servicePromotionTypeController.historicRelatedDataCriteria}">
+									<f:selectItem id="historicCriteria"
+										itemLabel="Show Historic Data" itemValue="true" />
+									<f:selectItem id="dateCriteria" itemLabel="Show Data for Date"
+										itemValue="false" />
+								</p:selectOneRadio>
+
+								<p:panel header="Show Data Criteria"
+									style="font-family:Arial Black; text-align: left; font-size: 11px; width: 100%; height: 10rem; background: WhiteSmoke">
+									<p:panelGrid columns="3" styleClass="ui-noborder">
+										<p:panel>
+											<p:radioButton id="historicRowButton"
+												for="historicRelatedCriteriaRowButton" itemIndex="0" />
+											<h:outputLabel for="historicRowButton"
+												value="Show Historic Data"
+												style="font-family:Arial Black; text-align: left; font-size: 11px; margin-left: .5rem" />
+										</p:panel>
+										<p:panel>
+											<p:radioButton id="dateRowButton"
+												for="historicRelatedCriteriaRowButton" itemIndex="1" />
+											<h:outputLabel for="dateRowButton"
+												value="Show Data for Date:"
+												style="font-family:Arial Black; text-align: left; font-size: 11px; margin-left: .5rem" />
+
+											<p:inputMask id="searchDate" required="false"
+												immediate="true"
+												value="#{servicePromotionTypeController.searchDate}"
+												mask="99/99/9999" style="width:7rem; height:2rem"
+												styleClass="p-mx-3"
+												valueChangeListener="#{servicePromotionTypeController.changeSearchDate}"
+												requiredMessage="The date value to search is null. Please fill the search date field">
+												<f:converter
+													converterId="com.comasw.converter.localDateTimeConverter" />
+											</p:inputMask>
+										</p:panel>
+										<p:commandButton id="refreshRelatedTable"
+											icon="#{uiValue.refreshIcon}" ajax="true"
+											actionListener="#{servicePromotionTypeController.refreshRelatedDataTable}"
+											oncomplete="{updateRelatedTable()}"
+											style="margin-left: 10rem; margin-right: .5rem"
+											styleClass="ui-button-warning rounded-button">
+										</p:commandButton>
+										<p:tooltip for="refreshRelatedTable"
+											value="Refresh related data" />
+									</p:panelGrid>
+								</p:panel>
+							</p:outputPanel>
+						</f:facet>
+
+						<!--  DATA TABLE - FOOTER -->
+						<f:facet id="facetFooter" name="footer">
+						</f:facet>
+
+
+
+						<!--  DATA TABLE - MANAGE EDIT EVENTS -->
+						<p:ajax id="ajaxRelatedRowEditInit" event="rowEditInit"
+							listener="#{servicePromotionTypeController.onRelatedRowInit}"
+							update="form:growlMessage">
+						</p:ajax>
+						<p:ajax id="ajaxRelatedRowEdit" event="rowEdit"
+							listener="#{servicePromotionTypeController.onRelatedRowEdit}"
+							update="form:growlMessage"
+							oncomplete="if (!args.validationFailed) {updateRelatedTable()}">
+						</p:ajax>
+
+						<p:ajax id="ajaxRelatedRowEditCancel" event="rowEditCancel"
+							listener="#{servicePromotionTypeController.onRelatedRowCancel}"
+							update="form:growlMessage" oncomplete="{updateRelatedTable()}">
+						</p:ajax>
+
+						<p:column id="editRelatedRow"
+							style="font-family:Arial Black;
+                                  text-align: center;
+                                  font-size: 11px;
+                                  width: 60px;    
+                                  overflow: hidden"
+							headerText="EDIT RELATION STATUS"
+							rendered="#{servicePromotionTypeController.canUserModify()}">
+							<p:rowEditor id="relatedRowEditor"
+								editTitle="Edit Relation Status" cancelTitle="Cancel Edit"
+								saveTitle="Save Row" />
+						</p:column>
+
+						<!--  DATA TABLE - DATA -->
+
+
+						<p:column id="relatedStatus"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="RELATION STATUS" rendered="true"
+							filterBy="#{relatedDataTable.promoServTypeStatusId}"
+							filterMatchMode="exact">
+							<f:facet id="statusRelatedEntityFilter" name="filter">
+								<p:selectOneMenu id="statusRelatedEntityFilterMenu"
+									onchange="PF('relatedTableWidget').filter()">
+									<f:selectItems id="statusRelatedEntityFilterSelectItems"
+										value="#{servicePromotionTypeController.statusSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+
+							<p:cellEditor id="statusRelatedEntityDataCellEditor">
+								<f:facet id="statusRelatedEntityDataOutputFacet" name="output">
+									<p:selectOneMenu id="statusRelatedEntityDataOutput"
+										editable="false" disabled="true" immediate="true"
+										value="#{relatedDataTable.promoServTypeStatusId}">
+										<f:selectItems
+											value="#{servicePromotionTypeController.statusSelectItems()}"
+											id="selectItemsStatusOutputRelatedEntityData"
+											itemDisabled="true" var="StatusOutput"
+											itemValue="#{relatedDataTable.promoServTypeStatusId}" />
+									</p:selectOneMenu>
+								</f:facet>
+								<f:facet id="statusRelatedEntityDataInputFacet" name="input">
+									<p:selectOneMenu id="statusRelatedEntityDataInput"
+										value="#{relatedDataTable.promoServTypeStatusId}"
+										immediate="true">
+										<f:selectItems
+											value="#{servicePromotionTypeController.statusSelectItems()}"
+											id="selectItemsStatusInputRelatedEntityData"
+											var="StatusInput"
+											itemValue="#{relatedDataTable.promoServTypeStatusId}">
+										</f:selectItems>
+										<f:param id="currentRowStatusRelatedEntityData"
+											name="currentRow" value="#{rowIndexRelatedTable}" />
+										<p:ajax event="change" immediate="true"
+											update="statusRelatedEntityDataOutput" />
+									</p:selectOneMenu>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+
+						<p:column id="relatedCode"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CODE" rendered="true"
+							filterBy="#{relatedDataTable.promotionTypeCode}"
+							filterMatchMode="contains">
+							<h:outputText id="codeOutput"
+								value="#{relatedDataTable.promotionTypeCode}" />
+						</p:column>
+
+						<p:column id="relatedName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="NAME" rendered="true"
+							filterBy="#{relatedDataTable.promotionTypeName}"
+							filterMatchMode="contains">
+							<h:outputText id="nameOutput"
+								value="#{relatedDataTable.promotionTypeName}" />
+						</p:column>
+
+						<p:column id="relatedDescription"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DESCRIPTION" rendered="true"
+							filterBy="#{relatedDataTable.promotionTypeDescription}"
+							filterMatchMode="contains">
+							<h:outputText id="descriptionOutput"
+								value="#{relatedDataTable.promotionTypeDescription}" />
+						</p:column>
+
+						<p:column id="relatedDiscountType"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DISCOUNT TYPE" rendered="true"
+							filterBy="#{relatedDataTable.discountTypeId}"
+							filterMatchMode="exact">
+							<f:facet id="relatedDiscountTypeFilter" name="filter">
+								<p:selectOneMenu id="relatedDiscountTypeFilterMenu"
+									onchange="PF('relatedTableWidget').filter()">
+									<f:selectItems id="relatedDiscountTypeFilterSelectItems"
+										value="#{servicePromotionTypeController.discountTypeSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:selectOneMenu id="relatedDiscountTypeDataOutput"
+								editable="false" disabled="true" immediate="true"
+								value="#{relatedDataTable.discountTypeId}">
+								<f:selectItems
+									value="#{servicePromotionTypeController.discountTypeSelectItems()}"
+									id="selectItemsDiscountTypeOutputRelated" itemDisabled="true"
+									var="Status" itemValue="#{relatedDataTable.discountTypeId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="relatedDiscountValue"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DISCOUNT" rendered="true"
+							sortBy="#{relatedDataTable.discountValue}"
+							filterBy="#{dataTable.discountValue}" filterMatchMode="contains">
+							<h:outputText id="filterDiscountValue" value="" />
+							<h:outputText id="discountValueOutput"
+								value="#{relatedDataTable.discountValue}" />
+						</p:column>
+
+						<p:column id="relatedDependantStatus"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="PROMOTION STATUS" rendered="true"
+							filterBy="#{relatedDataTable.promotionTypeStatusId}"
+							filterMatchMode="exact">
+							<f:facet id="statusRelatedDependantFilter" name="filter">
+								<p:selectOneMenu id="statusDependandFilterMenu"
+									onchange="PF('relatedTableWidget').filter()">
+									<f:selectItems id="statusRelatedDependantFilterSelectItems"
+										value="#{servicePromotionTypeController.statusSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:selectOneMenu id="statusRelatedDependantDataOutput"
+								editable="false" disabled="true" immediate="true"
+								value="#{relatedDataTable.promotionTypeStatusId}">
+								<f:selectItems
+									value="#{servicePromotionTypeController.statusSelectItems()}"
+									id="selectItemsStatusOutputRelatedDependantData"
+									itemDisabled="true" var="Status"
+									itemValue="#{relatedDataTable.promotionTypeStatusId}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+
+
+				<!--  ADD/REMOVE BUTTONS -->
+				<div id="divActionButtons" align="center">
+					<p:panel id="buttonPanel"
+						visible="#{servicePromotionTypeController.showDependentData}">
+						<p:panelGrid id="actionButtonsPanelGrid" columns="2"
+							style=" width: 10%; height: 10%;  margin-bottom: 5px;  margin-top: 5px; "
+							styleClass="ui-noborder">
+							<p:commandButton id="addCandidateButton"
+								styleClass="ui-button-help" style="margin-left: 85px;"
+								icon="#{uiValue.rowUpIcon}" ajax="true"
+								rendered="#{servicePromotionTypeController.canUserModify()}"
+								actionListener="#{servicePromotionTypeController.pushAddButtonCandidateToRelatedData()}"
+								oncomplete="if(!args.validationFailed) {updateRelatedTable(); updateCandidateTable()}" />
+							<p:commandButton id="removeRelationButton"
+								styleClass="ui-button-help" style="margin-right: 85px"
+								icon="#{uiValue.rowDownIcon}" ajax="true"
+								rendered="#{servicePromotionTypeController.canUserModify()}"
+								actionListener="#{servicePromotionTypeController.pushRemoveButtonFromRelatedData()}"
+								oncomplete="if(!args.validationFailed) {updateRelatedTable(); updateCandidateTable()}" />
+						</p:panelGrid>
+					</p:panel>
+				</div>
+
+
+				<!--  CANDIDATE DATA -->
+				<p:panel id="candidateTablePanel"
+					visible="#{servicePromotionTypeController.showDependentData}">
+
+					<p:dataTable id="candidateTable" widgetVar="candidateTableWidget"
+						var="candidateDataTable"
+						value="#{servicePromotionTypeController.candidateDataList}"
+						rowIndexVar="rowIndexCandidateTable"
+						rowKey="#{candidateDataTable.promotionTypeId}"
+						selectionMode="single"
+						selection="#{servicePromotionTypeController.injectSelectedCandidateData}"
+						filteredValue="#{servicePromotionTypeController.filteredCandidateDataList}"
+						showGridlines="true" stripedRows="true" scrollable="true"
+						emptyMessage="No data to show" size="small" paginator="true"
+						rows="4" paginatorPosition="bottom">
+
+						<f:facet name="header">
+
+							<p:outputLabel id="candidateTableTitle"
+								value="CANDIDATE PROMOTIONS for #{servicePromotionTypeController.selectedData.code} (#{servicePromotionTypeController.selectedData.description}) " />
+
+							<p:commandButton id="refreshCandidateTable"
+								icon="#{uiValue.refreshIcon}" ajax="true"
+								actionListener="#{servicePromotionTypeController.refreshCandidateDataTable}"
+								oncomplete="{updateCandidateTable()}"
+								style="margin-left: 1rem; margin-right: .5rem"
+								styleClass="ui-button-warning rounded-button">
+							</p:commandButton>
+							<p:tooltip for="refreshCandidateTable"
+								value="Refresh candidate data" />
+
+						</f:facet>
+
+
+						<p:column id="candidateShowHistoricData"
+							headerText="Show Historic"
+							style="font-family:Arial Black;
+                                  text-align: center;
+                                  font-size: 11px;
+                                  width: 30px;    
+                                  overflow: hidden">
+
+							<p:commandButton id="candidateHistoricButton" exportable="false"
+								style="font-family:Arial Black;
+                                   text-align: center;
+                                   font-size: 11px;
+                                   width: 40px;    
+                                   overflow: hidden"
+								class="ui-button-warning rounded-button"
+								icon="#{uiValue.viewIcon}" immediate="true" ajax="true"
+								actionListener="#{servicePromotionTypeController.pushShowHistoricCandidateRowButton()}"
+								oncomplete="{updateHistoricCandidateTable()}  PF('historicCandidateListWidget').show('#{component.clientId}')">
+								<f:setPropertyActionListener value="#{candidateDataTable}"
+									target="#{servicePromotionTypeController.injectSelectedCandidateData}" />
+							</p:commandButton>
+						</p:column>
+
+
+						<p:column id="candidateCode"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CODE" rendered="true"
+							filterBy="#{candidateDataTable.code}" filterMatchMode="contains">
+							<h:outputText id="codeOutput" value="#{candidateDataTable.code}" />
+						</p:column>
+
+						<p:column id="candidateName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="NAME" rendered="true"
+							filterBy="#{candidateDataTable.name}" filterMatchMode="contains">
+							<h:outputText id="nameOutput" value="#{candidateDataTable.name}" />
+						</p:column>
+
+						<p:column id="candidateDescription"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DESCRIPTION" rendered="true"
+							filterBy="#{candidateDataTable.description}"
+							filterMatchMode="contains">
+							<h:outputText id="descriptionOutput"
+								value="#{candidateDataTable.description}" />
+						</p:column>
+					</p:dataTable>
+
+					<p:overlayPanel id="historicCandidateList"
+						style="width:95%;background: WhiteSmoke; color: black"
+						showCloseIcon="true" dismissable="false" dynamic="false"
+						my="center top" at="center bottom"
+						widgetVar="historicCandidateListWidget">
+
+						<p:outputPanel id="historicCandidateListPanel"
+							style="text-align:center;">
+
+							<p />
+							<!--  DATA SEARCH TABLE -->
+							<p:dataTable id="historicCandidateTable"
+								widgetVar="historicCandidateTableWidget"
+								var="historicCandidateDataTable"
+								value="#{servicePromotionTypeController.historicCandidateDataList}"
+								filteredValue="#{servicePromotionTypeController.filteredHistoricCandidateDataList}"
+								showGridlines="true" stripedRows="true" scrollable="true"
+								reflow="true" editable="true"
+								rowIndexVar="rowIndexHistoricCandidateTable"
+								rowKey="(#{historicCandidateDataTable.promotionTypeId} #{historicCandidateDataTable.startDate} #{historicCandidateDataTable.endDate})"
+								paginator="true" rows="5" size="small"
+								paginatorPosition="bottom">
+
+								<!--  DATA TABLE - HEADER -->
+								<f:facet name="header">
+									<p:outputLabel id="title"
+										value="Historic Candidate Data for Promotion Code #{servicePromotionTypeController.selectedCandidateData.code}" />
+								</f:facet>
+
+								<!--  DATA TABLE - FOOTER -->
+								<f:facet id="facetFooter" name="footer">
+								</f:facet>
+
+
+								<!--  DATA TABLE - DATA COLUMNS -->
+								<p:column id="historicCandidateCode"
+									style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+									headerText="CODE" rendered="true"
+									sortBy="#{historicCandidateDataTable.code}"
+									filterBy="#{historicCandidateDataTable.code}"
+									filterMatchMode="contains">
+									<h:outputText id="historicCandidateCodeText"
+										value="#{historicCandidateDataTable.code}" />
+								</p:column>
+
+								<p:column id="historicCandidateStartDate"
+									style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+									headerText="START DATE" rendered="true"
+									sortBy="#{historicCandidateDataTable.startDate}"
+									filterBy="#{historicCandidateDataTable.startDate}"
+									filterMatchMode="exact">
+									<f:facet id="historicCandidateStartDateFilter" name="filter">
+										<p:datePicker id="historicCandidateStartDateFilterPicker"
+											onchange="PF('historicCandidateTableWidget').filter()"
+											focusOnSelect="true" monthNavigator="true"
+											yearNavigator="true" mask="true" pattern="dd/MM/yyyy">
+											<f:converter
+												converterId="com.comasw.converter.localDateTimeConverter" />
+										</p:datePicker>
+									</f:facet>
+									<h:outputText id="historicCandidateStartDateText"
+										value="#{historicCandidateDataTable.startDate}">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+									</h:outputText>
+								</p:column>
+
+								<p:column id="historicCandidateEndDate"
+									style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+									headerText="END DATE" rendered="true"
+									sortBy="#{historicCandidateDataTable.endDate}"
+									filterBy="#{historicCandidateDataTable.endDate}"
+									filterMatchMode="exact">
+									<f:facet id="historicCandidateEndDateFilter" name="filter">
+										<p:datePicker id="historicCandidateEndDateFilterPicker"
+											onchange="PF('historicCandidateTableWidget').filter()"
+											focusOnSelect="true" monthNavigator="true"
+											yearNavigator="true" mask="true" pattern="dd/MM/yyyy">
+											<f:converter
+												converterId="com.comasw.converter.localDateTimeConverter" />
+										</p:datePicker>
+									</f:facet>
+									<h:outputText id="historicCandidateEndDateText"
+										value="#{historicCandidateDataTable.endDate}">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+									</h:outputText>
+								</p:column>
+
+								<p:column id="historicCandidateName"
+									style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+									headerText="NAME" rendered="true"
+									sortBy="#{historicCandidateDataTable.name}"
+									filterBy="#{historicCandidateDataTable.name}"
+									filterMatchMode="contains">
+									<h:outputText id="historicCandidateNameText"
+										value="#{historicCandidateDataTable.name}" />
+								</p:column>
+
+								<p:column id="historicCandidateDescription"
+									style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+									headerText="DESCRIPTION" rendered="true"
+									sortBy="#{historicCandidateDataTable.description}"
+									filterBy="#{historicCandidateDataTable.description}"
+									filterMatchMode="contains">
+									<h:outputText id="historicCandidateDescriptionText"
+										value="#{historicCandidateDataTable.description}" />
+								</p:column>
+								<p:column id="historicCandidateApplicationLevel"
+									style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+									headerText="APPLICATION LEVEL" rendered="true"
+									filterBy="#{historicCandidateDataTable.applicationLevelId}"
+									filterMatchMode="exact">
+									<f:facet id="historicCandidateApplicationLevelFilter"
+										name="filter">
+										<p:selectOneMenu
+											id="historicCandidateApplicationLevelFilterMenu"
+											onchange="PF('historicCandidateTableWidget').filter()">
+											<f:selectItems
+												id="historicCandidateApplicationLevelFilterSelectItems"
+												value="#{servicePromotionTypeController.applicationLevelSelectItems()}" />
+										</p:selectOneMenu>
+									</f:facet>
+									<p:selectOneMenu id="historicCandidateApplicationLevelOutput"
+										editable="false" disabled="true" immediate="true"
+										value="#{historicCandidateDataTable.applicationLevelId}">
+										<f:selectItems
+											id="selectItemsHistoricCandidateApplicationLevelOutput"
+											itemDisabled="true" var="HistoricCandidateApplicationLevel"
+											value="#{servicePromotionTypeController.applicationLevelSelectItems()}"
+											itemValue="#{historicCandidateDataTable.applicationLevelId}" />
+									</p:selectOneMenu>
+								</p:column>
+
+								<p:column id="historicCandidateDiscountType"
+									style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+									headerText="DISCOUNT TYPE" rendered="true"
+									filterBy="#{historicCandidateDataTable.discountTypeId}"
+									filterMatchMode="exact">
+									<f:facet id="historicCandidateDiscountTypeFilter" name="filter">
+										<p:selectOneMenu id="historicCandidateDiscountTypeFilterMenu"
+											onchange="PF('historicCandidateTableWidget').filter()">
+											<f:selectItems
+												id="historicCandidateDiscountTypeFilterSelectItems"
+												value="#{servicePromotionTypeController.discountTypeSelectItems()}" />
+										</p:selectOneMenu>
+									</f:facet>
+									<p:selectOneMenu id="historicCandidateDiscountTypeDataOutput"
+										editable="false" disabled="true" immediate="true"
+										value="#{historicCandidateDataTable.discountTypeId}">
+										<f:selectItems
+											value="#{servicePromotionTypeController.discountTypeSelectItems()}"
+											id="selectItemsDiscountTypeOutputHistoricCandidate"
+											itemDisabled="true" var="Status"
+											itemValue="#{historicCandidateDataTable.discountTypeId}" />
+									</p:selectOneMenu>
+								</p:column>
+
+								<p:column id="historicCandidateDiscountValue"
+									style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+									headerText="DISCOUNT" rendered="true"
+									sortBy="#{historicCandidateDataTable.discountValue}"
+									filterBy="#{historicCandidateTable.discountValue}"
+									filterMatchMode="contains">
+									<h:outputText id="historicCandidateDiscountValueOutput"
+										value="#{historicCandidateDataTable.discountValue}" />
+								</p:column>
+
+								<p:column id="historicCandidateStatus"
+									style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+									headerText="STATUS" rendered="true"
+									filterBy="#{historicCandidateDataTable.statusId}"
+									filterMatchMode="exact">
+									<f:facet id="historicCandidateStatusFilter" name="filter">
+										<p:selectOneMenu id="statusFilterMenu"
+											onchange="PF('historicCandidateTableWidget').filter()">
+											<f:selectItems id="historicCandidateStatusFilterSelectItems"
+												value="#{servicePromotionTypeController.statusSelectItems()}" />
+										</p:selectOneMenu>
+									</f:facet>
+									<p:selectOneMenu id="historicCandidateStatusOutput"
+										editable="false" disabled="true" immediate="true"
+										value="#{historicCandidateDataTable.statusId}">
+										<f:selectItems id="selectItemsHistoricCandidateStatusOutput"
+											itemDisabled="true" var="Status"
+											value="#{servicePromotionTypeController.statusSelectItems()}"
+											itemValue="#{historicCandidateDataTable.statusId}" />
+									</p:selectOneMenu>
+								</p:column>
+							</p:dataTable>
+						</p:outputPanel>
+					</p:overlayPanel>
+				</p:panel>
+			</p:tab>
+		</p:accordionPanel>
+	</h:form>
+</body>
+</html>

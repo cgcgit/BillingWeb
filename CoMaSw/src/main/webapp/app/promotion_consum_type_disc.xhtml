@@ -1,0 +1,823 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+<f:metadata>
+
+	<f:viewAction id="loadParentData"
+		action="#{promotionConsumptionTypeDiscController.loadDataList()}"
+		phase="INVOKE_APPLICATION">
+	</f:viewAction>
+	<f:viewAction id="defaultControlVariables"
+		action="#{promotionConsumptionTypeDiscController.setInitVariablesToDefault()}"
+		phase="INVOKE_APPLICATION">
+	</f:viewAction>
+</f:metadata>
+
+
+<title>#{pageTitle.promotionConsumptionTypeDiscountPage}</title>
+
+
+<body>
+
+	<h:outputStylesheet library="webjars"
+		name="primeflex/2.0.0/primeflex.min.css" />
+
+
+	<header>
+		<ui:include id="mainTemplate"
+			src="/WEB-INF/templates/mainTemplate.xhtml">
+			<ui:param name="title" value="PROMOTION-CONSUMPTION TYPE RELATION" />
+		</ui:include>
+	</header>
+	<h:form id="form">
+		<p:growl id="growlMessage" showDetail="true" keepAlive="true">
+			<p:autoUpdate />
+		</p:growl>
+
+
+		<!--  Remote commands to update dataTables -->
+
+		<p:remoteCommand id="remoteCommandUpdateSearchTable"
+			name="updateSearchTable" process="@this"
+			update="form:accordionPanel:dataTable" />
+
+		<p:remoteCommand id="remoteCommandUpdateSelectedTable"
+			name="updateSelectedTable" process="@this"
+			update=":form:accordionPanel:selectedTable" />
+
+		<p:remoteCommand id="remoteCommandUpdateRelatedTable"
+			name="updateRelatedTable" process="@this"
+			update=":form:accordionPanel:relatedTable" />
+
+		<p:remoteCommand id="remoteCommandUpdateCandidateTable"
+			name="updateCandidateTable" process="@this"
+			update=":form:accordionPanel:candidateTable" />
+
+
+		<p:accordionPanel id="accordionPanel" multiple="true"
+			widgetVar="multipleAccordionPanelWidget">
+
+			<!--  MAIN DATA AREA  -->
+			<p:tab id="searchPanel"
+				titleStyle="background: WhiteSmoke; color: black"
+				title="PROMOTION TYPE">
+				<p:outputLabel id="dateSearchLabel" for="searchDate"
+					value="Search Date: " />
+
+				<p:inputMask id="searchDate" required="true" immediate="true"
+					valueChangeListener="#{promotionConsumptionTypeDiscController.changeSearchDate}"
+					value="#{promotionConsumptionTypeDiscController.searchDate}"
+					mask="99/99/9999" style="width:10rem" styleClass="p-mx-3"
+					requiredMessage="The date value to search is null. Please fill the search date field">
+					<f:converter
+						converterId="com.comasw.converter.localDateTimeConverter" />
+				</p:inputMask>
+
+				<p:commandButton id="searchDataButton" value="Search"
+					icon="#{uiValue.searchIcon}"
+					actionListener="#{promotionConsumptionTypeDiscController.pushSearchButton()}"
+					ajax="true" immediate="true" update=":form:growlMessage"
+					style="width:7rem"
+					oncomplete="#{updateSearchTable} PF('searchListWidget').show('#{component.clientId}')"
+					styleClass="p-mx-3" class="ui-button-success rounded-button">
+				</p:commandButton>
+
+				<p:overlayPanel id="searchList" style="width:95%;"
+					showCloseIcon="true" dismissable="true" my="center top"
+					at="center bottom" widgetVar="searchListWidget">
+					<p />
+
+					<p />
+					<p:dataTable id="dataTable" widgetVar="dataTableWidget"
+						var="dataTable"
+						value="#{promotionConsumptionTypeDiscController.dataList}"
+						rowIndexVar="rowIndexMainTable"
+						rowKey="#{dataTable.promotionTypeId}" selectionMode="single"
+						selection="#{promotionConsumptionTypeDiscController.injectSelectedData}"
+						filteredValue="#{promotionConsumptionTypeDiscController.filteredDataList}"
+						showGridlines="true" stripedRows="true" scrollable="true"
+						emptyMessage="No data to show" paginator="true" rows="4"
+						size="small" paginatorPosition="bottom">
+
+						<!--  DATA TABLE - HEADER -->
+						<f:facet name="header">
+							<p:outputLabel id="title"
+								value="Promotion Type Data - Click on 'show data button' to see the promotion consumption type relations" />
+						</f:facet>
+
+						<!--  DATA TABLE - FOOTER -->
+						<f:facet id="facetFooter" name="footer">
+						</f:facet>
+
+
+						<!--  DATA TABLE - ACTION COLUMNS -->
+						<p:column id="showRelation"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 20px;    
+                                  overflow: hidden"
+							headerText="Show Data" rendered="true">
+							<p:commandButton id="viewRowButton"
+								styleClass="ui-button-warning rounded-button"
+								icon="#{uiValue.viewIcon}" immediate="true" ajax="true"
+								actionListener="#{promotionConsumptionTypeDiscController.pushSelectedButton()}"
+								update="form:accordionPanel:selectedTablePanel
+								form:accordionPanel:emptyRelationTablePanel
+								form:accordionPanel:relatedTablePanel								
+								form:accordionPanel:candidateTablePanel
+								form:accordionPanel:buttonPanel"
+								oncomplete="#{updateRelatedTable} #{updateCandidateTable}">
+							</p:commandButton>
+						</p:column>
+
+						<!--  DATA TABLE - DATA COLUMNS -->
+						<p:column id="searchCode"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CODE" rendered="true" sortBy="#{dataTable.code}"
+							filterBy="#{dataTable.code}" filterMatchMode="contains">
+							<h:outputText id="searchCodeOutput" value="#{dataTable.code}" />
+						</p:column>
+
+						<p:column id="searchStartDate"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="START DATE" rendered="true"
+							sortBy="#{dataTable.startDate}" filterBy="#{dataTable.startDate}"
+							filterMatchMode="exact">
+							<f:facet id="searchStartDateFilter" name="filter">
+								<p:datePicker id="searchStartDateFilterPicker"
+									onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
+									monthNavigator="true" yearNavigator="true" mask="true"
+									pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<h:outputText id="searchStartDateText"
+								value="#{dataTable.startDate}">
+								<f:converter
+									converterId="com.comasw.converter.localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="searchEndDate"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="END DATE" rendered="true"
+							sortBy="#{dataTable.endDate}" filterBy="#{dataTable.endDate}"
+							filterMatchMode="exact">
+							<f:facet id="searchEndDateFilter" name="filter">
+								<p:datePicker id="searchEndDateFilterPicker"
+									onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
+									monthNavigator="true" yearNavigator="true" mask="true"
+									pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<h:outputText id="searchEndDateText" value="#{dataTable.endDate}">
+								<f:converter
+									converterId="com.comasw.converter.localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="searchName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="NAME" rendered="true" sortBy="#{dataTable.name}"
+							filterBy="#{dataTable.name}" filterMatchMode="contains">
+							<h:outputText id="searchNameOutput" value="#{dataTable.name}" />
+						</p:column>
+
+						<p:column id="searchDescription"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DESCRIPTION" rendered="true"
+							sortBy="#{dataTable.description}"
+							filterBy="#{dataTable.description}" filterMatchMode="contains">
+							<h:outputText id="searchDescriptionOutput"
+								value="#{dataTable.description}" />
+						</p:column>
+
+						<p:column id="searchApplicationLevel"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="APPLICATION LEVEL" rendered="true"
+							filterBy="#{dataTable.applicationLevelId}"
+							filterMatchMode="exact">
+							<f:facet id="searchApplicationLevelFilter" name="filter">
+								<p:selectOneMenu id="searchApplicationLevelFilterMenu"
+									onchange="PF('dataTableWidget').filter()">
+									<f:selectItems id="searchApplicationLevelFilterSelectItems"
+										value="#{promotionConsumptionTypeDiscController.applicationLevelSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:selectOneMenu id="searchApplicationLevelOutput"
+								editable="false" disabled="true" immediate="true"
+								value="#{dataTable.applicationLevelId}">
+								<f:selectItems id="selectItemsSearchApplicationLevelOutput"
+									itemDisabled="true" var="SearchApplicationLevel"
+									value="#{promotionConsumptionTypeDiscController.applicationLevelSelectItems()}"
+									itemValue="#{dataTable.applicationLevelId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="searchDiscountType"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DISCOUNT TYPE" rendered="true"
+							filterBy="#{dataTable.discountTypeId}" filterMatchMode="exact">
+							<f:facet id="searchDiscountTypeFilter" name="filter">
+								<p:selectOneMenu id="searchDiscountTypeFilterMenu"
+									onchange="PF('dataTableWidget').filter()">
+									<f:selectItems id="searchDiscountTypeFilterSelectItems"
+										value="#{promotionConsumptionTypeDiscController.discountTypeSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:selectOneMenu id="searchDiscountTypeDataOutput"
+								editable="false" disabled="true" immediate="true"
+								value="#{dataTable.discountTypeId}">
+								<f:selectItems
+									value="#{promotionConsumptionTypeDiscController.discountTypeSelectItems()}"
+									id="selectItemsDiscountTypeOutputSearch" itemDisabled="true"
+									var="Status" itemValue="#{dataTable.discountTypeId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="searchDiscountValue"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DISCOUNT" rendered="true"
+							sortBy="#{dataTable.discountValue}"
+							filterBy="#{searchTable.discountValue}"
+							filterMatchMode="contains">
+							<h:outputText id="searchDiscountValueOutput"
+								value="#{dataTable.discountValue}" />
+						</p:column>
+
+						<p:column id="searchStatus"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="STATUS" rendered="true"
+							filterBy="#{dataTable.statusId}" filterMatchMode="exact">
+							<f:facet id="searchStatusFilter" name="filter">
+								<p:selectOneMenu id="searchStatusFilterMenu"
+									onchange="PF('dataTableWidget').filter()">
+									<f:selectItems id="searchStatusFilterSelectItems"
+										value="#{promotionConsumptionTypeDiscController.statusSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:selectOneMenu id="searchStatusOutput" editable="false"
+								disabled="true" immediate="true" value="#{dataTable.statusId}">
+								<f:selectItems
+									value="#{promotionConsumptionTypeDiscController.statusSelectItems()}"
+									id="selectItemsSearchStatusOutput" itemDisabled="true"
+									var="Status" itemValue="#{dataTable.statusId}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:dataTable>
+				</p:overlayPanel>
+
+				<p:panel id="selectedTablePanel"
+					visible="#{promotionConsumptionTypeDiscController.showDependentData}">
+					<p:dataTable id="selectedTable" widgetVar="selectedTableWidget"
+						var="selectedDataTable"
+						value="#{promotionConsumptionTypeDiscController.selectedData}"
+						rendered="true" size="small" scrollable="true"
+						emptyMessage="No data to show" showGridlines="true"
+						paginatorPosition="bottom">
+
+
+						<p:column id="selectedCode"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CODE" rendered="true">
+							<h:outputText id="selectedCodeOutput"
+								value="#{selectedDataTable.code}" />
+						</p:column>
+
+						<p:column id="selectedStartDate"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="START DATE" rendered="true">
+
+							<h:outputText id="selectedStartDateText"
+								value="#{selectedDataTable.startDate}">
+								<f:converter
+									converterId="com.comasw.converter.localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="selectedEndDate"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="END DATE" rendered="true">
+							<h:outputText id="selectedEndDateText"
+								value="#{selectedDataTable.endDate}">
+								<f:converter
+									converterId="com.comasw.converter.localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+
+
+						<p:column id="selectedName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="NAME" rendered="true">
+							<h:outputText id="selectedNameOutput"
+								value="#{selectedDataTable.name}" />
+						</p:column>
+
+						<p:column id="selectedDescription"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DESCRIPTION" rendered="true">
+							<h:outputText id="selectedDescriptionOutput"
+								value="#{selectedDataTable.description}" />
+						</p:column>
+
+						<p:column id="selectedApplicationLevel"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="APPLICATION LEVEL" rendered="true">
+							<p:selectOneMenu id="selectedApplicationLevelOutput"
+								editable="false" disabled="true" immediate="true"
+								value="#{selectedDataTable.applicationLevelId}">
+								<f:selectItems id="selectItemsSearchApplicationLevelOutput"
+									itemDisabled="true" var="SearchApplicationLevel"
+									value="#{promotionConsumptionTypeDiscController.applicationLevelSelectItems()}"
+									itemValue="#{selectedDataTable.applicationLevelId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="selectedDiscountType"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DISCOUNT TYPE" rendered="true">
+							<p:selectOneMenu id="selectedDiscountTypeDataOutput"
+								editable="false" disabled="true" immediate="true"
+								value="#{selectedDataTable.discountTypeId}">
+								<f:selectItems
+									value="#{promotionConsumptionTypeDiscController.discountTypeSelectItems()}"
+									id="selectItemsDiscountTypeOutputSearch" itemDisabled="true"
+									var="Status" itemValue="#{selectedDataTable.discountTypeId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="selectedDiscountValue"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DISCOUNT" rendered="true">
+							<h:outputText id="selectedDiscountValueOutput"
+								value="#{selectedDataTable.discountValue}" />
+						</p:column>
+
+						<p:column id="selectedStatus"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="STATUS" rendered="true">
+							<p:selectOneMenu id="selectedStatusOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{selectedDataTable.statusId}">
+								<f:selectItems
+									value="#{promotionConsumptionTypeDiscController.statusSelectItems()}"
+									id="selectItemsSearchStatusOutput" itemDisabled="true"
+									var="Status" itemValue="#{selectedDataTable.statusId}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+
+			</p:tab>
+
+			<!--  RELATION DATA AREA - related data and candidate data  -->
+			<p:tab id="relationPanel"
+				titleStyle="background: WhiteSmoke; color: black"
+				title="CONSUMPTION TYPES">
+
+				<p:panel id="emptyRelationTablePanel"
+					visible="#{!promotionConsumptionTypeDiscController.showDependentData}">
+					No data to show. Please push the search button of the Search Promotion Type area and select one of the promotion types.
+				</p:panel>
+
+				<!--  RELATED DATA -->
+
+				<p:panel id="relatedTablePanel"
+					visible="#{promotionConsumptionTypeDiscController.showDependentData}">
+
+					<p:dataTable id="relatedTable" widgetVar="relatedTableWidget"
+						var="relatedDataTable"
+						value="#{promotionConsumptionTypeDiscController.relatedDataList}"
+						rowIndexVar="rowIndexRelatedTable"
+						rowKey="#{relatedDataTable.promoConsumTypeDiscountId}"
+						selectionMode="single"
+						selection="#{promotionConsumptionTypeDiscController.injectSelectedRelatedData}"
+						filteredValue="#{promotionConsumptionTypeDiscController.filteredRelatedDataList}"
+						showGridlines="true" stripedRows="true" scrollable="true"
+						emptyMessage="No data to show" size="small" paginator="true"
+						rows="4" paginatorPosition="bottom" editable="true">
+
+						<!--  DATA TABLE - HEADER -->
+						<f:facet name="header">
+							<p:outputLabel id="relatedTableTitle"
+								value="RELATED CONSUMPTIONS for #{promotionConsumptionTypeDiscController.selectedData.code} (#{promotionConsumptionTypeDiscController.selectedData.description}) " />
+							<p:commandButton id="refreshRelatedTable"
+								icon="#{uiValue.refreshIcon}" ajax="true"
+								actionListener="#{promotionConsumptionTypeDiscController.refreshRelatedDataTable}"
+								oncomplete="{updateRelatedTable()}"
+								style="margin-left: 10rem; margin-right: .5rem"
+								styleClass="ui-button-warning rounded-button">
+							</p:commandButton>
+							<p:tooltip for="refreshRelatedTable" value="Refresh related data" />
+						</f:facet>
+
+						<!--  DATA TABLE - FOOTER -->
+						<f:facet id="facetFooter" name="footer">
+						</f:facet>
+
+
+
+						<!--  DATA TABLE - MANAGE EDIT EVENTS -->
+						<p:ajax id="ajaxRelatedRowEditInit" event="rowEditInit"
+							listener="#{promotionConsumptionTypeDiscController.onRelatedRowInit}"
+							update="form:growlMessage">
+						</p:ajax>
+						<p:ajax id="ajaxRelatedRowEdit" event="rowEdit"
+							listener="#{promotionConsumptionTypeDiscController.onRelatedRowEdit}"
+							update="form:growlMessage"
+							oncomplete="if (!args.validationFailed) {updateRelatedTable()}">
+						</p:ajax>
+
+						<p:ajax id="ajaxRelatedRowEditCancel" event="rowEditCancel"
+							listener="#{promotionConsumptionTypeDiscController.onRelatedRowCancel}"
+							update="form:growlMessage" oncomplete="{updateRelatedTable()}">
+						</p:ajax>
+
+						<p:column id="editRelatedRow"
+							style="font-family:Arial Black;
+                                  text-align: center;
+                                  font-size: 11px;
+                                  width: 60px;    
+                                  overflow: hidden"
+							headerText="EDIT RELATION STATUS"
+							rendered="#{promotionConsumptionTypeDiscController.canUserModify()}">
+							<p:rowEditor id="relatedRowEditor"
+								editTitle="Edit Relation Status" cancelTitle="Cancel Edit"
+								saveTitle="Save Row" />
+						</p:column>
+
+						<!--  DATA TABLE - MANAGE EDIT EVENTS -->
+						<p:column id="relatedStatus"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="RELATION STATUS" rendered="true"
+							filterBy="#{relatedDataTable.promoConsumTypeDiscStatusId}"
+							filterMatchMode="exact">
+							<f:facet id="statusRelatedEntityFilter" name="filter">
+								<p:selectOneMenu id="statusRelatedEntityFilterMenu"
+									onchange="PF('relatedTableWidget').filter()">
+									<f:selectItems id="statusRelatedEntityFilterSelectItems"
+										value="#{promotionConsumptionTypeDiscController.statusSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:cellEditor id="statusRelatedEntityDataCellEditor">
+								<f:facet id="statusRelatedEntityDataOutputFacet" name="output">
+									<p:selectOneMenu id="statusRelatedEntityDataOutput"
+										editable="false" disabled="true" immediate="true"
+										value="#{relatedDataTable.promoConsumTypeDiscStatusId}">
+										<f:selectItems
+											value="#{promotionConsumptionTypeDiscController.statusSelectItems()}"
+											id="selectItemsStatusOutputRelatedEntityData"
+											itemDisabled="true" var="StatusOutput"
+											itemValue="#{relatedDataTable.promoConsumTypeDiscStatusId}" />
+									</p:selectOneMenu>
+								</f:facet>
+								<f:facet id="statusRelatedEntityDataInputFacet" name="input">
+									<p:selectOneMenu id="statusRelatedEntityDataInput"
+										value="#{relatedDataTable.promoConsumTypeDiscStatusId}"
+										immediate="true">
+										<f:selectItems
+											value="#{promotionConsumptionTypeDiscController.statusSelectItems()}"
+											id="selectItemsStatusInputRelatedEntityData"
+											var="StatusInput"
+											itemValue="#{relatedDataTable.promoConsumTypeDiscStatusId}">
+										</f:selectItems>
+										<f:param id="currentRowStatusRelatedEntityData"
+											name="currentRow" value="#{rowIndexRelatedTable}" />
+										<p:ajax event="change" immediate="true"
+											update="statusRelatedEntityDataOutput" />
+									</p:selectOneMenu>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="relatedCode"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CODE" rendered="true"
+							filterBy="#{relatedDataTable.consumptionTypeCode}"
+							filterMatchMode="contains">
+							<h:outputText id="codeOutput"
+								value="#{relatedDataTable.consumptionTypeCode}" />
+						</p:column>
+
+						<p:column id="relatedName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="NAME" rendered="true"
+							filterBy="#{relatedDataTable.consumptionTypeName}"
+							filterMatchMode="contains">
+							<h:outputText id="nameOutput"
+								value="#{relatedDataTable.consumptionTypeName}" />
+						</p:column>
+
+						<p:column id="relatedDescription"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DESCRIPTION" rendered="true"
+							filterBy="#{relatedDataTable.consumptionTypeDescription}"
+							filterMatchMode="contains">
+							<h:outputText id="descriptionOutput"
+								value="#{relatedDataTable.consumptionTypeDescription}" />
+						</p:column>
+
+						<p:column id="consumptionClass"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CONSUMPTION CLASS" rendered="true"
+							filterBy="#{relatedDataTable.consumptionClassId}"
+							filterMatchMode="exact">
+							<f:facet id="relatedConsumptionClassFilter" name="filter">
+								<p:selectOneMenu id="relatedConsumptionClassFilterMenu"
+									onchange="PF('relatedTableWidget').filter()">
+									<f:selectItems id="relatedConsumptionClassFilterSelectItems"
+										value="#{promotionConsumptionTypeDiscController.consumptionClassSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:selectOneMenu id="relatedConsumptionClassDataOutput"
+								editable="false" disabled="true" immediate="true"
+								value="#{relatedDataTable.consumptionClassId}">
+								<f:selectItems
+									value="#{promotionConsumptionTypeDiscController.consumptionClassSelectItems()}"
+									id="selectItemsConsumptionClassOutputRelated"
+									itemDisabled="true" var="Status"
+									itemValue="#{relatedDataTable.consumptionClassId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="relatedDependantStatus"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CONSUMPTION STATUS" rendered="true"
+							filterBy="#{relatedDataTable.consumptionTypeStatusId}"
+							filterMatchMode="exact">
+							<f:facet id="statusRelatedDependantFilter" name="filter">
+								<p:selectOneMenu id="statusDependandFilterMenu"
+									onchange="PF('relatedTableWidget').filter()">
+									<f:selectItems id="statusRelatedDependantFilterSelectItems"
+										value="#{promotionConsumptionTypeDiscController.statusSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:selectOneMenu id="statusRelatedDependantDataOutput"
+								editable="false" disabled="true" immediate="true"
+								value="#{relatedDataTable.consumptionTypeStatusId}">
+								<f:selectItems
+									value="#{promotionConsumptionTypeDiscController.statusSelectItems()}"
+									id="selectItemsStatusOutputRelatedDependantData"
+									itemDisabled="true" var="Status"
+									itemValue="#{relatedDataTable.consumptionTypeStatusId}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+
+				<!--  ADD/REMOVE BUTTONS -->
+				<div id="divActionButtons" align="center">
+					<p:panel id="buttonPanel"
+						visible="#{promotionConsumptionTypeDiscController.showDependentData}">
+						<p:panelGrid id="actionButtonsPanelGrid" columns="2"
+							style=" width: 10%; height: 10%;  margin-bottom: 5px;  margin-top: 5px; "
+							styleClass="ui-noborder">
+							<p:commandButton id="addCandidateButton"
+								styleClass="ui-button-help" style="margin-left: 85px;"
+								icon="#{uiValue.rowUpIcon}" ajax="true"
+								rendered="#{promotionConsumptionTypeDiscController.canUserModify()}"
+								actionListener="#{promotionConsumptionTypeDiscController.pushAddButtonCandidateToRelatedData()}"
+								oncomplete="if(!args.validationFailed) {updateRelatedTable(); updateCandidateTable()}" />
+							<p:commandButton id="removeRelationButton"
+								styleClass="ui-button-help" style="margin-right: 85px"
+								icon="#{uiValue.rowDownIcon}" ajax="true"
+								rendered="#{promotionConsumptionTypeDiscController.canUserModify()}"
+								actionListener="#{promotionConsumptionTypeDiscController.pushRemoveButtonFromRelatedData()}"
+								oncomplete="if(!args.validationFailed) {updateRelatedTable(); updateCandidateTable()}" />
+						</p:panelGrid>
+					</p:panel>
+				</div>
+
+
+				<!--  CANDIDATE DATA -->
+				<p:panel id="candidateTablePanel"
+					visible="#{promotionConsumptionTypeDiscController.showDependentData}">
+
+					<p:dataTable id="candidateTable" widgetVar="candidateTableWidget"
+						var="candidateDataTable"
+						value="#{promotionConsumptionTypeDiscController.candidateDataList}"
+						rowIndexVar="rowIndexCandidateTable"
+						rowKey="#{candidateDataTable.consumptionTypeId}"
+						selectionMode="single"
+						selection="#{promotionConsumptionTypeDiscController.injectSelectedCandidateData}"
+						filteredValue="#{promotionConsumptionTypeDiscController.filteredCandidateDataList}"
+						showGridlines="true" stripedRows="true" scrollable="true"
+						emptyMessage="No data to show" size="small" paginator="true"
+						rows="4" paginatorPosition="bottom">
+
+						<f:facet name="header">
+
+							<p:outputLabel id="candidateTableTitle"
+								value="CANDIDATE CONSUMPTIONS for #{promotionConsumptionTypeDiscController.selectedData.code} (#{promotionConsumptionTypeDiscController.selectedData.description}) " />
+
+							<p:commandButton id="refreshCandidateTable"
+								icon="#{uiValue.refreshIcon}" ajax="true"
+								actionListener="#{promotionConsumptionTypeDiscController.refreshCandidateDataTable}"
+								oncomplete="{updateCandidateTable()}"
+								style="margin-left: 1rem; margin-right: .5rem"
+								styleClass="ui-button-warning rounded-button">
+							</p:commandButton>
+							<p:tooltip for="refreshCandidateTable"
+								value="Refresh candidate data" />
+						</f:facet>
+
+						<p:column id="candidateCode"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CODE" rendered="true"
+							filterBy="#{candidateDataTable.code}" filterMatchMode="contains">
+							<h:outputText id="codeOutput" value="#{candidateDataTable.code}" />
+						</p:column>
+
+						<p:column id="candidateName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="NAME" rendered="true"
+							filterBy="#{candidateDataTable.name}" filterMatchMode="contains">
+							<h:outputText id="nameOutput" value="#{candidateDataTable.name}" />
+						</p:column>
+
+						<p:column id="candidateDescription"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="DESCRIPTION" rendered="true"
+							filterBy="#{candidateDataTable.description}"
+							filterMatchMode="contains">
+							<h:outputText id="descriptionOutput"
+								value="#{candidateDataTable.description}" />
+						</p:column>
+
+						<p:column id="candidateConsumptionClass"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CONSUMPTION CLASS" rendered="true"
+							filterBy="#{candidateDataTable.consumptionClassId}"
+							filterMatchMode="exact">
+							<f:facet id="candidateConsumptionClassFilter" name="filter">
+								<p:selectOneMenu id="candidateConsumptionClassFilterMenu"
+									onchange="PF('candidateTableWidget').filter()">
+									<f:selectItems id="candidateConsumptionClassFilterSelectItems"
+										value="#{promotionConsumptionTypeDiscController.consumptionClassSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:selectOneMenu id="candidateConsumptionClassDataOutput"
+								editable="false" disabled="true" immediate="true"
+								value="#{candidateDataTable.consumptionClassId}">
+								<f:selectItems
+									value="#{promotionConsumptionTypeDiscController.consumptionClassSelectItems()}"
+									id="selectItemsConsumptionClassOutputCandidate"
+									itemDisabled="true" var="Status"
+									itemValue="#{candidateDataTable.consumptionClassId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+
+						<p:column id="candidateStatus"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="STATUS" rendered="true"
+							filterBy="#{candidateDataTable.statusId}" filterMatchMode="exact">
+							<f:facet id="statusCandidateFilter" name="filter">
+								<p:selectOneMenu id="statusCandidateMenu"
+									onchange="PF('candidateTableWidget').filter()">
+									<f:selectItems id="statusCandidateFilterSelectItems"
+										value="#{promotionConsumptionTypeDiscController.statusSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:selectOneMenu id="statusCandidateDataOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{candidateDataTable.statusId}">
+								<f:selectItems
+									value="#{promotionConsumptionTypeDiscController.statusSelectItems()}"
+									id="selectItemsStatusOutputCandidateData" itemDisabled="true"
+									var="Status" itemValue="#{candidateDataTable.statusId}" />
+							</p:selectOneMenu>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+			</p:tab>
+		</p:accordionPanel>
+	</h:form>
+</body>
+</html>

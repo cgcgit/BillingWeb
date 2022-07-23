@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee  
+	http://xmlns.jcp.org/xml/ns/javaee/web-facesconfig_2_3.xsd"
+	version="2.3">
+
+	<application>
+		<resource-bundle>
+			<base-name>com.comasw.properties.pageTitle</base-name>
+			<var>pageTitle</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>com.comasw.properties.uiValues</base-name>
+			<var>uiValue</var>
+		</resource-bundle>
+		<resource-bundle>
+			<base-name>com.comasw.properties.dataBaseDefinitions</base-name>
+			<var>dataBase</var>
+		</resource-bundle>
+</application>
+	
+</faces-config>
+ 	
