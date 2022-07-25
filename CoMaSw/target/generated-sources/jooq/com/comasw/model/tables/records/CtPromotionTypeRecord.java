@@ -26,7 +26,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     private static final long serialVersionUID = 1L;
 
     /**
-     * Setter for <code>public.ct_promotion_type.promotion_type_id</code>.
+     * Setter for <code>public.ct_promotion_type.promotion_type_id</code>. Internal identifier of the promotion type
      */
     @Override
     public void setPromotionTypeId(Integer value) {
@@ -34,7 +34,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Getter for <code>public.ct_promotion_type.promotion_type_id</code>.
+     * Getter for <code>public.ct_promotion_type.promotion_type_id</code>. Internal identifier of the promotion type
      */
     @Override
     public Integer getPromotionTypeId() {
@@ -42,7 +42,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Setter for <code>public.ct_promotion_type.entity_type_id</code>.
+     * Setter for <code>public.ct_promotion_type.entity_type_id</code>. Entity_id for the promotion type
      */
     @Override
     public void setEntityTypeId(Integer value) {
@@ -50,7 +50,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Getter for <code>public.ct_promotion_type.entity_type_id</code>.
+     * Getter for <code>public.ct_promotion_type.entity_type_id</code>. Entity_id for the promotion type
      */
     @Override
     public Integer getEntityTypeId() {
@@ -58,7 +58,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Setter for <code>public.ct_promotion_type.start_date</code>.
+     * Setter for <code>public.ct_promotion_type.start_date</code>. Start_date for the promotion type
      */
     @Override
     public void setStartDate(LocalDateTime value) {
@@ -66,7 +66,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Getter for <code>public.ct_promotion_type.start_date</code>.
+     * Getter for <code>public.ct_promotion_type.start_date</code>. Start_date for the promotion type
      */
     @Override
     public LocalDateTime getStartDate() {
@@ -74,7 +74,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Setter for <code>public.ct_promotion_type.end_date</code>.
+     * Setter for <code>public.ct_promotion_type.end_date</code>. End_date for the promotion type
      */
     @Override
     public void setEndDate(LocalDateTime value) {
@@ -82,7 +82,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Getter for <code>public.ct_promotion_type.end_date</code>.
+     * Getter for <code>public.ct_promotion_type.end_date</code>. End_date for the promotion type
      */
     @Override
     public LocalDateTime getEndDate() {
@@ -90,7 +90,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Setter for <code>public.ct_promotion_type.code</code>.
+     * Setter for <code>public.ct_promotion_type.code</code>. Code of the promotion type
      */
     @Override
     public void setCode(String value) {
@@ -98,7 +98,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Getter for <code>public.ct_promotion_type.code</code>.
+     * Getter for <code>public.ct_promotion_type.code</code>. Code of the promotion type
      */
     @Override
     public String getCode() {
@@ -106,7 +106,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Setter for <code>public.ct_promotion_type.name</code>.
+     * Setter for <code>public.ct_promotion_type.name</code>. Name of the promotion type
      */
     @Override
     public void setName(String value) {
@@ -114,7 +114,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Getter for <code>public.ct_promotion_type.name</code>.
+     * Getter for <code>public.ct_promotion_type.name</code>. Name of the promotion type
      */
     @Override
     public String getName() {
@@ -122,7 +122,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Setter for <code>public.ct_promotion_type.description</code>.
+     * Setter for <code>public.ct_promotion_type.description</code>. Description for the promotion type
      */
     @Override
     public void setDescription(String value) {
@@ -130,7 +130,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Getter for <code>public.ct_promotion_type.description</code>.
+     * Getter for <code>public.ct_promotion_type.description</code>. Description for the promotion type
      */
     @Override
     public String getDescription() {
@@ -138,7 +138,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Setter for <code>public.ct_promotion_type.application_level_id</code>.
+     * Setter for <code>public.ct_promotion_type.application_level_id</code>. Application level id for the promotion type
      */
     @Override
     public void setApplicationLevelId(Integer value) {
@@ -146,7 +146,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Getter for <code>public.ct_promotion_type.application_level_id</code>.
+     * Getter for <code>public.ct_promotion_type.application_level_id</code>. Application level id for the promotion type
      */
     @Override
     public Integer getApplicationLevelId() {
@@ -154,7 +154,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Setter for <code>public.ct_promotion_type.discount_type_id</code>.
+     * Setter for <code>public.ct_promotion_type.discount_type_id</code>. Discount Type id for the promotion type
      */
     @Override
     public void setDiscountTypeId(Integer value) {
@@ -162,7 +162,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Getter for <code>public.ct_promotion_type.discount_type_id</code>.
+     * Getter for <code>public.ct_promotion_type.discount_type_id</code>. Discount Type id for the promotion type
      */
     @Override
     public Integer getDiscountTypeId() {
@@ -170,7 +170,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Setter for <code>public.ct_promotion_type.discount_value</code>.
+     * Setter for <code>public.ct_promotion_type.discount_value</code>. Discount value for the promotion type
      */
     @Override
     public void setDiscountValue(BigDecimal value) {
@@ -178,7 +178,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Getter for <code>public.ct_promotion_type.discount_value</code>.
+     * Getter for <code>public.ct_promotion_type.discount_value</code>. Discount value for the promotion type
      */
     @Override
     public BigDecimal getDiscountValue() {
@@ -186,7 +186,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Setter for <code>public.ct_promotion_type.status_id</code>.
+     * Setter for <code>public.ct_promotion_type.status_id</code>. Status id for the promotion type
      */
     @Override
     public void setStatusId(Integer value) {
@@ -194,7 +194,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Getter for <code>public.ct_promotion_type.status_id</code>.
+     * Getter for <code>public.ct_promotion_type.status_id</code>. Status id for the promotion type
      */
     @Override
     public Integer getStatusId() {
@@ -202,7 +202,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Setter for <code>public.ct_promotion_type.input_date</code>.
+     * Setter for <code>public.ct_promotion_type.input_date</code>. Date on which the record was created
      */
     @Override
     public void setInputDate(LocalDateTime value) {
@@ -210,7 +210,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Getter for <code>public.ct_promotion_type.input_date</code>.
+     * Getter for <code>public.ct_promotion_type.input_date</code>. Date on which the record was created
      */
     @Override
     public LocalDateTime getInputDate() {
@@ -218,7 +218,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Setter for <code>public.ct_promotion_type.input_user</code>.
+     * Setter for <code>public.ct_promotion_type.input_user</code>. User who was created the record
      */
     @Override
     public void setInputUser(String value) {
@@ -226,7 +226,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Getter for <code>public.ct_promotion_type.input_user</code>.
+     * Getter for <code>public.ct_promotion_type.input_user</code>. User who was created the record
      */
     @Override
     public String getInputUser() {
@@ -234,7 +234,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Setter for <code>public.ct_promotion_type.modif_date</code>.
+     * Setter for <code>public.ct_promotion_type.modif_date</code>. Date on which the record was modified (last modified)
      */
     @Override
     public void setModifDate(LocalDateTime value) {
@@ -242,7 +242,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Getter for <code>public.ct_promotion_type.modif_date</code>.
+     * Getter for <code>public.ct_promotion_type.modif_date</code>. Date on which the record was modified (last modified)
      */
     @Override
     public LocalDateTime getModifDate() {
@@ -250,7 +250,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Setter for <code>public.ct_promotion_type.modif_user</code>.
+     * Setter for <code>public.ct_promotion_type.modif_user</code>. User who was modified the record
      */
     @Override
     public void setModifUser(String value) {
@@ -258,7 +258,7 @@ public class CtPromotionTypeRecord extends UpdatableRecordImpl<CtPromotionTypeRe
     }
 
     /**
-     * Getter for <code>public.ct_promotion_type.modif_user</code>.
+     * Getter for <code>public.ct_promotion_type.modif_user</code>. User who was modified the record
      */
     @Override
     public String getModifUser() {

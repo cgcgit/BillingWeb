@@ -17,11 +17,23 @@ import com.comasw.model.tables.CtPromoFeeTypeDiscount;
 import com.comasw.model.tables.CtPromoProdType;
 import com.comasw.model.tables.CtPromoServType;
 import com.comasw.model.tables.CtPromotionType;
-import com.comasw.model.tables.CtPromotionTypeBck;
 import com.comasw.model.tables.CtServFeeType;
 import com.comasw.model.tables.CtServiceType;
+import com.comasw.model.tables.IdtAccount;
+import com.comasw.model.tables.IdtCustomer;
 import com.comasw.model.tables.IdtFeeType;
+import com.comasw.model.tables.IdtProduct;
+import com.comasw.model.tables.IdtProductFee;
+import com.comasw.model.tables.IdtProductPromotion;
+import com.comasw.model.tables.IdtProductService;
+import com.comasw.model.tables.IdtPromotion;
 import com.comasw.model.tables.IdtPromotionType;
+import com.comasw.model.tables.IdtService;
+import com.comasw.model.tables.IdtServiceFee;
+import com.comasw.model.tables.IdtServicePromotion;
+import com.comasw.model.tables.ItAccount;
+import com.comasw.model.tables.ItContract;
+import com.comasw.model.tables.ItCustomer;
 import com.comasw.model.tables.ItProfiles;
 import com.comasw.model.tables.ItUsers;
 import com.comasw.model.tables.MtApplicationMenu;
@@ -115,11 +127,6 @@ public class Tables {
     public static final CtPromotionType CT_PROMOTION_TYPE = CtPromotionType.CT_PROMOTION_TYPE;
 
     /**
-     * Table that stores the promotion types of the catalog for the application
-     */
-    public static final CtPromotionTypeBck CT_PROMOTION_TYPE_BCK = CtPromotionTypeBck.CT_PROMOTION_TYPE_BCK;
-
-    /**
      * Table that stores the fee service relation types of the catalog for the application
      */
     public static final CtServFeeType CT_SERV_FEE_TYPE = CtServFeeType.CT_SERV_FEE_TYPE;
@@ -130,14 +137,79 @@ public class Tables {
     public static final CtServiceType CT_SERVICE_TYPE = CtServiceType.CT_SERVICE_TYPE;
 
     /**
+     * Table that stores the account instance ids referenced by account table
+     */
+    public static final IdtAccount IDT_ACCOUNT = IdtAccount.IDT_ACCOUNT;
+
+    /**
+     * Table that stores the customer instance ids referenced by customer table
+     */
+    public static final IdtCustomer IDT_CUSTOMER = IdtCustomer.IDT_CUSTOMER;
+
+    /**
      * Table that stores the fee_type_id for the fee types of the catalog for the application
      */
     public static final IdtFeeType IDT_FEE_TYPE = IdtFeeType.IDT_FEE_TYPE;
 
     /**
+     * Table that stores the product instance ids referenced by product table
+     */
+    public static final IdtProduct IDT_PRODUCT = IdtProduct.IDT_PRODUCT;
+
+    /**
+     * Table that stores the product-fee instance relation ids referenced by product_fee table
+     */
+    public static final IdtProductFee IDT_PRODUCT_FEE = IdtProductFee.IDT_PRODUCT_FEE;
+
+    /**
+     * Table that stores the product-promotion instance relation ids referenced by product_promotion table
+     */
+    public static final IdtProductPromotion IDT_PRODUCT_PROMOTION = IdtProductPromotion.IDT_PRODUCT_PROMOTION;
+
+    /**
+     * Table that stores the product-service instance relation ids referenced by product_service table
+     */
+    public static final IdtProductService IDT_PRODUCT_SERVICE = IdtProductService.IDT_PRODUCT_SERVICE;
+
+    /**
+     * Table that stores the promotion instance ids referenced by promotion table
+     */
+    public static final IdtPromotion IDT_PROMOTION = IdtPromotion.IDT_PROMOTION;
+
+    /**
      * The table <code>public.idt_promotion_type</code>.
      */
     public static final IdtPromotionType IDT_PROMOTION_TYPE = IdtPromotionType.IDT_PROMOTION_TYPE;
+
+    /**
+     * Table that stores the service instance ids referenced by service table
+     */
+    public static final IdtService IDT_SERVICE = IdtService.IDT_SERVICE;
+
+    /**
+     * Table that stores the service-fee instance relation ids referenced by service_fee table
+     */
+    public static final IdtServiceFee IDT_SERVICE_FEE = IdtServiceFee.IDT_SERVICE_FEE;
+
+    /**
+     * Table that stores the service-promotion instance relation ids referenced by service_promotion table
+     */
+    public static final IdtServicePromotion IDT_SERVICE_PROMOTION = IdtServicePromotion.IDT_SERVICE_PROMOTION;
+
+    /**
+     * Table that stores the account instance data
+     */
+    public static final ItAccount IT_ACCOUNT = ItAccount.IT_ACCOUNT;
+
+    /**
+     * Table that stores the contract instance data
+     */
+    public static final ItContract IT_CONTRACT = ItContract.IT_CONTRACT;
+
+    /**
+     * Table that stores the customer instance data
+     */
+    public static final ItCustomer IT_CUSTOMER = ItCustomer.IT_CUSTOMER;
 
     /**
      * Table that stores application profiles
@@ -205,7 +277,7 @@ public class Tables {
     public static final VwProductServiceType VW_PRODUCT_SERVICE_TYPE = VwProductServiceType.VW_PRODUCT_SERVICE_TYPE;
 
     /**
-     * View showing the relationship between promotion types and the fee types that can be discount by the promotion type - related to ct_promo_consum_type_discount
+     * The table <code>public.vw_promo_consum_type_discount</code>.
      */
     public static final VwPromoConsumTypeDiscount VW_PROMO_CONSUM_TYPE_DISCOUNT = VwPromoConsumTypeDiscount.VW_PROMO_CONSUM_TYPE_DISCOUNT;
 

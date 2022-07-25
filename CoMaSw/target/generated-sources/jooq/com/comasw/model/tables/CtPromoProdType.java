@@ -142,15 +142,15 @@ public class CtPromoProdType extends TableImpl<CtPromoProdTypeRecord> {
         return Arrays.<ForeignKey<CtPromoProdTypeRecord, ?>>asList(Keys.CT_PROMO_PROD_TYPE__CT_PROMO_PROD_TYPE_PROMO_FK, Keys.CT_PROMO_PROD_TYPE__CT_PROMO_PROD_TYPE_PROD_FK, Keys.CT_PROMO_PROD_TYPE__CT_PROMO_PROD_TYPE_STATUS_FK);
     }
 
-    private transient CtPromotionTypeBck _ctPromotionTypeBck;
+    private transient IdtPromotionType _idtPromotionType;
     private transient CtProductType _ctProductType;
     private transient PtStatus _ptStatus;
 
-    public CtPromotionTypeBck ctPromotionTypeBck() {
-        if (_ctPromotionTypeBck == null)
-            _ctPromotionTypeBck = new CtPromotionTypeBck(this, Keys.CT_PROMO_PROD_TYPE__CT_PROMO_PROD_TYPE_PROMO_FK);
+    public IdtPromotionType idtPromotionType() {
+        if (_idtPromotionType == null)
+            _idtPromotionType = new IdtPromotionType(this, Keys.CT_PROMO_PROD_TYPE__CT_PROMO_PROD_TYPE_PROMO_FK);
 
-        return _ctPromotionTypeBck;
+        return _idtPromotionType;
     }
 
     public CtProductType ctProductType() {

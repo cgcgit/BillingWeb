@@ -142,15 +142,15 @@ public class CtPromoConsumTypeDiscount extends TableImpl<CtPromoConsumTypeDiscou
         return Arrays.<ForeignKey<CtPromoConsumTypeDiscountRecord, ?>>asList(Keys.CT_PROMO_CONSUM_TYPE_DISCOUNT__CT_PROMO_CONSUM_TYPE_DISC_PROMO_FK, Keys.CT_PROMO_CONSUM_TYPE_DISCOUNT__CT_PROMO_CONSUM_TYPE_DISC_CONS_FK, Keys.CT_PROMO_CONSUM_TYPE_DISCOUNT__CT_PROMO_CONSUM_TYPE_DISCOUNT_STATUS_FK);
     }
 
-    private transient CtPromotionTypeBck _ctPromotionTypeBck;
+    private transient IdtPromotionType _idtPromotionType;
     private transient CtConsumptionType _ctConsumptionType;
     private transient PtStatus _ptStatus;
 
-    public CtPromotionTypeBck ctPromotionTypeBck() {
-        if (_ctPromotionTypeBck == null)
-            _ctPromotionTypeBck = new CtPromotionTypeBck(this, Keys.CT_PROMO_CONSUM_TYPE_DISCOUNT__CT_PROMO_CONSUM_TYPE_DISC_PROMO_FK);
+    public IdtPromotionType idtPromotionType() {
+        if (_idtPromotionType == null)
+            _idtPromotionType = new IdtPromotionType(this, Keys.CT_PROMO_CONSUM_TYPE_DISCOUNT__CT_PROMO_CONSUM_TYPE_DISC_PROMO_FK);
 
-        return _ctPromotionTypeBck;
+        return _idtPromotionType;
     }
 
     public CtConsumptionType ctConsumptionType() {

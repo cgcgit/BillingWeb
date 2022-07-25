@@ -142,15 +142,15 @@ public class CtPromoServType extends TableImpl<CtPromoServTypeRecord> {
         return Arrays.<ForeignKey<CtPromoServTypeRecord, ?>>asList(Keys.CT_PROMO_SERV_TYPE__CT_PROMO_SERV_TYPE_PROMO_FK, Keys.CT_PROMO_SERV_TYPE__CT_PROMO_SERV_TYPE_SERV_FK, Keys.CT_PROMO_SERV_TYPE__CT_PROMO_SERV_TYPE_STATUS_FK);
     }
 
-    private transient CtPromotionTypeBck _ctPromotionTypeBck;
+    private transient IdtPromotionType _idtPromotionType;
     private transient CtServiceType _ctServiceType;
     private transient PtStatus _ptStatus;
 
-    public CtPromotionTypeBck ctPromotionTypeBck() {
-        if (_ctPromotionTypeBck == null)
-            _ctPromotionTypeBck = new CtPromotionTypeBck(this, Keys.CT_PROMO_SERV_TYPE__CT_PROMO_SERV_TYPE_PROMO_FK);
+    public IdtPromotionType idtPromotionType() {
+        if (_idtPromotionType == null)
+            _idtPromotionType = new IdtPromotionType(this, Keys.CT_PROMO_SERV_TYPE__CT_PROMO_SERV_TYPE_PROMO_FK);
 
-        return _ctPromotionTypeBck;
+        return _idtPromotionType;
     }
 
     public CtServiceType ctServiceType() {

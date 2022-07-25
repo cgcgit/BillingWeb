@@ -218,7 +218,7 @@ public class CtFeeTypeRecord extends UpdatableRecordImpl<CtFeeTypeRecord> implem
     }
 
     /**
-     * Setter for <code>public.ct_fee_type.input_user</code>. User who was modified the record
+     * Setter for <code>public.ct_fee_type.input_user</code>. User who was created the record
      */
     @Override
     public void setInputUser(String value) {
@@ -226,7 +226,7 @@ public class CtFeeTypeRecord extends UpdatableRecordImpl<CtFeeTypeRecord> implem
     }
 
     /**
-     * Getter for <code>public.ct_fee_type.input_user</code>. User who was modified the record
+     * Getter for <code>public.ct_fee_type.input_user</code>. User who was created the record
      */
     @Override
     public String getInputUser() {
@@ -250,7 +250,7 @@ public class CtFeeTypeRecord extends UpdatableRecordImpl<CtFeeTypeRecord> implem
     }
 
     /**
-     * Setter for <code>public.ct_fee_type.modif_user</code>.
+     * Setter for <code>public.ct_fee_type.modif_user</code>. User who was modified the record
      */
     @Override
     public void setModifUser(String value) {
@@ -258,7 +258,7 @@ public class CtFeeTypeRecord extends UpdatableRecordImpl<CtFeeTypeRecord> implem
     }
 
     /**
-     * Getter for <code>public.ct_fee_type.modif_user</code>.
+     * Getter for <code>public.ct_fee_type.modif_user</code>. User who was modified the record
      */
     @Override
     public String getModifUser() {

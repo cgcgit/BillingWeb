@@ -360,7 +360,7 @@
 						</p:ajax>
 
 						<p:ajax id="ajaxRelatedRowEditCancel" event="rowEditCancel"
-							listener="#{productPromotionTypeController.onRelatedRowCancel}"
+							listener="#{productFeeTypeController.onRelatedRowCancel}"
 							update="form:growlMessage" oncomplete="{updateRelatedTable()}">
 						</p:ajax>
 
@@ -371,7 +371,7 @@
                                   width: 60px;    
                                   overflow: hidden"
 							headerText="EDIT RELATION STATUS"
-							rendered="#{productPromotionTypeController.canUserModify()}">
+							rendered="#{productFeeTypeController.canUserModify()}">
 							<p:rowEditor id="relatedRowEditor"
 								editTitle="Edit Relation Status" cancelTitle="Cancel Edit"
 								saveTitle="Save Row" />

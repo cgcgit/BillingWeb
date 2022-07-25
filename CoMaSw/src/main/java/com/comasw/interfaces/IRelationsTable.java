@@ -11,13 +11,9 @@ import org.primefaces.event.RowEditEvent;
  * @author catuxa
  *
  */
-public interface IRelationsTable {
+public interface IRelationsTable extends ITable {
 	
-	/**
-	 * Gets the data from database and put them into a list.
-	 */
-	public void loadDataList();
-	
+
 	/**
 	 * Load related data
 	 */
@@ -55,16 +51,6 @@ public interface IRelationsTable {
 	 */
 	
 	public void pushRemoveButtonFromRelatedData();
-	
-	/**
-	 * Reset the filter of the data table
-	 */
-	public void resetFilterDataTable();
-	
-	/**
-	 * Refresh the data table
-	 */
-	public void refreshDataTable();
 	
 		
 	/**
@@ -114,15 +100,6 @@ public interface IRelationsTable {
 	
 	//public void onCandidateRowSelect(SelectEvent<?> event);
 	
-	
-	/**
-	 * Sets the init variables to default value
-	 */
-	public void setInitVariablesToDefault();
 
-	/**
-	 * Sets the control variables to default value
-	 */
-	public void setControlVariablesToDefault();
 	
 }

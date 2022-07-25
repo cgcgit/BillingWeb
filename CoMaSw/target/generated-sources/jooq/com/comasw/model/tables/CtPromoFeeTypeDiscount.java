@@ -147,16 +147,16 @@ public class CtPromoFeeTypeDiscount extends TableImpl<CtPromoFeeTypeDiscountReco
         return Arrays.<ForeignKey<CtPromoFeeTypeDiscountRecord, ?>>asList(Keys.CT_PROMO_FEE_TYPE_DISCOUNT__CT_PROMO_FEE_TYPE_DISCOUNT_PROMO_FK, Keys.CT_PROMO_FEE_TYPE_DISCOUNT__CT_PROMO_FEE_TYPE_DISCOUNT_FEE_FK, Keys.CT_PROMO_FEE_TYPE_DISCOUNT__CT_PROMO_FEE_TYPE_DISCOUNT_LEV_FK, Keys.CT_PROMO_FEE_TYPE_DISCOUNT__CT_PROMO_FEE_TYPE_DISCOUNT_STATUS_FK);
     }
 
-    private transient CtPromotionTypeBck _ctPromotionTypeBck;
+    private transient IdtPromotionType _idtPromotionType;
     private transient IdtFeeType _idtFeeType;
     private transient PtApplicationLevel _ptApplicationLevel;
     private transient PtStatus _ptStatus;
 
-    public CtPromotionTypeBck ctPromotionTypeBck() {
-        if (_ctPromotionTypeBck == null)
-            _ctPromotionTypeBck = new CtPromotionTypeBck(this, Keys.CT_PROMO_FEE_TYPE_DISCOUNT__CT_PROMO_FEE_TYPE_DISCOUNT_PROMO_FK);
+    public IdtPromotionType idtPromotionType() {
+        if (_idtPromotionType == null)
+            _idtPromotionType = new IdtPromotionType(this, Keys.CT_PROMO_FEE_TYPE_DISCOUNT__CT_PROMO_FEE_TYPE_DISCOUNT_PROMO_FK);
 
-        return _ctPromotionTypeBck;
+        return _idtPromotionType;
     }
 
     public IdtFeeType idtFeeType() {

@@ -111,9 +111,9 @@ public class CtFeeType extends TableImpl<CtFeeTypeRecord> {
     public final TableField<CtFeeTypeRecord, LocalDateTime> INPUT_DATE = createField(DSL.name("input_date"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field("(('now'::text)::timestamp(0) with time zone)::timestamp without time zone", SQLDataType.LOCALDATETIME)), this, "Date on which the record was created");
 
     /**
-     * The column <code>public.ct_fee_type.input_user</code>. User who was modified the record
+     * The column <code>public.ct_fee_type.input_user</code>. User who was created the record
      */
-    public final TableField<CtFeeTypeRecord, String> INPUT_USER = createField(DSL.name("input_user"), SQLDataType.VARCHAR(10).nullable(false), this, "User who was modified the record");
+    public final TableField<CtFeeTypeRecord, String> INPUT_USER = createField(DSL.name("input_user"), SQLDataType.VARCHAR(10).nullable(false), this, "User who was created the record");
 
     /**
      * The column <code>public.ct_fee_type.modif_date</code>. Date of the last modification of the record
@@ -121,9 +121,9 @@ public class CtFeeType extends TableImpl<CtFeeTypeRecord> {
     public final TableField<CtFeeTypeRecord, LocalDateTime> MODIF_DATE = createField(DSL.name("modif_date"), SQLDataType.LOCALDATETIME(6), this, "Date of the last modification of the record");
 
     /**
-     * The column <code>public.ct_fee_type.modif_user</code>.
+     * The column <code>public.ct_fee_type.modif_user</code>. User who was modified the record
      */
-    public final TableField<CtFeeTypeRecord, String> MODIF_USER = createField(DSL.name("modif_user"), SQLDataType.VARCHAR(10), this, "");
+    public final TableField<CtFeeTypeRecord, String> MODIF_USER = createField(DSL.name("modif_user"), SQLDataType.VARCHAR(10), this, "User who was modified the record");
 
     private CtFeeType(Name alias, Table<CtFeeTypeRecord> aliased) {
         this(alias, aliased, null);

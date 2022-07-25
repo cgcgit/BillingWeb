@@ -13,7 +13,7 @@ import org.primefaces.event.RowEditEvent;
  *         Manages the editable tables for the entities
  *
  */
-public interface IEditableTable extends ITable{
+public interface IEditableTable extends ITableAdd{
 	
 
 	// -------------- EVENT MANAGEMENT ON THE TABLES

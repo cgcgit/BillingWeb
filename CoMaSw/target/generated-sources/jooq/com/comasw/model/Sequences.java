@@ -16,6 +16,11 @@ import org.jooq.impl.SQLDataType;
 public class Sequences {
 
     /**
+     * The sequence <code>public.seq_account_id</code>
+     */
+    public static final Sequence<Long> SEQ_ACCOUNT_ID = Internal.createSequence("seq_account_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
+
+    /**
      * The sequence <code>public.seq_account_type_id</code>
      */
     public static final Sequence<Long> SEQ_ACCOUNT_TYPE_ID = Internal.createSequence("seq_account_type_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
@@ -49,6 +54,16 @@ public class Sequences {
      * The sequence <code>public.seq_consumption_type</code>
      */
     public static final Sequence<Long> SEQ_CONSUMPTION_TYPE = Internal.createSequence("seq_consumption_type", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
+
+    /**
+     * The sequence <code>public.seq_contract_id</code>
+     */
+    public static final Sequence<Long> SEQ_CONTRACT_ID = Internal.createSequence("seq_contract_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
+
+    /**
+     * The sequence <code>public.seq_customer_id</code>
+     */
+    public static final Sequence<Long> SEQ_CUSTOMER_ID = Internal.createSequence("seq_customer_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
 
     /**
      * The sequence <code>public.seq_customer_type_id</code>
@@ -86,6 +101,26 @@ public class Sequences {
     public static final Sequence<Long> SEQ_PROD_SERV_TYPE_ID = Internal.createSequence("seq_prod_serv_type_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
 
     /**
+     * The sequence <code>public.seq_product_fee_id</code>
+     */
+    public static final Sequence<Long> SEQ_PRODUCT_FEE_ID = Internal.createSequence("seq_product_fee_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
+
+    /**
+     * The sequence <code>public.seq_product_id</code>
+     */
+    public static final Sequence<Long> SEQ_PRODUCT_ID = Internal.createSequence("seq_product_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
+
+    /**
+     * The sequence <code>public.seq_product_promotion_id</code>
+     */
+    public static final Sequence<Long> SEQ_PRODUCT_PROMOTION_ID = Internal.createSequence("seq_product_promotion_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
+
+    /**
+     * The sequence <code>public.seq_product_service_id</code>
+     */
+    public static final Sequence<Long> SEQ_PRODUCT_SERVICE_ID = Internal.createSequence("seq_product_service_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
+
+    /**
      * The sequence <code>public.seq_product_type_id</code>
      */
     public static final Sequence<Long> SEQ_PRODUCT_TYPE_ID = Internal.createSequence("seq_product_type_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
@@ -116,6 +151,11 @@ public class Sequences {
     public static final Sequence<Long> SEQ_PROMO_SERV_TYPE_ID = Internal.createSequence("seq_promo_serv_type_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
 
     /**
+     * The sequence <code>public.seq_promotion_id</code>
+     */
+    public static final Sequence<Long> SEQ_PROMOTION_ID = Internal.createSequence("seq_promotion_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
+
+    /**
      * The sequence <code>public.seq_promotion_type_id</code>
      */
     public static final Sequence<Long> SEQ_PROMOTION_TYPE_ID = Internal.createSequence("seq_promotion_type_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
@@ -124,6 +164,21 @@ public class Sequences {
      * The sequence <code>public.seq_serv_fee_type_id</code>
      */
     public static final Sequence<Long> SEQ_SERV_FEE_TYPE_ID = Internal.createSequence("seq_serv_fee_type_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
+
+    /**
+     * The sequence <code>public.seq_service_fee_id</code>
+     */
+    public static final Sequence<Long> SEQ_SERVICE_FEE_ID = Internal.createSequence("seq_service_fee_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
+
+    /**
+     * The sequence <code>public.seq_service_id</code>
+     */
+    public static final Sequence<Long> SEQ_SERVICE_ID = Internal.createSequence("seq_service_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
+
+    /**
+     * The sequence <code>public.seq_service_promotion_id</code>
+     */
+    public static final Sequence<Long> SEQ_SERVICE_PROMOTION_ID = Internal.createSequence("seq_service_promotion_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
 
     /**
      * The sequence <code>public.seq_service_type_id</code>

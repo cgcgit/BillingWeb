@@ -2,7 +2,7 @@ package com.comasw.interfaces;
 
 import javax.faces.event.ValueChangeEvent;
 
-public interface IHistoricTable extends ITable {
+public interface IHistoricTable extends ITableAdd {
 
 	// -------------- DIRECT ACTIONS ON THE TABLES
 

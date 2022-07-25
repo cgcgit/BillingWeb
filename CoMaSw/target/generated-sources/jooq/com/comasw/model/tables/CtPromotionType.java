@@ -51,79 +51,79 @@ public class CtPromotionType extends TableImpl<CtPromotionTypeRecord> {
     }
 
     /**
-     * The column <code>public.ct_promotion_type.promotion_type_id</code>.
+     * The column <code>public.ct_promotion_type.promotion_type_id</code>. Internal identifier of the promotion type
      */
-    public final TableField<CtPromotionTypeRecord, Integer> PROMOTION_TYPE_ID = createField(DSL.name("promotion_type_id"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<CtPromotionTypeRecord, Integer> PROMOTION_TYPE_ID = createField(DSL.name("promotion_type_id"), SQLDataType.INTEGER.nullable(false), this, "Internal identifier of the promotion type");
 
     /**
-     * The column <code>public.ct_promotion_type.entity_type_id</code>.
+     * The column <code>public.ct_promotion_type.entity_type_id</code>. Entity_id for the promotion type
      */
-    public final TableField<CtPromotionTypeRecord, Integer> ENTITY_TYPE_ID = createField(DSL.name("entity_type_id"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("1002", SQLDataType.INTEGER)), this, "");
+    public final TableField<CtPromotionTypeRecord, Integer> ENTITY_TYPE_ID = createField(DSL.name("entity_type_id"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("1002", SQLDataType.INTEGER)), this, "Entity_id for the promotion type");
 
     /**
-     * The column <code>public.ct_promotion_type.start_date</code>.
+     * The column <code>public.ct_promotion_type.start_date</code>. Start_date for the promotion type
      */
-    public final TableField<CtPromotionTypeRecord, LocalDateTime> START_DATE = createField(DSL.name("start_date"), SQLDataType.LOCALDATETIME(0).nullable(false), this, "", new LocalDateAsLocalDateTimeBinding());
+    public final TableField<CtPromotionTypeRecord, LocalDateTime> START_DATE = createField(DSL.name("start_date"), SQLDataType.LOCALDATETIME(0).nullable(false), this, "Start_date for the promotion type", new LocalDateAsLocalDateTimeBinding());
 
     /**
-     * The column <code>public.ct_promotion_type.end_date</code>.
+     * The column <code>public.ct_promotion_type.end_date</code>. End_date for the promotion type
      */
-    public final TableField<CtPromotionTypeRecord, LocalDateTime> END_DATE = createField(DSL.name("end_date"), SQLDataType.LOCALDATETIME(0).nullable(false), this, "", new LocalDateAsLocalDateTimeBinding());
+    public final TableField<CtPromotionTypeRecord, LocalDateTime> END_DATE = createField(DSL.name("end_date"), SQLDataType.LOCALDATETIME(0).nullable(false), this, "End_date for the promotion type", new LocalDateAsLocalDateTimeBinding());
 
     /**
-     * The column <code>public.ct_promotion_type.code</code>.
+     * The column <code>public.ct_promotion_type.code</code>. Code of the promotion type
      */
-    public final TableField<CtPromotionTypeRecord, String> CODE = createField(DSL.name("code"), SQLDataType.VARCHAR(10).nullable(false), this, "");
+    public final TableField<CtPromotionTypeRecord, String> CODE = createField(DSL.name("code"), SQLDataType.VARCHAR(10).nullable(false), this, "Code of the promotion type");
 
     /**
-     * The column <code>public.ct_promotion_type.name</code>.
+     * The column <code>public.ct_promotion_type.name</code>. Name of the promotion type
      */
-    public final TableField<CtPromotionTypeRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(50).nullable(false), this, "");
+    public final TableField<CtPromotionTypeRecord, String> NAME = createField(DSL.name("name"), SQLDataType.VARCHAR(50).nullable(false), this, "Name of the promotion type");
 
     /**
-     * The column <code>public.ct_promotion_type.description</code>.
+     * The column <code>public.ct_promotion_type.description</code>. Description for the promotion type
      */
-    public final TableField<CtPromotionTypeRecord, String> DESCRIPTION = createField(DSL.name("description"), SQLDataType.VARCHAR(500).nullable(false), this, "");
+    public final TableField<CtPromotionTypeRecord, String> DESCRIPTION = createField(DSL.name("description"), SQLDataType.VARCHAR(500).nullable(false), this, "Description for the promotion type");
 
     /**
-     * The column <code>public.ct_promotion_type.application_level_id</code>.
+     * The column <code>public.ct_promotion_type.application_level_id</code>. Application level id for the promotion type
      */
-    public final TableField<CtPromotionTypeRecord, Integer> APPLICATION_LEVEL_ID = createField(DSL.name("application_level_id"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<CtPromotionTypeRecord, Integer> APPLICATION_LEVEL_ID = createField(DSL.name("application_level_id"), SQLDataType.INTEGER.nullable(false), this, "Application level id for the promotion type");
 
     /**
-     * The column <code>public.ct_promotion_type.discount_type_id</code>.
+     * The column <code>public.ct_promotion_type.discount_type_id</code>. Discount Type id for the promotion type
      */
-    public final TableField<CtPromotionTypeRecord, Integer> DISCOUNT_TYPE_ID = createField(DSL.name("discount_type_id"), SQLDataType.INTEGER.nullable(false), this, "");
+    public final TableField<CtPromotionTypeRecord, Integer> DISCOUNT_TYPE_ID = createField(DSL.name("discount_type_id"), SQLDataType.INTEGER.nullable(false), this, "Discount Type id for the promotion type");
 
     /**
-     * The column <code>public.ct_promotion_type.discount_value</code>.
+     * The column <code>public.ct_promotion_type.discount_value</code>. Discount value for the promotion type
      */
-    public final TableField<CtPromotionTypeRecord, BigDecimal> DISCOUNT_VALUE = createField(DSL.name("discount_value"), SQLDataType.NUMERIC(10, 4).nullable(false), this, "");
+    public final TableField<CtPromotionTypeRecord, BigDecimal> DISCOUNT_VALUE = createField(DSL.name("discount_value"), SQLDataType.NUMERIC(10, 4).nullable(false), this, "Discount value for the promotion type");
 
     /**
-     * The column <code>public.ct_promotion_type.status_id</code>.
+     * The column <code>public.ct_promotion_type.status_id</code>. Status id for the promotion type
      */
-    public final TableField<CtPromotionTypeRecord, Integer> STATUS_ID = createField(DSL.name("status_id"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("1000", SQLDataType.INTEGER)), this, "");
+    public final TableField<CtPromotionTypeRecord, Integer> STATUS_ID = createField(DSL.name("status_id"), SQLDataType.INTEGER.nullable(false).defaultValue(DSL.field("1000", SQLDataType.INTEGER)), this, "Status id for the promotion type");
 
     /**
-     * The column <code>public.ct_promotion_type.input_date</code>.
+     * The column <code>public.ct_promotion_type.input_date</code>. Date on which the record was created
      */
-    public final TableField<CtPromotionTypeRecord, LocalDateTime> INPUT_DATE = createField(DSL.name("input_date"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field("(('now'::text)::timestamp(0) with time zone)::timestamp without time zone", SQLDataType.LOCALDATETIME)), this, "");
+    public final TableField<CtPromotionTypeRecord, LocalDateTime> INPUT_DATE = createField(DSL.name("input_date"), SQLDataType.LOCALDATETIME(6).nullable(false).defaultValue(DSL.field("(('now'::text)::timestamp(0) with time zone)::timestamp without time zone", SQLDataType.LOCALDATETIME)), this, "Date on which the record was created");
 
     /**
-     * The column <code>public.ct_promotion_type.input_user</code>.
+     * The column <code>public.ct_promotion_type.input_user</code>. User who was created the record
      */
-    public final TableField<CtPromotionTypeRecord, String> INPUT_USER = createField(DSL.name("input_user"), SQLDataType.VARCHAR(10).nullable(false), this, "");
+    public final TableField<CtPromotionTypeRecord, String> INPUT_USER = createField(DSL.name("input_user"), SQLDataType.VARCHAR(10).nullable(false), this, "User who was created the record");
 
     /**
-     * The column <code>public.ct_promotion_type.modif_date</code>.
+     * The column <code>public.ct_promotion_type.modif_date</code>. Date on which the record was modified (last modified)
      */
-    public final TableField<CtPromotionTypeRecord, LocalDateTime> MODIF_DATE = createField(DSL.name("modif_date"), SQLDataType.LOCALDATETIME(6), this, "");
+    public final TableField<CtPromotionTypeRecord, LocalDateTime> MODIF_DATE = createField(DSL.name("modif_date"), SQLDataType.LOCALDATETIME(6), this, "Date on which the record was modified (last modified)");
 
     /**
-     * The column <code>public.ct_promotion_type.modif_user</code>.
+     * The column <code>public.ct_promotion_type.modif_user</code>. User who was modified the record
      */
-    public final TableField<CtPromotionTypeRecord, String> MODIF_USER = createField(DSL.name("modif_user"), SQLDataType.VARCHAR(10), this, "");
+    public final TableField<CtPromotionTypeRecord, String> MODIF_USER = createField(DSL.name("modif_user"), SQLDataType.VARCHAR(10), this, "User who was modified the record");
 
     private CtPromotionType(Name alias, Table<CtPromotionTypeRecord> aliased) {
         this(alias, aliased, null);

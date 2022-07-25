@@ -136,12 +136,12 @@ public interface ICtFeeType extends Serializable {
     public LocalDateTime getInputDate();
 
     /**
-     * Setter for <code>public.ct_fee_type.input_user</code>. User who was modified the record
+     * Setter for <code>public.ct_fee_type.input_user</code>. User who was created the record
      */
     public void setInputUser(String value);
 
     /**
-     * Getter for <code>public.ct_fee_type.input_user</code>. User who was modified the record
+     * Getter for <code>public.ct_fee_type.input_user</code>. User who was created the record
      */
     public String getInputUser();
 
@@ -156,12 +156,12 @@ public interface ICtFeeType extends Serializable {
     public LocalDateTime getModifDate();
 
     /**
-     * Setter for <code>public.ct_fee_type.modif_user</code>.
+     * Setter for <code>public.ct_fee_type.modif_user</code>. User who was modified the record
      */
     public void setModifUser(String value);
 
     /**
-     * Getter for <code>public.ct_fee_type.modif_user</code>.
+     * Getter for <code>public.ct_fee_type.modif_user</code>. User who was modified the record
      */
     public String getModifUser();
 
