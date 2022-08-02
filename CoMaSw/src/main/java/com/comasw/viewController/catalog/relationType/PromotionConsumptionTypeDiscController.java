@@ -38,7 +38,6 @@ import com.comasw.exception.CoMaSwDataAccessException;
 import com.comasw.generalClass.SimpleHistoricRelationWithList;
 import com.comasw.interfaces.ISimpleHistoricRelationsTable;
 
-
 @Named
 @ViewScoped
 public class PromotionConsumptionTypeDiscController
@@ -72,21 +71,20 @@ public class PromotionConsumptionTypeDiscController
 	/**
 	 * Selected main data
 	 */
-	@Inject
+	
 	private CtPromotionType injectSelectedData;
 
 	/**
 	 * Selected candidate data
 	 */
-	@Inject
+	
 	private CtConsumptionType injectSelectedCandidateData;
 
 	/**
 	 * Selected related data
 	 */
-	@Inject
-	private VwPromoConsumTypeDiscount injectSelectedRelatedData;
 	
+	private VwPromoConsumTypeDiscount injectSelectedRelatedData;
 
 	// --------------------
 	// GETTERS AND SETTERS
@@ -133,7 +131,6 @@ public class PromotionConsumptionTypeDiscController
 	public void setInjectSelectedRelatedData(VwPromoConsumTypeDiscount injectSelectedRelatedData) {
 		this.injectSelectedRelatedData = injectSelectedRelatedData;
 	}
-	
 
 	// -------------------
 	// METHODS
@@ -194,18 +191,37 @@ public class PromotionConsumptionTypeDiscController
 
 	@Override
 	public void loadDataList() {
-		this.setDataList(promotionTypeEJB.findDataBySearchDate(this.getSearchDate()));
-		if (this.getDataList().isEmpty()) {
-			logger.info("No parent data to show");
+		String message = "LOAD DATA";
+		String messageDetail = "";
+		if (this.isHistoricSearchDataCriteria()) {
+			this.setDataList(promotionTypeEJB.findAllData());
+			if (this.getDataList().isEmpty()) {
+				logger.info("No data to show");
 
+			} else {
+				logger.info("Load data sucessful");
+			}
 		} else {
-			logger.info("Load parent data sucessful");
+			if (this.getSearchDate() == null) {
+				messageDetail = "The date value to search is null. Please fill the search date field";
+				logger.error(message + " - " + messageDetail);
+				FacesContext.getCurrentInstance().validationFailed();
+				throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_FATAL, message, messageDetail));
+			} else {
+				this.setDataList(promotionTypeEJB.findDataBySearchDate(searchDate));
+				if (this.getDataList().isEmpty()) {
+					logger.info("No data to show");
+
+				} else {
+					logger.info("Load data sucessful");
+				}
+			}
 		}
 	}
 
 	@Override
 	public void loadHistoricCandidateDataList() {
-		
+
 	}
 
 	@Override
@@ -236,7 +252,8 @@ public class PromotionConsumptionTypeDiscController
 
 		if ((this.getSelectedData() != null) && (this.getSelectedData().getPromotionTypeId() != null)
 				&& (this.getSelectedData().getPromotionTypeId() != 0)) {
-			this.setRelatedDataList(promotionConsumptionTypeEJB.findRelatedEntityTypesView(this.getSelectedData().getPromotionTypeId()));
+			this.setRelatedDataList(promotionConsumptionTypeEJB
+					.findRelatedEntityTypesView(this.getSelectedData().getPromotionTypeId()));
 			if (this.getRelatedDataList().isEmpty()) {
 				logger.info("No related data to show");
 
@@ -255,33 +272,21 @@ public class PromotionConsumptionTypeDiscController
 	public void pushSearchButton() {
 		String message = "SEARCH DATA";
 		String messageDetail = "";
-		
-		if (this.getSearchDate() == null) {
-			messageDetail = "The date value to search is null. Please fill the search date field";
-			logger.error(message + " - " + messageDetail);
-			FacesContext.getCurrentInstance().validationFailed();
-			throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_FATAL, message, messageDetail));
-		} else {			
-			this.loadDataList();
-			if (this.getDataList().isEmpty()) {
-				messageDetail = "No data to show ";
-				logger.info(message + " - " + messageDetail);
-				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
-			} else {
-				this.resetFilterDataTable();
-				//PrimeFaces.current().executeScript("PF('searchListWidget').show();");
-				// Ajax.update(SEARCH_DATA_TABLE_ID);
-				messageDetail = "Shown data for the search date:" + Formatter.localDateTimeToString(searchDate);
-				logger.info(message + " - " + messageDetail);
-				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
-			}
+		this.loadDataList();
+		if (this.getDataList().isEmpty()) {
+			messageDetail = "No data to show for the specific search criteria";
+			logger.info(message + " - " + messageDetail);
+			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
+
+		} else {
+			this.resetFilterDataTable();
+			this.changeSearchDataTableTitle();
+
+			PrimeFaces.current().executeScript("PF('searchListWidget').show();");
+			
 		}
 
-		
-		
-		
-		
 	}
 
 	@Override
@@ -372,7 +377,8 @@ public class PromotionConsumptionTypeDiscController
 
 			if (mainDataTable.getSelection() == null
 					|| ((CtConsumptionType) mainDataTable.getSelection()).getConsumptionTypeId() == null) {
-				messageDetail = "No selected consumption type to add for the promotion type " + this.getSelectedData().toString();
+				messageDetail = "No selected consumption type to add for the promotion type "
+						+ this.getSelectedData().toString();
 				logger.error(message + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message,
 						"The selected consumption type to add is null");
@@ -440,8 +446,8 @@ public class PromotionConsumptionTypeDiscController
 			otherDataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot()
 					.findComponent(CANDIDATE_DATA_TABLE_ID);
 
-			if (mainDataTable.getSelection() == null
-					|| ((VwPromoConsumTypeDiscount) mainDataTable.getSelection()).getPromoConsumTypeDiscountId() == null) {
+			if (mainDataTable.getSelection() == null || ((VwPromoConsumTypeDiscount) mainDataTable.getSelection())
+					.getPromoConsumTypeDiscountId() == null) {
 				messageDetail = "No selected consumption type to remove for the selected promotion type ";
 				logger.error(message + " - " + messageDetail + this.getSelectedData().toString());
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
@@ -505,6 +511,12 @@ public class PromotionConsumptionTypeDiscController
 	@Override
 	public void refreshCandidateDataTable() {
 		if (this.isShowDependentData()) {
+			if (this.getSelectedData() == null) {
+				// recover the selected data from the selected table
+				if (this.getSelectedDataList().get(0) != null) {
+					this.setSelectedData(this.getSelectedDataList().get(0));
+				}
+			}
 			this.resetFilterCandidateDataTable();
 			this.loadCandidateDataList();
 			Ajax.update(CANDIDATE_DATA_TABLE_ID);
@@ -520,6 +532,12 @@ public class PromotionConsumptionTypeDiscController
 	@Override
 	public void refreshRelatedDataTable() {
 		if (this.isShowDependentData()) {
+			if (this.getSelectedData() == null) {
+				// recover the selected data from the selected table
+				if (this.getSelectedDataList().get(0) != null) {
+					this.setSelectedData(this.getSelectedDataList().get(0));
+				}
+			}
 			this.resetFilterRelatedDataTable();
 			this.loadRelatedDataList();
 			Ajax.update(RELATED_DATA_TABLE_ID);
@@ -538,7 +556,8 @@ public class PromotionConsumptionTypeDiscController
 		this.setEditingMode(false);
 		this.setSearchDate(LocalDate.now().atStartOfDay());
 		this.setShowDependentData(false);
-		this.setHistoricRelatedDataCriteria(false);		
+		this.setHistoricRelatedDataCriteria(false);
+		this.setHistoricSearchDataCriteria(false);
 
 	}
 
@@ -590,8 +609,8 @@ public class PromotionConsumptionTypeDiscController
 
 			promotionConsumptionTypeEJB.updateData(dataObject);
 			messageDetail = "Data saves correctly";
-			logger.info(
-					"Update the status of the promotion_consumption_type_id  " + dataObject.toString() + " - " + messageDetail);
+			logger.info("Update the status of the promotion_consumption_type_id  " + dataObject.toString() + " - "
+					+ messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 		} catch (EJBException e) {
@@ -646,17 +665,27 @@ public class PromotionConsumptionTypeDiscController
 	public void changeSearchDate(ValueChangeEvent e) {
 		LocalDateTime newSearchDate = (LocalDateTime) e.getNewValue();
 		String message, messageDetail;
-		
-		message="CHANGE SEARCH DATE";
-		
+
+		message = "CHANGE SEARCH DATE";
+
 		if (newSearchDate != null) {
-			this.setSearchDate(newSearchDate);			
+			this.setSearchDate(newSearchDate);
 		} else {
 			messageDetail = "ERROR - The search date can not be null";
 			logger.fatal(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 		}
 	}
-	
-	
+
+	@Override
+	public void changeSearchDataTableTitle() {
+		if (this.isHistoricSearchDataCriteria()) {
+			this.setSearchDataTableTitle(
+					"RESULT DATA FOR HISTORIC SEARCH - Click on row button to manage the historic records of the promotion type");
+		} else {
+			this.setSearchDataTableTitle("RESULT DATA FOR SEARCH DATE: " + Formatter.localDateTimeToString(this.getSearchDate())
+					+ " - Click on row button to manage the historic records of the promotion type");
+		}
+	}
+
 }

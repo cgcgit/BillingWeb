@@ -7,7 +7,7 @@ import static com.comasw.model.Tables.CT_FEE_TYPE;
 import static com.comasw.model.Tables.CT_PROD_FEE_TYPE;
 
 import static org.jooq.impl.DSL.val;
-import static org.jooq.impl.DSL.max;
+import static org.jooq.impl.DSL.min;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -76,8 +76,8 @@ public class ProductFeeTypeEJB implements ProductFeeTypeEJBLocal {
 							.and(al.CODE.eq(val(APPLICATION_LEVEL_CODE_PROD))))
 					.whereNotExists(create.selectOne().from(pft)
 							.where(ft.FEE_TYPE_ID.eq(pft.FEE_TYPE_ID).and(pft.PRODUCT_TYPE_ID.eq(parentId))))
-							.and(ft.START_DATE.eq(create.select(max(ft2.START_DATE)).from(ft2)
-									.where(ft.FEE_TYPE_ID.eq(ft2.FEE_TYPE_ID))))
+					.and(ft.START_DATE
+							.eq(create.select(min(ft2.START_DATE)).from(ft2).where(ft.FEE_TYPE_ID.eq(ft2.FEE_TYPE_ID))))
 					.orderBy(ft.CODE)
 					.fetchGroups(r -> r.into(ft).into(CtFeeType.class), r -> r.into(al).into(PtApplicationLevel.class));
 
@@ -115,8 +115,8 @@ public class ProductFeeTypeEJB implements ProductFeeTypeEJBLocal {
 					.whereNotExists(create.selectOne()
 							.from(pft.join(st).on(pft.STATUS_ID.eq(st.STATUS_ID).and(st.CODE.eq(val(statusCode)))))
 							.where(ft.FEE_TYPE_ID.eq(pft.FEE_TYPE_ID).and(pft.PRODUCT_TYPE_ID.eq(parentId))))
-							.and(ft.START_DATE.eq(create.select(max(ft2.START_DATE)).from(ft2)
-									.where(ft.FEE_TYPE_ID.eq(ft2.FEE_TYPE_ID))))
+					.and(ft.START_DATE
+							.eq(create.select(min(ft2.START_DATE)).from(ft2).where(ft.FEE_TYPE_ID.eq(ft2.FEE_TYPE_ID))))
 					.orderBy(ft.CODE)
 					.fetchGroups(r -> r.into(ft).into(CtFeeType.class), r -> r.into(al).into(PtApplicationLevel.class));
 
@@ -132,18 +132,18 @@ public class ProductFeeTypeEJB implements ProductFeeTypeEJBLocal {
 
 		return result;
 	}
-	
-
 
 	@Override
-	public List<VwProductFeeType> findHistoricRelatedEntityTypesView(Integer parentId) throws CoMaSwDataAccessException {
+	public List<VwProductFeeType> findHistoricRelatedEntityTypesView(Integer parentId)
+			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<VwProductFeeType> result = null;
 		String errorMessage;
 		try {
 			result = create.select().from(VW_PRODUCT_FEE_TYPE)
 					.where(VW_PRODUCT_FEE_TYPE.PRODUCT_TYPE_ID.eq(val(parentId)))
-					.orderBy(VW_PRODUCT_FEE_TYPE.FEE_TYPE_CODE, VW_PRODUCT_FEE_TYPE.FEE_TYPE_START_DATE).fetch().into(VwProductFeeType.class);
+					.orderBy(VW_PRODUCT_FEE_TYPE.FEE_TYPE_CODE, VW_PRODUCT_FEE_TYPE.FEE_TYPE_START_DATE).fetch()
+					.into(VwProductFeeType.class);
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the view of fee types for the product_type_id : " + parentId + " - "
@@ -154,16 +154,20 @@ public class ProductFeeTypeEJB implements ProductFeeTypeEJBLocal {
 
 		return result;
 	}
-	
+
 	@Override
-	public List<VwProductFeeType> findRelatedEntityTypesByDateView(Integer parentId, LocalDateTime searchDate) throws CoMaSwDataAccessException {
+	public List<VwProductFeeType> findRelatedEntityTypesByDateView(Integer parentId, LocalDateTime searchDate)
+			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<VwProductFeeType> result = null;
 		String errorMessage;
 		try {
 			result = create.select().from(VW_PRODUCT_FEE_TYPE)
-					.where(VW_PRODUCT_FEE_TYPE.PRODUCT_TYPE_ID.eq(val(parentId)).and(val(searchDate).between(VW_PRODUCT_FEE_TYPE.FEE_TYPE_START_DATE, VW_PRODUCT_FEE_TYPE.FEE_TYPE_END_DATE)))
-					.orderBy(VW_PRODUCT_FEE_TYPE.FEE_TYPE_CODE, VW_PRODUCT_FEE_TYPE.FEE_TYPE_START_DATE).fetch().into(VwProductFeeType.class);
+					.where(VW_PRODUCT_FEE_TYPE.PRODUCT_TYPE_ID.eq(val(parentId))
+							.and(val(searchDate).between(VW_PRODUCT_FEE_TYPE.FEE_TYPE_START_DATE,
+									VW_PRODUCT_FEE_TYPE.FEE_TYPE_END_DATE)))
+					.orderBy(VW_PRODUCT_FEE_TYPE.FEE_TYPE_CODE, VW_PRODUCT_FEE_TYPE.FEE_TYPE_START_DATE).fetch()
+					.into(VwProductFeeType.class);
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the view of fee types for the product_type_id : " + parentId + " - "
@@ -244,8 +248,9 @@ public class ProductFeeTypeEJB implements ProductFeeTypeEJBLocal {
 
 		try {
 			result = create.selectFrom(VW_PRODUCT_FEE_TYPE).where(VW_PRODUCT_FEE_TYPE.PRODUCT_TYPE_ID.eq(val(parentId)))
-					.and(VW_PRODUCT_FEE_TYPE.FEE_TYPE_ID.eq(val(childId))).orderBy(VW_PRODUCT_FEE_TYPE.FEE_TYPE_CODE, VW_PRODUCT_FEE_TYPE.FEE_TYPE_START_DATE)
-					.fetch().into(VwProductFeeType.class);
+					.and(VW_PRODUCT_FEE_TYPE.FEE_TYPE_ID.eq(val(childId)))
+					.orderBy(VW_PRODUCT_FEE_TYPE.FEE_TYPE_CODE, VW_PRODUCT_FEE_TYPE.FEE_TYPE_START_DATE).fetch()
+					.into(VwProductFeeType.class);
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the view of product fee type for the product_type_id : "

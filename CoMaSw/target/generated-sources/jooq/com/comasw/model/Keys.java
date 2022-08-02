@@ -42,6 +42,7 @@ import com.comasw.model.tables.PtBillingPeriod;
 import com.comasw.model.tables.PtConsumptionClass;
 import com.comasw.model.tables.PtDiscountType;
 import com.comasw.model.tables.PtEntityType;
+import com.comasw.model.tables.PtIdentityCardType;
 import com.comasw.model.tables.PtPaymentMethod;
 import com.comasw.model.tables.PtStatus;
 import com.comasw.model.tables.PtTaxType;
@@ -83,6 +84,7 @@ import com.comasw.model.tables.records.PtBillingPeriodRecord;
 import com.comasw.model.tables.records.PtConsumptionClassRecord;
 import com.comasw.model.tables.records.PtDiscountTypeRecord;
 import com.comasw.model.tables.records.PtEntityTypeRecord;
+import com.comasw.model.tables.records.PtIdentityCardTypeRecord;
 import com.comasw.model.tables.records.PtPaymentMethodRecord;
 import com.comasw.model.tables.records.PtStatusRecord;
 import com.comasw.model.tables.records.PtTaxTypeRecord;
@@ -181,6 +183,9 @@ public class Keys {
     public static final UniqueKey<PtEntityTypeRecord> PT_ENTITY_TYPE_CODE_U = Internal.createUniqueKey(PtEntityType.PT_ENTITY_TYPE, DSL.name("pt_entity_type_code_U"), new TableField[] { PtEntityType.PT_ENTITY_TYPE.CODE }, true);
     public static final UniqueKey<PtEntityTypeRecord> PT_ENTITY_TYPE_NAME_U = Internal.createUniqueKey(PtEntityType.PT_ENTITY_TYPE, DSL.name("pt_entity_type_name_U"), new TableField[] { PtEntityType.PT_ENTITY_TYPE.NAME }, true);
     public static final UniqueKey<PtEntityTypeRecord> PT_ENTITY_TYPE_PK = Internal.createUniqueKey(PtEntityType.PT_ENTITY_TYPE, DSL.name("pt_entity_type_PK"), new TableField[] { PtEntityType.PT_ENTITY_TYPE.ENTITY_TYPE_ID }, true);
+    public static final UniqueKey<PtIdentityCardTypeRecord> PT_IDENTITY_CARD_TYPE_CODE_U = Internal.createUniqueKey(PtIdentityCardType.PT_IDENTITY_CARD_TYPE, DSL.name("pt_identity_card_type_code_u"), new TableField[] { PtIdentityCardType.PT_IDENTITY_CARD_TYPE.CODE }, true);
+    public static final UniqueKey<PtIdentityCardTypeRecord> PT_IDENTITY_CARD_TYPE_NAME_U = Internal.createUniqueKey(PtIdentityCardType.PT_IDENTITY_CARD_TYPE, DSL.name("pt_identity_card_type_name_u"), new TableField[] { PtIdentityCardType.PT_IDENTITY_CARD_TYPE.NAME }, true);
+    public static final UniqueKey<PtIdentityCardTypeRecord> PT_IDENTITY_CARD_TYPE_PK = Internal.createUniqueKey(PtIdentityCardType.PT_IDENTITY_CARD_TYPE, DSL.name("pt_identity_card_type_pk"), new TableField[] { PtIdentityCardType.PT_IDENTITY_CARD_TYPE.IDENTITY_CARD_TYPE_ID }, true);
     public static final UniqueKey<PtPaymentMethodRecord> PT_PAYMENT_METHOD_CODE_U = Internal.createUniqueKey(PtPaymentMethod.PT_PAYMENT_METHOD, DSL.name("pt_payment_method_code_u"), new TableField[] { PtPaymentMethod.PT_PAYMENT_METHOD.CODE }, true);
     public static final UniqueKey<PtPaymentMethodRecord> PT_PAYMENT_METHOD_NAME_U = Internal.createUniqueKey(PtPaymentMethod.PT_PAYMENT_METHOD, DSL.name("pt_payment_method_name_u"), new TableField[] { PtPaymentMethod.PT_PAYMENT_METHOD.NAME }, true);
     public static final UniqueKey<PtPaymentMethodRecord> PT_PAYMENT_METHOD_PK = Internal.createUniqueKey(PtPaymentMethod.PT_PAYMENT_METHOD, DSL.name("pt_payment_method_pk"), new TableField[] { PtPaymentMethod.PT_PAYMENT_METHOD.PAYMENT_METHOD_ID }, true);
@@ -250,6 +255,7 @@ public class Keys {
     public static final ForeignKey<ItCustomerRecord, IdtCustomerRecord> IT_CUSTOMER__IT_CUSTOMER_ID_FK = Internal.createForeignKey(ItCustomer.IT_CUSTOMER, DSL.name("it_customer_id_fk"), new TableField[] { ItCustomer.IT_CUSTOMER.CUSTOMER_ID }, Keys.IDT_CUSTOMER_PK, new TableField[] { IdtCustomer.IDT_CUSTOMER.CUSTOMER_ID }, true);
     public static final ForeignKey<ItCustomerRecord, PtStatusRecord> IT_CUSTOMER__IT_CUSTOMER_STATUS_FK = Internal.createForeignKey(ItCustomer.IT_CUSTOMER, DSL.name("it_customer_status_fk"), new TableField[] { ItCustomer.IT_CUSTOMER.STATUS_ID }, Keys.PT_STATUS_PK, new TableField[] { PtStatus.PT_STATUS.STATUS_ID }, true);
     public static final ForeignKey<ItCustomerRecord, CtCustomerTypeRecord> IT_CUSTOMER__IT_CUSTOMER_TYPE_ID_FK = Internal.createForeignKey(ItCustomer.IT_CUSTOMER, DSL.name("it_customer_type_id_fk"), new TableField[] { ItCustomer.IT_CUSTOMER.CUSTOMER_TYPE_ID }, Keys.CT_CUSTOMER_TYPE_PK, new TableField[] { CtCustomerType.CT_CUSTOMER_TYPE.CUSTOMER_TYPE_ID }, true);
+    public static final ForeignKey<ItCustomerRecord, PtIdentityCardTypeRecord> IT_CUSTOMER__IT_ID_CARD_TYPE_ID_FK = Internal.createForeignKey(ItCustomer.IT_CUSTOMER, DSL.name("it_id_card_type_id_fk"), new TableField[] { ItCustomer.IT_CUSTOMER.IDENTITY_CARD_TYPE_ID }, Keys.PT_IDENTITY_CARD_TYPE_PK, new TableField[] { PtIdentityCardType.PT_IDENTITY_CARD_TYPE.IDENTITY_CARD_TYPE_ID }, true);
     public static final ForeignKey<ItUsersRecord, ItProfilesRecord> IT_USERS__IT_USERS_PROFILE_ID_FKEY = Internal.createForeignKey(ItUsers.IT_USERS, DSL.name("it_users_profile_id_fkey"), new TableField[] { ItUsers.IT_USERS.PROFILE_ID }, Keys.IT_PROFILES_PKEY, new TableField[] { ItProfiles.IT_PROFILES.PROFILE_ID }, true);
     public static final ForeignKey<MtApplicationMenuRecord, MtApplicationMenuRecord> MT_APPLICATION_MENU__MT_APPLICATION_MENU_FK = Internal.createForeignKey(MtApplicationMenu.MT_APPLICATION_MENU, DSL.name("mt_application_menu_fk"), new TableField[] { MtApplicationMenu.MT_APPLICATION_MENU.APPLICATION_PARENT_MENU_ID }, Keys.MT_APPLICATION_MENU_PK, new TableField[] { MtApplicationMenu.MT_APPLICATION_MENU.APPLICATION_MENU_ID }, true);
 }

@@ -111,7 +111,6 @@ public class AccountTypeEJB implements AccountTypeEJBLocal {
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 
-		
 	}
 
 	@Override

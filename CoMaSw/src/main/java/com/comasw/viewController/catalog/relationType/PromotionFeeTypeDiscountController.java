@@ -47,15 +47,17 @@ import com.comasw.interfaces.IDoubleHistoricRelationsTable;
  * @author catuxa
  *
  */
-public class PromotionFeeTypeDiscountController extends DoubleHistoricRelationWithList<CtPromotionType, VwPromotionFeeTypeDiscount, CtFeeType> implements Serializable, IDoubleHistoricRelationsTable {
-	
+public class PromotionFeeTypeDiscountController
+		extends DoubleHistoricRelationWithList<CtPromotionType, VwPromotionFeeTypeDiscount, CtFeeType>
+		implements Serializable, IDoubleHistoricRelationsTable {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 4682982909640361796L;
-	
+
 	Logger logger = (Logger) LogManager.getLogger(PromotionFeeTypeDiscountController.class);
-	
+
 	@Inject
 	private ExternalContext externalContext;
 	@Inject
@@ -66,7 +68,7 @@ public class PromotionFeeTypeDiscountController extends DoubleHistoricRelationWi
 
 	@EJB
 	private PromotionFeeTypeDiscountEJBLocal promotionFeeTypeEJB;
-	
+
 	@EJB
 	private FeeTypeEJBLocal feeTypeEJB;
 
@@ -76,74 +78,70 @@ public class PromotionFeeTypeDiscountController extends DoubleHistoricRelationWi
 	/**
 	 * Selected main data
 	 */
-	@Inject
+	
 	private CtPromotionType injectSelectedData;
 
 	/**
 	 * Selected candidate data
 	 */
-	@Inject
+	
 	private CtFeeType injectSelectedCandidateData;
 
 	/**
 	 * Selected related data
 	 */
-	@Inject
-	private VwPromotionFeeTypeDiscount injectSelectedRelatedData;
 	
+	private VwPromotionFeeTypeDiscount injectSelectedRelatedData;
 
 	// --------------------
-		// GETTERS AND SETTERS
-		// -------------------
+	// GETTERS AND SETTERS
+	// -------------------
 
-		/**
-		 * @return the injectSelectedData
-		 */
-		public CtPromotionType getInjectSelectedData() {
-			return injectSelectedData;
-		}
+	/**
+	 * @return the injectSelectedData
+	 */
+	public CtPromotionType getInjectSelectedData() {
+		return injectSelectedData;
+	}
 
-		/**
-		 * @param injectSelectedData the selectedParentData to set
-		 */
-		public void setInjectSelectedData(CtPromotionType injectSelectedData) {
-			this.injectSelectedData = injectSelectedData;
-		}
+	/**
+	 * @param injectSelectedData the selectedParentData to set
+	 */
+	public void setInjectSelectedData(CtPromotionType injectSelectedData) {
+		this.injectSelectedData = injectSelectedData;
+	}
 
-		/**
-		 * @return the injectSelectedCandidateData
-		 */
-		public CtFeeType getInjectSelectedCandidateData() {
-			return injectSelectedCandidateData;
-		}
+	/**
+	 * @return the injectSelectedCandidateData
+	 */
+	public CtFeeType getInjectSelectedCandidateData() {
+		return injectSelectedCandidateData;
+	}
 
-		/**
-		 * @param injectSelectedCandidateData the selectedCandidateData to set
-		 */
-		public void setInjectSelectedCandidateData(CtFeeType injectSelectedCandidateData) {
-			this.injectSelectedCandidateData = injectSelectedCandidateData;
-		}
+	/**
+	 * @param injectSelectedCandidateData the selectedCandidateData to set
+	 */
+	public void setInjectSelectedCandidateData(CtFeeType injectSelectedCandidateData) {
+		this.injectSelectedCandidateData = injectSelectedCandidateData;
+	}
 
-		/**
-		 * @return the injectSelectedRelatedData
-		 */
-		public VwPromotionFeeTypeDiscount getInjectSelectedRelatedData() {
-			return injectSelectedRelatedData;
-		}
+	/**
+	 * @return the injectSelectedRelatedData
+	 */
+	public VwPromotionFeeTypeDiscount getInjectSelectedRelatedData() {
+		return injectSelectedRelatedData;
+	}
 
-		/**
-		 * @param selectedRelatedData the selectedRelatedData to set
-		 */
-		public void setInjectSelectedRelatedData(VwPromotionFeeTypeDiscount injectSelectedRelatedData) {
-			this.injectSelectedRelatedData = injectSelectedRelatedData;
-		}
-		
+	/**
+	 * @param selectedRelatedData the selectedRelatedData to set
+	 */
+	public void setInjectSelectedRelatedData(VwPromotionFeeTypeDiscount injectSelectedRelatedData) {
+		this.injectSelectedRelatedData = injectSelectedRelatedData;
+	}
 
-		// -------------------
-		// METHODS
-		// -------------------
-
-
+	// -------------------
+	// METHODS
+	// -------------------
 
 	/**
 	 * 
@@ -151,8 +149,7 @@ public class PromotionFeeTypeDiscountController extends DoubleHistoricRelationWi
 	public PromotionFeeTypeDiscountController() {
 		// TODO Auto-generated constructor stub
 	}
-	
-	
+
 	@PostConstruct
 	public void init() {
 
@@ -220,7 +217,7 @@ public class PromotionFeeTypeDiscountController extends DoubleHistoricRelationWi
 			errorMessage = "The selected promotion type is null";
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage);
-		}		
+		}
 	}
 
 	@Override
@@ -250,43 +247,62 @@ public class PromotionFeeTypeDiscountController extends DoubleHistoricRelationWi
 			logger.info(message + " - " + messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 		}
-		
+
 	}
 
 	@Override
 	public void resetFilterHistoricCandidateDataTable() {
 		PrimeFaces current = PrimeFaces.current();
 		current.executeScript("PF('historicCandidateTableWidget').clearFilters()");
-		
+
 	}
 
 	@Override
 	public void changeSearchDate(ValueChangeEvent e) {
 		LocalDateTime newSearchDate = (LocalDateTime) e.getNewValue();
 		String message, messageDetail;
-		
-		message="CHANGE SEARCH DATE";
-		
+
+		message = "CHANGE SEARCH DATE";
+
 		if (newSearchDate != null) {
-			this.setSearchDate(newSearchDate);			
+			this.setSearchDate(newSearchDate);
 		} else {
 			messageDetail = "ERROR - The search date can not be null";
 			logger.fatal(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 		}
-		
+
 	}
 
 	@Override
 	public void loadDataList() {
-		this.setDataList(promotionTypeEJB.findDataBySearchDate(this.getSearchDate()));
-		if (this.getDataList().isEmpty()) {
-			logger.info("No parent data to show");
+		String message = "LOAD DATA";
+		String messageDetail = "";
+		if (this.isHistoricSearchDataCriteria()) {
+			this.setDataList(promotionTypeEJB.findAllData());
+			if (this.getDataList().isEmpty()) {
+				logger.info("No data to show");
 
+			} else {
+				logger.info("Load data sucessful");
+			}
 		} else {
-			logger.info("Load parent data sucessful");
+			if (this.getSearchDate() == null) {
+				messageDetail = "The date value to search is null. Please fill the search date field";
+				logger.error(message + " - " + messageDetail);
+				FacesContext.getCurrentInstance().validationFailed();
+				throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_FATAL, message, messageDetail));
+			} else {
+				this.setDataList(promotionTypeEJB.findDataBySearchDate(searchDate));
+				if (this.getDataList().isEmpty()) {
+					logger.info("No data to show");
+
+				} else {
+					logger.info("Load data sucessful");
+				}
+			}
 		}
-		
+
 	}
 
 	@Override
@@ -320,7 +336,6 @@ public class PromotionFeeTypeDiscountController extends DoubleHistoricRelationWi
 			throw new CoMaSwDataAccessException(errorMessage);
 		}
 
-		
 	}
 
 	@Override
@@ -342,29 +357,28 @@ public class PromotionFeeTypeDiscountController extends DoubleHistoricRelationWi
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage);
 		}
-		
+
 	}
 
 	@Override
 	public void pushSearchButton() {
 		String message = "SEARCH DATA";
 		String messageDetail = "";
+
 		this.loadDataList();
 		if (this.getDataList().isEmpty()) {
-			messageDetail = "No data to show ";
+			messageDetail = "No data to show for the specific search criteria";
 			logger.info(message + " - " + messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 		} else {
 			this.resetFilterDataTable();
+			this.changeSearchDataTableTitle();
+
 			PrimeFaces.current().executeScript("PF('searchListWidget').show();");
-			// Ajax.update(SEARCH_DATA_TABLE_ID);
-			messageDetail = "Shown data for the search date:" + Formatter.localDateTimeToString(searchDate);
-			logger.info(message + " - " + messageDetail);
-			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
+			
 		}
 
-		
 	}
 
 	@Override
@@ -400,7 +414,7 @@ public class PromotionFeeTypeDiscountController extends DoubleHistoricRelationWi
 			PrimeFaces.current().executeScript("PF('multipleAccordionPanelWidget').selectAll();");
 
 		}
-		
+
 	}
 
 	@Override
@@ -425,7 +439,8 @@ public class PromotionFeeTypeDiscountController extends DoubleHistoricRelationWi
 
 			if (mainDataTable.getSelection() == null
 					|| ((CtFeeType) mainDataTable.getSelection()).getFeeTypeId() == null) {
-				messageDetail = "No selected fee type to add for the promotion type " + this.getSelectedData().toString();
+				messageDetail = "No selected fee type to add for the promotion type "
+						+ this.getSelectedData().toString();
 				logger.error(message + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message,
 						"The selected fee type to add is null");
@@ -469,7 +484,7 @@ public class PromotionFeeTypeDiscountController extends DoubleHistoricRelationWi
 
 			}
 		}
-		
+
 	}
 
 	@Override
@@ -493,8 +508,8 @@ public class PromotionFeeTypeDiscountController extends DoubleHistoricRelationWi
 			otherDataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot()
 					.findComponent(CANDIDATE_DATA_TABLE_ID);
 
-			if (mainDataTable.getSelection() == null
-					|| ((VwPromotionFeeTypeDiscount) mainDataTable.getSelection()).getPromoFeeTypeDiscountId() == null) {
+			if (mainDataTable.getSelection() == null || ((VwPromotionFeeTypeDiscount) mainDataTable.getSelection())
+					.getPromoFeeTypeDiscountId() == null) {
 				messageDetail = "No selected fee type to remove for the selected promotion type ";
 				logger.error(message + " - " + messageDetail + this.getSelectedData().toString());
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
@@ -533,14 +548,14 @@ public class PromotionFeeTypeDiscountController extends DoubleHistoricRelationWi
 				this.injectSelectedRelatedData = null;
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void resetFilterDataTable() {
 		PrimeFaces current = PrimeFaces.current();
 		current.executeScript("PF('dataTableWidget').clearFilters()");
-		
+
 	}
 
 	@Override
@@ -548,41 +563,53 @@ public class PromotionFeeTypeDiscountController extends DoubleHistoricRelationWi
 		this.resetFilterDataTable();
 		this.loadDataList();
 		Ajax.update(DATA_TABLE_ID);
-		
+
 	}
 
 	@Override
 	public void resetFilterCandidateDataTable() {
 		PrimeFaces current = PrimeFaces.current();
 		current.executeScript("PF('candidateTableWidget').clearFilters()");
-		
+
 	}
 
 	@Override
 	public void refreshCandidateDataTable() {
 		if (this.isShowDependentData()) {
+			if (this.getSelectedData() == null) {
+				// recover the selected data from the selected table
+				if (this.getSelectedDataList().get(0) != null) {
+					this.setSelectedData(this.getSelectedDataList().get(0));
+				}
+			}
 			this.resetFilterCandidateDataTable();
 			this.loadCandidateDataList();
 			Ajax.update(CANDIDATE_DATA_TABLE_ID);
 		}
-		
+
 	}
 
 	@Override
 	public void resetFilterRelatedDataTable() {
 		PrimeFaces current = PrimeFaces.current();
 		current.executeScript("PF('relatedTableWidget').clearFilters()");
-		
+
 	}
 
 	@Override
 	public void refreshRelatedDataTable() {
 		if (this.isShowDependentData()) {
+			if (this.getSelectedData() == null) {
+				// recover the selected data from the selected table
+				if (this.getSelectedDataList().get(0) != null) {
+					this.setSelectedData(this.getSelectedDataList().get(0));
+				}
+			}
 			this.resetFilterRelatedDataTable();
 			this.loadRelatedDataList();
 			Ajax.update(RELATED_DATA_TABLE_ID);
 		}
-		
+
 	}
 
 	@Override
@@ -601,9 +628,10 @@ public class PromotionFeeTypeDiscountController extends DoubleHistoricRelationWi
 
 		messageDetail = "Editing promotion_fee_type: ";
 		logger.info(messageDetail + dataObject.toString());
-		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail
-				+ " for promotion: " + dataObjectView.getPromotionTypeCode() + " and fee: " + dataObjectView.getFeeTypeCode());
-		
+		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
+				messageDetail + " for promotion: " + dataObjectView.getPromotionTypeCode() + " and fee: "
+						+ dataObjectView.getFeeTypeCode());
+
 	}
 
 	@Override
@@ -659,7 +687,7 @@ public class PromotionFeeTypeDiscountController extends DoubleHistoricRelationWi
 				this.loadRelatedDataList();
 			}
 		}
-		
+
 	}
 
 	@Override
@@ -675,7 +703,7 @@ public class PromotionFeeTypeDiscountController extends DoubleHistoricRelationWi
 				+ dataObjectView.getFeeTypeCode());
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
 				messageDetail + dataObjectView.toString());
-		
+
 	}
 
 	@Override
@@ -684,31 +712,42 @@ public class PromotionFeeTypeDiscountController extends DoubleHistoricRelationWi
 		this.setSearchDate(LocalDate.now().atStartOfDay());
 		this.setSecondSearchDate(LocalDateTime.now());
 		this.setShowDependentData(false);
-		this.setHistoricRelatedDataCriteria(false);		
-		
+		this.setHistoricRelatedDataCriteria(false);
+
 	}
 
 	@Override
 	public void setControlVariablesToDefault() {
 		this.setInitVariablesToDefault();
-		
+
 	}
 
 	@Override
 	public void changeSecondSearchDate(ValueChangeEvent e) {
 		LocalDateTime newSearchDate = (LocalDateTime) e.getNewValue();
 		String message, messageDetail;
-		
-		message="CHANGE SEARCH DATE";
-		
+
+		message = "CHANGE SEARCH DATE";
+
 		if (newSearchDate != null) {
-			this.setSecondSearchDate(newSearchDate);			
+			this.setSecondSearchDate(newSearchDate);
 		} else {
 			messageDetail = "ERROR - The second search date can not be null";
 			logger.fatal(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 		}
+
+	}
+
+	@Override
+	public void changeSearchDataTableTitle() {
+		if (this.isHistoricSearchDataCriteria()) {
+			this.setSearchDataTableTitle(
+					"RESULT DATA FOR HISTORIC SEARCH - Click on row button to manage the historic records of the promotion type");
+		} else {
+			this.setSearchDataTableTitle("RESULT DATA FOR SEARCH DATE: " + Formatter.localDateTimeToString(this.getSearchDate())
+					+ " - Click on row button to manage the historic records of the promotion type");
+		}
 		
 	}
 }
-

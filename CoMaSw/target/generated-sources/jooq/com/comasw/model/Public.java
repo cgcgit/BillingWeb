@@ -42,6 +42,7 @@ import com.comasw.model.tables.PtBillingPeriod;
 import com.comasw.model.tables.PtConsumptionClass;
 import com.comasw.model.tables.PtDiscountType;
 import com.comasw.model.tables.PtEntityType;
+import com.comasw.model.tables.PtIdentityCardType;
 import com.comasw.model.tables.PtPaymentMethod;
 import com.comasw.model.tables.PtStatus;
 import com.comasw.model.tables.PtTaxType;
@@ -267,6 +268,11 @@ public class Public extends SchemaImpl {
     public final PtEntityType PT_ENTITY_TYPE = PtEntityType.PT_ENTITY_TYPE;
 
     /**
+     * Table that stores the posible types of the the identity card
+     */
+    public final PtIdentityCardType PT_IDENTITY_CARD_TYPE = PtIdentityCardType.PT_IDENTITY_CARD_TYPE;
+
+    /**
      * Table that stores the payment types for the application
      */
     public final PtPaymentMethod PT_PAYMENT_METHOD = PtPaymentMethod.PT_PAYMENT_METHOD;
@@ -351,6 +357,7 @@ public class Public extends SchemaImpl {
             Sequences.SEQ_DISCOUNT_TYPE_ID,
             Sequences.SEQ_ENTITY_TYPE_ID,
             Sequences.SEQ_FEE_TYPE_ID,
+            Sequences.SEQ_IDENTITY_CARD_TYPE_ID,
             Sequences.SEQ_PAYMENT_METHOD_ID,
             Sequences.SEQ_PROD_FEE_TYPE_ID,
             Sequences.SEQ_PROD_SERV_TYPE_ID,
@@ -417,6 +424,7 @@ public class Public extends SchemaImpl {
             PtConsumptionClass.PT_CONSUMPTION_CLASS,
             PtDiscountType.PT_DISCOUNT_TYPE,
             PtEntityType.PT_ENTITY_TYPE,
+            PtIdentityCardType.PT_IDENTITY_CARD_TYPE,
             PtPaymentMethod.PT_PAYMENT_METHOD,
             PtStatus.PT_STATUS,
             PtTaxType.PT_TAX_TYPE,

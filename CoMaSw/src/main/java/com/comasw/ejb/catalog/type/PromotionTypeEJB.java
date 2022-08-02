@@ -36,20 +36,18 @@ import com.comasw.exception.CoMaSwDataAccessException;
  */
 @Stateless
 public class PromotionTypeEJB implements PromotionTypeEJBLocal {
-	
+
 	Logger logger = (Logger) LogManager.getLogger(PromotionTypeEJB.class);
 
 	@Resource(lookup = "java:jboss/datasources/db_comasw")
 	private DataSource ds;
 
-    /**
-     * Default constructor. 
-     */
-    public PromotionTypeEJB() {
-        // TODO Auto-generated constructor stub
-    }
-    
-    
+	/**
+	 * Default constructor.
+	 */
+	public PromotionTypeEJB() {
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public List<CtPromotionType> findAllData() throws CoMaSwDataAccessException {
@@ -58,7 +56,8 @@ public class PromotionTypeEJB implements PromotionTypeEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(CT_PROMOTION_TYPE).orderBy(CT_PROMOTION_TYPE.CODE).fetch().into(CtPromotionType.class);
+			result = create.selectFrom(CT_PROMOTION_TYPE).orderBy(CT_PROMOTION_TYPE.CODE).fetch()
+					.into(CtPromotionType.class);
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find all the promotion types - " + e.getMessage();
@@ -96,14 +95,15 @@ public class PromotionTypeEJB implements PromotionTypeEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(CT_PROMOTION_TYPE).where(CT_PROMOTION_TYPE.PROMOTION_TYPE_ID.eq(val(promotionTypeId)))
+			result = create.selectFrom(CT_PROMOTION_TYPE)
+					.where(CT_PROMOTION_TYPE.PROMOTION_TYPE_ID.eq(val(promotionTypeId)))
 					.orderBy(CT_PROMOTION_TYPE.START_DATE, CT_PROMOTION_TYPE.CODE).fetch().into(CtPromotionType.class);
 
 			return result;
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the promotion type for promotion_type_id: " + promotionTypeId + " - "
-					+ e.getMessage();
+			errorMessage = "Error while try to find the promotion type for promotion_type_id: " + promotionTypeId
+					+ " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
@@ -118,14 +118,15 @@ public class PromotionTypeEJB implements PromotionTypeEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(CT_PROMOTION_TYPE).where(CT_PROMOTION_TYPE.PROMOTION_TYPE_ID.eq(val(promotionTypeId)))
+			result = create.selectFrom(CT_PROMOTION_TYPE)
+					.where(CT_PROMOTION_TYPE.PROMOTION_TYPE_ID.eq(val(promotionTypeId)))
 					.and(val(searchDate).between(CT_PROMOTION_TYPE.START_DATE, CT_PROMOTION_TYPE.END_DATE))
 					.orderBy(CT_PROMOTION_TYPE.CODE).fetch().into(CtPromotionType.class);
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the promotion type for search date: " + searchDate.toString()
-						+ " and promotion_type_id : " + promotionTypeId + " - The query returns more rows(" + result.size()
-						+ ") than expected (1) ";
+						+ " and promotion_type_id : " + promotionTypeId + " - The query returns more rows("
+						+ result.size() + ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
@@ -148,8 +149,8 @@ public class PromotionTypeEJB implements PromotionTypeEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(CT_PROMOTION_TYPE).where(CT_PROMOTION_TYPE.CODE.eq(val(code))).orderBy(CT_PROMOTION_TYPE.CODE)
-					.fetch().into(CtPromotionType.class);
+			result = create.selectFrom(CT_PROMOTION_TYPE).where(CT_PROMOTION_TYPE.CODE.eq(val(code)))
+					.orderBy(CT_PROMOTION_TYPE.CODE).fetch().into(CtPromotionType.class);
 			return result;
 
 		} catch (DataAccessException e) {
@@ -198,12 +199,13 @@ public class PromotionTypeEJB implements PromotionTypeEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(CT_PROMOTION_TYPE).where(CT_PROMOTION_TYPE.APPLICATION_LEVEL_ID.eq(val(applicationLevelId)))
+			result = create.selectFrom(CT_PROMOTION_TYPE)
+					.where(CT_PROMOTION_TYPE.APPLICATION_LEVEL_ID.eq(val(applicationLevelId)))
 					.orderBy(CT_PROMOTION_TYPE.CODE).fetch().into(CtPromotionType.class);
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the promotion type for application_level_id " + applicationLevelId + " - "
-					+ e.getMessage();
+			errorMessage = "Error while try to find the promotion type for application_level_id " + applicationLevelId
+					+ " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
@@ -219,7 +221,8 @@ public class PromotionTypeEJB implements PromotionTypeEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(CT_PROMOTION_TYPE).where(CT_PROMOTION_TYPE.APPLICATION_LEVEL_ID.eq(val(applicationLevelId)))
+			result = create.selectFrom(CT_PROMOTION_TYPE)
+					.where(CT_PROMOTION_TYPE.APPLICATION_LEVEL_ID.eq(val(applicationLevelId)))
 					.and(val(searchDate).between(CT_PROMOTION_TYPE.START_DATE, CT_PROMOTION_TYPE.END_DATE))
 					.orderBy(CT_PROMOTION_TYPE.CODE).fetch().into(CtPromotionType.class);
 
@@ -247,15 +250,15 @@ public class PromotionTypeEJB implements PromotionTypeEJBLocal {
 		try {
 			record = create.select().from(al).join(ft)
 					.on(ft.APPLICATION_LEVEL_ID.eq(al.APPLICATION_LEVEL_ID).and(al.CODE.eq(val(applicationLevelCode))))
-					.orderBy(ft.CODE)
-					.fetchGroups(r -> r.into(ft).into(CtPromotionType.class), r -> r.into(al).into(PtApplicationLevel.class));
+					.orderBy(ft.CODE).fetchGroups(r -> r.into(ft).into(CtPromotionType.class),
+							r -> r.into(al).into(PtApplicationLevel.class));
 
 			result = new ArrayList<CtPromotionType>();
 			result.addAll(record.keySet());
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the promotion type for the application_level_code " + applicationLevelCode
-					+ " - " + e.getMessage();
+			errorMessage = "Error while try to find the promotion type for the application_level_code "
+					+ applicationLevelCode + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
@@ -279,8 +282,8 @@ public class PromotionTypeEJB implements PromotionTypeEJBLocal {
 					.on(ft.APPLICATION_LEVEL_ID.eq(al.APPLICATION_LEVEL_ID)
 							.and(val(searchDate).between(ft.START_DATE, ft.END_DATE))
 							.and(al.CODE.eq(val(applicationLevelCode))))
-					.orderBy(ft.CODE)
-					.fetchGroups(r -> r.into(ft).into(CtPromotionType.class), r -> r.into(al).into(PtApplicationLevel.class));
+					.orderBy(ft.CODE).fetchGroups(r -> r.into(ft).into(CtPromotionType.class),
+							r -> r.into(al).into(PtApplicationLevel.class));
 
 			result = new ArrayList<CtPromotionType>();
 			result.addAll(record.keySet());
@@ -345,7 +348,7 @@ public class PromotionTypeEJB implements PromotionTypeEJBLocal {
 
 	@Override
 	public void insertNewHistoricDataRecord(CtPromotionType dataObject) throws CoMaSwDataAccessException {
-		String errorMessage;		
+		String errorMessage;
 
 		try {
 			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
@@ -384,7 +387,7 @@ public class PromotionTypeEJB implements PromotionTypeEJBLocal {
 		String errorMessage;
 		try {
 			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
-			CtPromotionTypeDao daoObject = new CtPromotionTypeDao(configuration);			
+			CtPromotionTypeDao daoObject = new CtPromotionTypeDao(configuration);
 			daoObject.update(dataObject);
 		} catch (Exception e) {
 			errorMessage = "Error updating the promotion type object (value: " + dataObject.toString() + ") - "
@@ -409,6 +412,6 @@ public class PromotionTypeEJB implements PromotionTypeEJBLocal {
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 
-	}	
+	}
 
 }

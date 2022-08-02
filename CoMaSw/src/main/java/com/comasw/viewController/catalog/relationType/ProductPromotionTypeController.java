@@ -47,14 +47,14 @@ import com.comasw.interfaces.ISimpleHistoricRelationsTable;
  * @author catuxa
  *
  */
-public class ProductPromotionTypeController extends SimpleHistoricRelationWithList<CtProductType, VwPromotionProductType, CtPromotionType>
-implements Serializable, ISimpleHistoricRelationsTable {
+public class ProductPromotionTypeController
+		extends SimpleHistoricRelationWithList<CtProductType, VwPromotionProductType, CtPromotionType>
+		implements Serializable, ISimpleHistoricRelationsTable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2872381274603389370L;
-	
 
 	Logger logger = (Logger) LogManager.getLogger(ProductServiceTypeController.class);
 
@@ -78,7 +78,7 @@ implements Serializable, ISimpleHistoricRelationsTable {
 
 	@EJB
 	private ProductPromotionTypeEJBLocal productPromotionTypeEJB;
-	
+
 	@EJB
 	private PromotionTypeEJBLocal promotionTypeEJB;
 
@@ -88,19 +88,19 @@ implements Serializable, ISimpleHistoricRelationsTable {
 	/**
 	 * Selected main data
 	 */
-	@Inject
+	
 	private CtProductType injectSelectedData;
 
 	/**
 	 * Selected candidate data
 	 */
-	@Inject
+	
 	private CtPromotionType injectSelectedCandidateData;
 
 	/**
 	 * Selected related data
 	 */
-	@Inject
+	
 	private VwPromotionProductType injectSelectedRelatedData;
 
 	// --------------------
@@ -152,7 +152,6 @@ implements Serializable, ISimpleHistoricRelationsTable {
 	// -------------------
 	// METHODS
 	// -------------------
-	
 
 	/**
 	 * 
@@ -208,7 +207,7 @@ implements Serializable, ISimpleHistoricRelationsTable {
 			this.setLoggedUser((VwUsers) externalContext.getSessionMap().get("applicationUser"));
 		}
 	}
-	
+
 	@Override
 	public void loadDataList() {
 		this.setDataList(productTypeEJB.findAllData());
@@ -219,7 +218,6 @@ implements Serializable, ISimpleHistoricRelationsTable {
 			logger.info("Load parent data sucessful");
 		}
 
-		
 	}
 
 	@Override
@@ -253,7 +251,6 @@ implements Serializable, ISimpleHistoricRelationsTable {
 			throw new CoMaSwDataAccessException(errorMessage);
 		}
 
-		
 	}
 
 	@Override
@@ -276,9 +273,7 @@ implements Serializable, ISimpleHistoricRelationsTable {
 			throw new CoMaSwDataAccessException(errorMessage);
 		}
 
-		
 	}
-
 
 	@Override
 	public void loadHistoricCandidateDataList() {
@@ -299,7 +294,7 @@ implements Serializable, ISimpleHistoricRelationsTable {
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage);
 		}
-		
+
 	}
 
 	@Override
@@ -330,17 +325,15 @@ implements Serializable, ISimpleHistoricRelationsTable {
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 		}
 
-		
 	}
 
 	@Override
 	public void resetFilterHistoricCandidateDataTable() {
 		PrimeFaces current = PrimeFaces.current();
 		current.executeScript("PF('historicCandidateTableWidget').clearFilters()");
-		
+
 	}
 
-	
 	@Override
 	public void pushSearchButton() {
 		String message = "SEARCH DATA";
@@ -359,7 +352,7 @@ implements Serializable, ISimpleHistoricRelationsTable {
 			logger.info(message + " - " + messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 		}
-		
+
 	}
 
 	@Override
@@ -395,7 +388,7 @@ implements Serializable, ISimpleHistoricRelationsTable {
 			PrimeFaces.current().executeScript("PF('multipleAccordionPanelWidget').selectAll();");
 
 		}
-		
+
 	}
 
 	@Override
@@ -420,7 +413,8 @@ implements Serializable, ISimpleHistoricRelationsTable {
 
 			if (mainDataTable.getSelection() == null
 					|| ((CtPromotionType) mainDataTable.getSelection()).getPromotionTypeId() == null) {
-				messageDetail = "No selected promotion type to add for the product type " + this.getSelectedData().toString();
+				messageDetail = "No selected promotion type to add for the product type "
+						+ this.getSelectedData().toString();
 				logger.error(message + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message,
 						"The selected promotion type to add is null");
@@ -464,7 +458,7 @@ implements Serializable, ISimpleHistoricRelationsTable {
 
 			}
 		}
-		
+
 	}
 
 	@Override
@@ -529,14 +523,13 @@ implements Serializable, ISimpleHistoricRelationsTable {
 			}
 		}
 
-		
 	}
 
 	@Override
 	public void resetFilterDataTable() {
 		PrimeFaces current = PrimeFaces.current();
 		current.executeScript("PF('dataTableWidget').clearFilters()");
-		
+
 	}
 
 	@Override
@@ -552,10 +545,15 @@ implements Serializable, ISimpleHistoricRelationsTable {
 		current.executeScript("PF('candidateTableWidget').clearFilters()");
 	}
 
-
 	@Override
 	public void refreshCandidateDataTable() {
 		if (this.isShowDependentData()) {
+			if (this.getSelectedData() == null) {
+				// recover the selected data from the selected table
+				if (this.getSelectedDataList().get(0) != null) {
+					this.setSelectedData(this.getSelectedDataList().get(0));
+				}
+			}
 			this.resetFilterCandidateDataTable();
 			this.loadCandidateDataList();
 			Ajax.update(CANDIDATE_DATA_TABLE_ID);
@@ -568,10 +566,15 @@ implements Serializable, ISimpleHistoricRelationsTable {
 		current.executeScript("PF('relatedTableWidget').clearFilters()");
 	}
 
-
 	@Override
 	public void refreshRelatedDataTable() {
 		if (this.isShowDependentData()) {
+			if (this.getSelectedData() == null) {
+				// recover the selected data from the selected table
+				if (this.getSelectedDataList().get(0) != null) {
+					this.setSelectedData(this.getSelectedDataList().get(0));
+				}
+			}
 			this.resetFilterRelatedDataTable();
 			this.loadRelatedDataList();
 			Ajax.update(RELATED_DATA_TABLE_ID);
@@ -594,8 +597,9 @@ implements Serializable, ISimpleHistoricRelationsTable {
 
 		messageDetail = "Editing product_promotion_type: ";
 		logger.info(messageDetail + dataObject.toString());
-		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail
-				+ " for product: " + dataObjectView.getProductTypeCode() + " and promotion: " + dataObjectView.getPromotionTypeCode());
+		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
+				messageDetail + " for product: " + dataObjectView.getProductTypeCode() + " and promotion: "
+						+ dataObjectView.getPromotionTypeCode());
 
 	}
 
@@ -619,8 +623,8 @@ implements Serializable, ISimpleHistoricRelationsTable {
 
 			productPromotionTypeEJB.updateData(dataObject);
 			messageDetail = "Data saves correctly";
-			logger.info(
-					"Update the status of the product_promotion_type_id  " + dataObject.toString() + " - " + messageDetail);
+			logger.info("Update the status of the product_promotion_type_id  " + dataObject.toString() + " - "
+					+ messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 		} catch (EJBException e) {
@@ -653,7 +657,6 @@ implements Serializable, ISimpleHistoricRelationsTable {
 			}
 		}
 
-		
 	}
 
 	@Override
@@ -671,7 +674,6 @@ implements Serializable, ISimpleHistoricRelationsTable {
 				messageDetail + dataObjectView.toString());
 
 	}
-		
 
 	@Override
 	public void setInitVariablesToDefault() {
@@ -682,22 +684,28 @@ implements Serializable, ISimpleHistoricRelationsTable {
 	@Override
 	public void setControlVariablesToDefault() {
 		this.setInitVariablesToDefault();
-		
+
 	}
-	
+
 	@Override
 	public void changeSearchDate(ValueChangeEvent e) {
 		LocalDateTime newSearchDate = (LocalDateTime) e.getNewValue();
 		String message, messageDetail;
-		
-		message="CHANGE SEARCH DATE";
-		
+
+		message = "CHANGE SEARCH DATE";
+
 		if (newSearchDate != null) {
-			this.setSearchDate(newSearchDate);			
+			this.setSearchDate(newSearchDate);
 		} else {
 			messageDetail = "ERROR - The search date can not be null";
 			logger.fatal(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 		}
+	}
+
+	@Override
+	public void changeSearchDataTableTitle() {
+		// TODO Auto-generated method stub
+		
 	}
 }

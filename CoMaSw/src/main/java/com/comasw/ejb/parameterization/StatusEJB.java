@@ -58,6 +58,49 @@ public class StatusEJB implements StatusEJBLocal {
 		return result;
 	}
 
+	
+	@Override
+	public List<PtStatus> findDataForCatalog() throws CoMaSwDataAccessException {
+		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
+		List<PtStatus> result = null;
+		String errorMessage;
+
+		try {
+			result = create.selectFrom(PT_STATUS)
+					.where(PT_STATUS.CATALOG.eq(true))
+					.orderBy(PT_STATUS.CODE).fetch().into(PtStatus.class);
+
+		} catch (DataAccessException e) {
+			errorMessage = "Error while try to find all the status - " + e.getMessage();
+			logger.error(errorMessage);
+			throw new CoMaSwDataAccessException(errorMessage, e);
+		}
+
+		return result;
+	}
+	
+	
+	@Override
+	public List<PtStatus> findDataForInstance() throws CoMaSwDataAccessException {
+		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
+		List<PtStatus> result = null;
+		String errorMessage;
+
+		try {
+			result = create.selectFrom(PT_STATUS)
+					.where(PT_STATUS.INSTANCE.eq(true))
+					.orderBy(PT_STATUS.CODE).fetch().into(PtStatus.class);
+
+		} catch (DataAccessException e) {
+			errorMessage = "Error while try to find all the status - " + e.getMessage();
+			logger.error(errorMessage);
+			throw new CoMaSwDataAccessException(errorMessage, e);
+		}
+
+		return result;
+	}
+
+	
 	@Override
 	public PtStatus findDataByStatusId(Integer statusId) throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
@@ -67,7 +110,7 @@ public class StatusEJB implements StatusEJBLocal {
 		try {
 			result = create.selectFrom(PT_STATUS).where(PT_STATUS.STATUS_ID.eq(val(statusId))).orderBy(PT_STATUS.CODE)
 					.fetch().into(PtStatus.class);
-			
+
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the status for status_id : " + statusId
 						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
@@ -75,15 +118,14 @@ public class StatusEJB implements StatusEJBLocal {
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
 				return result.get(0);
-			}	
+			}
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the status for status_id: " + statusId + " - "
-					+ e.getMessage();
+			errorMessage = "Error while try to find the status for status_id: " + statusId + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
@@ -103,30 +145,29 @@ public class StatusEJB implements StatusEJBLocal {
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
 				return result.get(0);
-			}	
+			}
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the status for code " + code + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 
-		
 	}
 
 	@Override
 	public void insertData(PtStatus dataObject) throws CoMaSwDataAccessException {
 		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);			
-			PtStatusDao daoObject = new PtStatusDao(configuration);			
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
+			PtStatusDao daoObject = new PtStatusDao(configuration);
 			daoObject.insert(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error inserting the status object (value: "
-					+ dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error inserting the status object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
@@ -137,9 +178,10 @@ public class StatusEJB implements StatusEJBLocal {
 			PtStatusDao daoObject = new PtStatusDao(configuration);
 			daoObject.update(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error updating the status object (value: " + dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error updating the status object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
-			throw new CoMaSwDataAccessException(errorMessage, e);			
+			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 
 	}
@@ -152,7 +194,8 @@ public class StatusEJB implements StatusEJBLocal {
 			PtStatusDao daoObject = new PtStatusDao(configuration);
 			daoObject.delete(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error deleting the status object (value: " + dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error deleting the status object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}

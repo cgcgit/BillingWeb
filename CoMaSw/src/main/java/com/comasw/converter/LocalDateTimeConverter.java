@@ -71,8 +71,8 @@ public class LocalDateTimeConverter implements Converter<Object> {
 		}
 
 		// System.out.println("Component: " + component.getClientId() + " - old value: "
-				// + value + " - new value" + timestamp.toString() );
-		
+		// + value + " - new value" + timestamp.toString() );
+
 		return Formatter.stringToLocalDateTime(value);
 
 	}

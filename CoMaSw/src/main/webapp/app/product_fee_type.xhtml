@@ -9,10 +9,6 @@
 
 <f:metadata>
 
-	<f:viewAction id="loadParentData"
-		action="#{productFeeTypeController.loadDataList()}"
-		phase="INVOKE_APPLICATION">
-	</f:viewAction>
 	<f:viewAction id="defaultControlVariables"
 		action="#{productFeeTypeController.setInitVariablesToDefault()}"
 		phase="INVOKE_APPLICATION">
@@ -62,6 +58,13 @@
 		<p:remoteCommand id="remoteCommandUpdateHistoricCandidateTable"
 			name="updateHistoricCandidateTable" process="@this"
 			update=":form:accordionPanel:historicCandidateTable" />
+			
+		<p:remoteCommand id="remoteCommandUpdatePanelData"
+			name="updatePanelData" process="@this"
+			update="form:accordionPanel:selectedTablePanel
+			form:accordionPanel:relatedTablePanel
+			form:accordionPanel:buttonPanel
+			form:accordionPanel:candidateTablePanel" />			
 
 
 		<p:accordionPanel id="accordionPanel" multiple="true"
@@ -85,11 +88,11 @@
 					<p />
 
 					<p />
-					<p:dataTable id="dataTable" widgetVar="dataTableWidget"
+					<p:dataTable id="dataTable" widgetVar="dataTableWidget" partialUpdate="disabled"
 						var="dataTable" value="#{productFeeTypeController.dataList}"
-						rowIndexVar="rowIndexMainTable"
+						rowIndexVar="rowIndexSearchTable"
 						rowKey="#{dataTable.productTypeId}" selectionMode="single"
-						selection="#{productFeeTypeController.injectSelectedData}"
+						selection="#{productFeeTypeController.selectedData}"
 						filteredValue="#{productFeeTypeController.filteredDataList}"
 						showGridlines="true" stripedRows="true" scrollable="true"
 						emptyMessage="No data to show" paginator="true" rows="4"
@@ -134,11 +137,9 @@
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
-							headerText="CODE" rendered="true"
-							sortBy="#{dataTable.code}"
+							headerText="CODE" rendered="true" sortBy="#{dataTable.code}"
 							filterBy="#{dataTable.code}" filterMatchMode="contains">
-							<h:outputText id="searchCodeOutput"
-								value="#{dataTable.code}" />
+							<h:outputText id="searchCodeOutput" value="#{dataTable.code}" />
 						</p:column>
 
 						<p:column id="searchName"
@@ -147,11 +148,9 @@
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
-							headerText="NAME" rendered="true"
-							sortBy="#{dataTable.name}"
+							headerText="NAME" rendered="true" sortBy="#{dataTable.name}"
 							filterBy="#{dataTable.name}" filterMatchMode="contains">
-							<h:outputText id="searchNameOutput"
-								value="#{dataTable.name}" />
+							<h:outputText id="searchNameOutput" value="#{dataTable.name}" />
 						</p:column>
 
 						<p:column id="searchDescription"
@@ -162,8 +161,7 @@
                                   overflow: hidden"
 							headerText="DESCRIPTION" rendered="true"
 							sortBy="#{dataTable.description}"
-							filterBy="#{dataTable.description}"
-							filterMatchMode="contains">
+							filterBy="#{dataTable.description}" filterMatchMode="contains">
 							<h:outputText id="searchDescriptionOutput"
 								value="#{dataTable.description}" />
 						</p:column>
@@ -180,15 +178,14 @@
 								<p:selectOneMenu id="searchStatusFilterMenu"
 									onchange="PF('dataTableWidget').filter()">
 									<f:selectItems id="searchStatusFilterSelectItems"
-										value="#{productFeeTypeController.statusSelectItems()}" />
+										value="#{productFeeTypeController.statusCatalogSelectItems()}" />
 								</p:selectOneMenu>
 							</f:facet>
 
 							<p:selectOneMenu id="searchStatusOutput" editable="false"
-								disabled="true" immediate="true"
-								value="#{dataTable.statusId}">
+								disabled="true" immediate="true" value="#{dataTable.statusId}">
 								<f:selectItems
-									value="#{productFeeTypeController.statusSelectItems()}"
+									value="#{productFeeTypeController.statusCatalogSelectItems()}"
 									id="selectItemsSearchStatusOutput" itemDisabled="true"
 									var="Status" itemValue="#{dataTable.statusId}" />
 							</p:selectOneMenu>
@@ -196,11 +193,11 @@
 					</p:dataTable>
 				</p:overlayPanel>
 
-				<p:panel id="selectedTablePanel"
+				<p:panel id="selectedTablePanel" partialUpdate="disabled"
 					visible="#{productFeeTypeController.showDependentData}">
 					<p:dataTable id="selectedTable" widgetVar="selectedTableWidget"
 						var="selectedDataTable"
-						value="#{productFeeTypeController.selectedData}" rendered="true"
+						value="#{productFeeTypeController.selectedDataList}" rendered="true"
 						size="small" scrollable="true" emptyMessage="No data to show"
 						showGridlines="true" paginatorPosition="bottom">
 
@@ -249,7 +246,7 @@
 								disabled="true" immediate="true"
 								value="#{selectedDataTable.statusId}">
 								<f:selectItems
-									value="#{productFeeTypeController.statusSelectItems()}"
+									value="#{productFeeTypeController.statusCatalogSelectItems()}"
 									id="selectItemsSelectedStatusOutput" itemDisabled="true"
 									var="Status" itemValue="#{selectedDataTable.statusId}" />
 							</p:selectOneMenu>
@@ -276,10 +273,10 @@
 					<p:dataTable id="relatedTable" widgetVar="relatedTableWidget"
 						var="relatedDataTable"
 						value="#{productFeeTypeController.relatedDataList}"
-						rowIndexVar="rowIndexRelatedTable"						
-						rowKey="(#{relatedDataTable.prodFeeTypeId} #{relatedDataTable.feeTypeStartDate} #{relatedDataTable.feeTypeEndDate})" 
+						rowIndexVar="rowIndexRelatedTable"
+						rowKey="(#{relatedDataTable.prodFeeTypeId} #{relatedDataTable.feeTypeStartDate} #{relatedDataTable.feeTypeEndDate})"
 						selectionMode="single"
-						selection="#{productFeeTypeController.injectSelectedRelatedData}"
+						selection="#{productFeeTypeController.selectedRelatedData}"
 						filteredValue="#{productFeeTypeController.filteredRelatedDataList}"
 						showGridlines="true" stripedRows="true" scrollable="true"
 						emptyMessage="No data to show" size="small" paginator="true"
@@ -303,7 +300,7 @@
 								<p:panel header="Show Data Criteria"
 									style="font-family:Arial Black; text-align: left; font-size: 11px; width: 100%; height: 10rem; background: WhiteSmoke">
 									<p:panelGrid columns="3" styleClass="ui-noborder">
-										<p:panel >
+										<p:panel>
 											<p:radioButton id="historicRowButton"
 												for="historicRelatedCriteriaRowButton" itemIndex="0" />
 											<h:outputLabel for="historicRowButton"
@@ -391,7 +388,7 @@
 								<p:selectOneMenu id="statusRelatedEntityFilterMenu"
 									onchange="PF('relatedTableWidget').filter()">
 									<f:selectItems id="statusRelatedEntityFilterSelectItems"
-										value="#{productFeeTypeController.statusSelectItems()}" />
+										value="#{productFeeTypeController.statusCatalogSelectItems()}" />
 								</p:selectOneMenu>
 							</f:facet>
 							<p:cellEditor id="statusRelatedEntityDataCellEditor">
@@ -400,7 +397,7 @@
 										editable="false" disabled="true" immediate="true"
 										value="#{relatedDataTable.prodFeeTypeStatusId}">
 										<f:selectItems
-											value="#{productFeeTypeController.statusSelectItems()}"
+											value="#{productFeeTypeController.statusCatalogSelectItems()}"
 											id="selectItemsStatusOutputRelatedEntityData"
 											itemDisabled="true" var="StatusOutput"
 											itemValue="#{relatedDataTable.prodFeeTypeStatusId}" />
@@ -411,7 +408,7 @@
 										value="#{relatedDataTable.prodFeeTypeStatusId}"
 										immediate="true">
 										<f:selectItems
-											value="#{productFeeTypeController.statusSelectItems()}"
+											value="#{productFeeTypeController.statusCatalogSelectItems()}"
 											id="selectItemsStatusInputRelatedEntityData"
 											var="StatusInput"
 											itemValue="#{relatedDataTable.prodFeeTypeStatusId}">
@@ -567,14 +564,14 @@
 								<p:selectOneMenu id="statusDependandFilterMenu"
 									onchange="PF('relatedTableWidget').filter()">
 									<f:selectItems id="statusRelatedDependantFilterSelectItems"
-										value="#{productFeeTypeController.statusSelectItems()}" />
+										value="#{productFeeTypeController.statusCatalogSelectItems()}" />
 								</p:selectOneMenu>
 							</f:facet>
 							<p:selectOneMenu id="statusRelatedDependantDataOutput"
 								editable="false" disabled="true" immediate="true"
 								value="#{relatedDataTable.feeTypeStatusId}">
 								<f:selectItems
-									value="#{productFeeTypeController.statusSelectItems()}"
+									value="#{productFeeTypeController.statusCatalogSelectItems()}"
 									id="selectItemsStatusOutputRelatedDependantData"
 									itemDisabled="true" var="Status"
 									itemValue="#{relatedDataTable.feeTypeStatusId}" />
@@ -616,7 +613,7 @@
 						value="#{productFeeTypeController.candidateDataList}"
 						rowIndexVar="rowIndexCandidateTable"
 						rowKey="#{candidateDataTable.feeTypeId}" selectionMode="single"
-						selection="#{productFeeTypeController.injectSelectedCandidateData}"
+						selection="#{productFeeTypeController.selectedCandidateData}"
 						filteredValue="#{productFeeTypeController.filteredCandidateDataList}"
 						showGridlines="true" stripedRows="true" scrollable="true"
 						emptyMessage="No data to show" size="small" paginator="true"
@@ -626,7 +623,7 @@
 
 							<p:outputLabel id="candidateTableTitle"
 								value="CANDIDATE FEES for #{productFeeTypeController.selectedData.code} (#{productFeeTypeController.selectedData.description}) " />
-							
+
 							<p:commandButton id="refreshCandidateTable"
 								icon="#{uiValue.refreshIcon}" ajax="true"
 								actionListener="#{productFeeTypeController.refreshCandidateDataTable}"
@@ -636,7 +633,7 @@
 							</p:commandButton>
 							<p:tooltip for="refreshCandidateTable"
 								value="Refresh candidate data" />
-								
+
 						</f:facet>
 
 
@@ -656,10 +653,10 @@
                                    overflow: hidden"
 								class="ui-button-warning rounded-button"
 								icon="#{uiValue.viewIcon}" immediate="true" ajax="true"
-								actionListener="#{productFeeTypeController.pushShowHistoricCandidateRowButton()}"
+								actionListener="#{productFeeTypeController.pushShowHistoricCandidateRowButton}"
 								oncomplete="{updateHistoricCandidateTable()}  PF('historicCandidateListWidget').show('#{component.clientId}')">
 								<f:setPropertyActionListener value="#{candidateDataTable}"
-									target="#{productFeeTypeController.injectSelectedCandidateData}" />
+									target="#{productFeeTypeController.selectedCandidateData}" />
 							</p:commandButton>
 						</p:column>
 
@@ -711,7 +708,7 @@
 
 							<p />
 							<!--  DATA SEARCH TABLE -->
-							<p:dataTable id="historicCandidateTable"
+							<p:dataTable id="historicCandidateTable" partialUpdate="disabled"
 								widgetVar="historicCandidateTableWidget"
 								var="historicCandidateDataTable"
 								value="#{productFeeTypeController.historicCandidateDataList}"
@@ -912,7 +909,7 @@
 										<p:selectOneMenu id="statusFilterMenu"
 											onchange="PF('historicCandidateTableWidget').filter()">
 											<f:selectItems id="historicCandidateStatusFilterSelectItems"
-												value="#{productFeeTypeController.statusSelectItems()}" />
+												value="#{productFeeTypeController.statusCatalogSelectItems()}" />
 										</p:selectOneMenu>
 									</f:facet>
 
@@ -921,7 +918,7 @@
 										value="#{historicCandidateDataTable.statusId}">
 										<f:selectItems id="selectItemsHistoricCandidateStatusOutput"
 											itemDisabled="true" var="Status"
-											value="#{productFeeTypeController.statusSelectItems()}"
+											value="#{productFeeTypeController.statusCatalogSelectItems()}"
 											itemValue="#{historicCandidateDataTable.statusId}" />
 									</p:selectOneMenu>
 								</p:column>
@@ -929,11 +926,7 @@
 						</p:outputPanel>
 					</p:overlayPanel>
 				</p:panel>
-
-
-
 			</p:tab>
-
 		</p:accordionPanel>
 
 

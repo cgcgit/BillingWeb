@@ -5,12 +5,14 @@ package com.comasw.interfaces;
 
 import javax.faces.event.ValueChangeEvent;
 
+import org.primefaces.component.datatable.DataTable;
+
+
 /**
  * @author catuxa
  *
  */
 public interface IEditableHistoricTable extends IEditableTable, IHistoricTable {
-	
 
 	/**
 	 * Action to change the status of the historic value
@@ -27,23 +29,35 @@ public interface IEditableHistoricTable extends IEditableTable, IHistoricTable {
 	 * Action to push the confirm change status button
 	 */
 	public void pushConfirmButtonChangeStatus();
-	
 
 	/**
-	 * Defines the propper header for the current action
+	 * Defines the proper header for the current action
 	 */
 	public void changeNewDialogHeader();
 
-	
 	/**
-	 * Defines the propper message for the current delete action
+	 * Defines the proper message for the current delete action
 	 */
-	public void changeDeleteMessage() ;
-	
-	
+	public void changeDeleteMessage();
+
 	/**
-	 * Defines the propper message for the current change status Action
+	 * Defines the proper message for the current change status Action
 	 */
 	public void changeStatusMessage();
 	
+	/**
+	 * Function that split a row to insert a new row in the data table
+	 * 
+	 * @param dataTable
+	 * @param row
+	 * @param newRow
+	 * @return
+	 */
+	public boolean splitRecords(DataTable dataTable, int row, Object newRow);
+	
+	/**
+	 * Defines the proper message for the result data search data table
+	 */
+	public void changeSearchDataTableTitle();
+
 }

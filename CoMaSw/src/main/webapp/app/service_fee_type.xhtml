@@ -85,7 +85,7 @@
 					<p />
 
 					<p />
-					<p:dataTable id="dataTable" widgetVar="dataTableWidget"
+					<p:dataTable id="dataTable" widgetVar="dataTableWidget" partialUpdate="disabled"
 						var="dataTable" value="#{serviceFeeTypeController.dataList}"
 						rowIndexVar="rowIndexMainTable"
 						rowKey="#{dataTable.serviceTypeId}" selectionMode="single"
@@ -134,11 +134,9 @@
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
-							headerText="CODE" rendered="true"
-							sortBy="#{dataTable.code}"
+							headerText="CODE" rendered="true" sortBy="#{dataTable.code}"
 							filterBy="#{dataTable.code}" filterMatchMode="contains">
-							<h:outputText id="searchCodeOutput"
-								value="#{dataTable.code}" />
+							<h:outputText id="searchCodeOutput" value="#{dataTable.code}" />
 						</p:column>
 
 						<p:column id="searchName"
@@ -147,11 +145,9 @@
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
-							headerText="NAME" rendered="true"
-							sortBy="#{dataTable.name}"
+							headerText="NAME" rendered="true" sortBy="#{dataTable.name}"
 							filterBy="#{dataTable.name}" filterMatchMode="contains">
-							<h:outputText id="searchNameOutput"
-								value="#{dataTable.name}" />
+							<h:outputText id="searchNameOutput" value="#{dataTable.name}" />
 						</p:column>
 
 						<p:column id="searchDescription"
@@ -162,8 +158,7 @@
                                   overflow: hidden"
 							headerText="DESCRIPTION" rendered="true"
 							sortBy="#{dataTable.description}"
-							filterBy="#{dataTable.description}"
-							filterMatchMode="contains">
+							filterBy="#{dataTable.description}" filterMatchMode="contains">
 							<h:outputText id="searchDescriptionOutput"
 								value="#{dataTable.description}" />
 						</p:column>
@@ -180,15 +175,14 @@
 								<p:selectOneMenu id="searchStatusFilterMenu"
 									onchange="PF('dataTableWidget').filter()">
 									<f:selectItems id="searchStatusFilterSelectItems"
-										value="#{serviceFeeTypeController.statusSelectItems()}" />
+										value="#{serviceFeeTypeController.statusCatalogSelectItems()}" />
 								</p:selectOneMenu>
 							</f:facet>
 
 							<p:selectOneMenu id="searchStatusOutput" editable="false"
-								disabled="true" immediate="true"
-								value="#{dataTable.statusId}">
+								disabled="true" immediate="true" value="#{dataTable.statusId}">
 								<f:selectItems
-									value="#{serviceFeeTypeController.statusSelectItems()}"
+									value="#{serviceFeeTypeController.statusCatalogSelectItems()}"
 									id="selectItemsSearchStatusOutput" itemDisabled="true"
 									var="Status" itemValue="#{dataTable.statusId}" />
 							</p:selectOneMenu>
@@ -196,9 +190,9 @@
 					</p:dataTable>
 				</p:overlayPanel>
 
-				<p:panel id="selectedTablePanel"
+				<p:panel id="selectedTablePanel" 
 					visible="#{serviceFeeTypeController.showDependentData}">
-					<p:dataTable id="selectedTable" widgetVar="selectedTableWidget"
+					<p:dataTable id="selectedTable" widgetVar="selectedTableWidget" partialUpdate="disabled"
 						var="selectedDataTable"
 						value="#{serviceFeeTypeController.selectedData}" rendered="true"
 						size="small" scrollable="true" emptyMessage="No data to show"
@@ -249,7 +243,7 @@
 								disabled="true" immediate="true"
 								value="#{selectedDataTable.statusId}">
 								<f:selectItems
-									value="#{serviceFeeTypeController.statusSelectItems()}"
+									value="#{serviceFeeTypeController.statusCatalogSelectItems()}"
 									id="selectItemsSelectedStatusOutput" itemDisabled="true"
 									var="Status" itemValue="#{selectedDataTable.statusId}" />
 							</p:selectOneMenu>
@@ -277,7 +271,7 @@
 						var="relatedDataTable"
 						value="#{serviceFeeTypeController.relatedDataList}"
 						rowIndexVar="rowIndexRelatedTable"
-						rowKey="(#{relatedDataTable.servFeeTypeId} #{relatedDataTable.feeTypeStartDate} #{relatedDataTable.feeTypeEndDate})" 
+						rowKey="(#{relatedDataTable.servFeeTypeId} #{relatedDataTable.feeTypeStartDate} #{relatedDataTable.feeTypeEndDate})"
 						selectionMode="single"
 						selection="#{serviceFeeTypeController.injectSelectedRelatedData}"
 						filteredValue="#{serviceFeeTypeController.filteredRelatedDataList}"
@@ -303,7 +297,7 @@
 								<p:panel header="Show Data Criteria"
 									style="font-family:Arial Black; text-align: left; font-size: 11px; width: 100%; height: 10rem; background: WhiteSmoke">
 									<p:panelGrid columns="3" styleClass="ui-noborder">
-										<p:panel >
+										<p:panel>
 											<p:radioButton id="historicRowButton"
 												for="historicRelatedCriteriaRowButton" itemIndex="0" />
 											<h:outputLabel for="historicRowButton"
@@ -391,7 +385,7 @@
 								<p:selectOneMenu id="statusRelatedEntityFilterMenu"
 									onchange="PF('relatedTableWidget').filter()">
 									<f:selectItems id="statusRelatedEntityFilterSelectItems"
-										value="#{serviceFeeTypeController.statusSelectItems()}" />
+										value="#{serviceFeeTypeController.statusCatalogSelectItems()}" />
 								</p:selectOneMenu>
 							</f:facet>
 							<p:cellEditor id="statusRelatedEntityDataCellEditor">
@@ -400,7 +394,7 @@
 										editable="false" disabled="true" immediate="true"
 										value="#{relatedDataTable.servFeeTypeStatusId}">
 										<f:selectItems
-											value="#{serviceFeeTypeController.statusSelectItems()}"
+											value="#{serviceFeeTypeController.statusCatalogSelectItems()}"
 											id="selectItemsStatusOutputRelatedEntityData"
 											itemDisabled="true" var="StatusOutput"
 											itemValue="#{relatedDataTable.servFeeTypeStatusId}" />
@@ -411,7 +405,7 @@
 										value="#{relatedDataTable.servFeeTypeStatusId}"
 										immediate="true">
 										<f:selectItems
-											value="#{serviceFeeTypeController.statusSelectItems()}"
+											value="#{serviceFeeTypeController.statusCatalogSelectItems()}"
 											id="selectItemsStatusInputRelatedEntityData"
 											var="StatusInput"
 											itemValue="#{relatedDataTable.servFeeTypeStatusId}">
@@ -567,14 +561,14 @@
 								<p:selectOneMenu id="statusDependandFilterMenu"
 									onchange="PF('relatedTableWidget').filter()">
 									<f:selectItems id="statusRelatedDependantFilterSelectItems"
-										value="#{serviceFeeTypeController.statusSelectItems()}" />
+										value="#{serviceFeeTypeController.statusCatalogSelectItems()}" />
 								</p:selectOneMenu>
 							</f:facet>
 							<p:selectOneMenu id="statusRelatedDependantDataOutput"
 								editable="false" disabled="true" immediate="true"
 								value="#{relatedDataTable.feeTypeStatusId}">
 								<f:selectItems
-									value="#{serviceFeeTypeController.statusSelectItems()}"
+									value="#{serviceFeeTypeController.statusCatalogSelectItems()}"
 									id="selectItemsStatusOutputRelatedDependantData"
 									itemDisabled="true" var="Status"
 									itemValue="#{relatedDataTable.feeTypeStatusId}" />
@@ -626,7 +620,7 @@
 
 							<p:outputLabel id="candidateTableTitle"
 								value="CANDIDATE FEES for #{serviceFeeTypeController.selectedData.code} (#{serviceFeeTypeController.selectedData.description}) " />
-							
+
 							<p:commandButton id="refreshCandidateTable"
 								icon="#{uiValue.refreshIcon}" ajax="true"
 								actionListener="#{serviceFeeTypeController.refreshCandidateDataTable}"
@@ -636,7 +630,7 @@
 							</p:commandButton>
 							<p:tooltip for="refreshCandidateTable"
 								value="Refresh candidate data" />
-								
+
 						</f:facet>
 
 
@@ -711,7 +705,7 @@
 
 							<p />
 							<!--  DATA SEARCH TABLE -->
-							<p:dataTable id="historicCandidateTable"
+							<p:dataTable id="historicCandidateTable" partialUpdate="disabled"
 								widgetVar="historicCandidateTableWidget"
 								var="historicCandidateDataTable"
 								value="#{serviceFeeTypeController.historicCandidateDataList}"
@@ -912,7 +906,7 @@
 										<p:selectOneMenu id="statusFilterMenu"
 											onchange="PF('historicCandidateTableWidget').filter()">
 											<f:selectItems id="historicCandidateStatusFilterSelectItems"
-												value="#{serviceFeeTypeController.statusSelectItems()}" />
+												value="#{serviceFeeTypeController.statusCatalogSelectItems()}" />
 										</p:selectOneMenu>
 									</f:facet>
 
@@ -921,7 +915,7 @@
 										value="#{historicCandidateDataTable.statusId}">
 										<f:selectItems id="selectItemsHistoricCandidateStatusOutput"
 											itemDisabled="true" var="Status"
-											value="#{serviceFeeTypeController.statusSelectItems()}"
+											value="#{serviceFeeTypeController.statusCatalogSelectItems()}"
 											itemValue="#{historicCandidateDataTable.statusId}" />
 									</p:selectOneMenu>
 								</p:column>

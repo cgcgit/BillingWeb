@@ -22,25 +22,23 @@ import com.comasw.model.tables.daos.PtBillingPeriodDao;
 import com.comasw.model.tables.pojos.PtBillingPeriod;
 import com.comasw.exception.CoMaSwDataAccessException;
 
-
 /**
  * Session Bean implementation class BillingPeriodEJB
  */
 @Stateless
 public class BillingPeriodEJB implements BillingPeriodEJBLocal {
-	
+
 	Logger logger = (Logger) LogManager.getLogger(StatusEJB.class);
 
 	@Resource(lookup = "java:jboss/datasources/db_comasw")
 	private DataSource ds;
-    
 
-    /**
-     * Default constructor. 
-     */
-    public BillingPeriodEJB() {
-        // TODO Auto-generated constructor stub
-    }
+	/**
+	 * Default constructor.
+	 */
+	public BillingPeriodEJB() {
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public List<PtBillingPeriod> findAllData() throws CoMaSwDataAccessException {
@@ -49,9 +47,8 @@ public class BillingPeriodEJB implements BillingPeriodEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(PT_BILLING_PERIOD).
-					orderBy(PT_BILLING_PERIOD.CODE).
-					fetch().into(PtBillingPeriod.class);
+			result = create.selectFrom(PT_BILLING_PERIOD).orderBy(PT_BILLING_PERIOD.CODE).fetch()
+					.into(PtBillingPeriod.class);
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find all the billing periods - " + e.getMessage();
@@ -63,18 +60,16 @@ public class BillingPeriodEJB implements BillingPeriodEJBLocal {
 	}
 
 	@Override
-	public PtBillingPeriod findDataByBillingPeriodId(Integer billingPeriodId)
-			throws CoMaSwDataAccessException {
+	public PtBillingPeriod findDataByBillingPeriodId(Integer billingPeriodId) throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<PtBillingPeriod> result = null;
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(PT_BILLING_PERIOD).
-					where(PT_BILLING_PERIOD.BILLING_PERIOD_ID.eq(val(billingPeriodId))).
-					orderBy(PT_BILLING_PERIOD.CODE)
+			result = create.selectFrom(PT_BILLING_PERIOD)
+					.where(PT_BILLING_PERIOD.BILLING_PERIOD_ID.eq(val(billingPeriodId))).orderBy(PT_BILLING_PERIOD.CODE)
 					.fetch().into(PtBillingPeriod.class);
-			
+
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the billing period for billing_period_id : " + billingPeriodId
 						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
@@ -82,16 +77,15 @@ public class BillingPeriodEJB implements BillingPeriodEJBLocal {
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
 				return result.get(0);
-			}				
+			}
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the billing period for billing_period_id: " + billingPeriodId + " - "
-					+ e.getMessage();
+			errorMessage = "Error while try to find the billing period for billing_period_id: " + billingPeriodId
+					+ " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 	}
-		
 
 	@Override
 	public PtBillingPeriod findDataByCode(String code) throws CoMaSwDataAccessException {
@@ -100,11 +94,9 @@ public class BillingPeriodEJB implements BillingPeriodEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(PT_BILLING_PERIOD).
-					where(PT_BILLING_PERIOD.CODE.eq(val(code))).
-					orderBy(PT_BILLING_PERIOD.CODE).fetch()
-					.into(PtBillingPeriod.class);
-			
+			result = create.selectFrom(PT_BILLING_PERIOD).where(PT_BILLING_PERIOD.CODE.eq(val(code)))
+					.orderBy(PT_BILLING_PERIOD.CODE).fetch().into(PtBillingPeriod.class);
+
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the billing period for code : " + code
 						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
@@ -112,7 +104,7 @@ public class BillingPeriodEJB implements BillingPeriodEJBLocal {
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
 				return result.get(0);
-			}				
+			}
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the billing period for code " + code + " - " + e.getMessage();
@@ -126,16 +118,16 @@ public class BillingPeriodEJB implements BillingPeriodEJBLocal {
 	public void insertData(PtBillingPeriod dataObject) throws CoMaSwDataAccessException {
 		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);			
-			PtBillingPeriodDao daoObject = new PtBillingPeriodDao(configuration);			
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
+			PtBillingPeriodDao daoObject = new PtBillingPeriodDao(configuration);
 			daoObject.insert(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error inserting the billing period object (value: "
-					+ dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error inserting the billing period object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
@@ -146,11 +138,12 @@ public class BillingPeriodEJB implements BillingPeriodEJBLocal {
 			PtBillingPeriodDao daoObject = new PtBillingPeriodDao(configuration);
 			daoObject.update(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error updating the billing period object (value: " + dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error updating the billing period object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
-			throw new CoMaSwDataAccessException(errorMessage, e);			
+			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
@@ -161,11 +154,12 @@ public class BillingPeriodEJB implements BillingPeriodEJBLocal {
 			PtBillingPeriodDao daoObject = new PtBillingPeriodDao(configuration);
 			daoObject.delete(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error deleting the billing period object (value: " + dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error deleting the billing period object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 }

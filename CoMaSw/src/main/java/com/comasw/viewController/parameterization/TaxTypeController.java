@@ -45,7 +45,6 @@ public class TaxTypeController extends BasicType<PtTaxType> implements Serializa
 
 	Logger logger = (Logger) LogManager.getLogger(TaxTypeController.class);
 
-
 	@Inject
 	private ExternalContext externalContext;
 	@Inject
@@ -54,36 +53,9 @@ public class TaxTypeController extends BasicType<PtTaxType> implements Serializa
 	@EJB
 	private TaxTypeEJBLocal taxTypeEJB;
 
-	/**
-	 * Selected data row in the table
-	 */
 	
-	@Inject
-	private PtTaxType selectedData;
-
-
-
-	// --------------------
-	// GETTERS AND SETTERS
-	// -------------------
 	
 
-
-	/**
-	 * @return the selectedData
-	 */
-	public PtTaxType getSelectedData() {
-		return selectedData;
-	}
-
-	/**
-	 * @param selectedData the selectedData to set
-	 */
-	public void setSelectedData(PtTaxType selectedData) {
-		this.selectedData = selectedData;
-	}
-
-	
 	// -------------------
 	// METHODS
 	// -------------------
@@ -98,8 +70,8 @@ public class TaxTypeController extends BasicType<PtTaxType> implements Serializa
 	@PostConstruct
 	public void init() {
 
-		if (selectedData == null) {
-			selectedData = new PtTaxType();
+		if (getSelectedData() == null) {
+			setSelectedData( new PtTaxType());
 		}
 
 		if (this.getLoggedUser() == null) {
@@ -117,7 +89,7 @@ public class TaxTypeController extends BasicType<PtTaxType> implements Serializa
 		} else {
 			logger.info("Load data sucessful");
 		}
-		
+
 	}
 
 	@Override
@@ -148,7 +120,7 @@ public class TaxTypeController extends BasicType<PtTaxType> implements Serializa
 		messageDetail = "Editing tax type: " + dataObject.getCode();
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
-		
+
 	}
 
 	@Override
@@ -168,7 +140,7 @@ public class TaxTypeController extends BasicType<PtTaxType> implements Serializa
 			if (this.objectValidation(dataObject)) {
 				taxTypeEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";
-				logger.info("Update tax type: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Update tax type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 				this.setControlVariablesToDefault();
 			} else {
@@ -201,43 +173,41 @@ public class TaxTypeController extends BasicType<PtTaxType> implements Serializa
 			if (error) {
 				FacesContext.getCurrentInstance().validationFailed();
 			} else {
-				
+
 				this.loadDataList();
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void onRowCancel(RowEditEvent<?> event) {
 
 		String message, messageDetail;
-		
-		message = "CANCEL UPDATE ROW";		messageDetail = "Cancelled the edition of the tax type";
+
+		message = "CANCEL UPDATE ROW";
+		messageDetail = "Cancelled the edition of the tax type";
 		logger.info(messageDetail);
-		
+
 		this.refreshDataTable();
 		this.setControlVariablesToDefault();
-		
+
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
-		
 	}
-
 
 	@Override
 	public void pushDeleteRowButton() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void pushCreateNewButton() {
-		this.selectedData = new PtTaxType();
+		this.setSelectedData (new PtTaxType());
 		PrimeFaces.current().executeScript("PF('createNewDialogWidget').show();");
-		
+
 	}
 
 	@Override
@@ -247,10 +217,10 @@ public class TaxTypeController extends BasicType<PtTaxType> implements Serializa
 		Boolean error = false;
 
 		try {
-			if (objectValidation(this.selectedData)) {
-				taxTypeEJB.insertData(this.selectedData);
+			if (objectValidation(this.getSelectedData())) {
+				taxTypeEJB.insertData(this.getSelectedData());
 				messageDetail = "Data saves succesfully";
-				logger.info("Create tax type: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Create tax type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 			} else {
@@ -286,22 +256,22 @@ public class TaxTypeController extends BasicType<PtTaxType> implements Serializa
 			} else {
 				this.resetFilterDataTable();
 				this.loadDataList();
-				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();"); 
+				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();");
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void pushCancelButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pushCleanButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -311,10 +281,10 @@ public class TaxTypeController extends BasicType<PtTaxType> implements Serializa
 		Boolean error = false;
 
 		try {
-			if (this.selectedData != null) {
-				taxTypeEJB.deleteData(this.selectedData);
+			if (this.getSelectedData() != null) {
+				taxTypeEJB.deleteData(this.getSelectedData());
 				messageDetail = "Data deletes succesfully";
-				logger.info("Delete tax type: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Delete tax type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;
@@ -355,19 +325,19 @@ public class TaxTypeController extends BasicType<PtTaxType> implements Serializa
 				this.loadDataList();
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void pushCancelButtonDeleteDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resetObjectValues() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -398,12 +368,11 @@ public class TaxTypeController extends BasicType<PtTaxType> implements Serializa
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} else if (((Integer) objectToValidate.getCode().length())
-					.compareTo(BasicType.CODE_FIELD_LENGTH_MAX) > 0) {
+			} else if (((Integer) objectToValidate.getCode().length()).compareTo(BasicType.CODE_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The code of the tax type (" + objectToValidate.getCode().length()
-						+ " characters) exceeds the limit of "
-						+ BasicType.CODE_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicType.CODE_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -413,12 +382,11 @@ public class TaxTypeController extends BasicType<PtTaxType> implements Serializa
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} else if (((Integer) objectToValidate.getName().length())
-					.compareTo(BasicType.NAME_FIELD_LENGTH_MAX) > 0) {
+			} else if (((Integer) objectToValidate.getName().length()).compareTo(BasicType.NAME_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The name of the tax type (" + objectToValidate.getName().length()
-						+ " characters) exceeds the limit of "
-						+ BasicType.NAME_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicType.NAME_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -433,21 +401,20 @@ public class TaxTypeController extends BasicType<PtTaxType> implements Serializa
 					.compareTo(BasicType.DESCRIPTION_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The description of the entity type ("
-						+ objectToValidate.getDescription().length()
-						+ " characters) exceeds the limit of "
+						+ objectToValidate.getDescription().length() + " characters) exceeds the limit of "
 						+ BasicType.DESCRIPTION_FIELD_LENGTH_MAX.toString() + " characters";
 
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
 			}
-			
-			if (objectToValidate.getPercentValue().compareTo(BigDecimal.valueOf(0)) < 0){
+
+			if (objectToValidate.getPercentValue().compareTo(BigDecimal.valueOf(0)) < 0) {
 				messageDetail = "ERROR - The percent value must be a positive number";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} 
+			}
 
 			if (result) {
 				// no error --> update panel
@@ -466,19 +433,19 @@ public class TaxTypeController extends BasicType<PtTaxType> implements Serializa
 	@Override
 	public void retrieveBackupData() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void setInitVariablesToDefault() {
 		this.editingMode = false;
-		
+
 	}
 
 	@Override
 	public void setControlVariablesToDefault() {
 		this.setInitVariablesToDefault();
-		
+
 	}
 
 	@Override
@@ -494,5 +461,5 @@ public class TaxTypeController extends BasicType<PtTaxType> implements Serializa
 		this.loadDataList();
 		Ajax.update(DATA_TABLE_ID);
 	}
-	
+
 }

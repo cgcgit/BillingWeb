@@ -28,24 +28,17 @@ import com.comasw.exception.CoMaSwDataAccessException;
 @Stateless
 public class CustomerTypeEJB implements CustomerTypeEJBLocal {
 
-
 	Logger logger = (Logger) LogManager.getLogger(CustomerTypeEJB.class);
 
 	@Resource(lookup = "java:jboss/datasources/db_comasw")
 	private DataSource ds;
 
-	
-	
-	
-    /**
-     * Default constructor. 
-     */
-    public CustomerTypeEJB() {
-        // TODO Auto-generated constructor stub
-    }
-
-
-
+	/**
+	 * Default constructor.
+	 */
+	public CustomerTypeEJB() {
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public List<CtCustomerType> findAllData() throws CoMaSwDataAccessException {
@@ -54,10 +47,8 @@ public class CustomerTypeEJB implements CustomerTypeEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(CT_CUSTOMER_TYPE)
-					.orderBy(CT_CUSTOMER_TYPE.CODE)
-					.fetch()
-					.into(CtCustomerType.class);		
+			result = create.selectFrom(CT_CUSTOMER_TYPE).orderBy(CT_CUSTOMER_TYPE.CODE).fetch()
+					.into(CtCustomerType.class);
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find all the customer types - " + e.getMessage();
@@ -68,22 +59,16 @@ public class CustomerTypeEJB implements CustomerTypeEJBLocal {
 		return result;
 	}
 
-
-
-
 	@Override
 	public CtCustomerType findDataByCustomerTypeId(Integer customerTypeId) throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtCustomerType> result = null;
 		String errorMessage;
-		
+
 		try {
 			result = create.selectFrom(CT_CUSTOMER_TYPE)
-					.where(CT_CUSTOMER_TYPE.CUSTOMER_TYPE_ID.eq(val(customerTypeId)))
-					.orderBy(CT_CUSTOMER_TYPE.CODE)
-					.fetch()
-					.into(CtCustomerType.class);
-			
+					.where(CT_CUSTOMER_TYPE.CUSTOMER_TYPE_ID.eq(val(customerTypeId))).orderBy(CT_CUSTOMER_TYPE.CODE)
+					.fetch().into(CtCustomerType.class);
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the customer type for customer_type_id : " + customerTypeId
@@ -92,33 +77,27 @@ public class CustomerTypeEJB implements CustomerTypeEJBLocal {
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
 				return result.get(0);
-			}			
+			}
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the customer type for customer_type_id: " + customerTypeId + " - " + e.getMessage();
+			errorMessage = "Error while try to find the customer type for customer_type_id: " + customerTypeId + " - "
+					+ e.getMessage();
 			logger.error(errorMessage);
-			throw new CoMaSwDataAccessException(errorMessage, e);		
+			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
-
-
-
 
 	@Override
 	public CtCustomerType findDataByCode(String code) throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtCustomerType> result = null;
 		String errorMessage;
-		
 
 		try {
-			result = create.selectFrom(CT_CUSTOMER_TYPE)
-					.where(CT_CUSTOMER_TYPE.CODE.eq(val(code)))
-					.orderBy(CT_CUSTOMER_TYPE.CODE)
-					.fetch()
-					.into(CtCustomerType.class);
-			
+			result = create.selectFrom(CT_CUSTOMER_TYPE).where(CT_CUSTOMER_TYPE.CODE.eq(val(code)))
+					.orderBy(CT_CUSTOMER_TYPE.CODE).fetch().into(CtCustomerType.class);
+
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the customer type for code : " + code
 						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
@@ -126,69 +105,62 @@ public class CustomerTypeEJB implements CustomerTypeEJBLocal {
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
 				return result.get(0);
-			}					
+			}
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the customer type for code " + code + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
-
-
-
 
 	@Override
 	public void insertData(CtCustomerType dataObject) throws CoMaSwDataAccessException {
-		String errorMessage;		
+		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);			
-			CtCustomerTypeDao daoObject = new CtCustomerTypeDao(configuration);			
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
+			CtCustomerTypeDao daoObject = new CtCustomerTypeDao(configuration);
 			daoObject.insert(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error inserting the customer type object (value: " + dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error inserting the customer type object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
-
-
-
 
 	@Override
 	public void updateData(CtCustomerType dataObject) throws CoMaSwDataAccessException {
 		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);		
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
 			CtCustomerTypeDao daoObject = new CtCustomerTypeDao(configuration);
 			daoObject.update(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error updating the customer type object (value: " + dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error updating the customer type object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
-
-
-
 
 	@Override
 	public void deleteData(CtCustomerType dataObject) throws CoMaSwDataAccessException {
 		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);		
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
 			CtCustomerTypeDao daoObject = new CtCustomerTypeDao(configuration);
 			daoObject.delete(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error deleting the customer type object (value: "
-					+ dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error deleting the customer type object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
-			throw new CoMaSwDataAccessException(errorMessage, e);			
+			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 }

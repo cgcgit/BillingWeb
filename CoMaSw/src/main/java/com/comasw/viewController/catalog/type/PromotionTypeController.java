@@ -55,71 +55,7 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 	@EJB
 	private PromotionTypeEJBLocal promotionTypeEJB;
 
-	// ----- SELECTED DATA -----\\
-
-	@Inject
-	/**
-	 * Selected data from dataList
-	 */
-	private CtPromotionType injectSelectedData;
-
-	/**
-	 * Selected data row in the table
-	 */
-	@Inject
-	private CtPromotionType injectSelectedHistoricData;
-
-	// ----- NEW DATA -----\\
-
-	@Inject
-	private CtPromotionType injectNewData;
-
-	// --------------------
-	// GETTERS AND SETTERS
-	// -------------------
-
-	/**
-	 * @return the selectedData
-	 */
-	public CtPromotionType getInjectSelectedData() {
-		return injectSelectedData;
-	}
-
-	/**
-	 * @param selection the selectedData to set
-	 */
-	public void setInjectSelectedData(CtPromotionType injectSelectedData) {
-		this.injectSelectedData = injectSelectedData;
-	}
-
-	/**
-	 * @return the selectedHistoricData
-	 */
-	public CtPromotionType getInjectSelectedHistoricData() {
-		return injectSelectedHistoricData;
-	}
-
-	/**
-	 * @param selectedHistoricData the selectedHistoricData to set
-	 */
-	public void setInjectSelectedHistoricData(CtPromotionType injectSelectedHistoricData) {
-		this.injectSelectedHistoricData = injectSelectedHistoricData;
-	}
-
-	/**
-	 * @return the newData
-	 */
-	public CtPromotionType getInjectNewData() {
-		return injectNewData;
-	}
-
-	/**
-	 * @param newData the newData to set
-	 */
-	public void setInjectNewData(CtPromotionType injectNewData) {
-		this.injectNewData = injectNewData;
-	}
-
+	
 	// -------------------
 	// METHODS
 	// -------------------
@@ -134,12 +70,24 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 	@PostConstruct
 	public void init() {
 
+		if (this.getNewData() == null) {
+			this.setNewData(new CtPromotionType());
+		}
+
 		if (this.getSearchDate() == null) {
 			this.setSearchDate(LocalDate.now().atStartOfDay());
 		}
 
 		if (this.getDataList() == null) {
 			this.setDataList(new ArrayList<CtPromotionType>());
+		}
+
+		if (this.getFilteredDataList() == null) {
+			this.setFilteredDataList(new ArrayList<CtPromotionType>());
+		}
+		
+		if (this.getSelectedDataList() == null) {
+			this.setSelectedDataList(new ArrayList<CtPromotionType>());
 		}
 
 		if (this.getFilteredDataList() == null) {
@@ -152,6 +100,10 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 
 		if (this.getHistoricDataList() == null) {
 			this.setHistoricDataList(new ArrayList<CtPromotionType>());
+		}
+
+		if (this.getSelectedHistoricData() == null) {
+			this.setSelectedHistoricData(new CtPromotionType());
 		}
 
 		if (this.getFilteredHistoricDataList() == null) {
@@ -172,21 +124,30 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 	public void loadDataList() {
 		String message = "LOAD DATA";
 		String messageDetail = "";
-		if (this.getSearchDate() == null) {
-			messageDetail = "The date value to search is null. Please fill the search date field";
-			logger.error(message + " - " + messageDetail);
-			FacesContext.getCurrentInstance().validationFailed();
-			throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_FATAL, message, messageDetail));
-		} else {
-			this.setDataList(promotionTypeEJB.findDataBySearchDate(searchDate));
+		if (this.isHistoricSearchDataCriteria()) {
+			this.setDataList(promotionTypeEJB.findAllData());
 			if (this.getDataList().isEmpty()) {
 				logger.info("No data to show");
 
 			} else {
 				logger.info("Load data sucessful");
 			}
-		}
+		} else {
+			if (this.getSearchDate() == null) {
+				messageDetail = "The date value to search is null. Please fill the search date field";
+				logger.error(message + " - " + messageDetail);
+				FacesContext.getCurrentInstance().validationFailed();
+				throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_FATAL, message, messageDetail));
+			} else {
+				this.setDataList(promotionTypeEJB.findDataBySearchDate(searchDate));
+				if (this.getDataList().isEmpty()) {
+					logger.info("No data to show");
 
+				} else {
+					logger.info("Load data sucessful");
+				}
+			}
+		}
 	}
 
 	@Override
@@ -215,28 +176,17 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 		String message = "SEARCH DATA";
 		String messageDetail = "";
 
-		if (this.getSearchDate() == null) {
-			messageDetail = "The date value to search is null. Please fill the search date field";
-			logger.error(message + " - " + messageDetail);
-			FacesContext.getCurrentInstance().validationFailed();
-			throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_FATAL, message, messageDetail));
+		this.loadDataList();
+		if (this.getDataList().isEmpty()) {
+			messageDetail = "No data to show for the specific search criteria";
+			logger.info(message + " - " + messageDetail);
+			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
+
 		} else {
-			this.setDataList(promotionTypeEJB.findDataBySearchDate(searchDate));
-			if (this.getDataList().isEmpty()) {
-				messageDetail = "No data to show for search date:" + Formatter.localDateTimeToString(searchDate);
-				logger.info(message + " - " + messageDetail);
-				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
+			this.resetFilterDataTable();
+			this.changeSearchDataTableTitle();
 
-			} else {
-				this.resetFilterDataTable();
-				PrimeFaces.current().executeScript("PF('searchListWidget').show();");
-				// Ajax.update(SEARCH_DATA_TABLE_ID);
-
-				messageDetail = "Shown data for the search date:" + Formatter.localDateTimeToString(searchDate);
-				logger.info(message + " - " + messageDetail);
-				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
-			}
-
+			PrimeFaces.current().executeScript("PF('searchListWidget').show();");
 		}
 
 	}
@@ -248,28 +198,25 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 
 		DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent(DATA_TABLE_ID);
 
-		if (this.getInjectSelectedData() == null) {
-			this.setInjectSelectedData(new CtPromotionType());
-		}
-
 		// Gets the selected data
-		this.setInjectSelectedData((CtPromotionType) dataTable.getRowData());
+		this.setSelectedData((CtPromotionType) dataTable.getRowData());
 
-		if (this.getInjectSelectedData() == null || this.getInjectSelectedData().getPromotionTypeId() == null
-				|| this.getInjectSelectedData().getPromotionTypeId() == 0) {
+		if (this.getSelectedData() == null || this.getSelectedData().getPromotionTypeId() == null
+				|| this.getSelectedData().getPromotionTypeId() == 0) {
 			messageDetail = "The promotion type is null";
 			logger.error(message + " - " + messageDetail);
 			createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 
 		} else {
 			this.setShowSelectedData(true);
-			this.setSelectedData(this.getInjectSelectedData());
+			this.getSelectedDataList().clear();
+			this.getSelectedDataList().add(this.getSelectedData());
 			loadHistoricalDataList();
 
 			messageDetail = "Shown data for promotion: ";
-			logger.info(message + " - " + messageDetail + this.getInjectSelectedData().toString());
+			logger.info(message + " - " + messageDetail + this.getSelectedData().toString());
 			createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
-					messageDetail + injectSelectedData.getCode());
+					messageDetail + this.getSelectedData().getCode());
 
 			PrimeFaces.current().executeScript("PF('searchListWidget').hide();");
 			PrimeFaces.current().executeScript("PF('multipleAccordionPanelWidget').selectAll();");
@@ -500,17 +447,12 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 		dataObject = (CtPromotionType) event.getObject();
 
 		try {
-			this.loadHistoricalDataList();
-
+			this.refreshHistoricDataTable();
 			messageDetail = "The changes for promotion type " + dataObject.toString() + " was cancelled";
 			logger.info(messageDetail);
 			createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
-
 			// return the default values of the control variables
 			this.setControlVariablesToDefault();
-
-			// update the historic table
-			// Ajax.update(HISTORIC_DATA_TABLE_ID);
 
 		} catch (Exception e) {
 			messageDetail = "ERROR - " + e.getCause().toString();
@@ -520,7 +462,6 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 
 	}
 
-	
 	@Override
 	public void pushAddNewRowButton() {
 		String message, messageDetail;
@@ -540,10 +481,10 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 			// pos = dataTable.getRowIndex();
 			this.setCurrentHistoricRow(dataTable.getRowIndex());
 			currentData = (CtPromotionType) dataTable.getRowData();
-			this.setInjectSelectedHistoricData((CtPromotionType) Utilities.deepClone(currentData));
+			this.setSelectedHistoricData((CtPromotionType) Utilities.deepClone(currentData));
 
-			this.injectNewData = new CtPromotionType();
-			injectNewData.from(currentData);
+			this.setNewData(new CtPromotionType());
+			this.getNewData().from(currentData);
 
 			// Sets the fromAddingRow value to true
 			this.setFromAddingRow(true);
@@ -587,7 +528,7 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 			// pos = dataTable.getRowIndex();
 			this.setCurrentHistoricRow(dataTable.getRowIndex());
 			currentData = (CtPromotionType) dataTable.getRowData();
-			this.setInjectSelectedHistoricData((CtPromotionType) Utilities.deepClone(currentData));
+			this.setSelectedHistoricData((CtPromotionType) Utilities.deepClone(currentData));
 
 			this.changeDeleteMessage();
 
@@ -618,12 +559,12 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 	public void pushCreateNewButton() {
 
 		// Set the default dates and input values for the new data
-		this.injectNewData = new CtPromotionType();
-		this.injectNewData.setEntityTypeId(ENTITY_TYPE_ID);
-		this.injectNewData.setStartDate(Formatter.stringToLocalDateTime(Formatter.DEFAULT_START_DATE));
-		this.injectNewData.setEndDate(Formatter.stringToLocalDateTime(Formatter.DEFAULT_END_DATE));
-		this.injectNewData.setInputUser(this.loggedUser.getUserCode());
-		this.injectNewData.setInputDate(LocalDateTime.now());
+		this.setNewData(new CtPromotionType());
+		this.getNewData().setEntityTypeId(ENTITY_TYPE_ID);
+		this.getNewData().setStartDate(Formatter.stringToLocalDateTime(Formatter.DEFAULT_START_DATE));
+		this.getNewData().setEndDate(Formatter.stringToLocalDateTime(Formatter.DEFAULT_END_DATE));
+		this.getNewData().setInputUser(this.loggedUser.getUserCode());
+		this.getNewData().setInputDate(LocalDateTime.now());
 
 		// Change the header to the new dialog
 		this.changeNewDialogHeader();
@@ -637,308 +578,29 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 		String message = "INSERT NEW DATA";
 		String messageDetail = "";
 		boolean error = false;
-		boolean coverGap = false;
 		Integer row = this.getCurrentHistoricRow();
-		CtPromotionType originalPreviousDataRow, previousDataRow, subsequentDataRow;
 
 		try {
-			if (this.objectValidation(injectNewData)) {
-
+			if (this.objectValidation(this.getNewData())) {
 				if (this.isFromAddingRow()) {
-					// Gets the table
+					// Gets the table					
 					DataTable dataTable = (DataTable) facesContext.getViewRoot().findComponent(HISTORIC_DATA_TABLE_ID);
-					Integer totalRows = dataTable.getRowCount();
-
-					// The previous row from new data is the current row on the data table
-					previousDataRow = this.getBackupHistoricDataList().get(row);
-					// Gets original values from previous row --> backup
-					originalPreviousDataRow = (CtPromotionType) Utilities.deepClone(previousDataRow);
-
-					// new historic version from existing object
-					if (!this.rangeDateValidation(facesContext, externalContext, previousDataRow.getStartDate(),
-							previousDataRow.getEndDate(), injectNewData.getStartDate(), injectNewData.getEndDate())) {
-						// not valid dates
-						error = true;
-					} else {
-						// validates other date condition
-						if (this.injectNewData.getStartDate()
-								.isEqual(Formatter.stringToLocalDateTime(Formatter.DEFAULT_START_DATE)) && (row != 0)) {
-							// new start date = minDate for a row different from first row ==> error
-							messageDetail = "Error in dates - Only the first row can sets the start date to the minimum allowed date.";
-							logger.info("Create promotion type: " + this.injectNewData.toString() + " - " + messageDetail);
-							this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
-									messageDetail);
-							error = true;
-
-						}
-						if (injectNewData.getEndDate()
-								.isEqual(Formatter.stringToLocalDateTime(Formatter.DEFAULT_END_DATE))
-								&& row != (totalRows - 1)) {
-							// new end date = maxDate for a row different from last row ==> error
-							messageDetail = "Error in dates - Only the last row can sets the end date to the maximum allowed date.";
-							logger.info("Create promotion type: " + this.injectNewData.toString() + " - " + messageDetail);
-							this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
-									messageDetail);
-							error = true;
-
-						}
-
-						if (!error) {
-							// dates are OK
-
-							if (row != totalRows - 1) {
-								// Check if de data to insert is to cover a gap
-								// Retrieve the subsequent record data
-								subsequentDataRow = this.backupHistoricDataList.get(row + 1);
-
-								if (previousDataRow.getEndDate().isEqual(injectNewData.getStartDate().minusDays(1))
-										&& injectNewData.getEndDate()
-												.isEqual(subsequentDataRow.getStartDate().minusDays(1))) {
-									// exceptional case: there is a gap between the records and the new record comes
-									// to cover it
-									// ==> inserts only the new record
-									// ...currentSD ............ currentED.....subsequentSD ........... subsequentED
-									// ...v .................... v.............v ...................... v
-									// ...[-----currentValue----]..............[-----subsequentValue----]
-									// ..........................[--newValue--]
-									// ..........................^ .......... ^
-									// .........................newSD ....... newED
-
-									promotionTypeEJB.insertNewHistoricDataRecord(injectNewData);
-
-									coverGap = true;
-								}
-							}
-
-							if (!coverGap) {
-								// normal case: the new record and the exist record are consecutives or overlaps
-
-								if ((injectNewData.getEndDate().isEqual(previousDataRow.getStartDate()))
-										|| (injectNewData.getEndDate().isBefore(previousDataRow.getStartDate()))) {
-									// .............currentSD ............ currentED
-									// .............v ................... v
-									// .............[-----currentValue----]
-									// [--newValue--]]
-									// ^ ......... ^^
-									// newSD ..... newED
-									if (row == 0) {
-										// first row ==> can be a record before the first record
-
-										if (previousDataRow.getStartDate()
-												.isEqual(injectNewData.getEndDate().plusDays(1))) {
-											// the current record not to be modify ==> inserts only the new record <p>
-											// ..............currentSD ............ currentED <p>
-											// ..............v ................... v <p>
-											// ..............[-----currentValue----] <p>
-											// [--newValue--] <p>
-											// ^ .......... ^ <p>
-											// newSD ..... newED <p>
-
-											promotionTypeEJB.insertNewHistoricDataRecord(injectNewData);
-										} else {
-											if (injectNewData.getEndDate().isEqual(previousDataRow.getStartDate())) {
-												// [current start date, current end date] <p>
-												// becomes to: <p>
-												// [new start date, new end date] <p>
-												// [new end date + 1, current end date] <p>
-
-												// ....currentSD'=newED+1 ............ currentED <p>
-												// ............. v ................... v <p>
-												// ..............[-----currentValue----] <p>
-												// [--newValue--] <p>
-												// ^ .......... ^ <p>
-												// newS ....... newED <p>
-
-												// set first section of the record with the new value
-												promotionTypeEJB.insertNewHistoricDataRecord(injectNewData);
-
-												// set the modified values
-												previousDataRow.setModifUser(this.loggedUser.getUserCode());
-												previousDataRow.setModifDate(LocalDateTime.now());
-												// set second section of the record with the original value (except
-												// dates)
-												previousDataRow.setStartDate(injectNewData.getEndDate().plusDays(1));
-
-												promotionTypeEJB.updateHistoricDataRecord(previousDataRow);
-
-												// delete the original record
-												promotionTypeEJB.deleteData(originalPreviousDataRow);
-											} else {
-												// no consecutive records ==> error
-												messageDetail = "Error in dates - The new and current dates are not consecutives.";
-												logger.info("Create promotion type: " + this.injectNewData.toString() + " - "
-														+ messageDetail);
-												this.createMessage(facesContext, externalContext,
-														FacesMessage.SEVERITY_INFO, message, messageDetail);
-												error = true;
-											}
-										}
-
-									} else {
-										// not the first row ==> not allowed
-										messageDetail = "Error in dates - The new end date can not be less than current start date.";
-										logger.info("Create promotion type: " + this.injectNewData.toString() + " - "
-												+ messageDetail);
-										this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO,
-												message, messageDetail);
-										error = true;
-									}
-								} else {
-									if (injectNewData.getStartDate().isEqual(previousDataRow.getStartDate())) {
-										// ..............currentSD .................. currentED <p>
-										// ..............v ........................... v <p>
-										// ..............[-----------------------------] <p>
-										// ..............[-----------] <p>
-										// ..............^ ......... ^ <p>
-										// ..............newSD ..... newED <p>
-										// becomes to: <p>
-										// ..................currentSD'=newED+1 ....... currentED <p>
-										// ...........................v ............... v <p>
-										// ...........................[--.currentValue--] <p>
-										// .............[--newValue--] <p>
-										// .............^ .......... ^ <p>
-										// .............newSD ...... newED <p>
-
-										// split the record --> set first section of the record with the new value
-										previousDataRow = (CtPromotionType) Utilities.deepClone(injectNewData);
-										previousDataRow.setInputDate(LocalDateTime.now());
-										previousDataRow.setInputUser(this.getLoggedUser().getUserCode());
-
-										promotionTypeEJB.updateHistoricDataRecord(previousDataRow);
-
-										// split the record --> set second section of the record with the original value
-										// (except dates)
-										previousDataRow = (CtPromotionType) Utilities.deepClone(originalPreviousDataRow);
-										// set the modified values
-										previousDataRow.setModifUser(this.loggedUser.getUserCode());
-										previousDataRow.setModifDate(LocalDateTime.now());
-										// set the new start date
-										previousDataRow.setStartDate(injectNewData.getEndDate().plusDays(1));
-										promotionTypeEJB.updateHistoricDataRecord(previousDataRow);
-
-										// delete the original record
-										promotionTypeEJB.deleteData(originalPreviousDataRow);
-
-									} else {
-										if (injectNewData.getEndDate().isEqual(previousDataRow.getEndDate())) {
-											// .............currentSD .................. currentED <p>
-											// .............v ........................... v <p>
-											// .............[-----------------------------] <p>
-											// ...............................[-----------] <p>
-											// ...............................^ ......... ^ <p>
-											// ...............................newSD ..... newED <p>
-											// becomes to: <p>
-											// .......currentSD........... currentED'=newSD-1 <p>
-											// .............v .............. v <p>
-											// .............[--currentValue--] <p>
-											// ...............................[--newValue--] <p>
-											// ...............................^ .......... ^ <p>
-											// ...............................newSD ...... newED <p>
-
-											// split the record --> set first section of the record with the original
-											// value
-											// (except dates)
-
-											// set the modified values
-											previousDataRow.setModifUser(this.loggedUser.getUserCode());
-											previousDataRow.setModifDate(LocalDateTime.now());
-											// set the new endDate
-											previousDataRow.setEndDate(injectNewData.getStartDate().minusDays(1));
-											promotionTypeEJB.updateHistoricDataRecord(previousDataRow);
-
-											// split the record --> set second section of the record with the new value
-											previousDataRow = (CtPromotionType) Utilities.deepClone(injectNewData);
-											previousDataRow.setInputDate(LocalDateTime.now());
-											previousDataRow.setInputUser(this.getLoggedUser().getUserCode());
-											promotionTypeEJB.updateHistoricDataRecord(previousDataRow);
-
-											// delete the original record
-											promotionTypeEJB.deleteData(originalPreviousDataRow);
-
-										} else {
-											// ........currentSD ..................................... currentED <p>
-											// .........v ............................................. v <p>
-											// .........[-----------------------------------------------] <p>
-											// .....................[-----------] <p>
-											// .....................^ ......... ^
-											// .....................newSD ..... newED <p>
-											// becomes to: <p>
-											// ....currentSD............ currentED'=newSD-1 <p>
-											// .........v .............. v <p>
-											// .........[--currentValue--] <p>
-											// ...........................[--newValue--] <p>
-											// ...........................^ .......... ^ <p>
-											// ...........................newSD. ..... newED <p>
-											// .........................................[--currentValue--] <p>
-											// .........................................^ .............. ^ <p>
-											// ......................................otherSD=newED+1 ...
-											// otherED=currentED <p>
-											//
-
-											// split the record --> set first section of the record with the original
-											// value
-											// (except dates)
-											// set the modified values
-											previousDataRow.setModifUser(this.loggedUser.getUserCode());
-											previousDataRow.setModifDate(LocalDateTime.now());
-											// set the new endDate
-											previousDataRow.setEndDate(injectNewData.getStartDate().minusDays(1));
-											promotionTypeEJB.updateHistoricDataRecord(previousDataRow);
-
-											// split the record --> set second section of the record with the new value
-											previousDataRow = (CtPromotionType) Utilities.deepClone(injectNewData);
-											previousDataRow.setInputDate(LocalDateTime.now());
-											previousDataRow.setInputUser(this.getLoggedUser().getUserCode());
-											promotionTypeEJB.updateHistoricDataRecord(previousDataRow);
-
-											// split the record --> set third section of the record with the original
-											// values
-											// (except dates)
-											previousDataRow = (CtPromotionType) Utilities.deepClone(originalPreviousDataRow);
-											// set the modified values
-											previousDataRow.setModifUser(this.loggedUser.getUserCode());
-											previousDataRow.setModifDate(LocalDateTime.now());
-											// set the new startDate and endDate
-											previousDataRow.setStartDate(injectNewData.getEndDate().plusDays(1));
-											previousDataRow.setEndDate(originalPreviousDataRow.getEndDate());
-											promotionTypeEJB.updateHistoricDataRecord(previousDataRow);
-
-											// delete the original record
-											promotionTypeEJB.deleteData(originalPreviousDataRow);
-										}
-									}
-
-								}
-							}
-
-						}
-					}
+					error = splitRecords(dataTable, row, this.getNewData());
 				} else {
 					// create a new object
-					promotionTypeEJB.insertData(injectNewData);
+					promotionTypeEJB.insertData(this.getNewData());
+					CtPromotionType object = promotionTypeEJB
+							.findDataBySearchDateAndCode(this.getNewData().getStartDate(), this.getNewData().getCode());
 
-					CtPromotionType object = promotionTypeEJB.findDataBySearchDateAndCode(this.injectNewData.getStartDate(),
-							this.injectNewData.getCode());
+					this.setSelectedData(object);
+					this.getSelectedDataList().clear();
+					this.getSelectedDataList().add(this.getSelectedData());
+					// this.setInjectSelectedData(object);
 
 					messageDetail = "Data saves succesfully";
-					logger.info("Create promotion type: " + this.injectNewData.toString() + " - " + messageDetail);
+					logger.info("Create promotion type: " + this.getNewData().toString() + " - " + messageDetail);
 					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
 							messageDetail);
-
-					// Show the data for the new object
-					this.setShowSelectedData(true);
-					this.setSelectedData(object);
-					loadHistoricalDataList();
-
-					messageDetail = "Shown data for promotion: ";
-					logger.info(message + " - " + messageDetail + this.injectNewData.toString());
-					createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
-							messageDetail + this.injectNewData.getCode());
-
-					this.resetFilterDataTable();
-					this.resetFilterHistoricDataTable();
-					PrimeFaces.current().executeScript("PF('multipleAccordionPanelWidget').selectAll();");
-
 				}
 
 			} else {
@@ -972,16 +634,25 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 			if (error) {
 				facesContext.validationFailed();
 			} else {
+				
+				//this.refreshSelectedDataAttribute();
+				
 				if (this.isFromAddingRow()) {
 					this.resetFilterHistoricDataTable();
 					this.loadHistoricalDataList();
-					Ajax.update(HISTORIC_DATA_TABLE_ID);
+					// Ajax.update(HISTORIC_DATA_TABLE_ID);
 					this.setFromAddingRow(false);
 
 				} else {
-					this.resetFilterDataTable();
-					this.loadDataList();
-					Ajax.update(DATA_TABLE_ID);
+					// Ajax.update(DATA_TABLE_ID);
+					this.resetFilterHistoricDataTable();
+					loadHistoricalDataList();
+					this.setShowSelectedData(true);
+					PrimeFaces.current().executeScript("PF('multipleAccordionPanelWidget').selectAll();");
+					messageDetail = "Shown data for promotion: ";
+					logger.info(message + " - " + messageDetail + this.getNewData().toString());
+					createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
+							messageDetail + this.getNewData().getCode());
 				}
 				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();");
 
@@ -1016,13 +687,12 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 		String messageDetail = "";
 		int currentPos, lastPos;
 		boolean error = false;
-		
-		currentPos=-1;
-		lastPos=-1;
+
+		currentPos = -1;
+		lastPos = -1;
 
 		try {
-			if (this.injectSelectedHistoricData != null) {
-
+			if (this.getSelectedHistoricData() != null) {
 				// Gets the data
 				DataTable dataTable = (DataTable) facesContext.getViewRoot().findComponent(HISTORIC_DATA_TABLE_ID);
 				currentPos = this.getRowHistoricSelected();
@@ -1048,20 +718,34 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 					previousRecord.setModifDate(LocalDateTime.now());
 					previousRecord.setModifUser(this.getLoggedUser().getUserCode());
 
-					// Update the previous record with the new endDate
-					promotionTypeEJB.updateHistoricDataRecord(previousRecord);
-					// delete the original previous record
+					// delete the selected data
+					promotionTypeEJB.deleteData(this.getSelectedHistoricData());
+
+					// delete the original previous record (to eliminate overlaps)
 					promotionTypeEJB.deleteData(previousRecordOriginalData);
 
+					// Update the previous record with the new endDate
+					promotionTypeEJB.updateHistoricDataRecord(previousRecord);
+
+					messageDetail = "Data deletes succesfully";
+					logger.info("Delete promotion type: " + this.getSelectedHistoricData().toString() + " - "
+							+ messageDetail);
+					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
+							messageDetail);
+
 					logger.info("Update the previous record end date sucessfully");
+				} else {
+
+					// delete the selected data
+					promotionTypeEJB.deleteData(this.getSelectedHistoricData());
+
+					messageDetail = "Data deletes succesfully";
+					logger.info("Delete promotion type: " + this.getSelectedHistoricData().toString() + " - "
+							+ messageDetail);
+					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
+							messageDetail);
 				}
-
-				// delete the selected data
-				promotionTypeEJB.deleteData(this.injectSelectedHistoricData);
-
-				messageDetail = "Data deletes succesfully";
-				logger.info("Delete promotion type: " + this.injectSelectedHistoricData.toString() + " - " + messageDetail);
-				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
+				
 			} else {
 				error = true;
 				messageDetail = "ERROR - Selected data is null";
@@ -1098,16 +782,17 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 				facesContext.validationFailed();
 			} else {
 				this.resetFilterHistoricDataTable();
-				this.loadHistoricalDataList();
 
 				if (lastPos == 0) {
 					// if it was only one row, reset the selected data
 					this.setSelectedData(null);
+					this.getSelectedDataList().clear();
+					this.getHistoricDataList().clear();
+				} else {
+					this.loadHistoricalDataList();
 				}
-
-			}
+			}			
 		}
-
 	}
 
 	@Override
@@ -1126,157 +811,157 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 	public boolean objectValidation(Object dataObject) {
 
 		CtPromotionType objectToValidate;
-			String message = "DATA VALIDATION";
-			String messageDetail = "";
+		String message = "DATA VALIDATION";
+		String messageDetail = "";
 
-			LocalDateTime minDate = Formatter.stringToLocalDateTime("01/01/1900");
-			LocalDateTime maxDate = Formatter.stringToLocalDateTime("31/12/9999");
+		LocalDateTime minDate = Formatter.stringToLocalDateTime("01/01/1900");
+		LocalDateTime maxDate = Formatter.stringToLocalDateTime("31/12/9999");
 
-			boolean validation = true;
+		boolean validation = true;
 
-			objectToValidate = (CtPromotionType) dataObject;
+		objectToValidate = (CtPromotionType) dataObject;
 
-			if (objectToValidate != null) {
+		if (objectToValidate != null) {
 
-				if (objectToValidate.getCode() != null) {
-					objectToValidate.setCode(objectToValidate.getCode().toUpperCase().trim());
-				}
+			if (objectToValidate.getCode() != null) {
+				objectToValidate.setCode(objectToValidate.getCode().toUpperCase().trim());
+			}
 
-				if (objectToValidate.getName() != null) {
-					objectToValidate.setName(objectToValidate.getName().toUpperCase().trim());
-				}
+			if (objectToValidate.getName() != null) {
+				objectToValidate.setName(objectToValidate.getName().toUpperCase().trim());
+			}
 
-				if (objectToValidate.getDescription() != null) {
-					objectToValidate.setDescription(objectToValidate.getDescription().trim());
-				}
+			if (objectToValidate.getDescription() != null) {
+				objectToValidate.setDescription(objectToValidate.getDescription().trim());
+			}
 
-				if (objectToValidate.getStartDate() == null) {
-					messageDetail = "ERROR - The start date of the promotion type can not be null";
-					logger.error(messageDetail);
-					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-					validation = false;
-				} else if (objectToValidate.getStartDate().compareTo(minDate) < 0) {
-					messageDetail = "ERROR - The start date of the promotion type can not be less than "
-							+ Formatter.localDateTimeToString(minDate);
-					logger.error(messageDetail);
-					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-					validation = false;
-				} else if (objectToValidate.getStartDate().compareTo(maxDate) > 0) {
-					messageDetail = "ERROR - The start date of the promotion type can not be greater than "
-							+ Formatter.localDateTimeToString(maxDate);
-					logger.error(messageDetail);
-					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-					validation = false;
-				}
-
-				if (objectToValidate.getEndDate() == null) {
-					messageDetail = "ERROR - The end date of the promotion type can not be null";
-					logger.error(messageDetail);
-					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-					validation = false;
-				} else if (objectToValidate.getEndDate().compareTo(minDate) < 0) {
-					messageDetail = "ERROR - The end date of the promotion type can not be less than "
-							+ Formatter.localDateTimeToString(minDate);
-					logger.error(messageDetail);
-					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-					validation = false;
-				} else if (objectToValidate.getEndDate().compareTo(maxDate) > 0) {
-					messageDetail = "ERROR - The end date of the promotion type can not be greater than "
-							+ Formatter.localDateTimeToString(maxDate);
-					logger.error(messageDetail);
-					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-					validation = false;
-				}
-
-				if (objectToValidate.getCode() == null || objectToValidate.getCode().length() == 0) {
-					messageDetail = "ERROR - The code of the promotion type can not be null";
-					logger.error(messageDetail);
-					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-					validation = false;
-				} else if (((Integer) objectToValidate.getCode().length())
-						.compareTo(BasicHistoricWithLists.CODE_FIELD_LENGTH_MAX) > 0) {
-					// length characters exceeds the maximum length
-					messageDetail = "Error - The code of the promotion type (" + objectToValidate.getCode().length()
-							+ " characters) exceeds the limit of "
-							+ BasicHistoricWithLists.CODE_FIELD_LENGTH_MAX.toString() + " characters";
-					logger.error(messageDetail);
-					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-					validation = false;
-				}
-				if (objectToValidate.getName() == null || objectToValidate.getName().length() == 0) {
-					messageDetail = "ERROR - The name of the promotion type can not be null";
-					logger.error(messageDetail);
-					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-					validation = false;
-				} else if (((Integer) objectToValidate.getName().length())
-						.compareTo(BasicHistoricWithLists.NAME_FIELD_LENGTH_MAX) > 0) {
-					// length characters exceeds the maximum length
-					messageDetail = "Error - The name of the promotion type (" + objectToValidate.getName().length()
-							+ " characters) exceeds the limit of "
-							+ BasicHistoricWithLists.NAME_FIELD_LENGTH_MAX.toString() + " characters";
-					logger.error(messageDetail);
-					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-					validation = false;
-				}
-
-				if (objectToValidate.getDescription() == null || objectToValidate.getDescription().length() == 0) {
-					messageDetail = "ERROR - The description of the promotion type can not be null";
-					logger.error(messageDetail);
-					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-					validation = false;
-				} else if (((Integer) objectToValidate.getDescription().length())
-						.compareTo(BasicHistoricWithLists.DESCRIPTION_FIELD_LENGTH_MAX) > 0) {
-					// length characters exceeds the maximum length
-					messageDetail = "Error - The description of the promotion type ("
-							+ objectToValidate.getDescription().length() + " characters) exceeds the limit of "
-							+ BasicHistoricWithLists.DESCRIPTION_FIELD_LENGTH_MAX.toString() + " characters";
-
-					logger.error(messageDetail);
-					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-					validation = false;
-				}
-
-				if (objectToValidate.getApplicationLevelId() == null) {
-					validation = false;
-					messageDetail = "ERROR - The application level can not be null";
-					logger.error(messageDetail);
-					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-				}
-
-				if (objectToValidate.getDiscountTypeId() == null) {
-					validation = false;
-					messageDetail = "ERROR - The discount type can not be null";
-					logger.error(messageDetail);
-					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-				}
-
-				if (objectToValidate.getDiscountValue() == null
-						|| (objectToValidate.getDiscountValue().compareTo(BigDecimal.valueOf(0)) < 0)) {
-					messageDetail = "ERROR - The discount value must be a positive number";
-					logger.error(messageDetail);
-					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-					validation = false;
-				}
-
-				if (objectToValidate.getStatusId() == null) {
-					validation = false;
-					messageDetail = "ERROR - The status can not be null";
-					logger.error(messageDetail);
-					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-				}
-
-				if (validation) {
-					// no error --> update panel
-					Ajax.update(NEW_PANEL_DATA_ID);
-				}
-
-			} else {
-				messageDetail = "ERROR - Empty values";
+			if (objectToValidate.getStartDate() == null) {
+				messageDetail = "ERROR - The start date of the promotion type can not be null";
+				logger.error(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
+				validation = false;
+			} else if (objectToValidate.getStartDate().compareTo(minDate) < 0) {
+				messageDetail = "ERROR - The start date of the promotion type can not be less than "
+						+ Formatter.localDateTimeToString(minDate);
+				logger.error(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
+				validation = false;
+			} else if (objectToValidate.getStartDate().compareTo(maxDate) > 0) {
+				messageDetail = "ERROR - The start date of the promotion type can not be greater than "
+						+ Formatter.localDateTimeToString(maxDate);
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			}
-			return validation;
+
+			if (objectToValidate.getEndDate() == null) {
+				messageDetail = "ERROR - The end date of the promotion type can not be null";
+				logger.error(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
+				validation = false;
+			} else if (objectToValidate.getEndDate().compareTo(minDate) < 0) {
+				messageDetail = "ERROR - The end date of the promotion type can not be less than "
+						+ Formatter.localDateTimeToString(minDate);
+				logger.error(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
+				validation = false;
+			} else if (objectToValidate.getEndDate().compareTo(maxDate) > 0) {
+				messageDetail = "ERROR - The end date of the promotion type can not be greater than "
+						+ Formatter.localDateTimeToString(maxDate);
+				logger.error(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
+				validation = false;
+			}
+
+			if (objectToValidate.getCode() == null || objectToValidate.getCode().length() == 0) {
+				messageDetail = "ERROR - The code of the promotion type can not be null";
+				logger.error(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
+				validation = false;
+			} else if (((Integer) objectToValidate.getCode().length())
+					.compareTo(BasicHistoricWithLists.CODE_FIELD_LENGTH_MAX) > 0) {
+				// length characters exceeds the maximum length
+				messageDetail = "Error - The code of the promotion type (" + objectToValidate.getCode().length()
+						+ " characters) exceeds the limit of " + BasicHistoricWithLists.CODE_FIELD_LENGTH_MAX.toString()
+						+ " characters";
+				logger.error(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
+				validation = false;
+			}
+			if (objectToValidate.getName() == null || objectToValidate.getName().length() == 0) {
+				messageDetail = "ERROR - The name of the promotion type can not be null";
+				logger.error(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
+				validation = false;
+			} else if (((Integer) objectToValidate.getName().length())
+					.compareTo(BasicHistoricWithLists.NAME_FIELD_LENGTH_MAX) > 0) {
+				// length characters exceeds the maximum length
+				messageDetail = "Error - The name of the promotion type (" + objectToValidate.getName().length()
+						+ " characters) exceeds the limit of " + BasicHistoricWithLists.NAME_FIELD_LENGTH_MAX.toString()
+						+ " characters";
+				logger.error(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
+				validation = false;
+			}
+
+			if (objectToValidate.getDescription() == null || objectToValidate.getDescription().length() == 0) {
+				messageDetail = "ERROR - The description of the promotion type can not be null";
+				logger.error(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
+				validation = false;
+			} else if (((Integer) objectToValidate.getDescription().length())
+					.compareTo(BasicHistoricWithLists.DESCRIPTION_FIELD_LENGTH_MAX) > 0) {
+				// length characters exceeds the maximum length
+				messageDetail = "Error - The description of the promotion type ("
+						+ objectToValidate.getDescription().length() + " characters) exceeds the limit of "
+						+ BasicHistoricWithLists.DESCRIPTION_FIELD_LENGTH_MAX.toString() + " characters";
+
+				logger.error(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
+				validation = false;
+			}
+
+			if (objectToValidate.getApplicationLevelId() == null) {
+				validation = false;
+				messageDetail = "ERROR - The application level can not be null";
+				logger.error(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
+			}
+
+			if (objectToValidate.getDiscountTypeId() == null) {
+				validation = false;
+				messageDetail = "ERROR - The discount type can not be null";
+				logger.error(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
+			}
+
+			if (objectToValidate.getDiscountValue() == null
+					|| (objectToValidate.getDiscountValue().compareTo(BigDecimal.valueOf(0)) < 0)) {
+				messageDetail = "ERROR - The discount value must be a positive number";
+				logger.error(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
+				validation = false;
+			}
+
+			if (objectToValidate.getStatusId() == null) {
+				validation = false;
+				messageDetail = "ERROR - The status can not be null";
+				logger.error(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
+			}
+
+			if (validation) {
+				// no error --> update panel
+				Ajax.update(NEW_PANEL_DATA_ID);
+			}
+
+		} else {
+			messageDetail = "ERROR - Empty values";
+			logger.error(messageDetail);
+			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
+			validation = false;
+		}
+		return validation;
 	}
 
 	@Override
@@ -1294,6 +979,7 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 		this.setToCancel(false);
 		this.setPrevStatusId(-1);
 		this.setShowSelectedData(false);
+		this.setHistoricSearchDataCriteria(false);
 
 	}
 
@@ -1325,11 +1011,15 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 
 	@Override
 	public void refreshHistoricDataTable() {
-		if (this.getSelectedData() != null) {
+		if (this.getSelectedData() == null) {
+			// recover the selected data from the selected table
+			if (this.getSelectedDataList().get(0) != null) {
+				this.setSelectedData(this.getSelectedDataList().get(0));
+			}
+		}
 			this.resetFilterHistoricDataTable();
 			this.loadHistoricalDataList();
-			Ajax.update(HISTORIC_DATA_TABLE_ID);
-		}
+			Ajax.update(HISTORIC_DATA_TABLE_ID);		
 	}
 
 	@Override
@@ -1343,7 +1033,7 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 				.findComponent(HISTORIC_DATA_TABLE_ID);
 		CtPromotionType data = (CtPromotionType) dataTable.getRowData();
 
-		this.injectSelectedHistoricData = data;
+		this.setSelectedHistoricData(data);
 
 		// Gets the row of the current User
 		String row = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
@@ -1395,7 +1085,7 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 		boolean error = false;
 
 		try {
-			if (this.injectSelectedHistoricData != null) {
+			if (this.getSelectedHistoricData() != null) {
 
 				// Gets the data
 				DataTable dataTable = (DataTable) facesContext.getViewRoot().findComponent(HISTORIC_DATA_TABLE_ID);
@@ -1416,7 +1106,7 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 					dataTable.setRowIndex(currentPos);
 
 					messageDetail = "Subsequent status change succesfully";
-					logger.info("Change status promotion type: " + this.injectSelectedHistoricData.toString() + " - "
+					logger.info("Change status promotion type: " + this.getSelectedHistoricData().toString() + " - "
 							+ messageDetail);
 					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
 							messageDetail);
@@ -1477,7 +1167,8 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 			if (this.isFromAddingRow()) {
 				// The old value was equal to the previous row
 				currentObject = (CtPromotionType) dataTable.getRowData();
-				currentObject.setStatusId(((CtPromotionType) this.backupHistoricDataList.get(currentPos - 1)).getStatusId());
+				currentObject
+						.setStatusId(((CtPromotionType) this.backupHistoricDataList.get(currentPos - 1)).getStatusId());
 				Ajax.updateRow(dataTable, currentPos);
 			}
 
@@ -1519,29 +1210,29 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 
 	@Override
 	public void changeDeleteMessage() {
-		this.setDeleteMessageDialog("Promotion type " + this.injectSelectedHistoricData.getCode()
+		this.setDeleteMessageDialog("Promotion type " + this.getSelectedHistoricData().getCode()
 				+ " - Do you really want to delete historic period ["
-				+ Formatter.localDateTimeToString(this.injectSelectedHistoricData.getStartDate()) + ", "
-				+ Formatter.localDateTimeToString(this.injectSelectedHistoricData.getEndDate()) + "]? ");
+				+ Formatter.localDateTimeToString(this.getSelectedHistoricData().getStartDate()) + ", "
+				+ Formatter.localDateTimeToString(this.getSelectedHistoricData().getEndDate()) + "]? ");
 	}
 
 	@Override
 	public void changeStatusMessage() {
-		this.setCancelMessageDialog("Promotion type " + this.injectSelectedHistoricData.getCode()
+		this.setCancelMessageDialog("Promotion type " + this.getSelectedHistoricData().getCode()
 				+ " - Do you really want to set the status to cancel from historic period ["
-				+ Formatter.localDateTimeToString(this.injectSelectedHistoricData.getStartDate()) + ", "
-				+ Formatter.localDateTimeToString(this.injectSelectedHistoricData.getEndDate()) + "] onwards?");
+				+ Formatter.localDateTimeToString(this.getSelectedHistoricData().getStartDate()) + ", "
+				+ Formatter.localDateTimeToString(this.getSelectedHistoricData().getEndDate()) + "] onwards?");
 	}
-	
+
 	@Override
 	public void changeSearchDate(ValueChangeEvent e) {
 		LocalDateTime newSearchDate = (LocalDateTime) e.getNewValue();
 		String message, messageDetail;
-		
-		message="CHANGE SEARCH DATE";
-		
+
+		message = "CHANGE SEARCH DATE";
+
 		if (newSearchDate != null) {
-			this.setSearchDate(newSearchDate);			
+			this.setSearchDate(newSearchDate);
 		} else {
 			messageDetail = "ERROR - The search date can not be null";
 			logger.fatal(messageDetail);
@@ -1549,4 +1240,324 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 		}
 	}
 
+	@SuppressWarnings("finally")
+	@Override
+	public boolean splitRecords(DataTable dataTable, int row, Object newRow) {
+		String message = "INSERT NEW DATA";
+		String messageDetail = "";
+		boolean error = false;
+		boolean coverGap = false;
+		CtPromotionType newObject, originalPreviousDataRow, previousDataRow, subsequentDataRow;
+
+		try {
+
+			newObject = (CtPromotionType) newRow;
+
+			Integer totalRows = dataTable.getRowCount();
+
+			// The previous row from new data is the current row on the data table
+			previousDataRow = this.getBackupHistoricDataList().get(row);
+			// Gets original values from previous row --> backup
+			originalPreviousDataRow = (CtPromotionType) Utilities.deepClone(previousDataRow);
+
+			// new historic version from existing object
+			if (!this.rangeDateValidation(facesContext, externalContext, previousDataRow.getStartDate(),
+					previousDataRow.getEndDate(), newObject.getStartDate(), newObject.getEndDate())) {
+				// not valid dates
+				error = true;
+			} else {
+				// validates other date condition
+				if (newObject.getStartDate().isEqual(Formatter.stringToLocalDateTime(Formatter.DEFAULT_START_DATE))
+						&& (row != 0)) {
+					// new start date = minDate for a row different from first row ==> error
+					messageDetail = "Error in dates - Only the first row can sets the start date to the minimum allowed date.";
+					logger.info("Create promotion type: " + newObject.toString() + " - " + messageDetail);
+					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
+							messageDetail);
+					error = true;
+
+				}
+				if (newObject.getEndDate().isEqual(Formatter.stringToLocalDateTime(Formatter.DEFAULT_END_DATE))
+						&& row != (totalRows - 1)) {
+					// new end date = maxDate for a row different from last row ==> error
+					messageDetail = "Error in dates - Only the last row can sets the end date to the maximum allowed date.";
+					logger.info("Create promotion type: " + newObject.toString() + " - " + messageDetail);
+					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
+							messageDetail);
+					error = true;
+
+				}
+
+				if (!error) {
+					// dates are OK
+
+					if (row != totalRows - 1) {
+						// Check if de data to insert is to cover a gap
+						// Retrieve the subsequent record data
+						subsequentDataRow = this.backupHistoricDataList.get(row + 1);
+
+						if (previousDataRow.getEndDate().isEqual(newObject.getStartDate().minusDays(1))
+								&& newObject.getEndDate().isEqual(subsequentDataRow.getStartDate().minusDays(1))) {
+							// exceptional case: there is a gap between the records and the new record comes
+							// to cover it
+							// ==> inserts only the new record
+							// ...currentSD ............ currentED.....subsequentSD ........... subsequentED
+							// ...v .................... v.............v ...................... v
+							// ...[-----currentValue----]..............[-----subsequentValue----]
+							// ..........................[--newValue--]
+							// ..........................^ .......... ^
+							// .........................newSD ....... newED
+
+							promotionTypeEJB.insertNewHistoricDataRecord(newObject);
+
+							coverGap = true;
+						}
+					}
+
+					if (!coverGap) {
+						// normal case: the new record and the exist record are consecutives or overlaps
+
+						if ((newObject.getEndDate().isEqual(previousDataRow.getStartDate()))
+								|| (newObject.getEndDate().isBefore(previousDataRow.getStartDate()))) {
+							// .............currentSD ............ currentED
+							// .............v ................... v
+							// .............[-----currentValue----]
+							// [--newValue--]]
+							// ^ ......... ^^
+							// newSD ..... newED
+							if (row == 0) {
+								// first row ==> can be a record before the first record
+
+								if (previousDataRow.getStartDate().isEqual(newObject.getEndDate().plusDays(1))) {
+									// the current record not to be modify ==> inserts only the new record <p>
+									// ..............currentSD ............ currentED <p>
+									// ..............v ................... v <p>
+									// ..............[-----currentValue----] <p>
+									// [--newValue--] <p>
+									// ^ .......... ^ <p>
+									// newSD ..... newED <p>
+
+									promotionTypeEJB.insertNewHistoricDataRecord(newObject);
+								} else {
+									if (newObject.getEndDate().isEqual(previousDataRow.getStartDate())) {
+										// [current start date, current end date] <p>
+										// becomes to: <p>
+										// [new start date, new end date] <p>
+										// [new end date + 1, current end date] <p>
+
+										// ....currentSD'=newED+1 ............ currentED <p>
+										// ............. v ................... v <p>
+										// ..............[-----currentValue----] <p>
+										// [--newValue--] <p>
+										// ^ .......... ^ <p>
+										// newS ....... newED <p>
+
+										// set first section of the record with the new value
+										promotionTypeEJB.insertNewHistoricDataRecord(newObject);
+
+										// delete the original record (to eliminate overlapping)
+										promotionTypeEJB.deleteData(originalPreviousDataRow);
+
+										// set the modified values
+										previousDataRow.setModifUser(this.loggedUser.getUserCode());
+										previousDataRow.setModifDate(LocalDateTime.now());
+										// set second section of the record with the original value (except
+										// dates)
+										previousDataRow.setStartDate(newObject.getEndDate().plusDays(1));
+
+										promotionTypeEJB.updateHistoricDataRecord(previousDataRow);
+
+									} else {
+										// no consecutive records ==> error
+										messageDetail = "Error in dates - The new and current dates are not consecutives.";
+										logger.info("Create promotion type: " + newObject.toString() + " - "
+												+ messageDetail);
+										this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO,
+												message, messageDetail);
+										error = true;
+									}
+								}
+
+							} else {
+								// not the first row ==> not allowed
+								messageDetail = "Error in dates - The new end date can not be less than current start date.";
+								logger.info("Create promotion type: " + newObject.toString() + " - " + messageDetail);
+								this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
+										messageDetail);
+								error = true;
+							}
+						} else {
+							if (newObject.getStartDate().isEqual(previousDataRow.getStartDate())) {
+								// ..............currentSD .................. currentED <p>
+								// ..............v ........................... v <p>
+								// ..............[-----------------------------] <p>
+								// ..............[-----------] <p>
+								// ..............^ ......... ^ <p>
+								// ..............newSD ..... newED <p>
+								// becomes to: <p>
+								// ..................currentSD'=newED+1 ....... currentED <p>
+								// ...........................v ............... v <p>
+								// ...........................[--.currentValue--] <p>
+								// .............[--newValue--] <p>
+								// .............^ .......... ^ <p>
+								// .............newSD ...... newED <p>
+
+								// delete the original record (to eliminate overlapping)
+								promotionTypeEJB.deleteData(originalPreviousDataRow);
+
+								// split the record --> set first section of the record with the new value
+								previousDataRow = (CtPromotionType) Utilities.deepClone(newObject);
+								previousDataRow.setInputDate(LocalDateTime.now());
+								previousDataRow.setInputUser(this.getLoggedUser().getUserCode());
+
+								promotionTypeEJB.updateHistoricDataRecord(previousDataRow);
+
+								// split the record --> set second section of the record with the original value
+								// (except dates)
+								previousDataRow = (CtPromotionType) Utilities.deepClone(originalPreviousDataRow);
+								// set the modified values
+								previousDataRow.setModifUser(this.loggedUser.getUserCode());
+								previousDataRow.setModifDate(LocalDateTime.now());
+								// set the new start date
+								previousDataRow.setStartDate(newObject.getEndDate().plusDays(1));
+								promotionTypeEJB.updateHistoricDataRecord(previousDataRow);
+
+							} else {
+								if (newObject.getEndDate().isEqual(previousDataRow.getEndDate())) {
+									// .............currentSD .................. currentED <p>
+									// .............v ........................... v <p>
+									// .............[-----------------------------] <p>
+									// ...............................[-----------] <p>
+									// ...............................^ ......... ^ <p>
+									// ...............................newSD ..... newED <p>
+									// becomes to: <p>
+									// .......currentSD........... currentED'=newSD-1 <p>
+									// .............v .............. v <p>
+									// .............[--currentValue--] <p>
+									// ...............................[--newValue--] <p>
+									// ...............................^ .......... ^ <p>
+									// ...............................newSD ...... newED <p>
+
+									// split the record --> set first section of the record with the original
+									// value
+									// (except dates)
+
+									// delete the original record (to eliminate overlapping)
+									promotionTypeEJB.deleteData(originalPreviousDataRow);
+
+									// set the modified values
+									previousDataRow.setModifUser(this.loggedUser.getUserCode());
+									previousDataRow.setModifDate(LocalDateTime.now());
+									// set the new endDate
+									previousDataRow.setEndDate(newObject.getStartDate().minusDays(1));
+									promotionTypeEJB.updateHistoricDataRecord(previousDataRow);
+
+									// split the record --> set second section of the record with the new value
+									previousDataRow = (CtPromotionType) Utilities.deepClone(newObject);
+									previousDataRow.setInputDate(LocalDateTime.now());
+									previousDataRow.setInputUser(this.getLoggedUser().getUserCode());
+									promotionTypeEJB.updateHistoricDataRecord(previousDataRow);
+
+								} else {
+									// ........currentSD ..................................... currentED <p>
+									// .........v ............................................. v <p>
+									// .........[-----------------------------------------------] <p>
+									// .....................[-----------] <p>
+									// .....................^ ......... ^
+									// .....................newSD ..... newED <p>
+									// becomes to: <p>
+									// ....currentSD............ currentED'=newSD-1 <p>
+									// .........v .............. v <p>
+									// .........[--currentValue--] <p>
+									// ...........................[--newValue--] <p>
+									// ...........................^ .......... ^ <p>
+									// ...........................newSD. ..... newED <p>
+									// .........................................[--currentValue--] <p>
+									// .........................................^ .............. ^ <p>
+									// ......................................otherSD=newED+1 ...
+									// otherED=currentED <p>
+									//
+
+									// delete the original record (to eliminate overlapping)
+									promotionTypeEJB.deleteData(originalPreviousDataRow);
+
+									// split the record --> set first section of the record with the original
+									// value
+									// (except dates)
+									// set the modified values
+									previousDataRow.setModifUser(this.loggedUser.getUserCode());
+									previousDataRow.setModifDate(LocalDateTime.now());
+									// set the new endDate
+									previousDataRow.setEndDate(newObject.getStartDate().minusDays(1));
+									promotionTypeEJB.updateHistoricDataRecord(previousDataRow);
+
+									// split the record --> set second section of the record with the new value
+									previousDataRow = (CtPromotionType) Utilities.deepClone(newObject);
+									previousDataRow.setInputDate(LocalDateTime.now());
+									previousDataRow.setInputUser(this.getLoggedUser().getUserCode());
+									promotionTypeEJB.updateHistoricDataRecord(previousDataRow);
+
+									// split the record --> set third section of the record with the original
+									// values
+									// (except dates)
+									previousDataRow = (CtPromotionType) Utilities.deepClone(originalPreviousDataRow);
+									// set the modified values
+									previousDataRow.setModifUser(this.loggedUser.getUserCode());
+									previousDataRow.setModifDate(LocalDateTime.now());
+									// set the new startDate and endDate
+									previousDataRow.setStartDate(newObject.getEndDate().plusDays(1));
+									previousDataRow.setEndDate(originalPreviousDataRow.getEndDate());
+									promotionTypeEJB.updateHistoricDataRecord(previousDataRow);
+
+								}
+							}
+
+						}
+					}
+
+				}
+			}
+
+		} catch (EJBException e) {
+			error = true;
+			Exception ne = (Exception) e.getCause();
+			if (ne.getClass().getName().equals("es.comasw.exception.CoMaSwDataAccessException")) {
+				messageDetail = "DATA ACCES ERROR - " + ne.getMessage();
+				logger.fatal(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_FATAL, message, messageDetail);
+
+			} else if (ne.getClass().getName().equals("es.comasw.exception.CoMaSwParseException")) {
+				messageDetail = "PARSE ERROR - " + ne.getMessage();
+				logger.fatal(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_FATAL, message, messageDetail);
+
+			} else {
+				messageDetail = "ERROR - " + ne.getMessage();
+				logger.fatal(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_FATAL, message, messageDetail);
+			}
+
+		} catch (Exception e) {
+			error = true;
+			messageDetail = "ERROR - " + e.getMessage();
+			logger.fatal(messageDetail);
+			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_FATAL, message, messageDetail);
+		} finally {
+			return error;
+		}
+
+	}
+
+	@Override
+	public void changeSearchDataTableTitle() {
+		if (this.isHistoricSearchDataCriteria()) {
+			this.setSearchDataTableTitle(
+					"RESULT DATA FOR HISTORIC SEARCH - Click on row button to manage the historic records of the promotion type");
+		} else {
+			this.setSearchDataTableTitle(
+					"RESULT DATA FOR SEARCH DATE: " + Formatter.localDateTimeToString(this.getSearchDate())
+							+ " - Click on row button to manage the historic records of the promotion type");
+		}
+
+	}
 }

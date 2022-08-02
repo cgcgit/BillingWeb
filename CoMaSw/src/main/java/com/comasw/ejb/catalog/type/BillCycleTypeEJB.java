@@ -22,7 +22,6 @@ import com.comasw.model.tables.daos.CtBillCycleTypeDao;
 import com.comasw.model.tables.pojos.CtBillCycleType;
 import com.comasw.exception.CoMaSwDataAccessException;
 
-
 /**
  * Session Bean implementation class BillCycleTypeEJB
  */
@@ -34,12 +33,12 @@ public class BillCycleTypeEJB implements BillCycleTypeEJBLocal {
 	@Resource(lookup = "java:jboss/datasources/db_comasw")
 	private DataSource ds;
 
-    /**
-     * Default constructor. 
-     */
-    public BillCycleTypeEJB() {
-        // TODO Auto-generated constructor stub
-    }
+	/**
+	 * Default constructor.
+	 */
+	public BillCycleTypeEJB() {
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public List<CtBillCycleType> findAllData() throws CoMaSwDataAccessException {
@@ -48,10 +47,8 @@ public class BillCycleTypeEJB implements BillCycleTypeEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(CT_BILL_CYCLE_TYPE)
-					.orderBy(CT_BILL_CYCLE_TYPE.CODE)
-					.fetch()
-					.into(CtBillCycleType.class);		
+			result = create.selectFrom(CT_BILL_CYCLE_TYPE).orderBy(CT_BILL_CYCLE_TYPE.CODE).fetch()
+					.into(CtBillCycleType.class);
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find all the bill cycle types - " + e.getMessage();
@@ -61,7 +58,7 @@ public class BillCycleTypeEJB implements BillCycleTypeEJBLocal {
 
 		return result;
 	}
-	
+
 	@Override
 	public List<CtBillCycleType> findOrdinaryCycleType() throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
@@ -69,11 +66,8 @@ public class BillCycleTypeEJB implements BillCycleTypeEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(CT_BILL_CYCLE_TYPE)
-					.where(CT_BILL_CYCLE_TYPE.CORRECTIVE.eq(false))
-					.orderBy(CT_BILL_CYCLE_TYPE.CODE)
-					.fetch()
-					.into(CtBillCycleType.class);		
+			result = create.selectFrom(CT_BILL_CYCLE_TYPE).where(CT_BILL_CYCLE_TYPE.CORRECTIVE.eq(false))
+					.orderBy(CT_BILL_CYCLE_TYPE.CODE).fetch().into(CtBillCycleType.class);
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find all the ordinary bill cycle types - " + e.getMessage();
@@ -91,11 +85,8 @@ public class BillCycleTypeEJB implements BillCycleTypeEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(CT_BILL_CYCLE_TYPE)
-					.where(CT_BILL_CYCLE_TYPE.CORRECTIVE.eq(true))
-					.orderBy(CT_BILL_CYCLE_TYPE.CODE)
-					.fetch()
-					.into(CtBillCycleType.class);		
+			result = create.selectFrom(CT_BILL_CYCLE_TYPE).where(CT_BILL_CYCLE_TYPE.CORRECTIVE.eq(true))
+					.orderBy(CT_BILL_CYCLE_TYPE.CODE).fetch().into(CtBillCycleType.class);
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find all the corrective bill cycle types - " + e.getMessage();
@@ -105,22 +96,17 @@ public class BillCycleTypeEJB implements BillCycleTypeEJBLocal {
 
 		return result;
 	}
-	
 
 	@Override
-	public CtBillCycleType findDataByBillCycleTypeId(Integer billCycleTypeId)
-			throws CoMaSwDataAccessException {
+	public CtBillCycleType findDataByBillCycleTypeId(Integer billCycleTypeId) throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtBillCycleType> result = null;
 		String errorMessage;
-		
+
 		try {
 			result = create.selectFrom(CT_BILL_CYCLE_TYPE)
 					.where(CT_BILL_CYCLE_TYPE.BILL_CYCLE_TYPE_ID.eq(val(billCycleTypeId)))
-					.orderBy(CT_BILL_CYCLE_TYPE.CODE)
-					.fetch()
-					.into(CtBillCycleType.class);
-			
+					.orderBy(CT_BILL_CYCLE_TYPE.CODE).fetch().into(CtBillCycleType.class);
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the bill cycle type for bill_cycle_type_id : " + billCycleTypeId
@@ -132,12 +118,12 @@ public class BillCycleTypeEJB implements BillCycleTypeEJBLocal {
 			}
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the bill cycle type for bill_cycle_type_id: " + billCycleTypeId + " - " + e.getMessage();
+			errorMessage = "Error while try to find the bill cycle type for bill_cycle_type_id: " + billCycleTypeId
+					+ " - " + e.getMessage();
 			logger.error(errorMessage);
-			throw new CoMaSwDataAccessException(errorMessage, e);		
+			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 
-		
 	}
 
 	@Override
@@ -145,15 +131,11 @@ public class BillCycleTypeEJB implements BillCycleTypeEJBLocal {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtBillCycleType> result = null;
 		String errorMessage;
-		
 
 		try {
-			result = create.selectFrom(CT_BILL_CYCLE_TYPE)
-					.where(CT_BILL_CYCLE_TYPE.CODE.eq(val(code)))
-					.orderBy(CT_BILL_CYCLE_TYPE.CODE)
-					.fetch()
-					.into(CtBillCycleType.class);
-			
+			result = create.selectFrom(CT_BILL_CYCLE_TYPE).where(CT_BILL_CYCLE_TYPE.CODE.eq(val(code)))
+					.orderBy(CT_BILL_CYCLE_TYPE.CODE).fetch().into(CtBillCycleType.class);
+
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the bill cycle type for code : " + code
 						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
@@ -168,55 +150,55 @@ public class BillCycleTypeEJB implements BillCycleTypeEJBLocal {
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
 	public void insertData(CtBillCycleType dataObject) throws CoMaSwDataAccessException {
-		String errorMessage;		
+		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);			
-			CtBillCycleTypeDao daoObject = new CtBillCycleTypeDao(configuration);			
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
+			CtBillCycleTypeDao daoObject = new CtBillCycleTypeDao(configuration);
 			daoObject.insert(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error inserting the bill cycle type object (value: " + dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error inserting the bill cycle type object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
 	public void updateData(CtBillCycleType dataObject) throws CoMaSwDataAccessException {
 		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);		
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
 			CtBillCycleTypeDao daoObject = new CtBillCycleTypeDao(configuration);
 			daoObject.update(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error updating the bill cycle type object (value: " + dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error updating the bill cycle type object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
 	public void deleteData(CtBillCycleType dataObject) throws CoMaSwDataAccessException {
 		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);		
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
 			CtBillCycleTypeDao daoObject = new CtBillCycleTypeDao(configuration);
 			daoObject.delete(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error deleting the bill cycle type object (value: "
-					+ dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error deleting the bill cycle type object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
-			throw new CoMaSwDataAccessException(errorMessage, e);			
+			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
-	}
 
-	
+	}
 
 }

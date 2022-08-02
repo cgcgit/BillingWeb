@@ -13,8 +13,7 @@ import org.primefaces.event.RowEditEvent;
  *         Manages the editable tables for the entities
  *
  */
-public interface IEditableTable extends ITableAdd{
-	
+public interface IEditableTable extends ITableAdd {
 
 	// -------------- EVENT MANAGEMENT ON THE TABLES
 
@@ -39,8 +38,5 @@ public interface IEditableTable extends ITableAdd{
 	 * @param event
 	 */
 	public void onRowCancel(RowEditEvent<?> event);
-	
-	
-
 
 }

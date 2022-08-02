@@ -53,6 +53,26 @@ public interface IPtStatus extends Serializable {
      */
     public String getDescription();
 
+    /**
+     * Setter for <code>public.pt_status.catalog</code>. Indicates if the status applies to catalog entities
+     */
+    public void setCatalog(Boolean value);
+
+    /**
+     * Getter for <code>public.pt_status.catalog</code>. Indicates if the status applies to catalog entities
+     */
+    public Boolean getCatalog();
+
+    /**
+     * Setter for <code>public.pt_status.instance</code>. Indicates if the status applies to instance entities
+     */
+    public void setInstance(Boolean value);
+
+    /**
+     * Getter for <code>public.pt_status.instance</code>. Indicates if the status applies to instance entities
+     */
+    public Boolean getInstance();
+
     // -------------------------------------------------------------------------
     // FROM and INTO
     // -------------------------------------------------------------------------

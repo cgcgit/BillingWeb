@@ -11,5 +11,5 @@ import javax.security.enterprise.authentication.mechanism.http.LoginToContinue;
 @ApplicationScoped
 
 public class ApplicationConfig {
-	//					
+	//
 }

@@ -45,7 +45,6 @@ public class ConsumptionClassController extends BasicType<PtConsumptionClass> im
 
 	Logger logger = (Logger) LogManager.getLogger(EntityTypeController.class);
 
-
 	@Inject
 	private ExternalContext externalContext;
 	@Inject
@@ -54,33 +53,7 @@ public class ConsumptionClassController extends BasicType<PtConsumptionClass> im
 	@EJB
 	private ConsumptionClassEJBLocal consumptionClassEJB;
 
-
-	/**
-	 * Selected data row in the table
-	 */
-	@Inject
-	private PtConsumptionClass selectedData;
-
-
-	// --------------------
-	// GETTERS AND SETTERS
-	// -------------------
-
-	/**
-	 * @return the selectedData
-	 */
-	public PtConsumptionClass getSelectedData() {
-		return selectedData;
-	}
-
-	/**
-	 * @param selectedData the selectedData to set
-	 */
-	public void setSelectedData(PtConsumptionClass selectedData) {
-		this.selectedData = selectedData;
-	}
-
-
+	
 	// -------------------
 	// METHODS
 	// -------------------
@@ -91,7 +64,6 @@ public class ConsumptionClassController extends BasicType<PtConsumptionClass> im
 	public ConsumptionClassController() {
 		// TODO Auto-generated constructor stub
 	}
-	
 
 	@PostConstruct
 	public void init() {
@@ -99,14 +71,12 @@ public class ConsumptionClassController extends BasicType<PtConsumptionClass> im
 		if (this.getSelectedData() == null) {
 			this.setSelectedData(new PtConsumptionClass());
 		}
-		
 
 		if (this.getLoggedUser() == null) {
 			this.setLoggedUser((VwUsers) externalContext.getSessionMap().get("applicationUser"));
 		}
 
 	}
-	
 
 	@Override
 	public void loadDataList() {
@@ -118,7 +88,6 @@ public class ConsumptionClassController extends BasicType<PtConsumptionClass> im
 			logger.info("Load data sucessful");
 		}
 
-		
 	}
 
 	@Override
@@ -149,7 +118,7 @@ public class ConsumptionClassController extends BasicType<PtConsumptionClass> im
 		messageDetail = "Editing consumption class: " + dataObject.getCode();
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
-		
+
 	}
 
 	@Override
@@ -167,9 +136,9 @@ public class ConsumptionClassController extends BasicType<PtConsumptionClass> im
 
 			// Validates the data
 			if (this.objectValidation(dataObject)) {
-			    consumptionClassEJB.updateData(dataObject);
+				consumptionClassEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";
-				logger.info("Update consumption class: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Update consumption class: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 				this.setControlVariablesToDefault();
 			} else {
@@ -202,41 +171,39 @@ public class ConsumptionClassController extends BasicType<PtConsumptionClass> im
 			if (error) {
 				FacesContext.getCurrentInstance().validationFailed();
 			} else {
-				
+
 				this.loadDataList();
 			}
 		}
-		
+
 	}
 
 	@Override
-	public void onRowCancel(RowEditEvent<?> event) {		
-		String message, messageDetail;		
+	public void onRowCancel(RowEditEvent<?> event) {
+		String message, messageDetail;
 
 		message = "CANCEL UPDATE ROW";
 		messageDetail = "Cancelled the edition of the consumption type";
 
 		this.refreshDataTable();
 		this.setControlVariablesToDefault();
-		
+
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
-		
-		
-	}
 
+	}
 
 	@Override
 	public void pushDeleteRowButton() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pushCreateNewButton() {
-		this.selectedData = new PtConsumptionClass();
+		this.setSelectedData(new PtConsumptionClass());
 		PrimeFaces.current().executeScript("PF('createNewDialogWidget').show();");
-		
+
 	}
 
 	@Override
@@ -249,7 +216,7 @@ public class ConsumptionClassController extends BasicType<PtConsumptionClass> im
 			if (objectValidation(this.getSelectedData())) {
 				consumptionClassEJB.insertData(this.getSelectedData());
 				messageDetail = "Data saves succesfully";
-				logger.info("Create consumption class: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Create consumption class: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 			} else {
@@ -285,22 +252,22 @@ public class ConsumptionClassController extends BasicType<PtConsumptionClass> im
 			} else {
 				this.resetFilterDataTable();
 				this.loadDataList();
-				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();"); 
+				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();");
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void pushCancelButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pushCleanButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -313,7 +280,7 @@ public class ConsumptionClassController extends BasicType<PtConsumptionClass> im
 			if (this.getSelectedData() != null) {
 				consumptionClassEJB.deleteData(this.getSelectedData());
 				messageDetail = "Data deletes succesfully";
-				logger.info("Delete consumption class: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Delete consumption class: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;
@@ -355,19 +322,18 @@ public class ConsumptionClassController extends BasicType<PtConsumptionClass> im
 			}
 		}
 
-		
 	}
 
 	@Override
 	public void pushCancelButtonDeleteDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resetObjectValues() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -398,12 +364,11 @@ public class ConsumptionClassController extends BasicType<PtConsumptionClass> im
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} else if (((Integer) objectToValidate.getCode().length())
-					.compareTo(BasicType.CODE_FIELD_LENGTH_MAX) > 0) {
+			} else if (((Integer) objectToValidate.getCode().length()).compareTo(BasicType.CODE_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The code of the consumption class (" + objectToValidate.getCode().length()
-						+ " characters) exceeds the limit of "
-						+ BasicType.CODE_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicType.CODE_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -413,12 +378,11 @@ public class ConsumptionClassController extends BasicType<PtConsumptionClass> im
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} else if (((Integer) objectToValidate.getName().length())
-					.compareTo(BasicType.NAME_FIELD_LENGTH_MAX) > 0) {
+			} else if (((Integer) objectToValidate.getName().length()).compareTo(BasicType.NAME_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The name of the consumption class (" + objectToValidate.getName().length()
-						+ " characters) exceeds the limit of "
-						+ BasicType.NAME_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicType.NAME_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -433,8 +397,7 @@ public class ConsumptionClassController extends BasicType<PtConsumptionClass> im
 					.compareTo(BasicType.DESCRIPTION_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The description of the consumption class ("
-						+ objectToValidate.getDescription().length()
-						+ " characters) exceeds the limit of "
+						+ objectToValidate.getDescription().length() + " characters) exceeds the limit of "
 						+ BasicType.DESCRIPTION_FIELD_LENGTH_MAX.toString() + " characters";
 
 				logger.error(messageDetail);
@@ -459,28 +422,28 @@ public class ConsumptionClassController extends BasicType<PtConsumptionClass> im
 	@Override
 	public void retrieveBackupData() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void setInitVariablesToDefault() {
 		this.editingMode = false;
-		
+
 	}
 
 	@Override
 	public void setControlVariablesToDefault() {
 		this.setInitVariablesToDefault();
-		
+
 	}
-	
+
 	@Override
 	public void resetFilterDataTable() {
 		PrimeFaces current = PrimeFaces.current();
 		current.executeScript("PF('dataTableWidget').clearFilters()");
 
 	}
-	
+
 	@Override
 	public void refreshDataTable() {
 		this.resetFilterDataTable();

@@ -1,15 +1,13 @@
 package com.comasw.interfaces;
 
-public interface ITableAdd extends ITable{
+public interface ITableAdd extends ITable {
 
-	
 	// -------------- DIRECT ACTIONS ON THE TABLES
 
 	/**
 	 * Action to push the delete row button
 	 */
 	public void pushDeleteRowButton();
-
 
 	// -------------- INDIRECT ACTIONS ON THE TABLES
 
@@ -63,8 +61,5 @@ public interface ITableAdd extends ITable{
 	 * Retrieves the backup data
 	 */
 	public void retrieveBackupData();
-	
-	
 
-	
 }

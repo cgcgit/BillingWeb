@@ -252,8 +252,7 @@
 		<!--  DELETE ROW DIALOG -->
 		<p:confirmDialog global="true" styleClass="change-position"
 			showEffect="fade" responsive="true" widgetVar="deleteRowDialogWidget"
-			header="DELETE ROW"
-			message="Do you really want to delete this row?">
+			header="DELETE ROW" message="Do you really want to delete this row?">
 			<p:commandButton id="deleteDialogConfirm" value="#{uiValue.okLabel}"
 				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
 				actionListener="#{discountTypeController.pushConfirmButtonDeleteDialog()}"

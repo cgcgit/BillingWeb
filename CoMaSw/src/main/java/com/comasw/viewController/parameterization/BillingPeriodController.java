@@ -5,7 +5,6 @@ package com.comasw.viewController.parameterization;
 
 import java.io.Serializable;
 
-
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.EJBException;
@@ -53,48 +52,15 @@ public class BillingPeriodController extends BasicType<PtBillingPeriod> implemen
 	@EJB
 	private BillingPeriodEJBLocal billingPeriodEJB;
 
-	/**
-	 * Selected data row in the table
-	 */
-	@Inject
-	private PtBillingPeriod selectedData;
-
 	
-	
-	
-
-	// --------------------
-	// GETTERS AND SETTERS
-	// -------------------
-	
-	/**
-	 * @return the selectedData
-	 */
-	public PtBillingPeriod getSelectedData() {
-		return selectedData;
-	}
-
-
-	/**
-	 * @param selectedData the selectedData to set
-	 */
-	public void setSelectedData(PtBillingPeriod selectedData) {
-		this.selectedData = selectedData;
-	}
-
-
-	
-
 	// -------------------
 	// METHODS
 	// -------------------
-	
 
-	
 	public BillingPeriodController() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	@PostConstruct
 	public void init() {
 
@@ -106,20 +72,18 @@ public class BillingPeriodController extends BasicType<PtBillingPeriod> implemen
 			this.setLoggedUser((VwUsers) externalContext.getSessionMap().get("applicationUser"));
 		}
 
-
 	}
-	
 
 	@Override
 	public void loadDataList() {
-		this.setDataList (billingPeriodEJB.findAllData());
+		this.setDataList(billingPeriodEJB.findAllData());
 		if (this.getDataList().isEmpty()) {
 			logger.info("No data to show");
 
 		} else {
 			logger.info("Load data sucessful");
 		}
-		
+
 	}
 
 	@Override
@@ -135,7 +99,6 @@ public class BillingPeriodController extends BasicType<PtBillingPeriod> implemen
 
 		// Gets the backup of the data to modify
 		dataObject = (PtBillingPeriod) event.getObject();
-		
 
 		// If we are editing a row, we must disabled all the other buttons
 		this.editingMode = true;
@@ -152,7 +115,6 @@ public class BillingPeriodController extends BasicType<PtBillingPeriod> implemen
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
-		
 	}
 
 	@Override
@@ -166,14 +128,13 @@ public class BillingPeriodController extends BasicType<PtBillingPeriod> implemen
 		// Retrieved the data that was modified
 		dataObject = (PtBillingPeriod) event.getObject();
 
-				
 		try {
 
 			// Validates the data
 			if (this.objectValidation(dataObject)) {
 				billingPeriodEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";
-				logger.info("Update billing period cycle: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Update billing period cycle: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 				this.setControlVariablesToDefault();
 			} else {
@@ -206,41 +167,38 @@ public class BillingPeriodController extends BasicType<PtBillingPeriod> implemen
 			if (error) {
 				FacesContext.getCurrentInstance().validationFailed();
 			} else {
-				
+
 				this.loadDataList();
 			}
 		}
-		
+
 	}
 
 	@Override
-	public void onRowCancel(RowEditEvent<?> event) {		
+	public void onRowCancel(RowEditEvent<?> event) {
 		String message, messageDetail;
 		message = "CANCEL UPDATE ROW";
 		messageDetail = "Cancelled the edition of the billing period";
-		
+
 		this.refreshDataTable();
 		this.setControlVariablesToDefault();
-		
+
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
-		
 	}
-
 
 	@Override
 	public void pushDeleteRowButton() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void pushCreateNewButton() {
 		this.setSelectedData(new PtBillingPeriod());
 		PrimeFaces.current().executeScript("PF('createNewDialogWidget').show();");
-		
+
 	}
 
 	@Override
@@ -250,10 +208,10 @@ public class BillingPeriodController extends BasicType<PtBillingPeriod> implemen
 		Boolean error = false;
 
 		try {
-			if (objectValidation(this.selectedData)) {
-				billingPeriodEJB.insertData(this.selectedData);
+			if (objectValidation(this.getSelectedData())) {
+				billingPeriodEJB.insertData(this.getSelectedData());
 				messageDetail = "Data saves succesfully";
-				logger.info("Create billing period cycle: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Create billing period cycle: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 			} else {
@@ -289,22 +247,22 @@ public class BillingPeriodController extends BasicType<PtBillingPeriod> implemen
 			} else {
 				this.resetFilterDataTable();
 				this.loadDataList();
-				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();"); 
+				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();");
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void pushCancelButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pushCleanButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -314,10 +272,10 @@ public class BillingPeriodController extends BasicType<PtBillingPeriod> implemen
 		Boolean error = false;
 
 		try {
-			if (this.selectedData != null) {
+			if (this.getSelectedData() != null) {
 				billingPeriodEJB.deleteData(this.getSelectedData());
 				messageDetail = "Data deletes succesfully";
-				logger.info("Delete billing period cycle: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Delete billing period cycle: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;
@@ -358,19 +316,19 @@ public class BillingPeriodController extends BasicType<PtBillingPeriod> implemen
 				this.loadDataList();
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void pushCancelButtonDeleteDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resetObjectValues() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -395,18 +353,17 @@ public class BillingPeriodController extends BasicType<PtBillingPeriod> implemen
 			if (objectToValidate.getDescription() != null) {
 				objectToValidate.setDescription(objectToValidate.getDescription().trim());
 			}
-			
+
 			if (objectToValidate.getCode() == null || objectToValidate.getCode().length() == 0) {
 				messageDetail = "ERROR - The code of the billing period can not be null";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} else if (((Integer) objectToValidate.getCode().length())
-					.compareTo(BasicType.CODE_FIELD_LENGTH_MAX) > 0) {
+			} else if (((Integer) objectToValidate.getCode().length()).compareTo(BasicType.CODE_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The code of the billing period (" + objectToValidate.getCode().length()
-						+ " characters) exceeds the limit of "
-						+ BasicType.CODE_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicType.CODE_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -416,12 +373,11 @@ public class BillingPeriodController extends BasicType<PtBillingPeriod> implemen
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} else if (((Integer) objectToValidate.getName().length())
-					.compareTo(BasicType.NAME_FIELD_LENGTH_MAX) > 0) {
+			} else if (((Integer) objectToValidate.getName().length()).compareTo(BasicType.NAME_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The name of the billing period (" + objectToValidate.getName().length()
-						+ " characters) exceeds the limit of "
-						+ BasicType.NAME_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicType.NAME_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -436,21 +392,20 @@ public class BillingPeriodController extends BasicType<PtBillingPeriod> implemen
 					.compareTo(BasicType.DESCRIPTION_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The description of the billing period ("
-						+ objectToValidate.getDescription().length()
-						+ " characters) exceeds the limit of "
+						+ objectToValidate.getDescription().length() + " characters) exceeds the limit of "
 						+ BasicType.DESCRIPTION_FIELD_LENGTH_MAX.toString() + " characters";
 
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
 			}
-			
-			if (objectToValidate.getBillingPeriodDays() == null || objectToValidate.getBillingPeriodDays()<= 0) {
+
+			if (objectToValidate.getBillingPeriodDays() == null || objectToValidate.getBillingPeriodDays() <= 0) {
 				messageDetail = "ERROR - The period of the billing period must be greater than 0";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} 
+			}
 
 			if (result) {
 				// no error --> update panel
@@ -469,9 +424,9 @@ public class BillingPeriodController extends BasicType<PtBillingPeriod> implemen
 	@Override
 	public void retrieveBackupData() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
 	public void setInitVariablesToDefault() {
 		this.editingMode = false;
@@ -481,7 +436,7 @@ public class BillingPeriodController extends BasicType<PtBillingPeriod> implemen
 	public void setControlVariablesToDefault() {
 		this.setInitVariablesToDefault();
 	}
-	
+
 	@Override
 	public void resetFilterDataTable() {
 		PrimeFaces current = PrimeFaces.current();
@@ -495,6 +450,5 @@ public class BillingPeriodController extends BasicType<PtBillingPeriod> implemen
 		this.loadDataList();
 		Ajax.update(DATA_TABLE_ID);
 	}
-	
-}
 
+}

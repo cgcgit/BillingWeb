@@ -4,9 +4,8 @@ import java.util.List;
 
 public class RelationBasicTypeWithList<T, S, U> extends BasicTypeWithLists<T> {
 
+	protected String DATA_TABLE_ID = "form:accordionPanel:" + uiValues.getString("dataTableID");
 
-	protected String DATA_TABLE_ID = "form:accordionPanel:"	+ uiValues.getString("dataTableID");
-	
 	protected String RELATED_DATA_TABLE_ID = "form:accordionPanel:" + uiValues.getString("relatedDataTableID");
 
 	protected String CANDIDATE_DATA_TABLE_ID = "form:accordionPanel:" + uiValues.getString("candidateDataTableID");
@@ -15,8 +14,7 @@ public class RelationBasicTypeWithList<T, S, U> extends BasicTypeWithLists<T> {
 	 * Indicates if the data form must be shown
 	 */
 	protected boolean showDependentData = false;
-	
-	
+
 	/**
 	 * Related data list
 	 */
@@ -38,31 +36,26 @@ public class RelationBasicTypeWithList<T, S, U> extends BasicTypeWithLists<T> {
 	protected List<U> filteredCandidateDataList;
 
 	/**
-	 * Selected related data 
+	 * Selected related data
 	 */
 	protected S selectedRelatedData;
-	
-	
+
 	/**
-	 * Selected candidat data
+	 * Selected candidate data
 	 */
 	protected U selectedCandidateData;
 	
 	
-
 	// --------------------
 	// GETTERS AND SETTERS
 	// -------------------
 
-	
-
 	/**
 	 * @return the relatedDataList
-	 */	
+	 */
 	public List<S> getRelatedDataList() {
 		return relatedDataList;
 	}
-
 
 	/**
 	 * @param relatedDataList the relatedDataList to set
@@ -127,15 +120,12 @@ public class RelationBasicTypeWithList<T, S, U> extends BasicTypeWithLists<T> {
 		this.showDependentData = showDependentData;
 	}
 
-	
-
 	/**
 	 * @return the selectedRelatedData
 	 */
 	public S getSelectedRelatedData() {
 		return selectedRelatedData;
 	}
-
 
 	/**
 	 * @param selectedRelatedData the selectedRelatedDataList to set
@@ -144,7 +134,6 @@ public class RelationBasicTypeWithList<T, S, U> extends BasicTypeWithLists<T> {
 		this.selectedRelatedData = selectedRelatedData;
 	}
 
-
 	/**
 	 * @return the selectedCandidateData
 	 */
@@ -152,13 +141,11 @@ public class RelationBasicTypeWithList<T, S, U> extends BasicTypeWithLists<T> {
 		return selectedCandidateData;
 	}
 
-
 	/**
 	 * @param selectedCandidateData the selectedCandidateData to set
 	 */
 	public void setSelectedCandidateData(U selectedCandidateData) {
 		this.selectedCandidateData = selectedCandidateData;
 	}
-	
-	
+
 }

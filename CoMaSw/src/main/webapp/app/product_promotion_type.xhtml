@@ -9,10 +9,6 @@
 
 <f:metadata>
 
-	<f:viewAction id="loadParentData"
-		action="#{productPromotionTypeController.loadDataList()}"
-		phase="INVOKE_APPLICATION">
-	</f:viewAction>
 	<f:viewAction id="defaultControlVariables"
 		action="#{productPromotionTypeController.setInitVariablesToDefault()}"
 		phase="INVOKE_APPLICATION">
@@ -85,9 +81,8 @@
 					<p />
 
 					<p />
-					<p:dataTable id="dataTable" widgetVar="dataTableWidget"
-						var="dataTable"
-						value="#{productPromotionTypeController.dataList}"
+					<p:dataTable id="dataTable" widgetVar="dataTableWidget"  partialUpdate="disabled"
+						var="dataTable" value="#{productPromotionTypeController.dataList}"
 						rowIndexVar="rowIndexMainTable"
 						rowKey="#{dataTable.productTypeId}" selectionMode="single"
 						selection="#{productPromotionTypeController.injectSelectedData}"
@@ -135,11 +130,9 @@
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
-							headerText="CODE" rendered="true"
-							sortBy="#{dataTable.code}"
+							headerText="CODE" rendered="true" sortBy="#{dataTable.code}"
 							filterBy="#{dataTable.code}" filterMatchMode="contains">
-							<h:outputText id="searchCodeOutput"
-								value="#{dataTable.code}" />
+							<h:outputText id="searchCodeOutput" value="#{dataTable.code}" />
 						</p:column>
 
 						<p:column id="searchName"
@@ -148,11 +141,9 @@
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
-							headerText="NAME" rendered="true"
-							sortBy="#{dataTable.name}"
+							headerText="NAME" rendered="true" sortBy="#{dataTable.name}"
 							filterBy="#{dataTable.name}" filterMatchMode="contains">
-							<h:outputText id="searchNameOutput"
-								value="#{dataTable.name}" />
+							<h:outputText id="searchNameOutput" value="#{dataTable.name}" />
 						</p:column>
 
 						<p:column id="searchDescription"
@@ -163,8 +154,7 @@
                                   overflow: hidden"
 							headerText="DESCRIPTION" rendered="true"
 							sortBy="#{dataTable.description}"
-							filterBy="#{dataTable.description}"
-							filterMatchMode="contains">
+							filterBy="#{dataTable.description}" filterMatchMode="contains">
 							<h:outputText id="searchDescriptionOutput"
 								value="#{dataTable.description}" />
 						</p:column>
@@ -181,15 +171,14 @@
 								<p:selectOneMenu id="searchStatusFilterMenu"
 									onchange="PF('dataTableWidget').filter()">
 									<f:selectItems id="searchStatusFilterSelectItems"
-										value="#{productPromotionTypeController.statusSelectItems()}" />
+										value="#{productPromotionTypeController.statusCatalogSelectItems()}" />
 								</p:selectOneMenu>
 							</f:facet>
 
 							<p:selectOneMenu id="searchStatusOutput" editable="false"
-								disabled="true" immediate="true"
-								value="#{dataTable.statusId}">
+								disabled="true" immediate="true" value="#{dataTable.statusId}">
 								<f:selectItems
-									value="#{productPromotionTypeController.statusSelectItems()}"
+									value="#{productPromotionTypeController.statusCatalogSelectItems()}"
 									id="selectItemsSearchStatusOutput" itemDisabled="true"
 									var="Status" itemValue="#{dataTable.statusId}" />
 							</p:selectOneMenu>
@@ -197,7 +186,7 @@
 					</p:dataTable>
 				</p:overlayPanel>
 
-				<p:panel id="selectedTablePanel"
+				<p:panel id="selectedTablePanel" 
 					visible="#{productPromotionTypeController.showDependentData}">
 					<p:dataTable id="selectedTable" widgetVar="selectedTableWidget"
 						var="selectedDataTable"
@@ -251,7 +240,7 @@
 								disabled="true" immediate="true"
 								value="#{selectedDataTable.statusId}">
 								<f:selectItems
-									value="#{productPromotionTypeController.statusSelectItems()}"
+									value="#{productPromotionTypeController.statusCatalogSelectItems()}"
 									id="selectItemsSelectedStatusOutput" itemDisabled="true"
 									var="Status" itemValue="#{selectedDataTable.statusId}" />
 							</p:selectOneMenu>
@@ -263,7 +252,8 @@
 
 			<!--  RELATION DATA AREA - related data and candidate data  -->
 			<p:tab id="relationPanel"
-				titleStyle="background: WhiteSmoke; color: black" title="PROMOTION TYPES">
+				titleStyle="background: WhiteSmoke; color: black"
+				title="PROMOTION TYPES">
 
 				<p:panel id="emptyRelationTablePanel"
 					visible="#{!productPromotionTypeController.showDependentData}">
@@ -279,7 +269,8 @@
 						var="relatedDataTable"
 						value="#{productPromotionTypeController.relatedDataList}"
 						rowIndexVar="rowIndexRelatedTable"
-						rowKey="#{relatedDataTable.promoProdTypeId}" selectionMode="single"
+						rowKey="#{relatedDataTable.promoProdTypeId}"
+						selectionMode="single"
 						selection="#{productPromotionTypeController.injectSelectedRelatedData}"
 						filteredValue="#{productPromotionTypeController.filteredRelatedDataList}"
 						showGridlines="true" stripedRows="true" scrollable="true"
@@ -394,7 +385,7 @@
 								<p:selectOneMenu id="statusRelatedEntityFilterMenu"
 									onchange="PF('relatedTableWidget').filter()">
 									<f:selectItems id="statusRelatedEntityFilterSelectItems"
-										value="#{productPromotionTypeController.statusSelectItems()}" />
+										value="#{productPromotionTypeController.statusCatalogSelectItems()}" />
 								</p:selectOneMenu>
 							</f:facet>
 
@@ -404,7 +395,7 @@
 										editable="false" disabled="true" immediate="true"
 										value="#{relatedDataTable.promoProdTypeStatusId}">
 										<f:selectItems
-											value="#{productPromotionTypeController.statusSelectItems()}"
+											value="#{productPromotionTypeController.statusCatalogSelectItems()}"
 											id="selectItemsStatusOutputRelatedEntityData"
 											itemDisabled="true" var="StatusOutput"
 											itemValue="#{relatedDataTable.promoProdTypeStatusId}" />
@@ -415,7 +406,7 @@
 										value="#{relatedDataTable.promoProdTypeStatusId}"
 										immediate="true">
 										<f:selectItems
-											value="#{productPromotionTypeController.statusSelectItems()}"
+											value="#{productPromotionTypeController.statusCatalogSelectItems()}"
 											id="selectItemsStatusInputRelatedEntityData"
 											var="StatusInput"
 											itemValue="#{relatedDataTable.promoProdTypeStatusId}">
@@ -522,14 +513,14 @@
 								<p:selectOneMenu id="statusDependandFilterMenu"
 									onchange="PF('relatedTableWidget').filter()">
 									<f:selectItems id="statusRelatedDependantFilterSelectItems"
-										value="#{productPromotionTypeController.statusSelectItems()}" />
+										value="#{productPromotionTypeController.statusCatalogSelectItems()}" />
 								</p:selectOneMenu>
 							</f:facet>
 							<p:selectOneMenu id="statusRelatedDependantDataOutput"
 								editable="false" disabled="true" immediate="true"
 								value="#{relatedDataTable.promotionTypeStatusId}">
 								<f:selectItems
-									value="#{productPromotionTypeController.statusSelectItems()}"
+									value="#{productPromotionTypeController.statusCatalogSelectItems()}"
 									id="selectItemsStatusOutputRelatedDependantData"
 									itemDisabled="true" var="Status"
 									itemValue="#{relatedDataTable.promotionTypeStatusId}" />
@@ -657,7 +648,7 @@
 						</p:column>
 					</p:dataTable>
 
-					<p:overlayPanel id="historicCandidateList"
+					<p:overlayPanel id="historicCandidateList" partialUpdate="disabled"
 						style="width:95%;background: WhiteSmoke; color: black"
 						showCloseIcon="true" dismissable="false" dynamic="false"
 						my="center top" at="center bottom"
@@ -870,7 +861,7 @@
 										<p:selectOneMenu id="statusFilterMenu"
 											onchange="PF('historicCandidateTableWidget').filter()">
 											<f:selectItems id="historicCandidateStatusFilterSelectItems"
-												value="#{productPromotionTypeController.statusSelectItems()}" />
+												value="#{productPromotionTypeController.statusCatalogSelectItems()}" />
 										</p:selectOneMenu>
 									</f:facet>
 									<p:selectOneMenu id="historicCandidateStatusOutput"
@@ -878,7 +869,7 @@
 										value="#{historicCandidateDataTable.statusId}">
 										<f:selectItems id="selectItemsHistoricCandidateStatusOutput"
 											itemDisabled="true" var="Status"
-											value="#{productPromotionTypeController.statusSelectItems()}"
+											value="#{productPromotionTypeController.statusCatalogSelectItems()}"
 											itemValue="#{historicCandidateDataTable.statusId}" />
 									</p:selectOneMenu>
 								</p:column>

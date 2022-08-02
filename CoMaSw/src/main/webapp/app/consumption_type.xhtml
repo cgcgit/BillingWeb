@@ -222,7 +222,7 @@
 					<p:selectOneMenu id="statusFilterMenu"
 						onchange="PF('dataTableWidget').filter()">
 						<f:selectItems id="statusFilterSelectItems"
-							value="#{consumptionTypeController.statusSelectItems()}" />
+							value="#{consumptionTypeController.statusCatalogSelectItems()}" />
 					</p:selectOneMenu>
 				</f:facet>
 				<p:cellEditor id="statusIdCellEditor">
@@ -230,7 +230,7 @@
 						<p:selectOneMenu id="statusOutput" editable="false"
 							disabled="true" immediate="true" value="#{dataTable.statusId}">
 							<f:selectItems
-								value="#{consumptionTypeController.statusSelectItems()}"
+								value="#{consumptionTypeController.statusCatalogSelectItems()}"
 								id="selectItemsStatusOutput" itemDisabled="true" var="Status"
 								itemValue="#{dataTable.statusId}" />
 						</p:selectOneMenu>
@@ -239,7 +239,7 @@
 						<p:selectOneMenu id="statusnput" value="#{dataTable.statusId}"
 							immediate="true">
 							<f:selectItems
-								value="#{consumptionTypeController.statusSelectItems()}"
+								value="#{consumptionTypeController.statusCatalogSelectItems()}"
 								id="selectItemsStatusInput" var="Status"
 								itemValue="#{dataTable.statusId}">
 
@@ -293,7 +293,7 @@
 					value="#{consumptionTypeController.selectedData.statusId}"
 					immediate="true">
 					<f:selectItems
-						value="#{consumptionTypeController.statusSelectItems()}"
+						value="#{consumptionTypeController.statusCatalogSelectItems()}"
 						id="selectItemsStatusInput" var="Status"
 						itemValue="#{consumptionTypeController.selectedData.statusId}">
 					</f:selectItems>

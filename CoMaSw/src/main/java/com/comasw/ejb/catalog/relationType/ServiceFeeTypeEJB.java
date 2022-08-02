@@ -5,7 +5,7 @@ import static com.comasw.model.Tables.CT_SERV_FEE_TYPE;
 import static com.comasw.model.Tables.PT_APPLICATION_LEVEL;
 import static com.comasw.model.Tables.PT_STATUS;
 import static com.comasw.model.Tables.VW_SERVICE_FEE_TYPE;
-import static org.jooq.impl.DSL.max;
+import static org.jooq.impl.DSL.min;
 import static org.jooq.impl.DSL.val;
 
 import java.time.LocalDateTime;
@@ -27,7 +27,6 @@ import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
 
-
 import com.comasw.model.tables.daos.CtServFeeTypeDao;
 import com.comasw.model.tables.pojos.CtFeeType;
 import com.comasw.model.tables.pojos.CtServFeeType;
@@ -40,7 +39,7 @@ import com.comasw.exception.CoMaSwDataAccessException;
  */
 @Stateless
 public class ServiceFeeTypeEJB implements ServiceFeeTypeEJBLocal {
-	
+
 	Logger logger = (Logger) LogManager.getLogger(ServiceFeeTypeEJB.class);
 
 	@Resource(lookup = "java:jboss/datasources/db_comasw")
@@ -50,14 +49,13 @@ public class ServiceFeeTypeEJB implements ServiceFeeTypeEJBLocal {
 			.getBundle("com.comasw.properties.dataBaseDefinitions");
 
 	protected static String APPLICATION_LEVEL_CODE_SERV = dbDefinitions.getString("APPLICATION_LEVEL_CODE_SERV");
-	
-	
-    /**
-     * Default constructor. 
-     */
-    public ServiceFeeTypeEJB() {
-        // TODO Auto-generated constructor stub
-    }
+
+	/**
+	 * Default constructor.
+	 */
+	public ServiceFeeTypeEJB() {
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public List<CtFeeType> findEntityTypeCandidates(Integer parentId) throws CoMaSwDataAccessException {
@@ -77,8 +75,8 @@ public class ServiceFeeTypeEJB implements ServiceFeeTypeEJBLocal {
 							.and(al.CODE.eq(val(APPLICATION_LEVEL_CODE_SERV))))
 					.whereNotExists(create.selectOne().from(sft)
 							.where(ft.FEE_TYPE_ID.eq(sft.FEE_TYPE_ID).and(sft.SERVICE_TYPE_ID.eq(parentId))))
-							.and(ft.START_DATE.eq(create.select(max(ft2.START_DATE)).from(ft2)
-									.where(ft.FEE_TYPE_ID.eq(ft2.FEE_TYPE_ID))))
+					.and(ft.START_DATE
+							.eq(create.select(min(ft2.START_DATE)).from(ft2).where(ft.FEE_TYPE_ID.eq(ft2.FEE_TYPE_ID))))
 					.orderBy(ft.CODE)
 					.fetchGroups(r -> r.into(ft).into(CtFeeType.class), r -> r.into(al).into(PtApplicationLevel.class));
 
@@ -116,8 +114,8 @@ public class ServiceFeeTypeEJB implements ServiceFeeTypeEJBLocal {
 					.whereNotExists(create.selectOne()
 							.from(sft.join(st).on(sft.STATUS_ID.eq(st.STATUS_ID).and(st.CODE.eq(val(statusCode)))))
 							.where(ft.FEE_TYPE_ID.eq(sft.FEE_TYPE_ID).and(sft.SERVICE_TYPE_ID.eq(parentId))))
-							.and(ft.START_DATE.eq(create.select(max(ft2.START_DATE)).from(ft2)
-									.where(ft.FEE_TYPE_ID.eq(ft2.FEE_TYPE_ID))))
+					.and(ft.START_DATE
+							.eq(create.select(min(ft2.START_DATE)).from(ft2).where(ft.FEE_TYPE_ID.eq(ft2.FEE_TYPE_ID))))
 					.orderBy(ft.CODE)
 					.fetchGroups(r -> r.into(ft).into(CtFeeType.class), r -> r.into(al).into(PtApplicationLevel.class));
 
@@ -133,18 +131,18 @@ public class ServiceFeeTypeEJB implements ServiceFeeTypeEJBLocal {
 
 		return result;
 	}
-	
-
 
 	@Override
-	public List<VwServiceFeeType> findHistoricRelatedEntityTypesView(Integer parentId) throws CoMaSwDataAccessException {
+	public List<VwServiceFeeType> findHistoricRelatedEntityTypesView(Integer parentId)
+			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<VwServiceFeeType> result = null;
 		String errorMessage;
 		try {
 			result = create.select().from(VW_SERVICE_FEE_TYPE)
 					.where(VW_SERVICE_FEE_TYPE.SERVICE_TYPE_ID.eq(val(parentId)))
-					.orderBy(VW_SERVICE_FEE_TYPE.FEE_TYPE_CODE, VW_SERVICE_FEE_TYPE.FEE_TYPE_START_DATE).fetch().into(VwServiceFeeType.class);
+					.orderBy(VW_SERVICE_FEE_TYPE.FEE_TYPE_CODE, VW_SERVICE_FEE_TYPE.FEE_TYPE_START_DATE).fetch()
+					.into(VwServiceFeeType.class);
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the view of fee types for the service_type_id : " + parentId + " - "
@@ -155,16 +153,20 @@ public class ServiceFeeTypeEJB implements ServiceFeeTypeEJBLocal {
 
 		return result;
 	}
-	
+
 	@Override
-	public List<VwServiceFeeType> findRelatedEntityTypesByDateView(Integer parentId, LocalDateTime searchDate) throws CoMaSwDataAccessException {
+	public List<VwServiceFeeType> findRelatedEntityTypesByDateView(Integer parentId, LocalDateTime searchDate)
+			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<VwServiceFeeType> result = null;
 		String errorMessage;
 		try {
 			result = create.select().from(VW_SERVICE_FEE_TYPE)
-					.where(VW_SERVICE_FEE_TYPE.SERVICE_TYPE_ID.eq(val(parentId)).and(val(searchDate).between(VW_SERVICE_FEE_TYPE.FEE_TYPE_START_DATE, VW_SERVICE_FEE_TYPE.FEE_TYPE_END_DATE)))
-					.orderBy(VW_SERVICE_FEE_TYPE.FEE_TYPE_CODE, VW_SERVICE_FEE_TYPE.FEE_TYPE_START_DATE).fetch().into(VwServiceFeeType.class);
+					.where(VW_SERVICE_FEE_TYPE.SERVICE_TYPE_ID.eq(val(parentId))
+							.and(val(searchDate).between(VW_SERVICE_FEE_TYPE.FEE_TYPE_START_DATE,
+									VW_SERVICE_FEE_TYPE.FEE_TYPE_END_DATE)))
+					.orderBy(VW_SERVICE_FEE_TYPE.FEE_TYPE_CODE, VW_SERVICE_FEE_TYPE.FEE_TYPE_START_DATE).fetch()
+					.into(VwServiceFeeType.class);
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the view of fee types for the service_type_id : " + parentId + " - "
@@ -245,8 +247,9 @@ public class ServiceFeeTypeEJB implements ServiceFeeTypeEJBLocal {
 
 		try {
 			result = create.selectFrom(VW_SERVICE_FEE_TYPE).where(VW_SERVICE_FEE_TYPE.SERVICE_TYPE_ID.eq(val(parentId)))
-					.and(VW_SERVICE_FEE_TYPE.FEE_TYPE_ID.eq(val(childId))).orderBy(VW_SERVICE_FEE_TYPE.FEE_TYPE_CODE, VW_SERVICE_FEE_TYPE.FEE_TYPE_START_DATE)
-					.fetch().into(VwServiceFeeType.class);
+					.and(VW_SERVICE_FEE_TYPE.FEE_TYPE_ID.eq(val(childId)))
+					.orderBy(VW_SERVICE_FEE_TYPE.FEE_TYPE_CODE, VW_SERVICE_FEE_TYPE.FEE_TYPE_START_DATE).fetch()
+					.into(VwServiceFeeType.class);
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the view of service fee type for the service_type_id : "
@@ -313,5 +316,5 @@ public class ServiceFeeTypeEJB implements ServiceFeeTypeEJBLocal {
 		}
 
 	}
-    
+
 }

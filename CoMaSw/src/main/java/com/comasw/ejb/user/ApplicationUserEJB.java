@@ -138,7 +138,7 @@ public class ApplicationUserEJB implements ApplicationUserEJBLocal {
 	}
 
 	@Override
-	public List<ItUsers> findDataByProfileId(Integer id) throws CoMaSwDataAccessException {		// 
+	public List<ItUsers> findDataByProfileId(Integer id) throws CoMaSwDataAccessException { //
 		List<ItUsers> result = null;
 		String errorMessage;
 		try {
@@ -175,11 +175,11 @@ public class ApplicationUserEJB implements ApplicationUserEJBLocal {
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find users with profile code " + code + " - " + e.getMessage();
 			logger.error(errorMessage);
-			throw new CoMaSwDataAccessException(errorMessage, e);			
+			throw new CoMaSwDataAccessException(errorMessage, e);
 		} catch (Exception e) {
 			errorMessage = "Error while try to find users with profile code " + code + " - " + e.getMessage();
 			logger.error(errorMessage);
-			throw new CoMaSwDataAccessException(errorMessage, e);			
+			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 
 		return result;
@@ -195,7 +195,7 @@ public class ApplicationUserEJB implements ApplicationUserEJBLocal {
 		} catch (Exception e) {
 			errorMessage = "Error inserting the user object (value: " + dataObject.toString() + ") - " + e.getMessage();
 			logger.error(errorMessage);
-			throw new CoMaSwDataAccessException(errorMessage, e);	
+			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 
 	}
@@ -210,7 +210,7 @@ public class ApplicationUserEJB implements ApplicationUserEJBLocal {
 		} catch (Exception e) {
 			errorMessage = "Error updating the user object (value: " + dataObject.toString() + ") - " + e.getMessage();
 			logger.error(errorMessage);
-			throw new CoMaSwDataAccessException(errorMessage, e);			
+			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 
 	}
@@ -218,7 +218,7 @@ public class ApplicationUserEJB implements ApplicationUserEJBLocal {
 	@Override
 	public void deleteData(ItUsers dataObject) throws CoMaSwDataAccessException {
 		String errorMessage;
-		
+
 		try {
 			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
 			ItUsersDao daoObject = new ItUsersDao(configuration);

@@ -24,7 +24,7 @@
 <body>
 	<h:outputStylesheet library="webjars"
 		name="primeflex/2.0.0/primeflex.min.css" />
-		
+
 	<header>
 		<ui:include id="mainTemplate"
 			src="/WEB-INF/templates/mainTemplate.xhtml">
@@ -47,19 +47,18 @@
 			var="dataTable" value="#{taxTypeController.dataList}"
 			filteredValue="#{taxTypeController.filteredDataList}"
 			showGridlines="true" stripedRows="true" scrollable="true"
-			reflow="true" editable="true"
-			rowIndexVar="rowIndexDataTable" paginator="true" rows="10"
-			size="small" paginatorPosition="bottom">
+			reflow="true" editable="true" rowIndexVar="rowIndexDataTable"
+			paginator="true" rows="10" size="small" paginatorPosition="bottom">
 
 			<!--  DATA TABLE - HEADER -->
 			<f:facet name="header">
 				<p:toolbar>
 					<p:toolbarGroup>
 						<h3>TAX TYPE DATA TABLE</h3>
-					<p:divider layout="vertical"> </p:divider>
+						<p:divider layout="vertical">
+						</p:divider>
 						<p:commandButton id="createNewButton" value="New data"
-							icon="#{uiValue.addIcon}"
-							ajax="true"
+							icon="#{uiValue.addIcon}" ajax="true"
 							actionListener="#{taxTypeController.pushCreateNewButton()}"
 							rendered="#{taxTypeController.canUserModify()}"
 							disabled="#{taxTypeController.editingMode}"
@@ -82,8 +81,7 @@
 				update="form:growlMessage createNewButton  form:dataTable">
 			</p:ajax>
 			<p:ajax id="ajaxRowEdit" event="rowEdit"
-				listener="#{taxTypeController.onRowEdit}"
-				update="form:growlMessage"
+				listener="#{taxTypeController.onRowEdit}" update="form:growlMessage"
 				oncomplete="if (!args.validationFailed) {updateDataTable()}">
 			</p:ajax>
 			<p:ajax id="ajaxRowEditCancel" event="rowEditCancel"
@@ -99,8 +97,7 @@
                                    font-size: 11px;
                                    width: 60px;    
                                    overflow: hidden"
-				headerText="DEL ROW"
-				rendered="#{taxTypeController.canUserModify()}">
+				headerText="DEL ROW" rendered="#{taxTypeController.canUserModify()}">
 				<p:commandButton id="deleteRowButton"
 					class="ui-button-warning rounded-button"
 					icon="#{uiValue.deleteIcon}"
@@ -129,7 +126,7 @@
 
 
 			<!--  DATA TABLE - DATA COLUMNS -->
-			
+
 			<p:column id="code"
 				style="font-family:Arial Black;
                                   text-align: left;
@@ -138,9 +135,9 @@
                                   overflow: hidden"
 				headerText="CODE" rendered="true" sortBy="#{dataTable.code}"
 				filterBy="#{dataTable.code}" filterMatchMode="contains">
-				<h:outputText id="codeOutput" value="#{dataTable.code}" />			
+				<h:outputText id="codeOutput" value="#{dataTable.code}" />
 			</p:column>
-			
+
 			<p:column id="name"
 				style="font-family:Arial Black;
                                   text-align: left;
@@ -148,7 +145,7 @@
                                   width: 100px;    
                                   overflow: hidden"
 				headerText="NAME" rendered="true" sortBy="#{dataTable.name}"
-				filterBy="#{dataTable.name}" filterMatchMode="contains">				
+				filterBy="#{dataTable.name}" filterMatchMode="contains">
 				<p:cellEditor id="cellEditorName">
 					<f:facet id="facetNameOutput" name="output">
 						<h:outputText id="nameOutput" value="#{dataTable.name}" />
@@ -161,7 +158,7 @@
 					</f:facet>
 				</p:cellEditor>
 			</p:column>
-			
+
 			<p:column id="description"
 				style="font-family:Arial Black;
                                   text-align: left;
@@ -170,7 +167,7 @@
                                   overflow: hidden"
 				headerText="DESCRIPTION" rendered="true"
 				sortBy="#{dataTable.description}"
-				filterBy="#{dataTable.description}" filterMatchMode="contains">				
+				filterBy="#{dataTable.description}" filterMatchMode="contains">
 				<p:cellEditor id="cellEditorDescription">
 					<f:facet id="facetDescriptionOutput" name="output">
 						<h:outputText id="descriptionOutput"
@@ -184,28 +181,31 @@
 					</f:facet>
 				</p:cellEditor>
 			</p:column>
-			
+
 			<p:column id="percentValue"
 				style="font-family:Arial Black;
                                   text-align: left;
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
-				headerText="PERCENT VALUE" rendered="true" sortBy="#{dataTable.percentValue}"
+				headerText="PERCENT VALUE" rendered="true"
+				sortBy="#{dataTable.percentValue}"
 				filterBy="#{dataTable.percentValue}" filterMatchMode="contains">
 				<h:outputText id="filterPercentvalue" value="" />
 				<p:cellEditor id="cellEditorPercentValue">
 					<f:facet id="facetPercentValueOutput" name="output">
-						<h:outputText id="percentValueOutput" value="#{dataTable.percentValue}" />
+						<h:outputText id="percentValueOutput"
+							value="#{dataTable.percentValue}" />
 					</f:facet>
 					<f:facet id="facetPercentValueInput" name="input">
-						<p:inputNumber id="percentValueInput" label="PercentValue" decimalPlaces="4"
-							value="#{dataTable.percentValue}" style="width:96%">
+						<p:inputNumber id="percentValueInput" label="PercentValue"
+							decimalPlaces="4" value="#{dataTable.percentValue}"
+							style="width:96%">
 							<p:ajax event="change" update="percentValueOutput" />
 						</p:inputNumber>
 					</f:facet>
 				</p:cellEditor>
-			</p:column>			
+			</p:column>
 		</p:dataTable>
 
 		<!--  CREATE NEW DIALOG -->
@@ -228,18 +228,18 @@
 				<p:inputText id="newDescriptionInput" label="Description"
 					value="#{taxTypeController.selectedData.description}">
 				</p:inputText>
-				
+
 				<p:outputLabel id="newPercentValueLabel" value="Percent Value: " />
-				<p:inputNumber id="newPercentValueInput" label="PercentValue" decimalPlaces="4"
+				<p:inputNumber id="newPercentValueInput" label="PercentValue"
+					decimalPlaces="4"
 					value="#{taxTypeController.selectedData.percentValue}">
 				</p:inputNumber>
-				
+
 			</h:panelGrid>
 			<h:panelGrid id="createNewDialogPanelButtons" columns="3"
 				cellpadding="5">
 				<p:commandButton id="createNewDialogConfirm"
-					value="#{uiValue.okLabel}" 
-					update="form:growlMessage" 
+					value="#{uiValue.okLabel}" update="form:growlMessage"
 					actionListener="#{taxTypeController.pushConfirmButtonCreateNewDialog()}"
 					styleClass="ui-confirmdialog-yes" icon="#{uiValue.okCircleIcon}"
 					oncomplete="if (!args.validationFailed) {updateDataTable()}">
@@ -250,7 +250,7 @@
 					onclick="PF('createNewDialogWidget').hide()"
 					class="ui-button-secondary" />
 				<p:commandButton id="createNewDialogClean"
-					value="#{uiValue.cleanLabel}" icon="#{uiValue.cleanCircleIcon}"					
+					value="#{uiValue.cleanLabel}" icon="#{uiValue.cleanCircleIcon}"
 					update="createNewDialogPanelData form:growlMessage" process="@this"
 					class="ui-button-secondary">
 					<p:resetInput target="createNewDialogPanelData" />
@@ -261,11 +261,9 @@
 		<!--  DELETE ROW DIALOG -->
 		<p:confirmDialog global="true" styleClass="change-position"
 			showEffect="fade" responsive="true" widgetVar="deleteRowDialogWidget"
-			header="DELETE ROW"
-			message="Do you really want to delete this row?">
+			header="DELETE ROW" message="Do you really want to delete this row?">
 			<p:commandButton id="deleteDialogConfirm" value="#{uiValue.okLabel}"
-				styleClass="ui-confirmdialog-yes"
-				update="form:growlMessage"
+				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
 				actionListener="#{taxTypeController.pushConfirmButtonDeleteDialog()}"
 				oncomplete="updateDataTable(); PF('deleteRowDialogWidget').hide()"
 				process="@this" icon="#{uiValue.okCircleIcon}" />

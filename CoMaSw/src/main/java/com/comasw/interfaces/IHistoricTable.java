@@ -15,20 +15,17 @@ public interface IHistoricTable extends ITableAdd {
 	 * Action to push the search button
 	 */
 	public void pushSearchButton();
-	
-	
+
 	/**
 	 * Action to push the add new row button
 	 */
 	public void pushAddNewRowButton();
-	
 
 	/**
 	 * Action to push the row button which shows the detail data (i.e. the historic
 	 * data)
 	 */
 	public void pushShowDetailRowButton();
-
 
 	/**
 	 * Reset the filter from historic data table
@@ -39,12 +36,12 @@ public interface IHistoricTable extends ITableAdd {
 	 * Refresh the historic data table
 	 */
 	public void refreshHistoricDataTable();
-	
-	 /**
+
+	/**
 	 * Action to do when changes the search date
+	 * 
 	 * @param e - change event
-	 */	
+	 */
 	public void changeSearchDate(ValueChangeEvent e);
-	
 
 }

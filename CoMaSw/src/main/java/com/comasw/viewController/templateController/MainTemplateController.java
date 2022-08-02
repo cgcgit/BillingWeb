@@ -27,11 +27,9 @@ public class MainTemplateController implements Serializable {
 	private static final long serialVersionUID = -6171018974278400217L;
 
 	Logger logger = (Logger) LogManager.getLogger(MainTemplateController.class);
-	
-	
+
 	private Boolean hiddenPanel;
-	
-	
+
 	/**
 	 * @return the showMenu
 	 */
@@ -45,9 +43,10 @@ public class MainTemplateController implements Serializable {
 	public void setHiddenPanel(Boolean hiddenPanel) {
 		this.hiddenPanel = hiddenPanel;
 	}
-	
-	//private final ResourceBundle pageTitleProperties = ResourceBundle.getBundle("pageTitle.properties");
-	
+
+	// private final ResourceBundle pageTitleProperties =
+	// ResourceBundle.getBundle("pageTitle.properties");
+
 	public void verifySession() {
 		String errorMessage;
 		try {
@@ -55,7 +54,7 @@ public class MainTemplateController implements Serializable {
 
 			Optional<VwUsers> user = Optional
 					.ofNullable((VwUsers) externalContext.getSessionMap().get("applicationUser"));
-			if (! user.isPresent()) {
+			if (!user.isPresent()) {
 				externalContext.redirect("../errorPage.xthml");
 			}
 
@@ -66,27 +65,24 @@ public class MainTemplateController implements Serializable {
 		}
 
 	}
-	
-	
+
 	@PostConstruct
 	public void init() {
-		this.hiddenPanel=true;
-		
+		this.hiddenPanel = true;
+
 	}
-	
+
 	public void hiddenPanel() {
-		if (this.hiddenPanel == true) {			
+		if (this.hiddenPanel == true) {
 			this.hiddenPanel = false;
 			PrimeFaces.current().executeScript("PF('sidebar').show();");
 		} else {
 			this.hiddenPanel = true;
 			PrimeFaces.current().executeScript("PF('sidebar').hide();");
 		}
-		
-		Ajax.update("mainFormTop");
-		
-				
-	}
 
+		Ajax.update("mainFormTop");
+
+	}
 
 }

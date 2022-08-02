@@ -13,114 +13,202 @@ import javax.faces.context.FacesContext;
 
 import com.comasw.utilities.Formatter;
 
-
 /**
  * @author catuxa
  *
  */
-public class BasicHistoricWithLists<T> extends BasicTypeWithLists<T>{
+public class BasicHistoricWithLists<T> extends BasicTypeWithLists<T> {
+
+	protected static String DATA_TABLE_ID = "form:accordionPanel:" + uiValues.getString("dataTableID");
+	protected static String SELECTED_DATA_TABLE_ID = "form:accordionPanel:" + uiValues.getString("selectedDataTableID");
+	protected static String NEW_PANEL_DATA_ID = "form:accordionPanel:" + uiValues.getString("newPanelDataID");
+
+	protected String HISTORIC_DATA_TABLE_ID = "form:accordionPanel:" + uiValues.getString("historicDataTableID");
+
 	
+	/**
+	 * New data to create/new row to insert
+	 */	
+	private T newData;
 
-	protected String DATA_TABLE_ID = "form:accordionPanel:"
-			+ uiValues.getString("dataTableID");
-	// private static String SELECTED_DATA_TABLE_ID = "form:accordionPanel:" +
-	// FeeTypeController.uiValues.getString("selectedDataTableID");
-	protected String NEW_PANEL_DATA_ID = "form:accordionPanel:"
-			+ uiValues.getString("newPanelDataID");
-
-	protected String HISTORIC_DATA_TABLE_ID = "form:accordionPanel:"
-			+ uiValues.getString("historicDataTableID");
 	
+	/**
+	 * Selected data list
+	 */
+	protected List<T> selectedDataList;
 
-    
-    
-    
+	/**
+	 * Filtered data for the selected list
+	 */
+	protected List<T> filteredSelectedDataList;
 
-    /**
+	/**
+	 * Backup object for the selected data list
+	 */
+	protected List<T> backupSelectedDataList;
+
+
+
+	/**
 	 * Historic data list
 	 */
-    protected List<T> historicDataList;
+	protected List<T> historicDataList;
 
 	/**
 	 * Filtered data for the historic list
 	 */
-    protected List<T> filteredHistoricDataList;
+	protected List<T> filteredHistoricDataList;
 
 	/**
-	 * Backup object for entity type(delete/modify operations)
+	 * Backup object for the selected data list
 	 */
-    protected List<T> backupHistoricDataList;
+	protected List<T> backupHistoricDataList;
+
+	/**
+	 * Selected data row in the table
+	 */	
+	
+	private T selectedHistoricData;
+
 
 	/**
 	 * selected row index of the historic table
 	 */
 
-    protected int rowHistoricSelected;
-    
-    
-    /**
+	protected int rowHistoricSelected;
+
+	/**
 	 * Current row index of the historic table
 	 */
 
-    protected int currentHistoricRow;
+	protected int currentHistoricRow;
 
-	
 	/**
 	 * Search date
 	 */
-    protected LocalDateTime searchDate;
-
+	protected LocalDateTime searchDate;
 
 	/**
 	 * Message for the delete action
 	 */
-    protected String deleteMessageDialog;
+	protected String deleteMessageDialog;
 
 	/**
 	 * Message for the cancel action
 	 */
-    protected String cancelMessageDialog;
-    
-    /**
-     * Flag that indicates if exists data to show
-     */
-    protected boolean showSelectedData;
-    
+	protected String cancelMessageDialog;
+
+	/**
+	 * Flag that indicates if exists data to show
+	 */
+	protected boolean showSelectedData;
 
 	/**
 	 * Indicates if the status change to Cancel
 	 */
 	protected boolean toCancel;
 
-    
 	/**
 	 * Indicates if the action is from adding new row
 	 */
 	protected boolean fromAddingRow;
-	
+
 	/**
 	 * Previous status id to control the changes for the edition. Value = -1 --> the
 	 * first change into the edition
 	 */
 	protected Integer prevStatusId;
-	
-	
+
 	/**
 	 * Text to shown in the dialog header
 	 */
 	protected String dialogHeaderText;
 	
+	
+	/**
+	 * Flag for the historic criteria to search
+	 */
 
+	protected boolean historicSearchDataCriteria;
+	
+	/**
+	 * Text to shown in the search data table title
+	 */
+	protected String searchDataTableTitle;
+	
+	
 
-    
-	//---------------------\\
+	// ---------------------\\
 	// GETTERS AND SETTERs \\
-	//---------------------\\	
+	// ---------------------\\
 
+
+
+	/**
+	 * @return the newData
+	 */
+	public T getNewData() {
+		return newData;
+	}
+
+	/**
+	 * @param newData the newData to set
+	 */
+	public void setNewData(T newData) {
+		this.newData = newData;
+	}
+
+	
+
+	
+	
+	/**
+	 * @return the selectedDataList
+	 */
+	public List<T> getSelectedDataList() {
+		return selectedDataList;
+	}
+
+	/**
+	 * @param selectedDataList the selectedDataList to set
+	 */
+	public void setSelectedDataList(List<T> selectedDataList) {
+		this.selectedDataList = selectedDataList;
+	}
+
+	/**
+	 * @return the filteredSelectedDataList
+	 */
+	public List<T> getFilteredSelectedDataList() {
+		return filteredSelectedDataList;
+	}
+
+	/**
+	 * @param filteredSelectedDataList the filteredSelectedDataList to set
+	 */
+	public void setFilteredSelectedDataList(List<T> filteredSelectedDataList) {
+		this.filteredSelectedDataList = filteredSelectedDataList;
+	}
+
+	/**
+	 * @return the backupSelectedDataList
+	 */
+	public List<T> getBackupSelectedDataList() {
+		return backupSelectedDataList;
+	}
+
+	/**
+	 * @param backupSelectedDataList the backupSelectedDataList to set
+	 */
+	public void setBackupSelectedDataList(List<T> backupSelectedDataList) {
+		this.backupSelectedDataList = backupSelectedDataList;
+	}
+	
+	
 	/**
 	 * @return the historicDataList
 	 */
-	public List<T> getHistoricDataList() {
+	public List<T> getHistoricDataList() {		
 		return historicDataList;
 	}
 
@@ -144,7 +232,7 @@ public class BasicHistoricWithLists<T> extends BasicTypeWithLists<T>{
 	public void setFilteredHistoricDataList(List<T> filteredHistoricDataList) {
 		this.filteredHistoricDataList = filteredHistoricDataList;
 	}
-	
+
 	/**
 	 * @return the backupHistoricDataList
 	 */
@@ -157,6 +245,21 @@ public class BasicHistoricWithLists<T> extends BasicTypeWithLists<T>{
 	 */
 	public void setBackupHistoricDataList(List<T> backupHistoricDataList) {
 		this.backupHistoricDataList = backupHistoricDataList;
+	}
+	
+	
+	/**
+	 * @return the selectedHistoricData
+	 */
+	public T getSelectedHistoricData() {
+		return selectedHistoricData;
+	}
+
+	/**
+	 * @param selectedHistoricData the selectedHistoricData to set
+	 */
+	public void setSelectedHistoricData(T selectedHistoricData) {
+		this.selectedHistoricData = selectedHistoricData;
 	}
 
 	/**
@@ -172,8 +275,6 @@ public class BasicHistoricWithLists<T> extends BasicTypeWithLists<T>{
 	public void setRowHistoricSelected(int rowHistoricSelected) {
 		this.rowHistoricSelected = rowHistoricSelected;
 	}
-
-	
 
 	/**
 	 * @return the currentHistoricRow
@@ -244,7 +345,7 @@ public class BasicHistoricWithLists<T> extends BasicTypeWithLists<T>{
 	public void setShowSelectedData(boolean showSelectedData) {
 		this.showSelectedData = showSelectedData;
 	}
-	
+
 	/**
 	 * @return the toCancel
 	 */
@@ -259,7 +360,6 @@ public class BasicHistoricWithLists<T> extends BasicTypeWithLists<T>{
 		this.toCancel = toCancel;
 	}
 
-
 	/**
 	 * @return the fromAddingRow
 	 */
@@ -273,8 +373,7 @@ public class BasicHistoricWithLists<T> extends BasicTypeWithLists<T>{
 	public void setFromAddingRow(boolean fromAddingRow) {
 		this.fromAddingRow = fromAddingRow;
 	}
-	
-	
+
 	/**
 	 * @return the prevStatusId
 	 */
@@ -288,8 +387,7 @@ public class BasicHistoricWithLists<T> extends BasicTypeWithLists<T>{
 	public void setPrevStatusId(Integer prevStatusId) {
 		this.prevStatusId = prevStatusId;
 	}
-	
-	
+
 	/**
 	 * @return the headerText
 	 */
@@ -303,16 +401,43 @@ public class BasicHistoricWithLists<T> extends BasicTypeWithLists<T>{
 	public void setDialogHeaderText(String dialogHeaderText) {
 		this.dialogHeaderText = dialogHeaderText;
 	}
-
 	
+	
+	/**
+	 * @return the historicSearchDataCriteria
+	 */
+	public boolean isHistoricSearchDataCriteria() {
+		return historicSearchDataCriteria;
+	}
+
+	/**
+	 * @param historicSearchDataCriteria the historicSearchDataCriteria to set
+	 */
+	public void setHistoricSearchDataCriteria(boolean historicSearchDataCriteria) {
+		this.historicSearchDataCriteria = historicSearchDataCriteria;
+	}
+
+
+	/**
+	 * @return the searchDataTableTitle
+	 */
+	public String getSearchDataTableTitle() {
+		return searchDataTableTitle;
+	}
+
+	/**
+	 * @param searchDataTableTitle the searchDataTableTitle to set
+	 */
+	public void setSearchDataTableTitle(String searchDataTableTitle) {
+		this.searchDataTableTitle = searchDataTableTitle;
+	}
 
 	
 	// --------\\
 	// METHODS \\
 	// --------\\
-	
-	
 
+	
 	/**
 	 * Validates if the dates are valid to create new historic according to create
 	 * consecutive records. NOT VALID conditions:
@@ -340,15 +465,14 @@ public class BasicHistoricWithLists<T> extends BasicTypeWithLists<T>{
 	 * @param newEndDate       end of the new data
 	 * @return true if grant contitions
 	 */
-	public boolean rangeDateValidation(FacesContext fc, ExternalContext ec, LocalDateTime currentStartDate, LocalDateTime currentEndDate,
-			LocalDateTime newStartDate, LocalDateTime newEndDate) {
+	public boolean rangeDateValidation(FacesContext fc, ExternalContext ec, LocalDateTime currentStartDate,
+			LocalDateTime currentEndDate, LocalDateTime newStartDate, LocalDateTime newEndDate) {
 		String message = "Data validation";
 		String messageDetail = "";
 		boolean validation = true;
 
-		
 		if (currentStartDate.isAfter(currentEndDate)) {
-			//currentStartDate > currentEndDate ==> out of range ==> error
+			// currentStartDate > currentEndDate ==> out of range ==> error
 			messageDetail = "Error in dates- The current start date can not be greather than current end date";
 			logger.error(messageDetail + " - current dates: [" + Formatter.localDateTimeToString(currentStartDate)
 					+ ", " + Formatter.localDateTimeToString(currentEndDate) + "] " + "new dates ["
@@ -359,7 +483,7 @@ public class BasicHistoricWithLists<T> extends BasicTypeWithLists<T>{
 		}
 
 		if (newStartDate.isAfter(newEndDate)) {
-			//newStartDate > newEndDate ==> out of range ==> error
+			// newStartDate > newEndDate ==> out of range ==> error
 			messageDetail = "Error in dates- The new start date can not be greather than new end date";
 			logger.error(messageDetail + " - current dates: [" + Formatter.localDateTimeToString(currentStartDate)
 					+ ", " + Formatter.localDateTimeToString(currentEndDate) + "] " + "new dates ["
@@ -370,19 +494,19 @@ public class BasicHistoricWithLists<T> extends BasicTypeWithLists<T>{
 		}
 
 		if (newStartDate.isBefore(Formatter.stringToLocalDateTime(Formatter.DEFAULT_START_DATE))) {
-			//newStartDate < minDate ==> error
+			// newStartDate < minDate ==> error
 			messageDetail = "Error in dates- The new start date can not be less than minimun data allowed ("
 					+ Formatter.stringToLocalDateTime(Formatter.DEFAULT_START_DATE) + ").";
 			logger.error(messageDetail + " - current dates: [" + Formatter.localDateTimeToString(currentStartDate)
 					+ ", " + Formatter.localDateTimeToString(currentEndDate) + "] " + "new dates ["
 					+ Formatter.localDateTimeToString(newStartDate) + ", " + Formatter.localDateTimeToString(newEndDate)
 					+ "] ");
-			createMessage(fc, ec,  FacesMessage.SEVERITY_ERROR, message, messageDetail);
+			createMessage(fc, ec, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
 		}
 
 		if (newEndDate.isAfter(Formatter.stringToLocalDateTime(Formatter.DEFAULT_END_DATE))) {
-			// newEndDate > maxEndDate ==> error			
+			// newEndDate > maxEndDate ==> error
 			messageDetail = "Error in dates- The new end date can not be greather than maximum data allowed ("
 					+ Formatter.stringToLocalDateTime(Formatter.DEFAULT_END_DATE) + ").";
 			logger.error(messageDetail + " - current dates: [" + Formatter.localDateTimeToString(currentStartDate)
@@ -394,7 +518,8 @@ public class BasicHistoricWithLists<T> extends BasicTypeWithLists<T>{
 		}
 
 		if (newStartDate.isEqual(currentStartDate) && newEndDate.isEqual(currentEndDate)) {
-			// newStartDate = currentStartDate && newEndDate = currentEndDate ==> no sense to create new record histori ==> error
+			// newStartDate = currentStartDate && newEndDate = currentEndDate ==> no sense
+			// to create new record histori ==> error
 			messageDetail = "Error in dates- The new and current new dates can not be the same";
 			logger.error(messageDetail + " - current dates: [" + Formatter.localDateTimeToString(currentStartDate)
 					+ ", " + Formatter.localDateTimeToString(currentEndDate) + "] " + "new dates ["
@@ -405,7 +530,8 @@ public class BasicHistoricWithLists<T> extends BasicTypeWithLists<T>{
 		}
 
 		if (newStartDate.isBefore(currentStartDate) && newEndDate.isAfter(currentEndDate)) {
-			// newStartDate < currentStartDate && newEndDate > currentEndDate ==> out of range ==> error
+			// newStartDate < currentStartDate && newEndDate > currentEndDate ==> out of
+			// range ==> error
 			messageDetail = "Error in dates- The new dates are out of range from current dates";
 			logger.error(messageDetail + " - current dates: [" + Formatter.localDateTimeToString(currentStartDate)
 					+ ", " + Formatter.localDateTimeToString(currentEndDate) + "] " + "new dates ["
@@ -429,4 +555,4 @@ public class BasicHistoricWithLists<T> extends BasicTypeWithLists<T>{
 
 	}
 
-}	
+}

@@ -1,6 +1,5 @@
 package com.comasw.ejb.parameterization;
 
-
 import javax.annotation.Resource;
 import javax.ejb.Stateless;
 import javax.sql.DataSource;
@@ -13,7 +12,6 @@ import org.jooq.SQLDialect;
 import org.jooq.exception.DataAccessException;
 import org.jooq.impl.DSL;
 import org.jooq.impl.DefaultConfiguration;
-
 
 import static org.jooq.impl.DSL.val;
 import org.jooq.Configuration;
@@ -53,10 +51,8 @@ public class ApplicationLevelEJB implements ApplicationLevelEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(PT_APPLICATION_LEVEL)
-					.orderBy(PT_APPLICATION_LEVEL.CODE)
-					.fetch()
-					.into(PtApplicationLevel.class);		
+			result = create.selectFrom(PT_APPLICATION_LEVEL).orderBy(PT_APPLICATION_LEVEL.CODE).fetch()
+					.into(PtApplicationLevel.class);
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find all the application levels - " + e.getMessage();
@@ -74,30 +70,29 @@ public class ApplicationLevelEJB implements ApplicationLevelEJBLocal {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<PtApplicationLevel> result = null;
 		String errorMessage;
-		
+
 		try {
 			result = create.selectFrom(PT_APPLICATION_LEVEL)
 					.where(PT_APPLICATION_LEVEL.APPLICATION_LEVEL_ID.eq(val(applicationLevelId)))
-					.orderBy(PT_APPLICATION_LEVEL.CODE)
-					.fetch()
-					.into(PtApplicationLevel.class);
-			
+					.orderBy(PT_APPLICATION_LEVEL.CODE).fetch().into(PtApplicationLevel.class);
+
 			if (result.size() > 1) {
-				errorMessage = "Error while try to find the application level for application_level_id : " + applicationLevelId
-						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
+				errorMessage = "Error while try to find the application level for application_level_id : "
+						+ applicationLevelId + " - The query returns more rows(" + result.size()
+						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
 				return result.get(0);
-			}	
+			}
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the application level for application_level_id: " + applicationLevelId + " - " + e.getMessage();
+			errorMessage = "Error while try to find the application level for application_level_id: "
+					+ applicationLevelId + " - " + e.getMessage();
 			logger.error(errorMessage);
-			throw new CoMaSwDataAccessException(errorMessage, e);		
+			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 
-		
 	}
 
 	@Override
@@ -105,14 +100,10 @@ public class ApplicationLevelEJB implements ApplicationLevelEJBLocal {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<PtApplicationLevel> result = null;
 		String errorMessage;
-		
 
 		try {
-			result = create.selectFrom(PT_APPLICATION_LEVEL)
-					.where(PT_APPLICATION_LEVEL.CODE.eq(val(code)))
-					.orderBy(PT_APPLICATION_LEVEL.CODE)
-					.fetch()
-					.into(PtApplicationLevel.class);
+			result = create.selectFrom(PT_APPLICATION_LEVEL).where(PT_APPLICATION_LEVEL.CODE.eq(val(code)))
+					.orderBy(PT_APPLICATION_LEVEL.CODE).fetch().into(PtApplicationLevel.class);
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the application level for code : " + code
 						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
@@ -120,7 +111,7 @@ public class ApplicationLevelEJB implements ApplicationLevelEJBLocal {
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
 				return result.get(0);
-			}				
+			}
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the application level for code " + code + " - " + e.getMessage();
@@ -128,18 +119,18 @@ public class ApplicationLevelEJB implements ApplicationLevelEJBLocal {
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 
-		
 	}
 
 	@Override
-	public void insertData(PtApplicationLevel dataObject) throws CoMaSwDataAccessException {		
-		String errorMessage;		
+	public void insertData(PtApplicationLevel dataObject) throws CoMaSwDataAccessException {
+		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);			
-			PtApplicationLevelDao daoObject = new PtApplicationLevelDao(configuration);			
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
+			PtApplicationLevelDao daoObject = new PtApplicationLevelDao(configuration);
 			daoObject.insert(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error inserting the application level object (value: " + dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error inserting the application level object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
@@ -150,11 +141,12 @@ public class ApplicationLevelEJB implements ApplicationLevelEJBLocal {
 	public void updateData(PtApplicationLevel dataObject) throws CoMaSwDataAccessException {
 		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);		
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
 			PtApplicationLevelDao daoObject = new PtApplicationLevelDao(configuration);
 			daoObject.update(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error updating the application level object (value: " + dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error updating the application level object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
@@ -164,14 +156,14 @@ public class ApplicationLevelEJB implements ApplicationLevelEJBLocal {
 	public void deleteData(PtApplicationLevel dataObject) throws CoMaSwDataAccessException {
 		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);		
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
 			PtApplicationLevelDao daoObject = new PtApplicationLevelDao(configuration);
 			daoObject.delete(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error deleting the application level object (value: "
-					+ dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error deleting the application level object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
-			throw new CoMaSwDataAccessException(errorMessage, e);			
+			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 	}
 

@@ -196,7 +196,7 @@
 					<p:selectOneMenu id="statusFilterMenu"
 						onchange="PF('dataTableWidget').filter()">
 						<f:selectItems id="statusFilterSelectItems"
-							value="#{productTypeController.statusSelectItems()}" />
+							value="#{productTypeController.statusCatalogSelectItems()}" />
 					</p:selectOneMenu>
 				</f:facet>
 				<p:cellEditor id="statusIdCellEditor">
@@ -204,7 +204,7 @@
 						<p:selectOneMenu id="statusOutput" editable="false"
 							disabled="true" immediate="true" value="#{dataTable.statusId}">
 							<f:selectItems
-								value="#{productTypeController.statusSelectItems()}"
+								value="#{productTypeController.statusCatalogSelectItems()}"
 								id="selectItemsStatusOutput" itemDisabled="true" var="Status"
 								itemValue="#{dataTable.statusId}" />
 						</p:selectOneMenu>
@@ -213,7 +213,7 @@
 						<p:selectOneMenu id="statusnput" value="#{dataTable.statusId}"
 							immediate="true">
 							<f:selectItems
-								value="#{productTypeController.statusSelectItems()}"
+								value="#{productTypeController.statusCatalogSelectItems()}"
 								id="selectItemsStatusInput" var="Status"
 								itemValue="#{dataTable.statusId}">
 							</f:selectItems>
@@ -251,7 +251,7 @@
 				<p:selectOneMenu id="statusInput"
 					value="#{productTypeController.selectedData.statusId}"
 					immediate="true">
-					<f:selectItems value="#{productTypeController.statusSelectItems()}"
+					<f:selectItems value="#{productTypeController.statusCatalogSelectItems()}"
 						id="selectItemsStatusInput" var="Status"
 						itemValue="#{productTypeController.selectedData.statusId}">
 					</f:selectItems>
@@ -284,8 +284,7 @@
 		<!--  DELETE ROW DIALOG -->
 		<p:confirmDialog global="true" styleClass="change-position"
 			showEffect="fade" responsive="true" widgetVar="deleteRowDialogWidget"
-			header="DELETE ROW"
-			message="Do you really want to delete this row?">
+			header="DELETE ROW" message="Do you really want to delete this row?">
 			<p:commandButton id="deleteDialogConfirm" value="#{uiValue.okLabel}"
 				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
 				actionListener="#{productTypeController.pushConfirmButtonDeleteDialog()}"

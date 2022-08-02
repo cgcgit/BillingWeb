@@ -1,6 +1,5 @@
 package com.comasw.viewController.appAccessController;
 
-
 import java.io.Serializable;
 import java.util.ResourceBundle;
 
@@ -10,24 +9,23 @@ import javax.inject.Named;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 
-@Named ("logoutController")
+@Named("logoutController")
 @ApplicationScoped
-public class LogoutController implements Serializable{
+public class LogoutController implements Serializable {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 2313368455041720201L;
-	
-	protected static ResourceBundle urlFile = ResourceBundle
-			.getBundle("com.comasw.properties.urlPage");
-	
+
+	protected static ResourceBundle urlFile = ResourceBundle.getBundle("com.comasw.properties.urlPage");
+
 	@Inject
 	private HttpServletRequest request;
 
 	public String submit() throws ServletException {
 		request.logout();
-		request.getSession().invalidate();		
-		return urlFile.getString("loginPage")+ urlFile.getString("redirect");
+		request.getSession().invalidate();
+		return urlFile.getString("loginPage") + urlFile.getString("redirect");
 	}
 }

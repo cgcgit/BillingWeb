@@ -139,7 +139,7 @@
 				filterBy="#{dataTable.code}" filterMatchMode="contains">
 				<h:outputText id="codeOutput" value="#{dataTable.code}" />
 			</p:column>
-			
+
 			<p:column id="name"
 				style="font-family:Arial Black;
                                   text-align: left;
@@ -147,7 +147,7 @@
                                   width: 100px;    
                                   overflow: hidden"
 				headerText="NAME" rendered="true" sortBy="#{dataTable.name}"
-				filterBy="#{dataTable.name}" filterMatchMode="contains">			
+				filterBy="#{dataTable.name}" filterMatchMode="contains">
 				<p:cellEditor id="cellEditorName">
 					<f:facet id="facetNameOutput" name="output">
 						<h:outputText id="nameOutput" value="#{dataTable.name}" />
@@ -160,7 +160,7 @@
 					</f:facet>
 				</p:cellEditor>
 			</p:column>
-			
+
 			<p:column id="description"
 				style="font-family:Arial Black;
                                   text-align: left;
@@ -169,7 +169,7 @@
                                   overflow: hidden"
 				headerText="DESCRIPTION" rendered="true"
 				sortBy="#{dataTable.description}"
-				filterBy="#{dataTable.description}" filterMatchMode="contains">			
+				filterBy="#{dataTable.description}" filterMatchMode="contains">
 				<p:cellEditor id="cellEditorDescription">
 					<f:facet id="facetDescriptionOutput" name="output">
 						<h:outputText id="descriptionOutput"
@@ -183,7 +183,7 @@
 					</f:facet>
 				</p:cellEditor>
 			</p:column>
-			
+
 			<p:column id="status"
 				style="font-family:Arial Black;
                                   text-align: left;
@@ -196,7 +196,7 @@
 					<p:selectOneMenu id="statusFilterMenu"
 						onchange="PF('dataTableWidget').filter()">
 						<f:selectItems id="statusFilterSelectItems"
-							value="#{serviceTypeController.statusSelectItems()}" />
+							value="#{serviceTypeController.statusCatalogSelectItems()}" />
 					</p:selectOneMenu>
 				</f:facet>
 				<p:cellEditor id="statusIdCellEditor">
@@ -204,7 +204,7 @@
 						<p:selectOneMenu id="statusOutput" editable="false"
 							disabled="true" immediate="true" value="#{dataTable.statusId}">
 							<f:selectItems
-								value="#{serviceTypeController.statusSelectItems()}"
+								value="#{serviceTypeController.statusCatalogSelectItems()}"
 								id="selectItemsStatusOutput" itemDisabled="true" var="Status"
 								itemValue="#{dataTable.statusId}" />
 						</p:selectOneMenu>
@@ -213,7 +213,7 @@
 						<p:selectOneMenu id="statusnput" value="#{dataTable.statusId}"
 							immediate="true">
 							<f:selectItems
-								value="#{serviceTypeController.statusSelectItems()}"
+								value="#{serviceTypeController.statusCatalogSelectItems()}"
 								id="selectItemsStatusInput" var="Status"
 								itemValue="#{dataTable.statusId}">
 
@@ -252,7 +252,7 @@
 				<p:selectOneMenu id="statusInput"
 					value="#{serviceTypeController.selectedData.statusId}"
 					immediate="true">
-					<f:selectItems value="#{serviceTypeController.statusSelectItems()}"
+					<f:selectItems value="#{serviceTypeController.statusCatalogSelectItems()}"
 						id="selectItemsStatusInput" var="Status"
 						itemValue="#{serviceTypeController.selectedData.statusId}">
 					</f:selectItems>
@@ -285,8 +285,7 @@
 		<!--  DELETE ROW DIALOG -->
 		<p:confirmDialog global="true" styleClass="change-position"
 			showEffect="fade" responsive="true" widgetVar="deleteRowDialogWidget"
-			header="DELETE ROW"
-			message="Do you really want to delete this row?">
+			header="DELETE ROW" message="Do you really want to delete this row?">
 			<p:commandButton id="deleteDialogConfirm" value="#{uiValue.okLabel}"
 				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
 				actionListener="#{serviceTypeController.pushConfirmButtonDeleteDialog()}"

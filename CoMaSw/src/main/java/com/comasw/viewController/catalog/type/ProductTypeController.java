@@ -37,7 +37,6 @@ import com.comasw.interfaces.IEditableTable;
  *
  */
 public class ProductTypeController extends BasicTypeWithLists<CtProductType> implements Serializable, IEditableTable {
-	
 
 	/**
 	 * 
@@ -56,37 +55,6 @@ public class ProductTypeController extends BasicTypeWithLists<CtProductType> imp
 	@EJB
 	private ProductTypeEJBLocal productTypeEJB;
 
-
-
-	/**
-	 * Selected data row in the table
-	 */
-	@Inject
-	private CtProductType selectedData;
-
-	
-	
-	// --------------------
-	// GETTERS AND SETTERS
-	// -------------------
-
-
-	/**
-	 * @return the selectedData
-	 */
-	public CtProductType getSelectedData() {
-		return selectedData;
-	}
-
-
-	/**
-	 * @param selectedData the selectedData to set
-	 */
-	public void setSelectedData(CtProductType selectedData) {
-		this.selectedData = selectedData;
-	}
-
-
 	
 	// -------------------
 	// METHODS
@@ -98,22 +66,19 @@ public class ProductTypeController extends BasicTypeWithLists<CtProductType> imp
 	public ProductTypeController() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	@PostConstruct
 	public void init() {
 
-		if (selectedData == null) {
-			selectedData = new CtProductType();
+		if (getSelectedData() == null) {
+			setSelectedData(new CtProductType());
 		}
 
 		if (this.getLoggedUser() == null) {
 			this.setLoggedUser((VwUsers) externalContext.getSessionMap().get("applicationUser"));
 		}
 
-
 	}
-
-
 
 	@Override
 	public void loadDataList() {
@@ -124,9 +89,8 @@ public class ProductTypeController extends BasicTypeWithLists<CtProductType> imp
 		} else {
 			logger.info("Load data sucessful");
 		}
-		
-	}
 
+	}
 
 	@Override
 	public void onRowInit(RowEditEvent<?> event) {
@@ -140,7 +104,7 @@ public class ProductTypeController extends BasicTypeWithLists<CtProductType> imp
 		int rowPosition = dataTable.getRowIndex();
 
 		// Gets the backup of the data to modify
-		dataObject = (CtProductType) event.getObject();		
+		dataObject = (CtProductType) event.getObject();
 
 		// If we are editing a row, we must disabled all the other buttons
 		this.editingMode = true;
@@ -156,9 +120,8 @@ public class ProductTypeController extends BasicTypeWithLists<CtProductType> imp
 		messageDetail = "Editing product type: " + dataObject.getCode();
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
-		
-	}
 
+	}
 
 	@Override
 	public void onRowEdit(RowEditEvent<?> event) throws ValidatorException {
@@ -171,18 +134,17 @@ public class ProductTypeController extends BasicTypeWithLists<CtProductType> imp
 		// Retrieved the data that was modified
 		dataObject = (CtProductType) event.getObject();
 
-				
 		try {
 
 			// Validates the data
 			if (this.objectValidation(dataObject)) {
-				//sets the modif data
-				this.selectedData.setModifUser(this.loggedUser.getUserCode());
-				this.selectedData.setModifDate(LocalDateTime.now());
-				
+				// sets the modif data
+				this.getSelectedData().setModifUser(this.loggedUser.getUserCode());
+				this.getSelectedData().setModifDate(LocalDateTime.now());
+
 				productTypeEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";
-				logger.info("Update product type: " + this.selectedData.toString() + " - " +messageDetail);
+				logger.info("Update product type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 				this.setControlVariablesToDefault();
 			} else {
@@ -214,46 +176,40 @@ public class ProductTypeController extends BasicTypeWithLists<CtProductType> imp
 		} finally {
 			if (error) {
 				FacesContext.getCurrentInstance().validationFailed();
-			} else {				
+			} else {
 				this.loadDataList();
 			}
 		}
-		
+
 	}
 
-
 	@Override
-	public void onRowCancel(RowEditEvent<?> event) {		
+	public void onRowCancel(RowEditEvent<?> event) {
 		String message, messageDetail;
 
 		message = "CANCEL UPDATE ROW";
 		messageDetail = "Cancelled the edition of the product type";
-		
+
 		this.refreshDataTable();
 		this.setControlVariablesToDefault();
-		
+
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
-		
+
 	}
-
-
 
 	@Override
 	public void pushDeleteRowButton() {
 		// TODO Auto-generated method stub
-		
+
 	}
-
-
 
 	@Override
 	public void pushCreateNewButton() {
-		this.selectedData = new CtProductType();
+		this.setSelectedData( new CtProductType());
 		PrimeFaces.current().executeScript("PF('createNewDialogWidget').show();");
-				
-	}
 
+	}
 
 	@Override
 	public void pushConfirmButtonCreateNewDialog() {
@@ -262,16 +218,16 @@ public class ProductTypeController extends BasicTypeWithLists<CtProductType> imp
 		Boolean error = false;
 
 		try {
-			if (objectValidation(this.selectedData)) {
-				//Set create values
-				
-				this.selectedData.setEntityTypeId(ENTITY_TYPE_ID);
-				this.selectedData.setInputUser(this.loggedUser.getUserCode());
-				this.selectedData.setInputDate(LocalDateTime.now());
-				
-				productTypeEJB.insertData(this.selectedData);
+			if (objectValidation(this.getSelectedData())) {
+				// Set create values
+
+				this.getSelectedData().setEntityTypeId(ENTITY_TYPE_ID);
+				this.getSelectedData().setInputUser(this.loggedUser.getUserCode());
+				this.getSelectedData().setInputDate(LocalDateTime.now());
+
+				productTypeEJB.insertData(this.getSelectedData());
 				messageDetail = "Data saves succesfully";
-				logger.info("Create product type: " + this.selectedData.toString() + " - " +messageDetail);
+				logger.info("Create product type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 			} else {
@@ -307,27 +263,23 @@ public class ProductTypeController extends BasicTypeWithLists<CtProductType> imp
 			} else {
 				this.resetFilterDataTable();
 				this.loadDataList();
-				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();"); 
+				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();");
 			}
 		}
-		
-		
-	}
 
+	}
 
 	@Override
 	public void pushCancelButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void pushCleanButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void pushConfirmButtonDeleteDialog() {
@@ -336,10 +288,10 @@ public class ProductTypeController extends BasicTypeWithLists<CtProductType> imp
 		Boolean error = false;
 
 		try {
-			if (this.selectedData != null) {
-				productTypeEJB.deleteData(this.selectedData);
+			if (this.getSelectedData() != null) {
+				productTypeEJB.deleteData(this.getSelectedData());
 				messageDetail = "Data deletes succesfully";
-				logger.info("Delete product type: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Delete product type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;
@@ -380,24 +332,20 @@ public class ProductTypeController extends BasicTypeWithLists<CtProductType> imp
 				this.loadDataList();
 			}
 		}
-		
-		
-	}
 
+	}
 
 	@Override
 	public void pushCancelButtonDeleteDialog() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void resetObjectValues() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public boolean objectValidation(Object dataObject) {
@@ -420,8 +368,8 @@ public class ProductTypeController extends BasicTypeWithLists<CtProductType> imp
 
 			if (objectToValidate.getDescription() != null) {
 				objectToValidate.setDescription(objectToValidate.getDescription().trim());
-			}		
-			
+			}
+
 			if (objectToValidate.getCode() == null || objectToValidate.getCode().length() == 0) {
 				messageDetail = "ERROR - The code of the product type can not be null";
 				logger.error(messageDetail);
@@ -431,8 +379,8 @@ public class ProductTypeController extends BasicTypeWithLists<CtProductType> imp
 					.compareTo(BasicTypeWithLists.CODE_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The code of the product type (" + objectToValidate.getCode().length()
-						+ " characters) exceeds the limit of "
-						+ BasicTypeWithLists.CODE_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicTypeWithLists.CODE_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -446,8 +394,8 @@ public class ProductTypeController extends BasicTypeWithLists<CtProductType> imp
 					.compareTo(BasicTypeWithLists.NAME_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The name of the product type (" + objectToValidate.getName().length()
-						+ " characters) exceeds the limit of "
-						+ BasicTypeWithLists.NAME_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicTypeWithLists.NAME_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -462,22 +410,20 @@ public class ProductTypeController extends BasicTypeWithLists<CtProductType> imp
 					.compareTo(BasicTypeWithLists.DESCRIPTION_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The description of the product type ("
-						+ objectToValidate.getDescription().length()
-						+ " characters) exceeds the limit of "
+						+ objectToValidate.getDescription().length() + " characters) exceeds the limit of "
 						+ BasicTypeWithLists.DESCRIPTION_FIELD_LENGTH_MAX.toString() + " characters";
 
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
 			}
-			
+
 			if (objectToValidate.getStatusId() == null) {
 				result = false;
 				messageDetail = "ERROR - The status can not be null";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			}
-			
 
 			if (result) {
 				// no error --> update panel
@@ -493,25 +439,22 @@ public class ProductTypeController extends BasicTypeWithLists<CtProductType> imp
 		return result;
 	}
 
-
 	@Override
 	public void retrieveBackupData() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void setInitVariablesToDefault() {
 		this.editingMode = false;
-		
-	}
 
+	}
 
 	@Override
 	public void setControlVariablesToDefault() {
 		this.setInitVariablesToDefault();
-		
+
 	}
 
 	@Override

@@ -9,10 +9,6 @@
 
 <f:metadata>
 
-	<f:viewAction id="loadParentData"
-		action="#{promotionConsumptionTypeDiscController.loadDataList()}"
-		phase="INVOKE_APPLICATION">
-	</f:viewAction>
 	<f:viewAction id="defaultControlVariables"
 		action="#{promotionConsumptionTypeDiscController.setInitVariablesToDefault()}"
 		phase="INVOKE_APPLICATION">
@@ -67,26 +63,54 @@
 			<p:tab id="searchPanel"
 				titleStyle="background: WhiteSmoke; color: black"
 				title="PROMOTION TYPE">
-				<p:outputLabel id="dateSearchLabel" for="searchDate"
-					value="Search Date: " />
+				<p:panel header="Search Promotion Type Criteria">
+						<p:outputPanel id="dataCriteriaPanel">
+							<p:selectOneRadio id="searchCriteriaRowButton" layout="custom" immediate="true" 
+								value="#{promotionConsumptionTypeDiscController.historicSearchDataCriteria}">
+								<f:selectItem id="historicCriteria"
+									itemLabel="Show Historic Data" itemValue="true" />
+								<f:selectItem id="dateCriteria" itemLabel="Show Data for Date"
+									itemValue="false" />
+							</p:selectOneRadio>
 
-				<p:inputMask id="searchDate" required="true" immediate="true"
-					valueChangeListener="#{promotionConsumptionTypeDiscController.changeSearchDate}"
-					value="#{promotionConsumptionTypeDiscController.searchDate}"
-					mask="99/99/9999" style="width:10rem" styleClass="p-mx-3"
-					requiredMessage="The date value to search is null. Please fill the search date field">
-					<f:converter
-						converterId="com.comasw.converter.localDateTimeConverter" />
-				</p:inputMask>
+							<p:panelGrid columns="3" columnClasses="ui-grid-col-4"
+								layout="flex" contentStyleClass="align-items-baseline ui-fluid"
+								style="border:0px none; background-color:transparent; align:left">
 
-				<p:commandButton id="searchDataButton" value="Search"
-					icon="#{uiValue.searchIcon}"
-					actionListener="#{promotionConsumptionTypeDiscController.pushSearchButton()}"
-					ajax="true" immediate="true" update=":form:growlMessage"
-					style="width:7rem"
-					oncomplete="#{updateSearchTable} PF('searchListWidget').show('#{component.clientId}')"
-					styleClass="p-mx-3" class="ui-button-success rounded-button">
-				</p:commandButton>
+								<p:panel>
+									<p:radioButton id="historicRowButton"
+										for="searchCriteriaRowButton" itemIndex="0" />
+									<h:outputLabel for="historicRowButton"
+										value="Show Historic Data"
+										style="font-family:Arial Black; text-align: left; font-size: 11px; margin-left: .5rem" />
+								</p:panel>
+								
+								<p:panel>
+									<p:radioButton id="dateRowButton" for="searchCriteriaRowButton"
+										itemIndex="1" />
+									<h:outputLabel for="dateRowButton" value="Show Data for Date:"
+										style="font-family:Arial Black; text-align: left; font-size: 11px; margin-left: .5rem" />
+
+									<p:inputMask id="searchDate" required="false" immediate="true"
+										value="#{promotionConsumptionTypeDiscController.searchDate}" mask="99/99/9999"
+										style="width:7rem; height:2rem" styleClass="p-mx-3"
+										valueChangeListener="#{promotionConsumptionTypeDiscController.changeSearchDate}"
+										requiredMessage="The date value to search is null. Please fill the search date field">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+									</p:inputMask>
+								</p:panel>
+								
+								<p:commandButton id="searchDataButton" value="Search"
+									icon="#{uiValue.searchIcon}" ajax="true" 
+									actionListener="#{promotionConsumptionTypeDiscController.pushSearchButton()}"
+									update=":form:growlMessage"
+									style="width:7rem" oncomplete="#{updateDataTable}"
+									styleClass="p-mx-3" class="ui-button-success rounded-button">
+								</p:commandButton>
+							</p:panelGrid>
+						</p:outputPanel>
+					</p:panel>
 
 				<p:overlayPanel id="searchList" style="width:95%;"
 					showCloseIcon="true" dismissable="true" my="center top"
@@ -94,7 +118,7 @@
 					<p />
 
 					<p />
-					<p:dataTable id="dataTable" widgetVar="dataTableWidget"
+					<p:dataTable id="dataTable" widgetVar="dataTableWidget" partialUpdate="disabled"
 						var="dataTable"
 						value="#{promotionConsumptionTypeDiscController.dataList}"
 						rowIndexVar="rowIndexMainTable"
@@ -108,7 +132,7 @@
 						<!--  DATA TABLE - HEADER -->
 						<f:facet name="header">
 							<p:outputLabel id="title"
-								value="Promotion Type Data - Click on 'show data button' to see the promotion consumption type relations" />
+								value="#{promotionConsumptionTypeDiscController.searchDataTableTitle}" />
 						</f:facet>
 
 						<!--  DATA TABLE - FOOTER -->
@@ -299,13 +323,13 @@
 								<p:selectOneMenu id="searchStatusFilterMenu"
 									onchange="PF('dataTableWidget').filter()">
 									<f:selectItems id="searchStatusFilterSelectItems"
-										value="#{promotionConsumptionTypeDiscController.statusSelectItems()}" />
+										value="#{promotionConsumptionTypeDiscController.statusCatalogSelectItems()}" />
 								</p:selectOneMenu>
 							</f:facet>
 							<p:selectOneMenu id="searchStatusOutput" editable="false"
 								disabled="true" immediate="true" value="#{dataTable.statusId}">
 								<f:selectItems
-									value="#{promotionConsumptionTypeDiscController.statusSelectItems()}"
+									value="#{promotionConsumptionTypeDiscController.statusCatalogSelectItems()}"
 									id="selectItemsSearchStatusOutput" itemDisabled="true"
 									var="Status" itemValue="#{dataTable.statusId}" />
 							</p:selectOneMenu>
@@ -442,7 +466,7 @@
 								disabled="true" immediate="true"
 								value="#{selectedDataTable.statusId}">
 								<f:selectItems
-									value="#{promotionConsumptionTypeDiscController.statusSelectItems()}"
+									value="#{promotionConsumptionTypeDiscController.statusCatalogSelectItems()}"
 									id="selectItemsSearchStatusOutput" itemDisabled="true"
 									var="Status" itemValue="#{selectedDataTable.statusId}" />
 							</p:selectOneMenu>
@@ -542,7 +566,7 @@
 								<p:selectOneMenu id="statusRelatedEntityFilterMenu"
 									onchange="PF('relatedTableWidget').filter()">
 									<f:selectItems id="statusRelatedEntityFilterSelectItems"
-										value="#{promotionConsumptionTypeDiscController.statusSelectItems()}" />
+										value="#{promotionConsumptionTypeDiscController.statusCatalogSelectItems()}" />
 								</p:selectOneMenu>
 							</f:facet>
 							<p:cellEditor id="statusRelatedEntityDataCellEditor">
@@ -551,7 +575,7 @@
 										editable="false" disabled="true" immediate="true"
 										value="#{relatedDataTable.promoConsumTypeDiscStatusId}">
 										<f:selectItems
-											value="#{promotionConsumptionTypeDiscController.statusSelectItems()}"
+											value="#{promotionConsumptionTypeDiscController.statusCatalogSelectItems()}"
 											id="selectItemsStatusOutputRelatedEntityData"
 											itemDisabled="true" var="StatusOutput"
 											itemValue="#{relatedDataTable.promoConsumTypeDiscStatusId}" />
@@ -562,7 +586,7 @@
 										value="#{relatedDataTable.promoConsumTypeDiscStatusId}"
 										immediate="true">
 										<f:selectItems
-											value="#{promotionConsumptionTypeDiscController.statusSelectItems()}"
+											value="#{promotionConsumptionTypeDiscController.statusCatalogSelectItems()}"
 											id="selectItemsStatusInputRelatedEntityData"
 											var="StatusInput"
 											itemValue="#{relatedDataTable.promoConsumTypeDiscStatusId}">
@@ -655,14 +679,14 @@
 								<p:selectOneMenu id="statusDependandFilterMenu"
 									onchange="PF('relatedTableWidget').filter()">
 									<f:selectItems id="statusRelatedDependantFilterSelectItems"
-										value="#{promotionConsumptionTypeDiscController.statusSelectItems()}" />
+										value="#{promotionConsumptionTypeDiscController.statusCatalogSelectItems()}" />
 								</p:selectOneMenu>
 							</f:facet>
 							<p:selectOneMenu id="statusRelatedDependantDataOutput"
 								editable="false" disabled="true" immediate="true"
 								value="#{relatedDataTable.consumptionTypeStatusId}">
 								<f:selectItems
-									value="#{promotionConsumptionTypeDiscController.statusSelectItems()}"
+									value="#{promotionConsumptionTypeDiscController.statusCatalogSelectItems()}"
 									id="selectItemsStatusOutputRelatedDependantData"
 									itemDisabled="true" var="Status"
 									itemValue="#{relatedDataTable.consumptionTypeStatusId}" />
@@ -802,14 +826,14 @@
 								<p:selectOneMenu id="statusCandidateMenu"
 									onchange="PF('candidateTableWidget').filter()">
 									<f:selectItems id="statusCandidateFilterSelectItems"
-										value="#{promotionConsumptionTypeDiscController.statusSelectItems()}" />
+										value="#{promotionConsumptionTypeDiscController.statusCatalogSelectItems()}" />
 								</p:selectOneMenu>
 							</f:facet>
 							<p:selectOneMenu id="statusCandidateDataOutput" editable="false"
 								disabled="true" immediate="true"
 								value="#{candidateDataTable.statusId}">
 								<f:selectItems
-									value="#{promotionConsumptionTypeDiscController.statusSelectItems()}"
+									value="#{promotionConsumptionTypeDiscController.statusCatalogSelectItems()}"
 									id="selectItemsStatusOutputCandidateData" itemDisabled="true"
 									var="Status" itemValue="#{candidateDataTable.statusId}" />
 							</p:selectOneMenu>

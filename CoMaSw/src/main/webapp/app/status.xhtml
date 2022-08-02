@@ -135,7 +135,7 @@
 				filterBy="#{dataTable.code}" filterMatchMode="contains">
 				<h:outputText id="codeOutput" value="#{dataTable.code}" />
 			</p:column>
-			
+
 			<p:column id="name"
 				style="font-family:Arial Black;
                                   text-align: left;
@@ -143,7 +143,7 @@
                                   width: 100px;    
                                   overflow: hidden"
 				headerText="NAME" rendered="true" sortBy="#{dataTable.name}"
-				filterBy="#{dataTable.name}" filterMatchMode="contains">			
+				filterBy="#{dataTable.name}" filterMatchMode="contains">
 				<p:cellEditor id="cellEditorName">
 					<f:facet id="facetNameOutput" name="output">
 						<h:outputText id="nameOutput" value="#{dataTable.name}" />
@@ -156,7 +156,7 @@
 					</f:facet>
 				</p:cellEditor>
 			</p:column>
-			
+
 			<p:column id="description"
 				style="font-family:Arial Black;
                                   text-align: left;
@@ -166,7 +166,7 @@
 				headerText="DESCRIPTION" rendered="true"
 				sortBy="#{dataTable.description}"
 				filterBy="#{dataTable.description}" filterMatchMode="contains">
-				
+
 				<p:cellEditor id="cellEditorDescription">
 					<f:facet id="facetDescriptionOutput" name="output">
 						<h:outputText id="descriptionOutput"
@@ -180,6 +180,80 @@
 					</f:facet>
 				</p:cellEditor>
 			</p:column>
+
+			<p:column id="catalog"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="CATALOG?" rendered="true"
+				filterBy="#{dataTable.catalog}" filterMatchMode="exact">
+				<f:facet id="catalogFilter" name="filter">
+					<p:selectOneMenu id="catalogFilterMenu"
+						onchange="PF('dataTableWidget').filter()">
+						<f:selectItems id="catalogFilterSelectItems"
+							value="#{statusController.booleanSelectItems()}" />
+					</p:selectOneMenu>
+				</f:facet>
+				<p:cellEditor id="catalogCellEditor">
+					<f:facet id="catalogOutputFacet" name="output">
+						<p:selectOneMenu id="catalogOutput" editable="false"
+							disabled="true" immediate="true" value="#{dataTable.catalog}">
+							<f:selectItems value="#{statusController.booleanSelectItems()}"
+								id="selectItemsCatalogOutput" itemDisabled="true" var="Catalog"
+								itemValue="#{dataTable.catalog}" />
+						</p:selectOneMenu>
+					</f:facet>
+					<f:facet id="catalogInputFacet" name="input">
+						<p:selectOneMenu id="catalogInput" value="#{dataTable.catalog}"
+							immediate="true">
+							<f:selectItems value="#{statusController.booleanSelectItems()}"
+								id="selectItemsCatalogInput" var="Catalog"
+								itemValue="#{dataTable.catalog}">
+							</f:selectItems>
+						</p:selectOneMenu>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column id="instance"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="INSTANCE?" rendered="true"
+				filterBy="#{dataTable.instance}" filterMatchMode="exact">
+				<f:facet id="instanceFilter" name="filter">
+					<p:selectOneMenu id="instanceFilterMenu"
+						onchange="PF('dataTableWidget').filter()">
+						<f:selectItems id="instanceFilterSelectItems"
+							value="#{statusController.booleanSelectItems()}" />
+					</p:selectOneMenu>
+				</f:facet>
+				<p:cellEditor id="instanceCellEditor">
+					<f:facet id="instanceOutputFacet" name="output">
+						<p:selectOneMenu id="instanceOutput" editable="false"
+							disabled="true" immediate="true" value="#{dataTable.instance}">
+							<f:selectItems value="#{statusController.booleanSelectItems()}"
+								id="selectItemsInstanceOutput" itemDisabled="true"
+								var="Instance" itemValue="#{dataTable.instance}" />
+						</p:selectOneMenu>
+					</f:facet>
+					<f:facet id="instanceInputFacet" name="input">
+						<p:selectOneMenu id="instanceInput" value="#{dataTable.instance}"
+							immediate="true">
+							<f:selectItems value="#{statusController.booleanSelectItems()}"
+								id="selectItemsInstanceInput" var="Instance"
+								itemValue="#{dataTable.instance}">
+							</f:selectItems>
+						</p:selectOneMenu>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+
 		</p:dataTable>
 
 		<!--  CREATE NEW DIALOG -->
@@ -202,6 +276,26 @@
 				<p:inputText id="newDescriptionInput" label="Description"
 					value="#{statusController.selectedData.description}">
 				</p:inputText>
+				
+				<p:outputLabel id="newCandidateLabel" value="Candidate?: " />
+				<p:selectOneMenu id="candidateInput"
+					value="#{statusController.selectedData.catalog}" immediate="true">
+					<f:selectItems value="#{statusController.booleanSelectItems()}"
+						id="selectItemsCandidateInput" var="Candidate"
+						itemValue="#{statusController.selectedData.catalog}">
+					</f:selectItems>
+				</p:selectOneMenu>
+				
+				<p:outputLabel id="newInstanceLabel" value="Instance?: " />
+				<p:selectOneMenu id="instanceInput"
+					value="#{statusController.selectedData.instance}" immediate="true">
+					<f:selectItems value="#{statusController.booleanSelectItems()}"
+						id="selectItemsInstanceInput" var="Instance"
+						itemValue="#{statusController.selectedData.instance}">
+					</f:selectItems>
+				</p:selectOneMenu>
+				
+				
 			</h:panelGrid>
 			<h:panelGrid id="createNewDialogPanelButtons" columns="3"
 				cellpadding="5">
@@ -228,8 +322,7 @@
 		<!--  DELETE ROW DIALOG -->
 		<p:confirmDialog global="true" styleClass="change-position"
 			showEffect="fade" responsive="true" widgetVar="deleteRowDialogWidget"
-			header="DELETE ROW"
-			message="Do you really want to delete this row?">
+			header="DELETE ROW" message="Do you really want to delete this row?">
 			<p:commandButton id="deleteDialogConfirm" value="#{uiValue.okLabel}"
 				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
 				actionListener="#{statusController.pushConfirmButtonDeleteDialog()}"

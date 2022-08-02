@@ -27,18 +27,18 @@ import com.comasw.exception.CoMaSwDataAccessException;
  */
 @Stateless
 public class ServiceTypeEJB implements ServiceTypeEJBLocal {
-	
+
 	Logger logger = (Logger) LogManager.getLogger(ServiceTypeEJB.class);
 
 	@Resource(lookup = "java:jboss/datasources/db_comasw")
 	private DataSource ds;
 
-    /**
-     * Default constructor. 
-     */
-    public ServiceTypeEJB() {
-        // TODO Auto-generated constructor stub
-    }
+	/**
+	 * Default constructor.
+	 */
+	public ServiceTypeEJB() {
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public List<CtServiceType> findAllData() throws CoMaSwDataAccessException {
@@ -47,10 +47,7 @@ public class ServiceTypeEJB implements ServiceTypeEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(CT_SERVICE_TYPE)
-					.orderBy(CT_SERVICE_TYPE.CODE)
-					.fetch()
-					.into(CtServiceType.class);		
+			result = create.selectFrom(CT_SERVICE_TYPE).orderBy(CT_SERVICE_TYPE.CODE).fetch().into(CtServiceType.class);
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find all the service types - " + e.getMessage();
@@ -66,14 +63,11 @@ public class ServiceTypeEJB implements ServiceTypeEJBLocal {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtServiceType> result = null;
 		String errorMessage;
-		
+
 		try {
-			result = create.selectFrom(CT_SERVICE_TYPE)
-					.where(CT_SERVICE_TYPE.SERVICE_TYPE_ID.eq(val(serviceTypeId)))
-					.orderBy(CT_SERVICE_TYPE.CODE)
-					.fetch()
-					.into(CtServiceType.class);
-			
+			result = create.selectFrom(CT_SERVICE_TYPE).where(CT_SERVICE_TYPE.SERVICE_TYPE_ID.eq(val(serviceTypeId)))
+					.orderBy(CT_SERVICE_TYPE.CODE).fetch().into(CtServiceType.class);
+
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the service type for service_type_id : " + serviceTypeId
 						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
@@ -81,15 +75,15 @@ public class ServiceTypeEJB implements ServiceTypeEJBLocal {
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
 				return result.get(0);
-			}				
+			}
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the service type for service_type_id: " + serviceTypeId + " - " + e.getMessage();
+			errorMessage = "Error while try to find the service type for service_type_id: " + serviceTypeId + " - "
+					+ e.getMessage();
 			logger.error(errorMessage);
-			throw new CoMaSwDataAccessException(errorMessage, e);		
+			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 
-		
 	}
 
 	@Override
@@ -97,15 +91,11 @@ public class ServiceTypeEJB implements ServiceTypeEJBLocal {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtServiceType> result = null;
 		String errorMessage;
-		
 
 		try {
-			result = create.selectFrom(CT_SERVICE_TYPE)
-					.where(CT_SERVICE_TYPE.CODE.eq(val(code)))
-					.orderBy(CT_SERVICE_TYPE.CODE)
-					.fetch()
-					.into(CtServiceType.class);
-			
+			result = create.selectFrom(CT_SERVICE_TYPE).where(CT_SERVICE_TYPE.CODE.eq(val(code)))
+					.orderBy(CT_SERVICE_TYPE.CODE).fetch().into(CtServiceType.class);
+
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the service type for code : " + code
 						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
@@ -113,60 +103,62 @@ public class ServiceTypeEJB implements ServiceTypeEJBLocal {
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
 				return result.get(0);
-			}				
+			}
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the service type for code " + code + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
 	public void insertData(CtServiceType dataObject) throws CoMaSwDataAccessException {
-		String errorMessage;		
+		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);			
-			CtServiceTypeDao daoObject = new CtServiceTypeDao(configuration);			
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
+			CtServiceTypeDao daoObject = new CtServiceTypeDao(configuration);
 			daoObject.insert(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error inserting the service type object (value: " + dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error inserting the service type object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
 	public void updateData(CtServiceType dataObject) throws CoMaSwDataAccessException {
 		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);		
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
 			CtServiceTypeDao daoObject = new CtServiceTypeDao(configuration);
 			daoObject.update(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error updating the service type object (value: " + dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error updating the service type object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
 	public void deleteData(CtServiceType dataObject) throws CoMaSwDataAccessException {
 		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);		
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
 			CtServiceTypeDao daoObject = new CtServiceTypeDao(configuration);
 			daoObject.delete(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error deleting the service type object (value: "
-					+ dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error deleting the service type object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
-			throw new CoMaSwDataAccessException(errorMessage, e);			
+			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 }

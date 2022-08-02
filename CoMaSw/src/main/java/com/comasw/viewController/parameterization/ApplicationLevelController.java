@@ -29,19 +29,17 @@ import com.comasw.ejb.parameterization.ApplicationLevelEJBLocal;
 import com.comasw.generalClass.BasicType;
 import com.comasw.interfaces.IEditableTable;
 
-@Named("applicationLevelController")
+@Named
 @ViewScoped
 /**
  * @author catuxa
  *
  */
-public class ApplicationLevelController extends BasicType<PtApplicationLevel>
-		implements Serializable, IEditableTable {
+public class ApplicationLevelController extends BasicType<PtApplicationLevel> implements Serializable, IEditableTable {
 
 	private static final long serialVersionUID = -6405489696326286188L;
 
 	Logger logger = (Logger) LogManager.getLogger(ApplicationLevelController.class);
-
 
 	@Inject
 	private ExternalContext externalContext;
@@ -51,27 +49,7 @@ public class ApplicationLevelController extends BasicType<PtApplicationLevel>
 	@EJB
 	private ApplicationLevelEJBLocal applicationLevelEJB;
 
-	/**
-	 * Selected data row in the table
-	 */
-	@Inject
-	private PtApplicationLevel selectedData;
-
-	// --------------------
-	// GETTERS AND SETTERS
-	// -------------------
-
-	public void setSelectedData(PtApplicationLevel selectedData) {
-		this.selectedData = selectedData;
-	}
-
-	/**
-	 * @return the selectedData
-	 */
-	public PtApplicationLevel getSelectedData() {
-		return selectedData;
-	}
-
+	
 	// -------------------
 	// METHODS
 	// -------------------
@@ -87,13 +65,12 @@ public class ApplicationLevelController extends BasicType<PtApplicationLevel>
 	public void init() {
 
 		if (this.getSelectedData() == null) {
-			this.setSelectedData (new PtApplicationLevel());
+			this.setSelectedData(new PtApplicationLevel());
 		}
 
 		if (this.getLoggedUser() == null) {
 			this.setLoggedUser((VwUsers) externalContext.getSessionMap().get("applicationUser"));
 		}
-
 
 	}
 
@@ -165,7 +142,7 @@ public class ApplicationLevelController extends BasicType<PtApplicationLevel>
 			if (this.objectValidation(dataObject)) {
 				applicationLevelEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";
-				logger.info("Update application level: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Update application level: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 				this.setControlVariablesToDefault();
 			} else {
@@ -205,20 +182,19 @@ public class ApplicationLevelController extends BasicType<PtApplicationLevel>
 	}
 
 	@Override
-	public void onRowCancel(RowEditEvent<?> event) {		
-		String message, messageDetail;		
+	public void onRowCancel(RowEditEvent<?> event) {
+		String message, messageDetail;
 		message = "CANCEL UPDATE ROW";
 		messageDetail = "Cancelled the edition of the application level";
-		
+
 		this.refreshDataTable();
 		this.setControlVariablesToDefault();
-		
+
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 	}
 
-	
 	@Override
 	public void pushDeleteRowButton() {
 		// TODO Auto-generated method stub
@@ -239,10 +215,10 @@ public class ApplicationLevelController extends BasicType<PtApplicationLevel>
 		Boolean error = false;
 
 		try {
-			if (objectValidation(this.selectedData)) {
-				applicationLevelEJB.insertData(this.selectedData);
+			if (objectValidation(this.getSelectedData())) {
+				applicationLevelEJB.insertData(this.getSelectedData());
 				messageDetail = "Data saves succesfully";
-				logger.info("Create application level: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Create application level: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 			} else {
@@ -277,7 +253,7 @@ public class ApplicationLevelController extends BasicType<PtApplicationLevel>
 				facesContext.validationFailed();
 			} else {
 				this.resetFilterDataTable();
-				this.loadDataList();				// 
+				this.loadDataList(); //
 				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();");
 			}
 		}
@@ -306,12 +282,12 @@ public class ApplicationLevelController extends BasicType<PtApplicationLevel>
 				applicationLevelEJB.deleteData(this.getSelectedData());
 				// this.selectedData = null;
 				messageDetail = "Data deletes succesfully";
-				logger.info("Delete application level data: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Delete application level data: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;
 				messageDetail = "ERROR - Selected data is null";
-				logger.fatal("Delete application level data: " + this.selectedData.getCode() + " - " + messageDetail);
+				logger.fatal("Delete application level data: " + this.getSelectedData().getCode() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_FATAL, message, messageDetail);
 
 			}
@@ -390,12 +366,11 @@ public class ApplicationLevelController extends BasicType<PtApplicationLevel>
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} else if (((Integer) objectToValidate.getCode().length())
-					.compareTo(BasicType.CODE_FIELD_LENGTH_MAX) > 0) {
+			} else if (((Integer) objectToValidate.getCode().length()).compareTo(BasicType.CODE_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The code of the application level (" + objectToValidate.getCode().length()
-						+ " characters) exceeds the limit of "
-						+ BasicType.CODE_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicType.CODE_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -405,12 +380,11 @@ public class ApplicationLevelController extends BasicType<PtApplicationLevel>
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} else if (((Integer) objectToValidate.getName().length())
-					.compareTo(BasicType.NAME_FIELD_LENGTH_MAX) > 0) {
+			} else if (((Integer) objectToValidate.getName().length()).compareTo(BasicType.NAME_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The name of the application level (" + objectToValidate.getName().length()
-						+ " characters) exceeds the limit of "
-						+ BasicType.NAME_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicType.NAME_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;

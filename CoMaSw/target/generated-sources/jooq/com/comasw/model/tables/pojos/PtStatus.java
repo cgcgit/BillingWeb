@@ -19,6 +19,8 @@ public class PtStatus implements IPtStatus {
     private String  code;
     private String  name;
     private String  description;
+    private Boolean catalog;
+    private Boolean instance;
 
     public PtStatus() {}
 
@@ -27,18 +29,24 @@ public class PtStatus implements IPtStatus {
         this.code = value.getCode();
         this.name = value.getName();
         this.description = value.getDescription();
+        this.catalog = value.getCatalog();
+        this.instance = value.getInstance();
     }
 
     public PtStatus(
         Integer statusId,
         String  code,
         String  name,
-        String  description
+        String  description,
+        Boolean catalog,
+        Boolean instance
     ) {
         this.statusId = statusId;
         this.code = code;
         this.name = name;
         this.description = description;
+        this.catalog = catalog;
+        this.instance = instance;
     }
 
     /**
@@ -105,6 +113,38 @@ public class PtStatus implements IPtStatus {
         this.description = description;
     }
 
+    /**
+     * Getter for <code>public.pt_status.catalog</code>. Indicates if the status applies to catalog entities
+     */
+    @Override
+    public Boolean getCatalog() {
+        return this.catalog;
+    }
+
+    /**
+     * Setter for <code>public.pt_status.catalog</code>. Indicates if the status applies to catalog entities
+     */
+    @Override
+    public void setCatalog(Boolean catalog) {
+        this.catalog = catalog;
+    }
+
+    /**
+     * Getter for <code>public.pt_status.instance</code>. Indicates if the status applies to instance entities
+     */
+    @Override
+    public Boolean getInstance() {
+        return this.instance;
+    }
+
+    /**
+     * Setter for <code>public.pt_status.instance</code>. Indicates if the status applies to instance entities
+     */
+    @Override
+    public void setInstance(Boolean instance) {
+        this.instance = instance;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("PtStatus (");
@@ -113,6 +153,8 @@ public class PtStatus implements IPtStatus {
         sb.append(", ").append(code);
         sb.append(", ").append(name);
         sb.append(", ").append(description);
+        sb.append(", ").append(catalog);
+        sb.append(", ").append(instance);
 
         sb.append(")");
         return sb.toString();
@@ -128,6 +170,8 @@ public class PtStatus implements IPtStatus {
         setCode(from.getCode());
         setName(from.getName());
         setDescription(from.getDescription());
+        setCatalog(from.getCatalog());
+        setInstance(from.getInstance());
     }
 
     @Override

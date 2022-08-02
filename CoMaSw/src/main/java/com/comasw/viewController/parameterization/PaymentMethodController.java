@@ -36,7 +36,7 @@ import com.comasw.interfaces.IEditableTable;
  *
  */
 public class PaymentMethodController extends BasicType<PtPaymentMethod> implements Serializable, IEditableTable {
-	
+
 	/**
 	 * 
 	 */
@@ -54,35 +54,8 @@ public class PaymentMethodController extends BasicType<PtPaymentMethod> implemen
 
 	@EJB
 	private PaymentMethodEJBLocal paymentMethodEJB;
-	
-	/**
-	 * Selected data row in the table
-	 */
-	@Inject
-	private PtPaymentMethod selectedData;
 
 	
-	// --------------------
-	// GETTERS AND SETTERS
-	// -------------------
-	
-	
-	/**
-	 * @return the selectedData
-	 */
-	public PtPaymentMethod getSelectedData() {
-		return selectedData;
-	}
-
-	/**
-	 * @param selectedData the selectedData to set
-	 */
-	public void setSelectedData(PtPaymentMethod selectedData) {
-		this.selectedData = selectedData;
-	}
-
-	
-
 	// -------------------
 	// METHODS
 	// -------------------
@@ -93,33 +66,30 @@ public class PaymentMethodController extends BasicType<PtPaymentMethod> implemen
 	public PaymentMethodController() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	@PostConstruct
 	public void init() {
 
-		if (selectedData == null) {
-			selectedData = new PtPaymentMethod();
+		if (this.getSelectedData() == null) {
+			setSelectedData( new PtPaymentMethod());
 		}
-		
 
 		if (this.getLoggedUser() == null) {
 			this.setLoggedUser((VwUsers) externalContext.getSessionMap().get("applicationUser"));
 		}
 
-
-		
 	}
 
 	@Override
 	public void loadDataList() {
-		this.setDataList (paymentMethodEJB.findAllData());
+		this.setDataList(paymentMethodEJB.findAllData());
 		if (this.getDataList().isEmpty()) {
 			logger.info("No data to show");
 
 		} else {
 			logger.info("Load data sucessful");
 		}
-		
+
 	}
 
 	@Override
@@ -135,7 +105,6 @@ public class PaymentMethodController extends BasicType<PtPaymentMethod> implemen
 
 		// Gets the backup of the data to modify
 		dataObject = (PtPaymentMethod) event.getObject();
-	
 
 		// If we are editing a row, we must disabled all the other buttons
 		this.editingMode = true;
@@ -150,7 +119,7 @@ public class PaymentMethodController extends BasicType<PtPaymentMethod> implemen
 		messageDetail = "Editing payment method: " + dataObject.getCode();
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
-		
+
 	}
 
 	@Override
@@ -170,9 +139,8 @@ public class PaymentMethodController extends BasicType<PtPaymentMethod> implemen
 			if (this.objectValidation(dataObject)) {
 				paymentMethodEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";
-				logger.info("Update payment method: " + this.selectedData.toString() + " - " + messageDetail);
-				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
-						messageDetail);
+				logger.info("Update payment method: " + this.getSelectedData().toString() + " - " + messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 				this.setControlVariablesToDefault();
 			} else {
 				messageDetail = "ERROR - Data values are incorrect";
@@ -203,42 +171,40 @@ public class PaymentMethodController extends BasicType<PtPaymentMethod> implemen
 		} finally {
 			if (error) {
 				FacesContext.getCurrentInstance().validationFailed();
-			} else {				
+			} else {
 				this.loadDataList();
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void onRowCancel(RowEditEvent<?> event) {
 
 		String message, messageDetail;
-		
+
 		message = "CANCEL UPDATE ROW";
 		messageDetail = "Cancelled the edition of the payment method";
-		
+
 		this.refreshDataTable();
 		this.setControlVariablesToDefault();
-		
+
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
-		
-	}
 
+	}
 
 	@Override
 	public void pushDeleteRowButton() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void pushCreateNewButton() {
-		this.selectedData = new PtPaymentMethod();
+		this.setSelectedData(new PtPaymentMethod());
 		PrimeFaces.current().executeScript("PF('createNewDialogWidget').show();");
-		
+
 	}
 
 	@Override
@@ -248,10 +214,10 @@ public class PaymentMethodController extends BasicType<PtPaymentMethod> implemen
 		Boolean error = false;
 
 		try {
-			if (objectValidation(this.selectedData)) {
-				paymentMethodEJB.insertData(this.selectedData);
+			if (objectValidation(this.getSelectedData())) {
+				paymentMethodEJB.insertData(this.getSelectedData());
 				messageDetail = "Data saves succesfully";
-				logger.info("Create payment method: " + this.selectedData.toString() + " - " +messageDetail);
+				logger.info("Create payment method: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 			} else {
@@ -290,19 +256,19 @@ public class PaymentMethodController extends BasicType<PtPaymentMethod> implemen
 				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();");
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void pushCancelButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pushCleanButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -312,16 +278,16 @@ public class PaymentMethodController extends BasicType<PtPaymentMethod> implemen
 		Boolean error = false;
 
 		try {
-			if (this.selectedData != null) {
-				paymentMethodEJB.deleteData(this.selectedData);
+			if (this.getSelectedData() != null) {
+				paymentMethodEJB.deleteData(this.getSelectedData());
 				// this.selectedData = null;
 				messageDetail = "Data deletes succesfully";
-				logger.info("Delete payment method data: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Delete payment method data: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;
 				messageDetail = "ERROR - Selected data is null";
-				logger.fatal("Delete payment method data: " + this.selectedData.getCode() + " - " + messageDetail);
+				logger.fatal("Delete payment method data: " + this.getSelectedData().getCode() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_FATAL, message, messageDetail);
 
 			}
@@ -357,19 +323,19 @@ public class PaymentMethodController extends BasicType<PtPaymentMethod> implemen
 				this.loadDataList();
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void pushCancelButtonDeleteDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resetObjectValues() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -400,12 +366,11 @@ public class PaymentMethodController extends BasicType<PtPaymentMethod> implemen
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} else if (((Integer) objectToValidate.getCode().length())
-					.compareTo(BasicType.CODE_FIELD_LENGTH_MAX) > 0) {
+			} else if (((Integer) objectToValidate.getCode().length()).compareTo(BasicType.CODE_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The code of the payment method (" + objectToValidate.getCode().length()
-						+ " characters) exceeds the limit of "
-						+ BasicType.CODE_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicType.CODE_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -415,12 +380,11 @@ public class PaymentMethodController extends BasicType<PtPaymentMethod> implemen
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} else if (((Integer) objectToValidate.getName().length())
-					.compareTo(BasicType.NAME_FIELD_LENGTH_MAX) > 0) {
+			} else if (((Integer) objectToValidate.getName().length()).compareTo(BasicType.NAME_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The name of the payment method (" + objectToValidate.getName().length()
-						+ " characters) exceeds the limit of "
-						+ BasicType.NAME_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicType.NAME_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -435,8 +399,7 @@ public class PaymentMethodController extends BasicType<PtPaymentMethod> implemen
 					.compareTo(BasicType.DESCRIPTION_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The description of the payment method ("
-						+ objectToValidate.getDescription().length()
-						+ " characters) exceeds the limit of "
+						+ objectToValidate.getDescription().length() + " characters) exceeds the limit of "
 						+ BasicType.DESCRIPTION_FIELD_LENGTH_MAX.toString() + " characters";
 
 				logger.error(messageDetail);
@@ -461,19 +424,19 @@ public class PaymentMethodController extends BasicType<PtPaymentMethod> implemen
 	@Override
 	public void retrieveBackupData() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void setInitVariablesToDefault() {
 		this.editingMode = false;
-		
+
 	}
 
 	@Override
 	public void setControlVariablesToDefault() {
 		this.setInitVariablesToDefault();
-		
+
 	}
 
 	@Override
@@ -489,5 +452,5 @@ public class PaymentMethodController extends BasicType<PtPaymentMethod> implemen
 		this.loadDataList();
 		Ajax.update(DATA_TABLE_ID);
 	}
-	
+
 }

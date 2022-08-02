@@ -1,7 +1,6 @@
 package com.comasw.exception;
 
-
-import static java.lang.String.format; 
+import static java.lang.String.format;
 
 /*
  *  source http://www.programcreek.com/java-api-examples/index.php?source_dir=steve-master/src/main/java/de/rwth/idsg/steve/SteveException.java
@@ -17,7 +16,6 @@ public class CoMaSwDataAccessException extends RuntimeException {
 	/**
 	 * 
 	 */
-	
 
 	public CoMaSwDataAccessException(String message) {
 		super(message);

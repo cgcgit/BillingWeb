@@ -73,19 +73,19 @@ public class ProductServiceTypeController
 	/**
 	 * Selected main data
 	 */
-	@Inject
+	
 	private CtProductType injectSelectedData;
 
 	/**
 	 * Selected candidate data
 	 */
-	@Inject
+	
 	private CtServiceType injectSelectedCandidateData;
 
 	/**
 	 * Selected related data
 	 */
-	@Inject
+	
 	private VwProductServiceType injectSelectedRelatedData;
 
 	// --------------------
@@ -319,7 +319,8 @@ public class ProductServiceTypeController
 
 			if (mainDataTable.getSelection() == null
 					|| ((CtServiceType) mainDataTable.getSelection()).getServiceTypeId() == null) {
-				messageDetail = "No selected service type to add for the product type " + this.getSelectedData().toString();
+				messageDetail = "No selected service type to add for the product type "
+						+ this.getSelectedData().toString();
 				logger.error(message + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message,
 						"The selected service type to add is null");
@@ -451,7 +452,7 @@ public class ProductServiceTypeController
 
 	@Override
 	public void refreshCandidateDataTable() {
-		if (this.isShowDependentData()) {
+		if (this.isShowDependentData()) {			
 			this.resetFilterCandidateDataTable();
 			this.loadCandidateDataList();
 			Ajax.update(CANDIDATE_DATA_TABLE_ID);
@@ -466,7 +467,7 @@ public class ProductServiceTypeController
 
 	@Override
 	public void refreshRelatedDataTable() {
-		if (this.isShowDependentData()) {
+		if (this.isShowDependentData()) {			
 			this.resetFilterRelatedDataTable();
 			this.loadRelatedDataList();
 			Ajax.update(RELATED_DATA_TABLE_ID);
@@ -489,8 +490,9 @@ public class ProductServiceTypeController
 
 		messageDetail = "Editing product_service_type: ";
 		logger.info(messageDetail + dataObject.toString());
-		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail
-				+ " for product: " + dataObjectView.getProductTypeCode() + " and service: " + dataObjectView.getServiceTypeCode());
+		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
+				messageDetail + " for product: " + dataObjectView.getProductTypeCode() + " and service: "
+						+ dataObjectView.getServiceTypeCode());
 
 	}
 
@@ -514,8 +516,8 @@ public class ProductServiceTypeController
 
 			productServiceTypeEJB.updateData(dataObject);
 			messageDetail = "Data saves correctly";
-			logger.info(
-					"Update the status of the product_service_type_id  " + dataObject.toString() + " - " + messageDetail);
+			logger.info("Update the status of the product_service_type_id  " + dataObject.toString() + " - "
+					+ messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 		} catch (EJBException e) {
@@ -547,7 +549,6 @@ public class ProductServiceTypeController
 				this.loadRelatedDataList();
 			}
 		}
-
 
 	}
 

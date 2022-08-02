@@ -4,7 +4,7 @@
 
 	<Properties>
 		<!-- Directorio de almacenamiento del registro Log -->
-		<Property name="path">/home/catuxa/TFG/eclipse-workspace/CoMaSwLog</Property>
+		<Property name="path">./CoMaSwLog</Property>
 	</Properties>
 	<Appenders>
 		<!-- Salida por consola -->
@@ -34,7 +34,5 @@
 			<AppenderRef ref="RollingFile" />
 		</Root>
 	</Loggers>
-
-
 
 </Configuration>

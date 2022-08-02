@@ -35,24 +35,21 @@ import com.comasw.ejb.parameterization.ConsumptionClassEJBLocal;
 import com.comasw.generalClass.BasicTypeWithLists;
 import com.comasw.interfaces.IEditableTable;
 
-
 @Named
 @ViewScoped
 /**
  * @author catuxa
  *
  */
-public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionType> implements Serializable, IEditableTable {
-	
+public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionType>
+		implements Serializable, IEditableTable {
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -7633206842987369754L;
 
-	
 	Logger logger = (Logger) LogManager.getLogger(ConsumptionTypeController.class);
-
-
 
 	@Inject
 	private ExternalContext externalContext;
@@ -61,59 +58,30 @@ public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionT
 
 	@EJB
 	private ConsumptionTypeEJBLocal consumptionTypeEJB;
-	
+
 	@EJB
 	private ConsumptionClassEJBLocal consumptionClassEJB;
+
 	
-	
-	/**
-	 * Selected data row in the table
-	 */
-	@Inject
-	private CtConsumptionType selectedData;
-
-	// --------------------
-	// GETTERS AND SETTERS
-	// -------------------
-	
-	
-
-	/**
-	 * @return the selectedData
-	 */
-	public CtConsumptionType getSelectedData() {
-		return selectedData;
-	}
-
-	/**
-	 * @param selectedData the selectedData to set
-	 */
-	public void setSelectedData(CtConsumptionType selectedData) {
-		this.selectedData = selectedData;
-	}
-
-
 
 	// -------------------
 	// METHODS
 	// -------------------
-	
+
 	/**
 	 * 
 	 */
 	public ConsumptionTypeController() {
 		// TODO Auto-generated constructor stub
 	}
-	
 
 	@PostConstruct
 	public void init() {
 
-		if (selectedData == null) {
-			selectedData = new CtConsumptionType();
+		if (this.getSelectedData() == null) {
+			setSelectedData(new CtConsumptionType());
 		}
 
-		
 		if (this.getLoggedUser() == null) {
 			this.setLoggedUser((VwUsers) externalContext.getSessionMap().get("applicationUser"));
 		}
@@ -129,7 +97,7 @@ public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionT
 		} else {
 			logger.info("Load data sucessful");
 		}
-		
+
 	}
 
 	@Override
@@ -145,7 +113,7 @@ public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionT
 
 		// Gets the backup of the data to modify
 		dataObject = (CtConsumptionType) event.getObject();
-		
+
 		// If we are editing a row, we must disabled all the other buttons
 		this.editingMode = true;
 
@@ -160,7 +128,7 @@ public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionT
 		messageDetail = "Editing consumption type: " + dataObject.getCode();
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
-		
+
 	}
 
 	@Override
@@ -174,18 +142,17 @@ public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionT
 		// Retrieved the data that was modified
 		dataObject = (CtConsumptionType) event.getObject();
 
-				
 		try {
 
 			// Validates the data
 			if (this.objectValidation(dataObject)) {
-				//sets the modif data
-				this.selectedData.setModifUser(this.loggedUser.getUserCode());
-				this.selectedData.setModifDate(LocalDateTime.now());
-				
+				// sets the modif data
+				this.getSelectedData().setModifUser(this.loggedUser.getUserCode());
+				this.getSelectedData().setModifDate(LocalDateTime.now());
+
 				consumptionTypeEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";
-				logger.info("Update consumption type: " + this.selectedData.toString() + " - " +messageDetail);
+				logger.info("Update consumption type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 				this.setControlVariablesToDefault();
 			} else {
@@ -217,7 +184,7 @@ public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionT
 		} finally {
 			if (error) {
 				FacesContext.getCurrentInstance().validationFailed();
-			} else {				
+			} else {
 				this.loadDataList();
 			}
 		}
@@ -229,27 +196,26 @@ public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionT
 
 		message = "CANCEL UPDATE ROW";
 		messageDetail = "Cancelled the edition of the consumption type";
-		
+
 		this.refreshDataTable();
 		this.setControlVariablesToDefault();
-		
+
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
-		
+
 	}
 
 	@Override
 	public void pushDeleteRowButton() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void pushCreateNewButton() {
-		this.selectedData = new CtConsumptionType();
+		this.setSelectedData( new CtConsumptionType());
 		PrimeFaces.current().executeScript("PF('createNewDialogWidget').show();");
-		
+
 	}
 
 	@Override
@@ -259,15 +225,15 @@ public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionT
 		Boolean error = false;
 
 		try {
-			if (objectValidation(this.selectedData)) {
-				//Set create values
-				
-				this.selectedData.setInputUser(this.loggedUser.getUserCode());
-				this.selectedData.setInputDate(LocalDateTime.now());
-				
-				consumptionTypeEJB.insertData(this.selectedData);
+			if (objectValidation(this.getSelectedData())) {
+				// Set create values
+
+				this.getSelectedData().setInputUser(this.loggedUser.getUserCode());
+				this.getSelectedData().setInputDate(LocalDateTime.now());
+
+				consumptionTypeEJB.insertData(this.getSelectedData());
 				messageDetail = "Data saves succesfully";
-				logger.info("Create consumption type: " + this.selectedData.toString() + " - " +messageDetail);
+				logger.info("Create consumption type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 			} else {
@@ -303,23 +269,22 @@ public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionT
 			} else {
 				this.resetFilterDataTable();
 				this.loadDataList();
-				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();"); 
+				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();");
 			}
 		}
-		
-		
+
 	}
 
 	@Override
 	public void pushCancelButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pushCleanButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -329,10 +294,10 @@ public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionT
 		Boolean error = false;
 
 		try {
-			if (this.selectedData != null) {
-				consumptionTypeEJB.deleteData(this.selectedData);				
+			if (this.getSelectedData() != null) {
+				consumptionTypeEJB.deleteData(this.getSelectedData());
 				messageDetail = "Data deletes succesfully";
-				logger.info("Delete consumption type: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Delete consumption type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;
@@ -373,20 +338,19 @@ public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionT
 				this.loadDataList();
 			}
 		}
-		
-		
+
 	}
 
 	@Override
 	public void pushCancelButtonDeleteDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resetObjectValues() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -410,8 +374,8 @@ public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionT
 
 			if (objectToValidate.getDescription() != null) {
 				objectToValidate.setDescription(objectToValidate.getDescription().trim());
-			}		
-			
+			}
+
 			if (objectToValidate.getCode() == null || objectToValidate.getCode().length() == 0) {
 				messageDetail = "ERROR - The code of the consumption type can not be null";
 				logger.error(messageDetail);
@@ -421,8 +385,8 @@ public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionT
 					.compareTo(BasicTypeWithLists.CODE_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The code of the consumption type (" + objectToValidate.getCode().length()
-						+ " characters) exceeds the limit of "
-						+ BasicTypeWithLists.CODE_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicTypeWithLists.CODE_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -436,8 +400,8 @@ public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionT
 					.compareTo(BasicTypeWithLists.NAME_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The name of the consumption type (" + objectToValidate.getName().length()
-						+ " characters) exceeds the limit of "
-						+ BasicTypeWithLists.NAME_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicTypeWithLists.NAME_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -452,30 +416,27 @@ public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionT
 					.compareTo(BasicTypeWithLists.DESCRIPTION_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The description of the consumption type ("
-						+ objectToValidate.getDescription().length()
-						+ " characters) exceeds the limit of "
+						+ objectToValidate.getDescription().length() + " characters) exceeds the limit of "
 						+ BasicTypeWithLists.DESCRIPTION_FIELD_LENGTH_MAX.toString() + " characters";
 
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
 			}
-			
+
 			if (objectToValidate.getConsumptionClassId() == null) {
 				result = false;
 				messageDetail = "ERROR - The consumption class can not be null";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			}
-			
-			
+
 			if (objectToValidate.getStatusId() == null) {
 				result = false;
 				messageDetail = "ERROR - The status can not be null";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			}
-			
 
 			if (result) {
 				// no error --> update panel
@@ -494,21 +455,21 @@ public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionT
 	@Override
 	public void retrieveBackupData() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void setInitVariablesToDefault() {
 		this.editingMode = false;
-		
+
 	}
 
 	@Override
 	public void setControlVariablesToDefault() {
 		this.setInitVariablesToDefault();
-		
+
 	}
-	
+
 	/*
 	 * Return the list of select items with the consumption class data
 	 */
@@ -534,7 +495,7 @@ public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionT
 		}
 		return selectItem;
 	}
-	
+
 	@Override
 	public void resetFilterDataTable() {
 		PrimeFaces current = PrimeFaces.current();
@@ -548,7 +509,5 @@ public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionT
 		this.loadDataList();
 		Ajax.update(DATA_TABLE_ID);
 	}
-
-	
 
 }

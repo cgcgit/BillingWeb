@@ -4,6 +4,8 @@
 package com.comasw.viewController.parameterization;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -11,6 +13,7 @@ import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
+import javax.faces.model.SelectItem;
 import javax.faces.validator.ValidatorException;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -36,12 +39,10 @@ import com.comasw.interfaces.IEditableTable;
  *
  */
 public class StatusController extends BasicType<PtStatus> implements Serializable, IEditableTable {
-	
-	
+
 	private static final long serialVersionUID = -2801892213420300788L;
 
 	Logger logger = (Logger) LogManager.getLogger(StatusController.class);
-
 
 	@Inject
 	private ExternalContext externalContext;
@@ -51,61 +52,30 @@ public class StatusController extends BasicType<PtStatus> implements Serializabl
 	@EJB
 	private StatusEJBLocal statusEJB;
 
-	/**
-	 * Selected data row in the table
-	 */
-	@Inject
-	private PtStatus selectedData;
-
-
 	
-	// --------------------
-	// GETTERS AND SETTERS
-	// -------------------
-	
-
-	/**
-	 * @return the selectedData
-	 */
-	public PtStatus getSelectedData() {
-		return selectedData;
-	}
-
-
-	/**
-	 * @param selectedData the selectedData to set
-	 */
-	public void setSelectedData(PtStatus selectedData) {
-		this.selectedData = selectedData;
-	}
-
-
 	// -------------------
 	// METHODS
 	// -------------------
-	
+
 	/**
 	 * 
 	 */
 	public StatusController() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	@PostConstruct
 	public void init() {
 
-		if (selectedData == null) {
-			selectedData = new PtStatus();
+		if (this.getSelectedData() == null) {
+			this.setSelectedData( new PtStatus());
 		}
-
 
 		if (this.getLoggedUser() == null) {
 			this.setLoggedUser((VwUsers) externalContext.getSessionMap().get("applicationUser"));
 		}
 
-
 	}
-	
 
 	@Override
 	public void loadDataList() {
@@ -116,7 +86,7 @@ public class StatusController extends BasicType<PtStatus> implements Serializabl
 		} else {
 			logger.info("Load data sucessful");
 		}
-		
+
 	}
 
 	@Override
@@ -132,7 +102,7 @@ public class StatusController extends BasicType<PtStatus> implements Serializabl
 
 		// Gets the backup of the data to modify
 		dataObject = (PtStatus) event.getObject();
-		
+
 		// If we are editing a row, we must disabled all the other buttons
 		this.editingMode = true;
 
@@ -148,7 +118,6 @@ public class StatusController extends BasicType<PtStatus> implements Serializabl
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
-		
 	}
 
 	@Override
@@ -161,14 +130,14 @@ public class StatusController extends BasicType<PtStatus> implements Serializabl
 
 		// Retrieved the data that was modified
 		dataObject = (PtStatus) event.getObject();
-	
+
 		try {
 
 			// Validates the data
 			if (this.objectValidation(dataObject)) {
 				statusEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";
-				logger.info("Update status: " + this.selectedData.toString() + " - " +messageDetail);
+				logger.info("Update status: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 				this.setControlVariablesToDefault();
 			} else {
@@ -200,39 +169,39 @@ public class StatusController extends BasicType<PtStatus> implements Serializabl
 		} finally {
 			if (error) {
 				FacesContext.getCurrentInstance().validationFailed();
-			} else {				
+			} else {
 				this.loadDataList();
 			}
 		}
-		
+
 	}
 
 	@Override
-	public void onRowCancel(RowEditEvent<?> event) {		
+	public void onRowCancel(RowEditEvent<?> event) {
 		String message, messageDetail;
 
 		message = "CANCEL UPDATE ROW";
 		messageDetail = "Cancelled the edition of the status";
-		
+
 		this.refreshDataTable();
 		this.setControlVariablesToDefault();
-		
+
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
-		
+
 	}
 
 	@Override
 	public void pushDeleteRowButton() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pushCreateNewButton() {
-		this.selectedData = new PtStatus();
+		this.setSelectedData(new PtStatus());
 		PrimeFaces.current().executeScript("PF('createNewDialogWidget').show();");
-		
+
 	}
 
 	@Override
@@ -242,10 +211,10 @@ public class StatusController extends BasicType<PtStatus> implements Serializabl
 		Boolean error = false;
 
 		try {
-			if (objectValidation(this.selectedData)) {
-				statusEJB.insertData(this.selectedData);
+			if (objectValidation(this.getSelectedData())) {
+				statusEJB.insertData(this.getSelectedData());
 				messageDetail = "Data saves succesfully";
-				logger.info("Create status: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Create status: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 			} else {
@@ -281,22 +250,22 @@ public class StatusController extends BasicType<PtStatus> implements Serializabl
 			} else {
 				this.resetFilterDataTable();
 				this.loadDataList();
-				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();"); 
+				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();");
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void pushCancelButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pushCleanButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -306,10 +275,10 @@ public class StatusController extends BasicType<PtStatus> implements Serializabl
 		Boolean error = false;
 
 		try {
-			if (this.selectedData != null) {
-				statusEJB.deleteData(this.selectedData);
+			if (this.getSelectedData() != null) {
+				statusEJB.deleteData(this.getSelectedData());
 				messageDetail = "Data deletes succesfully";
-				logger.info("Delete status: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Delete status: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;
@@ -350,19 +319,19 @@ public class StatusController extends BasicType<PtStatus> implements Serializabl
 				this.loadDataList();
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void pushCancelButtonDeleteDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resetObjectValues() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -393,12 +362,11 @@ public class StatusController extends BasicType<PtStatus> implements Serializabl
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} else if (((Integer) objectToValidate.getCode().length())
-					.compareTo(BasicType.CODE_FIELD_LENGTH_MAX) > 0) {
+			} else if (((Integer) objectToValidate.getCode().length()).compareTo(BasicType.CODE_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The code of the status (" + objectToValidate.getCode().length()
-						+ " characters) exceeds the limit of "
-						+ BasicType.CODE_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicType.CODE_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -408,12 +376,11 @@ public class StatusController extends BasicType<PtStatus> implements Serializabl
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} else if (((Integer) objectToValidate.getName().length())
-					.compareTo(BasicType.NAME_FIELD_LENGTH_MAX) > 0) {
+			} else if (((Integer) objectToValidate.getName().length()).compareTo(BasicType.NAME_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The name of the status (" + objectToValidate.getName().length()
-						+ " characters) exceeds the limit of "
-						+ BasicType.NAME_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicType.NAME_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -427,14 +394,27 @@ public class StatusController extends BasicType<PtStatus> implements Serializabl
 			} else if (((Integer) objectToValidate.getDescription().length())
 					.compareTo(BasicType.DESCRIPTION_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
-				messageDetail = "Error - The description of the status ("
-						+ objectToValidate.getDescription().length()
-						+ " characters) exceeds the limit of "
-						+ BasicType.DESCRIPTION_FIELD_LENGTH_MAX.toString() + " characters";
+				messageDetail = "Error - The description of the status (" + objectToValidate.getDescription().length()
+						+ " characters) exceeds the limit of " + BasicType.DESCRIPTION_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
+			}
+			
+			if (objectToValidate.getCatalog() == null) {
+				result = false;
+				messageDetail = "ERROR - The candidate scope flag can not be null";
+				logger.error(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
+			}
+
+			if (objectToValidate.getInstance() == null) {
+				result = false;
+				messageDetail = "ERROR - The instance scope flag can not be null";
+				logger.error(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			}
 
 			if (result) {
@@ -454,9 +434,9 @@ public class StatusController extends BasicType<PtStatus> implements Serializabl
 	@Override
 	public void retrieveBackupData() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
 	public void setInitVariablesToDefault() {
 		this.editingMode = false;
@@ -479,5 +459,30 @@ public class StatusController extends BasicType<PtStatus> implements Serializabl
 		this.resetFilterDataTable();
 		this.loadDataList();
 		Ajax.update(DATA_TABLE_ID);
+	}
+	
+	/**
+	 * boolean list
+	 * @return boolean list
+	 */
+	public List<SelectItem> booleanSelectItems() {
+		List<SelectItem> selectItem = new ArrayList<>();
+
+		SelectItem nullItem = new SelectItem();
+		nullItem.setLabel("Select One... ");
+		nullItem.setValue(null);
+		selectItem.add(nullItem);
+
+		SelectItem trueItem = new SelectItem();
+		trueItem.setLabel("True");
+		trueItem.setValue(true);
+		selectItem.add(trueItem);
+
+		SelectItem falseItem = new SelectItem();
+		falseItem.setLabel("False");
+		falseItem.setValue(false);
+		selectItem.add(falseItem);
+
+		return selectItem;
 	}
 }

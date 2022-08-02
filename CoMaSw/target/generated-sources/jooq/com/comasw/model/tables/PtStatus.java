@@ -15,7 +15,7 @@ import org.jooq.Field;
 import org.jooq.ForeignKey;
 import org.jooq.Name;
 import org.jooq.Record;
-import org.jooq.Row4;
+import org.jooq.Row6;
 import org.jooq.Schema;
 import org.jooq.Table;
 import org.jooq.TableField;
@@ -66,6 +66,16 @@ public class PtStatus extends TableImpl<PtStatusRecord> {
      * The column <code>public.pt_status.description</code>. Description for the status
      */
     public final TableField<PtStatusRecord, String> DESCRIPTION = createField(DSL.name("description"), SQLDataType.VARCHAR(500).nullable(false), this, "Description for the status");
+
+    /**
+     * The column <code>public.pt_status.catalog</code>. Indicates if the status applies to catalog entities
+     */
+    public final TableField<PtStatusRecord, Boolean> CATALOG = createField(DSL.name("catalog"), SQLDataType.BOOLEAN.nullable(false), this, "Indicates if the status applies to catalog entities");
+
+    /**
+     * The column <code>public.pt_status.instance</code>. Indicates if the status applies to instance entities
+     */
+    public final TableField<PtStatusRecord, Boolean> INSTANCE = createField(DSL.name("instance"), SQLDataType.BOOLEAN.nullable(false), this, "Indicates if the status applies to instance entities");
 
     private PtStatus(Name alias, Table<PtStatusRecord> aliased) {
         this(alias, aliased, null);
@@ -142,11 +152,11 @@ public class PtStatus extends TableImpl<PtStatusRecord> {
     }
 
     // -------------------------------------------------------------------------
-    // Row4 type methods
+    // Row6 type methods
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<Integer, String, String, String> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Row6<Integer, String, String, String, Boolean, Boolean> fieldsRow() {
+        return (Row6) super.fieldsRow();
     }
 }

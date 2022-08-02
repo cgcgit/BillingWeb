@@ -38,7 +38,6 @@ import com.comasw.interfaces.IEditableTable;
  */
 public class CustomerTypeController extends BasicTypeWithLists<CtCustomerType> implements Serializable, IEditableTable {
 
-
 	/**
 	 * 
 	 */
@@ -48,11 +47,8 @@ public class CustomerTypeController extends BasicTypeWithLists<CtCustomerType> i
 
 	String DATA_TABLE_ID = "form:" + BasicTypeWithLists.uiValues.getString("dataTableID");
 	String NEW_PANEL_DATA_ID = "form:" + BasicTypeWithLists.uiValues.getString("newPanelDataID");
-	
-	private static final Integer ENTITY_TYPE_ID = Integer
-			.valueOf(dbDefinitions.getString("ENTITY_TYPE_ID_CUST"));
-	
-	
+
+	private static final Integer ENTITY_TYPE_ID = Integer.valueOf(dbDefinitions.getString("ENTITY_TYPE_ID_CUST"));
 
 	@Inject
 	private ExternalContext externalContext;
@@ -61,81 +57,43 @@ public class CustomerTypeController extends BasicTypeWithLists<CtCustomerType> i
 
 	@EJB
 	private CustomerTypeEJBLocal customerTypeEJB;
-	
-	
-	/**
-	 * Selected data row in the table
-	 */
-	@Inject
-	private CtCustomerType selectedData;
-
-	
-	
-	// --------------------
-	// GETTERS AND SETTERS
-	// -------------------
-
-	
-	/**
-	 * @return the selectedData
-	 */
-	public CtCustomerType getSelectedData() {
-		return selectedData;
-	}
-
-
-	/**
-	 * @param selectedData the selectedData to set
-	 */
-	public void setSelectedData(CtCustomerType selectedData) {
-		this.selectedData = selectedData;
-	}
-
 
 	
 	// -------------------
 	// METHODS
 	// -------------------
-	
-	
-	
+
 	/**
 	 * 
 	 */
 	public CustomerTypeController() {
 		// TODO Auto-generated constructor stub
 	}
-	
-	
+
 	@PostConstruct
 	public void init() {
 
-		if (selectedData == null) {
-			selectedData = new CtCustomerType();
+		if (getSelectedData() == null) {
+			setSelectedData(new CtCustomerType());
 		}
 
-		
 		if (this.getLoggedUser() == null) {
 			this.setLoggedUser((VwUsers) externalContext.getSessionMap().get("applicationUser"));
 		}
-
 
 	}
 
 	@Override
 	public void loadDataList() {
-		this.setDataList( customerTypeEJB.findAllData());
+		this.setDataList(customerTypeEJB.findAllData());
 		if (this.getDataList().isEmpty()) {
 			logger.info("No data to show");
 
 		} else {
 			logger.info("Load data sucessful");
 		}
-		
-		
+
 	}
-
-
 
 	@Override
 	public void onRowInit(RowEditEvent<?> event) {
@@ -165,10 +123,8 @@ public class CustomerTypeController extends BasicTypeWithLists<CtCustomerType> i
 		messageDetail = "Editing customer type: " + dataObject.getCode();
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
-		
-		
-	}
 
+	}
 
 	@Override
 	public void onRowEdit(RowEditEvent<?> event) throws ValidatorException {
@@ -181,18 +137,17 @@ public class CustomerTypeController extends BasicTypeWithLists<CtCustomerType> i
 		// Retrieved the data that was modified
 		dataObject = (CtCustomerType) event.getObject();
 
-				
 		try {
 
 			// Validates the data
 			if (this.objectValidation(dataObject)) {
-				//sets the modif data
-				this.selectedData.setModifUser(this.loggedUser.getUserCode());
-				this.selectedData.setModifDate(LocalDateTime.now());
-				
+				// sets the modif data
+				this.getSelectedData().setModifUser(this.loggedUser.getUserCode());
+				this.getSelectedData().setModifDate(LocalDateTime.now());
+
 				customerTypeEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";
-				logger.info("Update customer type: " + this.selectedData.toString() + " - " +messageDetail);
+				logger.info("Update customer type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 				this.setControlVariablesToDefault();
 			} else {
@@ -224,13 +179,12 @@ public class CustomerTypeController extends BasicTypeWithLists<CtCustomerType> i
 		} finally {
 			if (error) {
 				FacesContext.getCurrentInstance().validationFailed();
-			} else {				
+			} else {
 				this.loadDataList();
 			}
 		}
-		
-	}
 
+	}
 
 	@Override
 	public void onRowCancel(RowEditEvent<?> event) {
@@ -238,31 +192,27 @@ public class CustomerTypeController extends BasicTypeWithLists<CtCustomerType> i
 
 		message = "CANCEL UPDATE ROW";
 		messageDetail = "Cancelled the edition of the customer type";
-		
+
 		this.refreshDataTable();
 		this.setControlVariablesToDefault();
-		
+
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 	}
 
-
-
 	@Override
 	public void pushDeleteRowButton() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void pushCreateNewButton() {
-		this.selectedData = new CtCustomerType();
+		this.setSelectedData(new CtCustomerType());
 		PrimeFaces.current().executeScript("PF('createNewDialogWidget').show();");
-		
-	}
 
+	}
 
 	@Override
 	public void pushConfirmButtonCreateNewDialog() {
@@ -271,16 +221,16 @@ public class CustomerTypeController extends BasicTypeWithLists<CtCustomerType> i
 		Boolean error = false;
 
 		try {
-			if (objectValidation(this.selectedData)) {
-				//Set create values
-				
-				this.selectedData.setEntityTypeId(ENTITY_TYPE_ID);
-				this.selectedData.setInputUser(this.loggedUser.getUserCode());
-				this.selectedData.setInputDate(LocalDateTime.now());
-				
-				customerTypeEJB.insertData(this.selectedData);
+			if (objectValidation(this.getSelectedData())) {
+				// Set create values
+
+				this.getSelectedData().setEntityTypeId(ENTITY_TYPE_ID);
+				this.getSelectedData().setInputUser(this.loggedUser.getUserCode());
+				this.getSelectedData().setInputDate(LocalDateTime.now());
+
+				customerTypeEJB.insertData(this.getSelectedData());
 				messageDetail = "Data saves succesfully";
-				logger.info("Create customer type: " + this.selectedData.toString() + " - " +messageDetail);
+				logger.info("Create customer type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 			} else {
@@ -316,26 +266,23 @@ public class CustomerTypeController extends BasicTypeWithLists<CtCustomerType> i
 			} else {
 				this.resetFilterDataTable();
 				this.loadDataList();
-				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();"); 
+				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();");
 			}
 		}
-		
-	}
 
+	}
 
 	@Override
 	public void pushCancelButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void pushCleanButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void pushConfirmButtonDeleteDialog() {
@@ -344,10 +291,10 @@ public class CustomerTypeController extends BasicTypeWithLists<CtCustomerType> i
 		Boolean error = false;
 
 		try {
-			if (this.selectedData != null) {
-				customerTypeEJB.deleteData(this.selectedData);
+			if (this.getSelectedData() != null) {
+				customerTypeEJB.deleteData(this.getSelectedData());
 				messageDetail = "Data deletes succesfully";
-				logger.info("Delete customer type: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Delete customer type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;
@@ -388,23 +335,20 @@ public class CustomerTypeController extends BasicTypeWithLists<CtCustomerType> i
 				this.loadDataList();
 			}
 		}
-		
-	}
 
+	}
 
 	@Override
 	public void pushCancelButtonDeleteDialog() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void resetObjectValues() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public boolean objectValidation(Object dataObject) {
@@ -427,8 +371,8 @@ public class CustomerTypeController extends BasicTypeWithLists<CtCustomerType> i
 
 			if (objectToValidate.getDescription() != null) {
 				objectToValidate.setDescription(objectToValidate.getDescription().trim());
-			}		
-			
+			}
+
 			if (objectToValidate.getCode() == null || objectToValidate.getCode().length() == 0) {
 				messageDetail = "ERROR - The code of the customer type can not be null";
 				logger.error(messageDetail);
@@ -438,8 +382,8 @@ public class CustomerTypeController extends BasicTypeWithLists<CtCustomerType> i
 					.compareTo(BasicTypeWithLists.CODE_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The code of the customer type (" + objectToValidate.getCode().length()
-						+ " characters) exceeds the limit of "
-						+ BasicTypeWithLists.CODE_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicTypeWithLists.CODE_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -453,8 +397,8 @@ public class CustomerTypeController extends BasicTypeWithLists<CtCustomerType> i
 					.compareTo(BasicTypeWithLists.NAME_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The name of the customer type (" + objectToValidate.getName().length()
-						+ " characters) exceeds the limit of "
-						+ BasicTypeWithLists.NAME_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicTypeWithLists.NAME_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -469,23 +413,20 @@ public class CustomerTypeController extends BasicTypeWithLists<CtCustomerType> i
 					.compareTo(BasicTypeWithLists.DESCRIPTION_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The description of the customer type ("
-						+ objectToValidate.getDescription().length()
-						+ " characters) exceeds the limit of "
+						+ objectToValidate.getDescription().length() + " characters) exceeds the limit of "
 						+ BasicTypeWithLists.DESCRIPTION_FIELD_LENGTH_MAX.toString() + " characters";
 
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
 			}
-			
-			
+
 			if (objectToValidate.getStatusId() == null) {
 				result = false;
 				messageDetail = "ERROR - The status can not be null";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			}
-			
 
 			if (result) {
 				// no error --> update panel
@@ -501,25 +442,22 @@ public class CustomerTypeController extends BasicTypeWithLists<CtCustomerType> i
 		return result;
 	}
 
-
 	@Override
 	public void retrieveBackupData() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void setInitVariablesToDefault() {
 		this.editingMode = false;
-		
-	}
 
+	}
 
 	@Override
 	public void setControlVariablesToDefault() {
 		this.setInitVariablesToDefault();
-		
+
 	}
 
 	@Override

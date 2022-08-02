@@ -3,29 +3,26 @@
  */
 package com.comasw.generalClass;
 
-
 import java.util.List;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 
-
 /**
  * @author catuxa
  *
  */
-public class BasicType <T> extends BasicClass {
-	
+public class BasicType<T> extends BasicClass {
+
 	Logger logger = (Logger) LogManager.getLogger(BasicType.class);
-	
+
 	protected static String DATA_TABLE_ID = "form:" + uiValues.getString("dataTableID");
 	protected static String NEW_PANEL_DATA_ID = "form:" + uiValues.getString("newPanelDataID");
-	
-    protected static Integer STATUS_ID_CANC = Integer.valueOf(dbDefinitions.getString("STATUS_ID_CANC"));
-	
-    protected static String ACTIVE_STATUS_CODE = dbDefinitions.getString("STATUS_CODE_ACT");
 
-	
+	protected static Integer STATUS_ID_CANC = Integer.valueOf(dbDefinitions.getString("STATUS_ID_CANC"));
+
+	protected static String ACTIVE_STATUS_CODE = dbDefinitions.getString("STATUS_CODE_ACT");
+
 	/**
 	 * List with the data of type T
 	 */
@@ -35,33 +32,26 @@ public class BasicType <T> extends BasicClass {
 	 * Filtered data list of type T
 	 */
 	private List<T> filteredDataList;
-	
-	
+
 	/**
 	 * Selected data
 	 */
 	private T selectedData;
-	
-    
-	
+
 	/**
 	 * Indicates if there are any rows in edit mode
 	 */
 	protected boolean editingMode = false;
-		
-   /**
-    * Current row of the table
-    */
+
+	/**
+	 * Current row of the table
+	 */
 	protected int currentRow;
-	
 
-	
-	
-	//---------------------\\
+	// ---------------------\\
 	// GETTERS AND SETTERs \\
-	//---------------------\\	
+	// ---------------------\\
 
-	
 	public List<T> getDataList() {
 		return dataList;
 	}
@@ -77,8 +67,7 @@ public class BasicType <T> extends BasicClass {
 	public void setFilteredDataList(List<T> filteredDataList) {
 		this.filteredDataList = filteredDataList;
 	}
-	
-	
+
 	/**
 	 * @return the selectedData
 	 */
@@ -93,15 +82,12 @@ public class BasicType <T> extends BasicClass {
 		this.selectedData = selectedData;
 	}
 
-
 	/**
 	 * @return the editingMode
 	 */
 	public boolean isEditingMode() {
 		return editingMode;
 	}
-
-
 
 	/**
 	 * @param editingMode the editingMode to set
@@ -110,7 +96,6 @@ public class BasicType <T> extends BasicClass {
 		this.editingMode = editingMode;
 	}
 
-
 	/**
 	 * @return the currentRow
 	 */
@@ -118,22 +103,15 @@ public class BasicType <T> extends BasicClass {
 		return currentRow;
 	}
 
-
-
 	/**
 	 * @param currentRow the currentRow to set
 	 */
 	public void setCurrentRow(int currentRow) {
 		this.currentRow = currentRow;
 	}
-	
-	
+
 	// --------\\
 	// METHODS \\
 	// --------\\
-
-
-
-	
 
 }

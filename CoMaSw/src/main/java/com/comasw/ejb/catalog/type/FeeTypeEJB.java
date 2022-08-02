@@ -3,7 +3,7 @@ package com.comasw.ejb.catalog.type;
 import static com.comasw.model.Tables.CT_FEE_TYPE;
 import static com.comasw.model.Sequences.SEQ_FEE_TYPE_ID;
 import static com.comasw.model.Tables.PT_APPLICATION_LEVEL;
-import static org.jooq.impl.DSL.val;
+import static org.jooq.impl.DSL.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -189,8 +189,7 @@ public class FeeTypeEJB implements FeeTypeEJBLocal {
 	}
 
 	@Override
-	public List<CtFeeType> findDataByApplicationLevelId(Integer applicationLevelId)
-			throws CoMaSwDataAccessException {
+	public List<CtFeeType> findDataByApplicationLevelId(Integer applicationLevelId) throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtFeeType> result = null;
 		String errorMessage;
@@ -292,6 +291,7 @@ public class FeeTypeEJB implements FeeTypeEJBLocal {
 
 		return result;
 	}
+	
 
 	@Override
 	public Integer getNewId() throws CoMaSwDataAccessException {
@@ -332,6 +332,7 @@ public class FeeTypeEJB implements FeeTypeEJBLocal {
 				CtFeeTypeDao daoObject = new CtFeeTypeDao(configuration);
 				daoObject.insert(dataObject);
 			}
+			
 		} catch (Exception e) {
 			errorMessage = "Error inserting the fee type object (value: " + dataObject.toString() + ") - "
 					+ e.getMessage();
@@ -343,7 +344,7 @@ public class FeeTypeEJB implements FeeTypeEJBLocal {
 
 	@Override
 	public void insertNewHistoricDataRecord(CtFeeType dataObject) throws CoMaSwDataAccessException {
-		String errorMessage;		
+		String errorMessage;
 
 		try {
 			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
@@ -382,7 +383,7 @@ public class FeeTypeEJB implements FeeTypeEJBLocal {
 		String errorMessage;
 		try {
 			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
-			CtFeeTypeDao daoObject = new CtFeeTypeDao(configuration);			
+			CtFeeTypeDao daoObject = new CtFeeTypeDao(configuration);
 			daoObject.update(dataObject);
 		} catch (Exception e) {
 			errorMessage = "Error updating the fee type object (value: " + dataObject.toString() + ") - "
@@ -407,6 +408,6 @@ public class FeeTypeEJB implements FeeTypeEJBLocal {
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 
-	}	
+	}
 
 }

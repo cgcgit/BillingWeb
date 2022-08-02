@@ -38,7 +38,6 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 
 	Logger logger = (Logger) LogManager.getLogger(EntityTypeController.class);
 
-
 	@Inject
 	private ExternalContext externalContext;
 	@Inject
@@ -46,33 +45,6 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 
 	@EJB
 	private EntityTypeEJBLocal entityTypeEJB;
-
-	
-	/**
-	 * Selected data row in the table
-	 */
-	@Inject
-	private PtEntityType selectedData;
-
-	
-	// --------------------
-	// GETTERS AND SETTERS
-	// -------------------
-
-	
-	/**
-	 * @return the selectedData
-	 */
-	public PtEntityType getSelectedData() {
-		return selectedData;
-	}
-
-	/**
-	 * @param selectedData the selectedData to set
-	 */
-	public void setSelectedData(PtEntityType selectedData) {
-		this.selectedData = selectedData;
-	}
 
 	
 
@@ -84,7 +56,6 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 		// TODO Auto-generated constructor stub
 	}
 
-	
 	@PostConstruct
 	public void init() {
 
@@ -92,15 +63,12 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 			this.setSelectedData(new PtEntityType());
 		}
 
-
 		if (this.getLoggedUser() == null) {
 			this.setLoggedUser((VwUsers) externalContext.getSessionMap().get("applicationUser"));
 		}
 
-		
 	}
-	
-	
+
 	@Override
 	public void loadDataList() {
 		this.setDataList(entityTypeEJB.findAllData());
@@ -112,7 +80,6 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 		}
 
 	}
-
 
 	@Override
 	public void onRowInit(RowEditEvent<?> event) {
@@ -127,7 +94,6 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 
 		// Gets the backup of the data to modify
 		dataObject = (PtEntityType) event.getObject();
-		
 
 		// If we are editing a row, we must disabled all the other buttons
 		this.editingMode = true;
@@ -163,7 +129,7 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 			if (this.objectValidation(dataObject)) {
 				entityTypeEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";
-				logger.info("Update entity type: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Update entity type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 				this.setControlVariablesToDefault();
 			} else {
@@ -196,7 +162,7 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 			if (error) {
 				FacesContext.getCurrentInstance().validationFailed();
 			} else {
-				
+
 				this.loadDataList();
 			}
 		}
@@ -204,21 +170,19 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 	}
 
 	@Override
-	public void onRowCancel(RowEditEvent<?> event) {		
+	public void onRowCancel(RowEditEvent<?> event) {
 		String message, messageDetail;
-		
+
 		message = "CANCEL UPDATE ROW";
 		messageDetail = "Cancelled the edition of the entity type";
-		
+
 		this.refreshDataTable();
 		this.setControlVariablesToDefault();
-		
+
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
-
 	}
-
 
 	@Override
 	public void pushDeleteRowButton() {
@@ -228,7 +192,7 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 
 	@Override
 	public void pushCreateNewButton() {
-		this.selectedData = new PtEntityType();
+		this.setSelectedData (new PtEntityType());
 		PrimeFaces.current().executeScript("PF('createNewDialogWidget').show();");
 
 	}
@@ -240,10 +204,10 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 		Boolean error = false;
 
 		try {
-			if (objectValidation(this.selectedData)) {
-				entityTypeEJB.insertData(this.selectedData);
+			if (objectValidation(this.getSelectedData())) {
+				entityTypeEJB.insertData(this.getSelectedData());
 				messageDetail = "Data saves succesfully";
-				logger.info("Create entity type: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Create entity type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 			} else {
@@ -279,7 +243,7 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 			} else {
 				this.resetFilterDataTable();
 				this.loadDataList();
-				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();"); 
+				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();");
 			}
 		}
 
@@ -304,10 +268,10 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 		Boolean error = false;
 
 		try {
-			if (this.selectedData != null) {
-				entityTypeEJB.deleteData(this.selectedData);
+			if (this.getSelectedData() != null) {
+				entityTypeEJB.deleteData(this.getSelectedData());
 				messageDetail = "Data deletes succesfully";
-				logger.info("Delete entity type: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Delete entity type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;
@@ -348,7 +312,6 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 				this.loadDataList();
 			}
 		}
-
 
 	}
 
@@ -392,12 +355,11 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} else if (((Integer) objectToValidate.getCode().length())
-					.compareTo(BasicType.CODE_FIELD_LENGTH_MAX) > 0) {
+			} else if (((Integer) objectToValidate.getCode().length()).compareTo(BasicType.CODE_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The code of the entity type (" + objectToValidate.getCode().length()
-						+ " characters) exceeds the limit of "
-						+ BasicType.CODE_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicType.CODE_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -407,12 +369,11 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} else if (((Integer) objectToValidate.getName().length())
-					.compareTo(BasicType.NAME_FIELD_LENGTH_MAX) > 0) {
+			} else if (((Integer) objectToValidate.getName().length()).compareTo(BasicType.NAME_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The name of the entity type (" + objectToValidate.getName().length()
-						+ " characters) exceeds the limit of "
-						+ BasicType.NAME_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicType.NAME_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -427,8 +388,7 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 					.compareTo(BasicType.DESCRIPTION_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The description of the entity type ("
-						+ objectToValidate.getDescription().length()
-						+ " characters) exceeds the limit of "
+						+ objectToValidate.getDescription().length() + " characters) exceeds the limit of "
 						+ BasicType.DESCRIPTION_FIELD_LENGTH_MAX.toString() + " characters";
 
 				logger.error(messageDetail);

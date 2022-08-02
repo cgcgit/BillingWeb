@@ -42,6 +42,7 @@ import com.comasw.model.tables.PtBillingPeriod;
 import com.comasw.model.tables.PtConsumptionClass;
 import com.comasw.model.tables.PtDiscountType;
 import com.comasw.model.tables.PtEntityType;
+import com.comasw.model.tables.PtIdentityCardType;
 import com.comasw.model.tables.PtPaymentMethod;
 import com.comasw.model.tables.PtStatus;
 import com.comasw.model.tables.PtTaxType;
@@ -250,6 +251,11 @@ public class Tables {
      * Table that stores the entity type of the application
      */
     public static final PtEntityType PT_ENTITY_TYPE = PtEntityType.PT_ENTITY_TYPE;
+
+    /**
+     * Table that stores the posible types of the the identity card
+     */
+    public static final PtIdentityCardType PT_IDENTITY_CARD_TYPE = PtIdentityCardType.PT_IDENTITY_CARD_TYPE;
 
     /**
      * Table that stores the payment types for the application

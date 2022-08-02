@@ -22,25 +22,23 @@ import com.comasw.model.tables.daos.PtDiscountTypeDao;
 import com.comasw.model.tables.pojos.PtDiscountType;
 import com.comasw.exception.CoMaSwDataAccessException;
 
-
 /**
  * Session Bean implementation class DiscountTypeEJB
  */
 @Stateless
 public class DiscountTypeEJB implements DiscountTypeEJBLocal {
 
-
 	Logger logger = (Logger) LogManager.getLogger(StatusEJB.class);
 
 	@Resource(lookup = "java:jboss/datasources/db_comasw")
 	private DataSource ds;
-    
+
 	/**
-     * Default constructor. 
-     */
-    public DiscountTypeEJB() {
-        // TODO Auto-generated constructor stub
-    }
+	 * Default constructor.
+	 */
+	public DiscountTypeEJB() {
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public List<PtDiscountType> findAllData() throws CoMaSwDataAccessException {
@@ -49,9 +47,8 @@ public class DiscountTypeEJB implements DiscountTypeEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(PT_DISCOUNT_TYPE).
-					orderBy(PT_DISCOUNT_TYPE.CODE).
-					fetch().into(PtDiscountType.class);
+			result = create.selectFrom(PT_DISCOUNT_TYPE).orderBy(PT_DISCOUNT_TYPE.CODE).fetch()
+					.into(PtDiscountType.class);
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find all the discount types - " + e.getMessage();
@@ -69,11 +66,10 @@ public class DiscountTypeEJB implements DiscountTypeEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(PT_DISCOUNT_TYPE).
-					where(PT_DISCOUNT_TYPE.DISCOUNT_TYPE_ID.eq(val(discountTypeId))).
-					orderBy(PT_DISCOUNT_TYPE.CODE)
+			result = create.selectFrom(PT_DISCOUNT_TYPE)
+					.where(PT_DISCOUNT_TYPE.DISCOUNT_TYPE_ID.eq(val(discountTypeId))).orderBy(PT_DISCOUNT_TYPE.CODE)
 					.fetch().into(PtDiscountType.class);
-			
+
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the discount type for discount_type_id : " + discountTypeId
 						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
@@ -81,7 +77,7 @@ public class DiscountTypeEJB implements DiscountTypeEJBLocal {
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
 				return result.get(0);
-			}		
+			}
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the discount type for discount_type_id: " + discountTypeId + " - "
@@ -89,7 +85,7 @@ public class DiscountTypeEJB implements DiscountTypeEJBLocal {
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
@@ -99,11 +95,9 @@ public class DiscountTypeEJB implements DiscountTypeEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(PT_DISCOUNT_TYPE).
-					where(PT_DISCOUNT_TYPE.CODE.eq(val(code))).
-					orderBy(PT_DISCOUNT_TYPE.CODE).fetch()
-					.into(PtDiscountType.class);
-			
+			result = create.selectFrom(PT_DISCOUNT_TYPE).where(PT_DISCOUNT_TYPE.CODE.eq(val(code)))
+					.orderBy(PT_DISCOUNT_TYPE.CODE).fetch().into(PtDiscountType.class);
+
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the discount type for code : " + code
 						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
@@ -111,30 +105,30 @@ public class DiscountTypeEJB implements DiscountTypeEJBLocal {
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
 				return result.get(0);
-			}	
+			}
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the discount type for code " + code + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
 	public void insertData(PtDiscountType dataObject) throws CoMaSwDataAccessException {
 		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);			
-			PtDiscountTypeDao daoObject = new PtDiscountTypeDao(configuration);			
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
+			PtDiscountTypeDao daoObject = new PtDiscountTypeDao(configuration);
 			daoObject.insert(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error inserting the discount type object (value: "
-					+ dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error inserting the discount type object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
@@ -145,11 +139,12 @@ public class DiscountTypeEJB implements DiscountTypeEJBLocal {
 			PtDiscountTypeDao daoObject = new PtDiscountTypeDao(configuration);
 			daoObject.update(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error updating the discount type object (value: " + dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error updating the discount type object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
-			throw new CoMaSwDataAccessException(errorMessage, e);			
+			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
@@ -160,11 +155,12 @@ public class DiscountTypeEJB implements DiscountTypeEJBLocal {
 			PtDiscountTypeDao daoObject = new PtDiscountTypeDao(configuration);
 			daoObject.delete(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error deleting the discount type object (value: " + dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error deleting the discount type object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 }

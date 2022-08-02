@@ -22,7 +22,6 @@ import javax.validation.constraints.NotNull;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 
-
 @Named("loginController")
 @ViewScoped
 public class LoginController implements Serializable {
@@ -30,12 +29,10 @@ public class LoginController implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 709402449883178816L;
-	
-	protected static ResourceBundle urlFile = ResourceBundle
-			.getBundle("com.comasw.properties.urlPage");
-	
-	Logger logger= (Logger) LogManager.getLogger(LoginController.class);		
-	
+
+	protected static ResourceBundle urlFile = ResourceBundle.getBundle("com.comasw.properties.urlPage");
+
+	Logger logger = (Logger) LogManager.getLogger(LoginController.class);
 
 	@NotNull
 	private String user;
@@ -45,10 +42,10 @@ public class LoginController implements Serializable {
 
 	@Inject
 	private SecurityContext securityContext;
-	
+
 	@Inject
 	private ExternalContext externalContext;
-	
+
 	@Inject
 	private FacesContext facesContext;
 
@@ -85,27 +82,29 @@ public class LoginController implements Serializable {
 			break;
 		case SEND_FAILURE: // authentication failed
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Login failed", null));
-			logger.error("Login failed - User: " + this.user );			
+			logger.error("Login failed - User: " + this.user);
 			break;
 		case SUCCESS: // authentication succeeded
 			flash.setKeepMessages(true);
 			facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Login succeed", null));
-			logger.info("Login succeed - User: " + this.user );
-			try {				
-				externalContext.redirect(externalContext.getRequestContextPath() +  "/app" + urlFile.getString("homePage"));
-				
-			} catch (IOException e) {				
-				facesContext.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "IOException: " + e.getMessage(), null));
-				logger.error("IOException: " + e.getMessage());				
+			logger.info("Login succeed - User: " + this.user);
+			try {
+				externalContext
+						.redirect(externalContext.getRequestContextPath() + "/app" + urlFile.getString("homePage"));
+
+			} catch (IOException e) {
+				facesContext.addMessage(null,
+						new FacesMessage(FacesMessage.SEVERITY_ERROR, "IOException: " + e.getMessage(), null));
+				logger.error("IOException: " + e.getMessage());
 				e.printStackTrace();
 			}
 			break;
 		case NOT_DONE:
-			
+
 		}
 	}
 
-	private AuthenticationStatus continueAuthentication() {		
+	private AuthenticationStatus continueAuthentication() {
 		System.out.println("user-password: " + user + "-" + password);
 		AuthenticationStatus auth = securityContext.authenticate((HttpServletRequest) externalContext.getRequest(),
 				(HttpServletResponse) externalContext.getResponse(),

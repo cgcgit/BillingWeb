@@ -22,7 +22,6 @@ import com.comasw.model.tables.daos.PtConsumptionClassDao;
 import com.comasw.model.tables.pojos.PtConsumptionClass;
 import com.comasw.exception.CoMaSwDataAccessException;
 
-
 /**
  * Session Bean implementation class ConsumptionClassEJB
  */
@@ -34,13 +33,12 @@ public class ConsumptionClassEJB implements ConsumptionClassEJBLocal {
 	@Resource(lookup = "java:jboss/datasources/db_comasw")
 	private DataSource ds;
 
-	
-    /**
-     * Default constructor. 
-     */
-    public ConsumptionClassEJB() {
-        // TODO Auto-generated constructor stub
-    }
+	/**
+	 * Default constructor.
+	 */
+	public ConsumptionClassEJB() {
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public List<PtConsumptionClass> findAllData() throws CoMaSwDataAccessException {
@@ -49,13 +47,11 @@ public class ConsumptionClassEJB implements ConsumptionClassEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(PT_CONSUMPTION_CLASS)
-					.orderBy(PT_CONSUMPTION_CLASS.CODE)
-					.fetch()
-					.into(PtConsumptionClass.class);		
+			result = create.selectFrom(PT_CONSUMPTION_CLASS).orderBy(PT_CONSUMPTION_CLASS.CODE).fetch()
+					.into(PtConsumptionClass.class);
 
 		} catch (DataAccessException e) {
-			errorMessage= "Error while try to find all the consumption class - " + e.getMessage();
+			errorMessage = "Error while try to find all the consumption class - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
@@ -64,7 +60,8 @@ public class ConsumptionClassEJB implements ConsumptionClassEJBLocal {
 	}
 
 	@Override
-	public PtConsumptionClass findDataByConsumptionClassId(Integer consumptionClassId) throws CoMaSwDataAccessException {
+	public PtConsumptionClass findDataByConsumptionClassId(Integer consumptionClassId)
+			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<PtConsumptionClass> result = null;
 		String errorMessage;
@@ -72,20 +69,20 @@ public class ConsumptionClassEJB implements ConsumptionClassEJBLocal {
 		try {
 			result = create.selectFrom(PT_CONSUMPTION_CLASS)
 					.where(PT_CONSUMPTION_CLASS.CONSUMPTION_CLASS_ID.eq(val(consumptionClassId)))
-					.orderBy(PT_CONSUMPTION_CLASS.CODE)
-					.fetch()
-					.into(PtConsumptionClass.class);
+					.orderBy(PT_CONSUMPTION_CLASS.CODE).fetch().into(PtConsumptionClass.class);
 			if (result.size() > 1) {
-				errorMessage = "Error while try to find the consumption class for consumption_class_id : " + consumptionClassId
-						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
+				errorMessage = "Error while try to find the consumption class for consumption_class_id : "
+						+ consumptionClassId + " - The query returns more rows(" + result.size()
+						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
 				return result.get(0);
-			}				
+			}
 
 		} catch (DataAccessException e) {
-			errorMessage= "Error while try to find the consumption class for consumption_class_id: " + consumptionClassId + " - " + e.getMessage();
+			errorMessage = "Error while try to find the consumption class for consumption_class_id: "
+					+ consumptionClassId + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
@@ -99,11 +96,8 @@ public class ConsumptionClassEJB implements ConsumptionClassEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(PT_CONSUMPTION_CLASS)
-					.where(PT_CONSUMPTION_CLASS.CODE.eq(val(code)))
-					.orderBy(PT_CONSUMPTION_CLASS.CODE)
-					.fetch()
-					.into(PtConsumptionClass.class);
+			result = create.selectFrom(PT_CONSUMPTION_CLASS).where(PT_CONSUMPTION_CLASS.CODE.eq(val(code)))
+					.orderBy(PT_CONSUMPTION_CLASS.CODE).fetch().into(PtConsumptionClass.class);
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the consumption class for code : " + code
 						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
@@ -111,10 +105,10 @@ public class ConsumptionClassEJB implements ConsumptionClassEJBLocal {
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
 				return result.get(0);
-			}				
+			}
 
 		} catch (DataAccessException e) {
-			errorMessage= "Error while try to find the consumption class for code " + code + " - " + e.getMessage();
+			errorMessage = "Error while try to find the consumption class for code " + code + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
@@ -124,48 +118,48 @@ public class ConsumptionClassEJB implements ConsumptionClassEJBLocal {
 	public void insertData(PtConsumptionClass dataObject) throws CoMaSwDataAccessException {
 		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);			
-			PtConsumptionClassDao daoObject = new PtConsumptionClassDao(configuration);			
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
+			PtConsumptionClassDao daoObject = new PtConsumptionClassDao(configuration);
 			daoObject.insert(dataObject);
 		} catch (Exception e) {
-			errorMessage= "Error inserting the consumption class object (value: "
-					+ dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error inserting the consumption class object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
 	public void updateData(PtConsumptionClass dataObject) throws CoMaSwDataAccessException {
 		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);		
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
 			PtConsumptionClassDao daoObject = new PtConsumptionClassDao(configuration);
 			daoObject.update(dataObject);
 		} catch (Exception e) {
-			errorMessage= "Error updating the consumption class object (value: "
-					+ dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error updating the consumption class object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
 	public void deleteData(PtConsumptionClass dataObject) throws CoMaSwDataAccessException {
 		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);		
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
 			PtConsumptionClassDao daoObject = new PtConsumptionClassDao(configuration);
 			daoObject.delete(dataObject);
 		} catch (Exception e) {
-			errorMessage= "Error deleting the consumption class object (value: "
-					+ dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error deleting the consumption class object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 }

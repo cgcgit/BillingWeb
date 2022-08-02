@@ -10,8 +10,8 @@
 	<!-- to debug errors: value Development -->
 	<context-param>
 		<param-name>javax.faces.PROJECT_STAGE</param-name>
-	<!-- 	<param-value>Development</param-value> -->
-		 <param-value>Production</param-value> 
+		<!-- <param-value>Development</param-value> -->
+		<param-value>Production</param-value>
 	</context-param>
 
 	<!-- increase buffer size to avoid JSF1095 errors -->
@@ -26,15 +26,15 @@
 		<param-value>true</param-value>
 	</context-param>
 
-<context-param>
-    <param-name>primefaces.THEME</param-name>
-    <param-value>nova-light</param-value>
-</context-param>
+	<context-param>
+		<param-name>primefaces.THEME</param-name>
+		<param-value>nova-light</param-value>
+	</context-param>
 
-<context-param>
-    <param-name>primefaces.FLEX</param-name>
-    <param-value>true</param-value>
-</context-param>
+	<context-param>
+		<param-name>primefaces.FLEX</param-name>
+		<param-value>true</param-value>
+	</context-param>
 
 	<servlet>
 		<servlet-name>facesServlet</servlet-name>
@@ -85,7 +85,7 @@
 		<description>Role to read/write application's user</description>
 		<role-name>MODIFY</role-name>
 	</security-role>
-		<security-role>
+	<security-role>
 		<description>Role to only read application's user</description>
 		<role-name>READ</role-name>
 	</security-role>

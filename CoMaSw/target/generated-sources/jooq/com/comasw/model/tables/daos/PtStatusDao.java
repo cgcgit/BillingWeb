@@ -114,4 +114,32 @@ public class PtStatusDao extends DAOImpl<PtStatusRecord, com.comasw.model.tables
     public List<com.comasw.model.tables.pojos.PtStatus> fetchByDescription(String... values) {
         return fetch(PtStatus.PT_STATUS.DESCRIPTION, values);
     }
+
+    /**
+     * Fetch records that have <code>catalog BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<com.comasw.model.tables.pojos.PtStatus> fetchRangeOfCatalog(Boolean lowerInclusive, Boolean upperInclusive) {
+        return fetchRange(PtStatus.PT_STATUS.CATALOG, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>catalog IN (values)</code>
+     */
+    public List<com.comasw.model.tables.pojos.PtStatus> fetchByCatalog(Boolean... values) {
+        return fetch(PtStatus.PT_STATUS.CATALOG, values);
+    }
+
+    /**
+     * Fetch records that have <code>instance BETWEEN lowerInclusive AND upperInclusive</code>
+     */
+    public List<com.comasw.model.tables.pojos.PtStatus> fetchRangeOfInstance(Boolean lowerInclusive, Boolean upperInclusive) {
+        return fetchRange(PtStatus.PT_STATUS.INSTANCE, lowerInclusive, upperInclusive);
+    }
+
+    /**
+     * Fetch records that have <code>instance IN (values)</code>
+     */
+    public List<com.comasw.model.tables.pojos.PtStatus> fetchByInstance(Boolean... values) {
+        return fetch(PtStatus.PT_STATUS.INSTANCE, values);
+    }
 }

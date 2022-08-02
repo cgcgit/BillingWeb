@@ -22,7 +22,6 @@ import com.comasw.ejb.user.ApplicationUserEJBLocal;
 import com.comasw.generalClass.BasicClass;
 import com.comasw.utilities.Utilities;
 
-
 @Named
 @ViewScoped
 public class UserProfileController extends BasicClass implements Serializable {
@@ -31,13 +30,19 @@ public class UserProfileController extends BasicClass implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1215092050426785353L;
-	
-	private static final Integer MAX_LENGTH_NAME = Integer.valueOf(dbDefinitions.getString("USER_NAME_FIELD_LENGTH_MAX"));;
-	private static final Integer MAX_LENGTH_SURNAME = Integer.valueOf(dbDefinitions.getString("USER_SURNAME_FIELD_LENGTH_MAX"));;
-	private static final Integer MAX_LENGTH_EMAIL = Integer.valueOf(dbDefinitions.getString("USER_EMAIL_FIELD_LENGTH_MAX"));;
-	private static final Integer MAX_LENGTH_PHONE_CONTACT = Integer.valueOf(dbDefinitions.getString("USER_PHONE_CONTACT_FIELD_LENGTH_MAX"));;
-	private static final Integer MIN_LENGTH_PASSWORD = Integer.valueOf(dbDefinitions.getString("USER_PASSWORD_FIELD_LENGTH_MIN"));;
-	private static final Integer MAX_LENGTH_PASSWORD = Integer.valueOf(dbDefinitions.getString("USER_PASSWORD_FIELD_LENGTH_MAX"));;
+
+	private static final Integer MAX_LENGTH_NAME = Integer
+			.valueOf(dbDefinitions.getString("USER_NAME_FIELD_LENGTH_MAX"));;
+	private static final Integer MAX_LENGTH_SURNAME = Integer
+			.valueOf(dbDefinitions.getString("USER_SURNAME_FIELD_LENGTH_MAX"));;
+	private static final Integer MAX_LENGTH_EMAIL = Integer
+			.valueOf(dbDefinitions.getString("USER_EMAIL_FIELD_LENGTH_MAX"));;
+	private static final Integer MAX_LENGTH_PHONE_CONTACT = Integer
+			.valueOf(dbDefinitions.getString("USER_PHONE_CONTACT_FIELD_LENGTH_MAX"));;
+	private static final Integer MIN_LENGTH_PASSWORD = Integer
+			.valueOf(dbDefinitions.getString("USER_PASSWORD_FIELD_LENGTH_MIN"));;
+	private static final Integer MAX_LENGTH_PASSWORD = Integer
+			.valueOf(dbDefinitions.getString("USER_PASSWORD_FIELD_LENGTH_MAX"));;
 
 	Logger logger = (Logger) LogManager.getLogger(UserProfileController.class);
 
@@ -186,7 +191,7 @@ public class UserProfileController extends BasicClass implements Serializable {
 		}
 
 	}
-	
+
 	/** CHANGE PASSWORD **/
 
 	public void pushChangePasswordButton() {
@@ -246,18 +251,17 @@ public class UserProfileController extends BasicClass implements Serializable {
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_FATAL, message, messageDetail);
 		} finally {
 			this.password = null;
-			if (error) {				
+			if (error) {
 				facesContext.validationFailed();
-			} else {				
+			} else {
 				this.loadData();
-				//this.initValues();
-				this.editPassword=false;
+				// this.initValues();
+				this.editPassword = false;
 				Ajax.update("form");
 			}
 		}
 
 	}
-	
 
 	public boolean passwordValidation() {
 		String message = "PASSWORD VALIDATION";
@@ -293,13 +297,12 @@ public class UserProfileController extends BasicClass implements Serializable {
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 		this.loadData();
-		//this.initValues();
-		this.editPassword=false;
+		// this.initValues();
+		this.editPassword = false;
 		Ajax.update("form");
 
 	}
 
-	
 	/** MODIFY DATA **/
 
 	public void pushEditButton() {
@@ -364,8 +367,8 @@ public class UserProfileController extends BasicClass implements Serializable {
 				facesContext.validationFailed();
 			} else {
 				this.loadData();
-				//this.initValues();
-				this.editMode=false;
+				// this.initValues();
+				this.editMode = false;
 				Ajax.update("form");
 			}
 		}
@@ -380,18 +383,16 @@ public class UserProfileController extends BasicClass implements Serializable {
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 		this.loadData();
-		//this.initValues();
-		this.editMode=false;
+		// this.initValues();
+		this.editMode = false;
 		Ajax.update("form");
 	}
 
-	
 	public boolean objectValidation(Object dataObject) {
 		boolean result = true;
 		ItUsers objectToValidate = (ItUsers) dataObject;
 		String message = "DATA VALIDATION";
 		String messageDetail = "";
-
 
 		if (objectToValidate != null) {
 
@@ -470,7 +471,7 @@ public class UserProfileController extends BasicClass implements Serializable {
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
 			} else {
-				if (! Utilities.phoneNumberValidation((objectToValidate.getPhoneContact()))) {
+				if (!Utilities.phoneNumberValidation((objectToValidate.getPhoneContact()))) {
 					messageDetail = "Error in the phone validation format";
 					logger.error(messageDetail);
 					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message,
@@ -488,7 +489,5 @@ public class UserProfileController extends BasicClass implements Serializable {
 		return result;
 
 	}
-	
-	
 
 }

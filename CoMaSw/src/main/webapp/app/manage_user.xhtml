@@ -57,7 +57,7 @@ button.ui-button {
 
 
 		<p:dataTable id="mainTable" widgetVar="mainTableWidget"
-			var="dataTable" value="#{manageUserController.dataList}"			
+			var="dataTable" value="#{manageUserController.dataList}"
 			editable="true" rowIndexVar="rowIndexMainTable" rows="10"
 			showGridlines="true" stripedRows="true" scrollable="true"
 			reflow="true" resizableColumns="true" size="small" paginator="true"
@@ -140,7 +140,7 @@ button.ui-button {
 
 
 			<!--  DATA TABLE - DATA COLUMNS -->
-		
+
 			<p:column id="userCode"
 				style="font-family:Arial Black;
                                   text-align: left;
@@ -374,7 +374,8 @@ button.ui-button {
 
 				<p:outputLabel id="newPasswordLabel" value="Password:" />
 				<p:password id="newPassword" label="Password:" toggleMask="true"
-					redisplay="true" value="#{manageUserController.selectedData.password}">
+					redisplay="true"
+					value="#{manageUserController.selectedData.password}">
 				</p:password>
 
 				<p:outputLabel id="newProfileLabel" value="Profile: " />
@@ -387,7 +388,7 @@ button.ui-button {
 						itemValue="#{manageUserController.selectedData.profileId}">
 					</f:selectItems>
 				</p:selectOneMenu>
-				
+
 				<p:outputLabel id="newActiveFlagLabel" value="Active? " />
 				<p:selectOneMenu id="activeFlagInput"
 					value="#{manageUserController.selectedData.active}"
@@ -421,14 +422,13 @@ button.ui-button {
 			</h:panelGrid>
 		</p:dialog>
 
-			<!--  DELETE ROW DIALOG -->
+		<!--  DELETE ROW DIALOG -->
 		<p:confirmDialog global="true" styleClass="change-position"
 			showEffect="fade" responsive="true" widgetVar="deleteRowDialogWidget"
 			header="DELETE ROW"
 			message="Do you really want to delete this row? (The row will be inmediately deleted from the system)">
 			<p:commandButton id="deleteDialogConfirm" value="#{uiValue.okLabel}"
-				styleClass="ui-confirmdialog-yes"
-				update="form:growlMessage"
+				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
 				actionListener="#{manageUserController.pushConfirmButtonDeleteDialog()}"
 				oncomplete="updateMainTable(); PF('deleteRowDialogWidget').hide()"
 				process="@this" icon="#{uiValue.okCircleIcon}" />

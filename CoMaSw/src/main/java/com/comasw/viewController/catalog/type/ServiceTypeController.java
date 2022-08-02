@@ -37,8 +37,7 @@ import com.comasw.interfaces.IEditableTable;
  *
  */
 public class ServiceTypeController extends BasicTypeWithLists<CtServiceType> implements Serializable, IEditableTable {
-	
-	
+
 	/**
 	 * 
 	 */
@@ -56,36 +55,6 @@ public class ServiceTypeController extends BasicTypeWithLists<CtServiceType> imp
 	@EJB
 	private ServiceTypeEJBLocal serviceTypeEJB;
 
-
-	/**
-	 * Selected data row in the table
-	 */
-	@Inject
-	private CtServiceType selectedData;
-
-	
-
-	// --------------------
-	// GETTERS AND SETTERS
-	// -------------------
-	
-	
-
-	/**
-	 * @return the selectedData
-	 */
-	public CtServiceType getSelectedData() {
-		return selectedData;
-	}
-
-	/**
-	 * @param selectedData the selectedData to set
-	 */
-	public void setSelectedData(CtServiceType selectedData) {
-		this.selectedData = selectedData;
-	}
-
-		
 	
 	// -------------------
 	// METHODS
@@ -97,22 +66,19 @@ public class ServiceTypeController extends BasicTypeWithLists<CtServiceType> imp
 	public ServiceTypeController() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	@PostConstruct
 	public void init() {
 
-		if (selectedData == null) {
-			selectedData = new CtServiceType();
+		if (getSelectedData()== null) {
+			setSelectedData(new CtServiceType());
 		}
 
-		
 		if (this.getLoggedUser() == null) {
 			this.setLoggedUser((VwUsers) externalContext.getSessionMap().get("applicationUser"));
 		}
 
-
 	}
-
 
 	@Override
 	public void loadDataList() {
@@ -123,9 +89,8 @@ public class ServiceTypeController extends BasicTypeWithLists<CtServiceType> imp
 		} else {
 			logger.info("Load data sucessful");
 		}
-		
-	}
 
+	}
 
 	@Override
 	public void onRowInit(RowEditEvent<?> event) {
@@ -139,7 +104,7 @@ public class ServiceTypeController extends BasicTypeWithLists<CtServiceType> imp
 		int rowPosition = dataTable.getRowIndex();
 
 		// Gets the backup of the data to modify
-		dataObject = (CtServiceType) event.getObject();		
+		dataObject = (CtServiceType) event.getObject();
 
 		// If we are editing a row, we must disabled all the other buttons
 		this.editingMode = true;
@@ -155,9 +120,8 @@ public class ServiceTypeController extends BasicTypeWithLists<CtServiceType> imp
 		messageDetail = "Editing service type: " + dataObject.getCode();
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
-		
-	}
 
+	}
 
 	@Override
 	public void onRowEdit(RowEditEvent<?> event) throws ValidatorException {
@@ -170,18 +134,17 @@ public class ServiceTypeController extends BasicTypeWithLists<CtServiceType> imp
 		// Retrieved the data that was modified
 		dataObject = (CtServiceType) event.getObject();
 
-				
 		try {
 
 			// Validates the data
 			if (this.objectValidation(dataObject)) {
-				//sets the modif data
-				this.selectedData.setModifUser(this.loggedUser.getUserCode());
-				this.selectedData.setModifDate(LocalDateTime.now());
-				
+				// sets the modif data
+				this.getSelectedData().setModifUser(this.loggedUser.getUserCode());
+				this.getSelectedData().setModifDate(LocalDateTime.now());
+
 				serviceTypeEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";
-				logger.info("Update service type: " + this.selectedData.toString() + " - " +messageDetail);
+				logger.info("Update service type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 				this.setControlVariablesToDefault();
 			} else {
@@ -213,13 +176,12 @@ public class ServiceTypeController extends BasicTypeWithLists<CtServiceType> imp
 		} finally {
 			if (error) {
 				FacesContext.getCurrentInstance().validationFailed();
-			} else {				
+			} else {
 				this.loadDataList();
 			}
 		}
-		
-	}
 
+	}
 
 	@Override
 	public void onRowCancel(RowEditEvent<?> event) {
@@ -227,32 +189,26 @@ public class ServiceTypeController extends BasicTypeWithLists<CtServiceType> imp
 
 		message = "CANCEL UPDATE ROW";
 		messageDetail = "Cancelled the edition of the service type";
-	
+
 		this.refreshDataTable();
 		this.setControlVariablesToDefault();
-		
+
 		logger.info(messageDetail);
-		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);		
+		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 	}
-
-
-
 
 	@Override
 	public void pushDeleteRowButton() {
 		// TODO Auto-generated method stub
-		
+
 	}
-
-
 
 	@Override
 	public void pushCreateNewButton() {
-		this.selectedData = new CtServiceType();
+		this.setSelectedData(new CtServiceType());
 		PrimeFaces.current().executeScript("PF('createNewDialogWidget').show();");
-				
-	}
 
+	}
 
 	@Override
 	public void pushConfirmButtonCreateNewDialog() {
@@ -260,20 +216,19 @@ public class ServiceTypeController extends BasicTypeWithLists<CtServiceType> imp
 		String messageDetail = "";
 		Boolean error = false;
 
-		
 		try {
-			if (objectValidation(this.selectedData)) {
-				//Set create values
-				
-				this.selectedData.setEntityTypeId(ENTITY_TYPE_ID);
-				this.selectedData.setInputUser(this.loggedUser.getUserCode());
-				this.selectedData.setInputDate(LocalDateTime.now());
-				
-				System.out.println ("objeto: " + this.selectedData.toString());
-				
-				serviceTypeEJB.insertData(this.selectedData);
+			if (objectValidation(this.getSelectedData())) {
+				// Set create values
+
+				this.getSelectedData().setEntityTypeId(ENTITY_TYPE_ID);
+				this.getSelectedData().setInputUser(this.loggedUser.getUserCode());
+				this.getSelectedData().setInputDate(LocalDateTime.now());
+
+				System.out.println("objeto: " + this.getSelectedData().toString());
+
+				serviceTypeEJB.insertData(this.getSelectedData());
 				messageDetail = "Data saves succesfully";
-				logger.info("Create service type: " + this.selectedData.toString() + " - " +messageDetail);
+				logger.info("Create service type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 			} else {
@@ -309,27 +264,23 @@ public class ServiceTypeController extends BasicTypeWithLists<CtServiceType> imp
 			} else {
 				this.resetFilterDataTable();
 				this.loadDataList();
-				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();"); 
+				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();");
 			}
 		}
-		
-		
-	}
 
+	}
 
 	@Override
 	public void pushCancelButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void pushCleanButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void pushConfirmButtonDeleteDialog() {
@@ -338,10 +289,10 @@ public class ServiceTypeController extends BasicTypeWithLists<CtServiceType> imp
 		Boolean error = false;
 
 		try {
-			if (this.selectedData != null) {
-				serviceTypeEJB.deleteData(this.selectedData);
+			if (this.getSelectedData() != null) {
+				serviceTypeEJB.deleteData(this.getSelectedData());
 				messageDetail = "Data deletes succesfully";
-				logger.info("Delete service type: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Delete service type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;
@@ -382,24 +333,20 @@ public class ServiceTypeController extends BasicTypeWithLists<CtServiceType> imp
 				this.loadDataList();
 			}
 		}
-		
-		
-	}
 
+	}
 
 	@Override
 	public void pushCancelButtonDeleteDialog() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void resetObjectValues() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public boolean objectValidation(Object dataObject) {
@@ -422,8 +369,8 @@ public class ServiceTypeController extends BasicTypeWithLists<CtServiceType> imp
 
 			if (objectToValidate.getDescription() != null) {
 				objectToValidate.setDescription(objectToValidate.getDescription().trim());
-			}		
-			
+			}
+
 			if (objectToValidate.getCode() == null || objectToValidate.getCode().length() == 0) {
 				messageDetail = "ERROR - The code of the service type can not be null";
 				logger.error(messageDetail);
@@ -433,8 +380,8 @@ public class ServiceTypeController extends BasicTypeWithLists<CtServiceType> imp
 					.compareTo(BasicTypeWithLists.CODE_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The code of the service type (" + objectToValidate.getCode().length()
-						+ " characters) exceeds the limit of "
-						+ BasicTypeWithLists.CODE_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicTypeWithLists.CODE_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -448,8 +395,8 @@ public class ServiceTypeController extends BasicTypeWithLists<CtServiceType> imp
 					.compareTo(BasicTypeWithLists.NAME_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The name of the service type (" + objectToValidate.getName().length()
-						+ " characters) exceeds the limit of "
-						+ BasicTypeWithLists.NAME_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicTypeWithLists.NAME_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -464,22 +411,20 @@ public class ServiceTypeController extends BasicTypeWithLists<CtServiceType> imp
 					.compareTo(BasicTypeWithLists.DESCRIPTION_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The description of the service type ("
-						+ objectToValidate.getDescription().length()
-						+ " characters) exceeds the limit of "
+						+ objectToValidate.getDescription().length() + " characters) exceeds the limit of "
 						+ BasicTypeWithLists.DESCRIPTION_FIELD_LENGTH_MAX.toString() + " characters";
 
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
 			}
-			
+
 			if (objectToValidate.getStatusId() == null) {
 				result = false;
 				messageDetail = "ERROR - The status can not be null";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			}
-			
 
 			if (result) {
 				// no error --> update panel
@@ -495,27 +440,24 @@ public class ServiceTypeController extends BasicTypeWithLists<CtServiceType> imp
 		return result;
 	}
 
-
 	@Override
 	public void retrieveBackupData() {
 		// TODO Auto-generated method stub
-		
-	}
 
+	}
 
 	@Override
 	public void setInitVariablesToDefault() {
 		this.editingMode = false;
-		
-	}
 
+	}
 
 	@Override
 	public void setControlVariablesToDefault() {
 		this.setInitVariablesToDefault();
-		
+
 	}
-	
+
 	@Override
 	public void resetFilterDataTable() {
 		PrimeFaces current = PrimeFaces.current();
@@ -529,6 +471,5 @@ public class ServiceTypeController extends BasicTypeWithLists<CtServiceType> imp
 		this.loadDataList();
 		Ajax.update(DATA_TABLE_ID);
 	}
-
 
 }

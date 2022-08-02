@@ -17,7 +17,6 @@ import static org.jooq.impl.DSL.concat;
 import static org.jooq.impl.DSL.inline;
 import static org.jooq.impl.DSL.val;
 
-
 import com.comasw.model.tables.records.MtApplicationMenuRecord;
 import com.comasw.exception.CoMaSwDataAccessException;
 
@@ -29,13 +28,11 @@ import static com.comasw.model.Tables.MT_APPLICATION_MENU;
 @Stateless
 @LocalBean
 public class ApplicationMenuEJB implements ApplicationMenuEJBLocal {
-	
-	
+
 	Logger logger = (Logger) LogManager.getLogger(ApplicationMenuEJB.class);
 
 	@Resource(lookup = "java:jboss/datasources/db_comasw")
 	private DataSource ds;
-
 
 	/**
 	 * Default constructor.
@@ -46,21 +43,22 @@ public class ApplicationMenuEJB implements ApplicationMenuEJBLocal {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override	
+	@Override
 	public Result<MtApplicationMenuRecord> findMenuByProfileCode(String profileCode) {
 
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		Result<MtApplicationMenuRecord> menu = null;
-		String errorMessage; 
+		String errorMessage;
 
 		try {
-			// search by like because the profile code can have more than one value 
+			// search by like because the profile code can have more than one value
 			menu = create.selectFrom(MT_APPLICATION_MENU)
 					.where(MT_APPLICATION_MENU.PROFILE_CODE.like(concat(inline("%"), val(profileCode), inline("%"))))
 					.orderBy(MT_APPLICATION_MENU.MENU_LEVEL, MT_APPLICATION_MENU.POSITION).fetch();
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the application menu for profile " + profileCode + " - " + e.getMessage();
+			errorMessage = "Error while try to find the application menu for profile " + profileCode + " - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
@@ -73,7 +71,7 @@ public class ApplicationMenuEJB implements ApplicationMenuEJBLocal {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		Result<MtApplicationMenuRecord> menu = null;
 		String errorMessage;
-		
+
 		try {
 			menu = create.selectFrom(MT_APPLICATION_MENU)
 					.where(MT_APPLICATION_MENU.PROFILE_CODE.like(concat(inline("%"), val(profileCode), inline("%"))))
@@ -81,7 +79,8 @@ public class ApplicationMenuEJB implements ApplicationMenuEJBLocal {
 					.orderBy(MT_APPLICATION_MENU.MENU_LEVEL, MT_APPLICATION_MENU.POSITION).fetch();
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the application menu for profile " + profileCode + " and level " + level + " - " + e.getMessage();
+			errorMessage = "Error while try to find the application menu for profile " + profileCode + " and level "
+					+ level + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
@@ -94,7 +93,7 @@ public class ApplicationMenuEJB implements ApplicationMenuEJBLocal {
 	public Result<MtApplicationMenuRecord> findRootItemMenuByProfileCode(String profileCode) {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		Integer rootLevel = 1;
-		String errorMessage;		
+		String errorMessage;
 
 		Result<MtApplicationMenuRecord> menu = null;
 
@@ -104,9 +103,10 @@ public class ApplicationMenuEJB implements ApplicationMenuEJBLocal {
 					.and(MT_APPLICATION_MENU.MENU_LEVEL.eq(val(rootLevel)))
 					.orderBy(MT_APPLICATION_MENU.MENU_LEVEL, MT_APPLICATION_MENU.POSITION).fetch();
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the root item application menu for profile " + profileCode +  " - " + e.getMessage();
+			errorMessage = "Error while try to find the root item application menu for profile " + profileCode + " - "
+					+ e.getMessage();
 			logger.error(errorMessage);
-			throw new CoMaSwDataAccessException(errorMessage, e);			
+			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 		return menu;
 	}
@@ -124,10 +124,11 @@ public class ApplicationMenuEJB implements ApplicationMenuEJBLocal {
 					.and(MT_APPLICATION_MENU.APPLICATION_PARENT_MENU_ID.eq(val(parentMenuId)))
 					.orderBy(MT_APPLICATION_MENU.MENU_LEVEL, MT_APPLICATION_MENU.POSITION).fetch();
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the child item application menu for profile " + profileCode +  " and parent menu id " + parentMenuId + " - " + e.getMessage();
+			errorMessage = "Error while try to find the child item application menu for profile " + profileCode
+					+ " and parent menu id " + parentMenuId + " - " + e.getMessage();
 			logger.error(errorMessage);
-			throw new CoMaSwDataAccessException(errorMessage, e);		
-			
+			throw new CoMaSwDataAccessException(errorMessage, e);
+
 		}
 		return menu;
 	}

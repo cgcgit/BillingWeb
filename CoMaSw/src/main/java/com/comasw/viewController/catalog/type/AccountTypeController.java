@@ -56,37 +56,9 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 
 	@EJB
 	private AccountTypeEJBLocal accountTypeEJB;
-	
+
 	@EJB
 	private BillCycleTypeEJBLocal billCycleTypeEJB;
-
-	
-	/**
-	 * Selected data row in the table
-	 */
-	@Inject
-	private CtAccountType selectedData;
-
-	
-	// --------------------
-	// GETTERS AND SETTERS
-	// -------------------
-
-	
-	/**
-	 * @return the selectedData
-	 */
-	public CtAccountType getSelectedData() {
-		return selectedData;
-	}
-
-	/**
-	 * @param selectedData the selectedData to set
-	 */
-	public void setSelectedData(CtAccountType selectedData) {
-		this.selectedData = selectedData;
-	}
-
 
 	
 
@@ -100,13 +72,12 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 	public AccountTypeController() {
 		// TODO Auto-generated constructor stub
 	}
-	
 
 	@PostConstruct
 	public void init() {
 
-		if (selectedData == null) {
-			selectedData = new CtAccountType();
+		if (getSelectedData() == null) {
+			setSelectedData ( new CtAccountType());
 		}
 
 		if (this.getLoggedUser() == null) {
@@ -124,8 +95,7 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 		} else {
 			logger.info("Load data sucessful");
 		}
-		
-		
+
 	}
 
 	@Override
@@ -140,7 +110,7 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 		int rowPosition = dataTable.getRowIndex();
 
 		// Gets the backup of the data to modify
-		dataObject = (CtAccountType) event.getObject();		
+		dataObject = (CtAccountType) event.getObject();
 
 		// If we are editing a row, we must disabled all the other buttons
 		this.editingMode = true;
@@ -156,8 +126,7 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 		messageDetail = "Editing account type: " + dataObject.getCode();
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
-		
-		
+
 	}
 
 	@Override
@@ -171,18 +140,17 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 		// Retrieved the data that was modified
 		dataObject = (CtAccountType) event.getObject();
 
-				
 		try {
 
 			// Validates the data
 			if (this.objectValidation(dataObject)) {
-				//sets the modif data
-				this.selectedData.setModifUser(this.loggedUser.getUserCode());
-				this.selectedData.setModifDate(LocalDateTime.now());
-				
+				// sets the modif data
+				this.getSelectedData().setModifUser(this.loggedUser.getUserCode());
+				this.getSelectedData().setModifDate(LocalDateTime.now());
+
 				accountTypeEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";
-				logger.info("Update account type: " + this.selectedData.toString() + " - " +messageDetail);
+				logger.info("Update account type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 				this.setControlVariablesToDefault();
 			} else {
@@ -214,15 +182,15 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 		} finally {
 			if (error) {
 				FacesContext.getCurrentInstance().validationFailed();
-			} else {				
+			} else {
 				this.loadDataList();
 			}
 		}
-		
+
 	}
 
 	@Override
-	public void onRowCancel(RowEditEvent<?> event) {		
+	public void onRowCancel(RowEditEvent<?> event) {
 		String message, messageDetail;
 
 		message = "CANCEL UPDATE ROW";
@@ -230,24 +198,23 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 
 		this.refreshDataTable();
 		this.setControlVariablesToDefault();
-		
+
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
-		
+
 	}
 
-	
 	@Override
 	public void pushDeleteRowButton() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pushCreateNewButton() {
-		this.selectedData = new CtAccountType();
+		this.setSelectedData(new CtAccountType());
 		PrimeFaces.current().executeScript("PF('createNewDialogWidget').show();");
-		
+
 	}
 
 	@Override
@@ -257,16 +224,16 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 		Boolean error = false;
 
 		try {
-			if (objectValidation(this.selectedData)) {
-				//Set create values
-				
-				this.selectedData.setEntityTypeId(ENTITY_TYPE_ID);
-				this.selectedData.setInputUser(this.loggedUser.getUserCode());
-				this.selectedData.setInputDate(LocalDateTime.now());
-				
-				accountTypeEJB.insertData(this.selectedData);
+			if (objectValidation(this.getSelectedData())) {
+				// Set create values
+
+				this.getSelectedData().setEntityTypeId(ENTITY_TYPE_ID);
+				this.getSelectedData().setInputUser(this.loggedUser.getUserCode());
+				this.getSelectedData().setInputDate(LocalDateTime.now());
+
+				accountTypeEJB.insertData(this.getSelectedData());
 				messageDetail = "Data saves succesfully";
-				logger.info("Create account type: " + this.selectedData.toString() + " - " +messageDetail);
+				logger.info("Create account type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 			} else {
@@ -302,22 +269,22 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 			} else {
 				this.resetFilterDataTable();
 				this.loadDataList();
-				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();"); 
+				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();");
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void pushCancelButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pushCleanButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -327,10 +294,10 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 		Boolean error = false;
 
 		try {
-			if (this.selectedData != null) {
-				accountTypeEJB.deleteData(this.selectedData);
+			if (this.getSelectedData() != null) {
+				accountTypeEJB.deleteData(this.getSelectedData());
 				messageDetail = "Data deletes succesfully";
-				logger.info("Delete account type: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Delete account type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;
@@ -371,19 +338,19 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 				this.loadDataList();
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void pushCancelButtonDeleteDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resetObjectValues() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -407,8 +374,8 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 
 			if (objectToValidate.getDescription() != null) {
 				objectToValidate.setDescription(objectToValidate.getDescription().trim());
-			}		
-			
+			}
+
 			if (objectToValidate.getCode() == null || objectToValidate.getCode().length() == 0) {
 				messageDetail = "ERROR - The code of the account type can not be null";
 				logger.error(messageDetail);
@@ -418,8 +385,8 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 					.compareTo(BasicTypeWithLists.CODE_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The code of the account type (" + objectToValidate.getCode().length()
-						+ " characters) exceeds the limit of "
-						+ BasicTypeWithLists.CODE_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicTypeWithLists.CODE_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -433,8 +400,8 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 					.compareTo(BasicTypeWithLists.NAME_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The name of the account type (" + objectToValidate.getName().length()
-						+ " characters) exceeds the limit of "
-						+ BasicTypeWithLists.NAME_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicTypeWithLists.NAME_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -449,36 +416,34 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 					.compareTo(BasicTypeWithLists.DESCRIPTION_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The description of the account type ("
-						+ objectToValidate.getDescription().length()
-						+ " characters) exceeds the limit of "
+						+ objectToValidate.getDescription().length() + " characters) exceeds the limit of "
 						+ BasicTypeWithLists.DESCRIPTION_FIELD_LENGTH_MAX.toString() + " characters";
 
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
 			}
-			
+
 			if (objectToValidate.getOrdinaryBillCycleTypeId() == null) {
 				result = false;
 				messageDetail = "ERROR - The ordirary bill cycle can not be null";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			}
-			
+
 			if (objectToValidate.getCorrectiveBillCycleTypeId() == null) {
 				result = false;
 				messageDetail = "ERROR - The ordirary bill cycle can not be null";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			}
-			
+
 			if (objectToValidate.getStatusId() == null) {
 				result = false;
 				messageDetail = "ERROR - The status can not be null";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			}
-			
 
 			if (result) {
 				// no error --> update panel
@@ -497,21 +462,21 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 	@Override
 	public void retrieveBackupData() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void setInitVariablesToDefault() {
 		this.editingMode = false;
-		
+
 	}
 
 	@Override
 	public void setControlVariablesToDefault() {
 		this.setInitVariablesToDefault();
-		
+
 	}
-	
+
 	public List<SelectItem> ordinaryBillCycleSelectItemsMenu() {
 		List<SelectItem> selectItem = new ArrayList<>();
 		List<CtBillCycleType> list = billCycleTypeEJB.findOrdinaryCycleType();
@@ -533,7 +498,7 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 		}
 		return selectItem;
 	}
-	
+
 	public List<SelectItem> correctiveBillCycleSelectItemsMenu() {
 		List<SelectItem> selectItem = new ArrayList<>();
 		List<CtBillCycleType> list = billCycleTypeEJB.findCorrectiveCycleType();
@@ -555,7 +520,7 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 		}
 		return selectItem;
 	}
-	
+
 	@Override
 	public void resetFilterDataTable() {
 		PrimeFaces current = PrimeFaces.current();

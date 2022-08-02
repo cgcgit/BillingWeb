@@ -1,6 +1,5 @@
 package com.comasw.ejb.catalog.type;
 
-
 import static com.comasw.model.Tables.CT_CONSUMPTION_TYPE;
 import static com.comasw.model.Tables.PT_CONSUMPTION_CLASS;
 import static org.jooq.impl.DSL.val;
@@ -36,13 +35,12 @@ public class ConsumptionTypeEJB implements ConsumptionTypeEJBLocal {
 	@Resource(lookup = "java:jboss/datasources/db_comasw")
 	private DataSource ds;
 
-	
-    /**
-     * Default constructor. 
-     */
-    public ConsumptionTypeEJB() {
-        // TODO Auto-generated constructor stub
-    }
+	/**
+	 * Default constructor.
+	 */
+	public ConsumptionTypeEJB() {
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public List<CtConsumptionType> findAllData() throws CoMaSwDataAccessException {
@@ -51,10 +49,8 @@ public class ConsumptionTypeEJB implements ConsumptionTypeEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(CT_CONSUMPTION_TYPE)
-					.orderBy(CT_CONSUMPTION_TYPE.CODE)
-					.fetch()
-					.into(CtConsumptionType.class);		
+			result = create.selectFrom(CT_CONSUMPTION_TYPE).orderBy(CT_CONSUMPTION_TYPE.CODE).fetch()
+					.into(CtConsumptionType.class);
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find all the consumption types - " + e.getMessage();
@@ -64,58 +60,55 @@ public class ConsumptionTypeEJB implements ConsumptionTypeEJBLocal {
 
 		return result;
 	}
-	
+
 	@Override
-	public List<PtConsumptionClass> findEntityTypeForConsumptions () throws CoMaSwDataAccessException{
+	public List<PtConsumptionClass> findEntityTypeForConsumptions() throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<PtConsumptionClass> result = null;
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(PT_CONSUMPTION_CLASS)
-					.orderBy(PT_CONSUMPTION_CLASS.CODE)
-					.fetch()
-					.into(PtConsumptionClass.class);		
+			result = create.selectFrom(PT_CONSUMPTION_CLASS).orderBy(PT_CONSUMPTION_CLASS.CODE).fetch()
+					.into(PtConsumptionClass.class);
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find all the consumption class for the consumption types - " + e.getMessage();
+			errorMessage = "Error while try to find all the consumption class for the consumption types - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 
 		return result;
-		
+
 	}
 
 	@Override
-	public CtConsumptionType findDataByConsumptionTypeId(Integer consumptionTypeId)
-			throws CoMaSwDataAccessException {
+	public CtConsumptionType findDataByConsumptionTypeId(Integer consumptionTypeId) throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtConsumptionType> result = null;
 		String errorMessage;
-		
+
 		try {
 			result = create.selectFrom(CT_CONSUMPTION_TYPE)
 					.where(CT_CONSUMPTION_TYPE.CONSUMPTION_TYPE_ID.eq(val(consumptionTypeId)))
-					.orderBy(CT_CONSUMPTION_TYPE.CODE)
-					.fetch()
-					.into(CtConsumptionType.class);
-			
+					.orderBy(CT_CONSUMPTION_TYPE.CODE).fetch().into(CtConsumptionType.class);
 
 			if (result.size() > 1) {
-				errorMessage = "Error while try to find the consumption type for consumption_type_id : " + consumptionTypeId
-						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
+				errorMessage = "Error while try to find the consumption type for consumption_type_id : "
+						+ consumptionTypeId + " - The query returns more rows(" + result.size()
+						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
-				
+
 			} else {
 				return result.get(0);
 			}
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the consumption type for consumption_type_id: " + consumptionTypeId + " - " + e.getMessage();
+			errorMessage = "Error while try to find the consumption type for consumption_type_id: " + consumptionTypeId
+					+ " - " + e.getMessage();
 			logger.error(errorMessage);
-			throw new CoMaSwDataAccessException(errorMessage, e);		
+			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 	}
 
@@ -124,15 +117,11 @@ public class ConsumptionTypeEJB implements ConsumptionTypeEJBLocal {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtConsumptionType> result = null;
 		String errorMessage;
-		
 
 		try {
-			result = create.selectFrom(CT_CONSUMPTION_TYPE)
-					.where(CT_CONSUMPTION_TYPE.CODE.eq(val(code)))
-					.orderBy(CT_CONSUMPTION_TYPE.CODE)
-					.fetch()
-					.into(CtConsumptionType.class);
-			
+			result = create.selectFrom(CT_CONSUMPTION_TYPE).where(CT_CONSUMPTION_TYPE.CODE.eq(val(code)))
+					.orderBy(CT_CONSUMPTION_TYPE.CODE).fetch().into(CtConsumptionType.class);
+
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the consumption type for code : " + code
 						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
@@ -142,59 +131,60 @@ public class ConsumptionTypeEJB implements ConsumptionTypeEJBLocal {
 				return result.get(0);
 			}
 
-
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the consumption type for code " + code + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
 	public void insertData(CtConsumptionType dataObject) throws CoMaSwDataAccessException {
-		String errorMessage;		
+		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);			
-			CtConsumptionTypeDao daoObject = new CtConsumptionTypeDao(configuration);			
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
+			CtConsumptionTypeDao daoObject = new CtConsumptionTypeDao(configuration);
 			daoObject.insert(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error inserting the consumption type object (value: " + dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error inserting the consumption type object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
 	public void updateData(CtConsumptionType dataObject) throws CoMaSwDataAccessException {
 		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);		
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
 			CtConsumptionTypeDao daoObject = new CtConsumptionTypeDao(configuration);
 			daoObject.update(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error updating the consumption type object (value: " + dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error updating the consumption type object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
 	public void deleteData(CtConsumptionType dataObject) throws CoMaSwDataAccessException {
 		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);		
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
 			CtConsumptionTypeDao daoObject = new CtConsumptionTypeDao(configuration);
 			daoObject.delete(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error deleting the consumption type object (value: "
-					+ dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error deleting the consumption type object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
-			throw new CoMaSwDataAccessException(errorMessage, e);			
+			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 }

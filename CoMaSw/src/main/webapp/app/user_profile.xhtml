@@ -74,8 +74,10 @@ button.ui-button {
 										match="pwd2" label="Password1"
 										rendered="#{userProfileController.editPassword}"
 										validatorMessage="New password and confirm new password fields do not match" />
-										<p:tooltip for="pwd1" value="The pasword characters must be between 5 and 32 characters" position="right"/>
-										
+									<p:tooltip for="pwd1"
+										value="The pasword characters must be between 5 and 32 characters"
+										position="right" />
+
 								</div>
 							</div>
 							<div class="p-field p-grid">
@@ -87,7 +89,9 @@ button.ui-button {
 										label="Password2"
 										rendered="#{userProfileController.editPassword}"
 										validatorMessage="New password and confirm new password fields do not match" />
-										<p:tooltip for="pwd2" value="The pasword characters must be between 5 and 32 characters" position="right"/>
+									<p:tooltip for="pwd2"
+										value="The pasword characters must be between 5 and 32 characters"
+										position="right" />
 								</div>
 								<p:commandButton id="savePassword" icon="#{uiValue.saveIcon}"
 									value="Save Changes" styleClass="ui-button-success"
@@ -167,7 +171,7 @@ button.ui-button {
 							value="#{userProfileController.userInject.phoneContact}"
 							disabled="#{!userProfileController.editMode}" />
 					</div>
-				</div>		
+				</div>
 
 			</p:panel>
 

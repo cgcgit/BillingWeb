@@ -30,7 +30,6 @@ import com.comasw.generalClass.BasicType;
 import com.comasw.interfaces.IEditableTable;
 import com.comasw.utilities.Utilities;
 
-
 @Named
 @ViewScoped
 public class ManageUserController extends BasicType<ItUsers> implements Serializable, IEditableTable {
@@ -69,7 +68,7 @@ public class ManageUserController extends BasicType<ItUsers> implements Serializ
 	@EJB
 	private ApplicationUserEJBLocal applicationUserEJB;
 
-	@Inject
+	
 	private ItUsers selectedData;
 
 	private List<SelectItem> profileList;
@@ -79,10 +78,10 @@ public class ManageUserController extends BasicType<ItUsers> implements Serializ
 	private ItUsers backupData;
 
 	private String password;
-	
-	//---------------------
-	// GETTERS AND SETTERS 
-	//---------------------
+
+	// ---------------------
+	// GETTERS AND SETTERS
+	// ---------------------
 
 	/**
 	 * @return the selectedData
@@ -153,11 +152,10 @@ public class ManageUserController extends BasicType<ItUsers> implements Serializ
 	public void setPassword(String password) {
 		this.password = password;
 	}
-     
-	
-	//---------------------
- 	// METHODS  
-	//---------------------
+
+	// ---------------------
+	// METHODS
+	// ---------------------
 
 	public ManageUserController() {
 		// TODO Auto-generated constructor stub
@@ -193,31 +191,28 @@ public class ManageUserController extends BasicType<ItUsers> implements Serializ
 		String message, messageDetail;
 
 		ItUsers dataObject;
-		
+
 		message = "EDIT ROW";
 
 		DataTable dataTable = (DataTable) facesContext.getViewRoot().findComponent(DATA_TABLE_ID);
 		int rowPosition = dataTable.getRowIndex();
-		
-		this.password=null;
-		
+
+		this.password = null;
+
 		// Gets the backup of the data to modify
 		dataObject = (ItUsers) event.getObject();
 		this.backupData.from(dataObject);
-		
 
 		this.editingMode = true;
-		
+
 		// Due to the update of the entire table to show the password column
 		// the edition of the row set to unselect --> force to expand the edit button
 		PrimeFaces.current().executeScript(
 				"jQuery('span.ui-icon-pencil').eq(" + rowPosition + ").each(function(){jQuery(this).click()});");
 
-	
 		messageDetail = "Editing user: " + dataObject.getUserCode();
 		logger.info(messageDetail);
-		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
-				messageDetail);
+		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 	}
 
@@ -246,8 +241,7 @@ public class ManageUserController extends BasicType<ItUsers> implements Serializ
 				messageDetail = "Error - The password (" + password.length() + " characters) must be between "
 						+ MIN_LENGTH_PASSWORD.toString() + "and " + MAX_LENGTH_PASSWORD.toString() + " characters";
 				logger.error(messageDetail);
-				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message,
-						messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 
 			} else {
 				// password is OK --> md5 to the password
@@ -300,9 +294,9 @@ public class ManageUserController extends BasicType<ItUsers> implements Serializ
 		} finally {
 			if (error) {
 				FacesContext.getCurrentInstance().validationFailed();
-				//Ajax.update(GROWL_MESSAGE_ID);
+				// Ajax.update(GROWL_MESSAGE_ID);
 			} else {
-				this.loadDataList();				
+				this.loadDataList();
 			}
 		}
 
@@ -321,11 +315,9 @@ public class ManageUserController extends BasicType<ItUsers> implements Serializ
 		messageDetail = "Cancelled the edition of the application level";
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
-		
-		this.setControlVariablesToDefault();		
-	}
 
-	
+		this.setControlVariablesToDefault();
+	}
 
 	@Override
 	public void pushDeleteRowButton() {
@@ -387,7 +379,7 @@ public class ManageUserController extends BasicType<ItUsers> implements Serializ
 
 			} else {
 				error = true;
-			}			
+			}
 
 		} catch (EJBException e) {
 			error = true;
@@ -418,7 +410,7 @@ public class ManageUserController extends BasicType<ItUsers> implements Serializ
 				facesContext.validationFailed();
 			} else {
 				this.loadDataList();
-				//Ajax.update(DATA_TABLE_ID);
+				// Ajax.update(DATA_TABLE_ID);
 				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();");
 				// PrimeFaces.current().ajax().update("form:mainTable");
 			}
@@ -711,13 +703,13 @@ public class ManageUserController extends BasicType<ItUsers> implements Serializ
 	@Override
 	public void resetFilterDataTable() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void refreshDataTable() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

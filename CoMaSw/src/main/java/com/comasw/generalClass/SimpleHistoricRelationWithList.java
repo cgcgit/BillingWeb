@@ -15,11 +15,22 @@ public class SimpleHistoricRelationWithList<T, S, U> extends RelationBasicTypeWi
 
 	protected String HISTORIC_CANDIDATE_DATA_TABLE_ID = "form:accordionPanel"
 			+ uiValues.getString("historicCandidateDataTableID");
-
-
+	
 	
 	/**
-	 * Main data list
+	 * Selected data list
+	 */
+	protected List<T> selectedDataList;
+
+	/**
+	 * Filtered data for the selected list
+	 */
+	protected List<T> filteredSelectedDataList;
+
+	
+
+	/**
+	 * Historic data list
 	 */
 	protected List<U> historicCandidateDataList;
 
@@ -28,6 +39,11 @@ public class SimpleHistoricRelationWithList<T, S, U> extends RelationBasicTypeWi
 	 */
 	protected List<U> filteredHistoricCandidateDataList;
 	
+	/**
+	 * Selected historic candidate data	 
+	 */
+	
+	protected U selectedHistoricCandidateData;
 
 	/**
 	 * Search date
@@ -39,15 +55,53 @@ public class SimpleHistoricRelationWithList<T, S, U> extends RelationBasicTypeWi
 	 */
 
 	protected boolean historicRelatedDataCriteria;
+	
+	/**
+	 * Flag for the historic criteria to search
+	 */
 
-
+	protected boolean historicSearchDataCriteria;
+	
+	/**
+	 * Text to shown in the search data table title
+	 */
+	protected String searchDataTableTitle;
+	
 
 	// --------------------
 	// GETTERS AND SETTERS
 	// -------------------
+	
 
-	
-	
+	/**
+	 * @return the selectedDataList
+	 */
+	public List<T> getSelectedDataList() {
+		return selectedDataList;
+	}
+
+	/**
+	 * @param selectedDataList the selectedDataList to set
+	 */
+	public void setSelectedDataList(List<T> selectedDataList) {
+		this.selectedDataList = selectedDataList;
+	}
+
+	/**
+	 * @return the filteredSelectedDataList
+	 */
+	public List<T> getFilteredSelectedDataList() {
+		return filteredSelectedDataList;
+	}
+
+	/**
+	 * @param filteredSelectedDataList the filteredSelectedDataList to set
+	 */
+	public void setFilteredSelectedDataList(List<T> filteredSelectedDataList) {
+		this.filteredSelectedDataList = filteredSelectedDataList;
+	}
+
+
 	/**
 	 * @return the searchDate
 	 */
@@ -92,6 +146,21 @@ public class SimpleHistoricRelationWithList<T, S, U> extends RelationBasicTypeWi
 		this.filteredHistoricCandidateDataList = filteredHistoricCandidateDataList;
 	}
 
+	
+	/**
+	 * @return the selectedHistoricCandidateData
+	 */
+	public U getSelectedHistoricCandidateData() {
+		return selectedHistoricCandidateData;
+	}
+
+	/**
+	 * @param selectedHistoricCandidateData the selectedHistoricCandidateData to set
+	 */
+	public void setSelectedHistoricCandidateData(U selectedHistoricCandidateData) {
+		this.selectedHistoricCandidateData = selectedHistoricCandidateData;
+	}
+	
 	/**
 	 * @return the historicRelatedDataCriteria
 	 */
@@ -105,8 +174,37 @@ public class SimpleHistoricRelationWithList<T, S, U> extends RelationBasicTypeWi
 	public void setHistoricRelatedDataCriteria(boolean historicRelatedDataCriteria) {
 		this.historicRelatedDataCriteria = historicRelatedDataCriteria;
 	}
+	
+	/**
+	 * @return the historicSearchDataCriteria
+	 */
+	public boolean isHistoricSearchDataCriteria() {
+		return historicSearchDataCriteria;
+	}
+
+	/**
+	 * @param historicSearchDataCriteria the historicSearchDataCriteria to set
+	 */
+	public void setHistoricSearchDataCriteria(boolean historicSearchDataCriteria) {
+		this.historicSearchDataCriteria = historicSearchDataCriteria;
+	}
+
+
+	/**
+	 * @return the searchDataTableTitle
+	 */
+	public String getSearchDataTableTitle() {
+		return searchDataTableTitle;
+	}
+
+	/**
+	 * @param searchDataTableTitle the searchDataTableTitle to set
+	 */
+	public void setSearchDataTableTitle(String searchDataTableTitle) {
+		this.searchDataTableTitle = searchDataTableTitle;
+	}
 
 	
-	
+
 
 }

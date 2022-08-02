@@ -49,36 +49,70 @@
 		<p:remoteCommand id="remoteCommandUpdateHistoricTable"
 			name="updateHistoricTable" process="@this"
 			update="form:accordionPanel:historicTable" />
+			
+		<p:remoteCommand id="remoteCommandUpdatePanelData"
+			name="updatePanelData" process="@this"
+			update="form:accordionPanel:selectedTablePanel
+			form:accordionPanel:historicTablePanel
+			form:accordionPanel:emptyHistoricTablePanel" />			
 
 
 		<p:accordionPanel id="accordionPanel" multiple="true"
 			widgetVar="multipleAccordionPanelWidget">
 
-			<!--  MAIN DATA AREA  -->
+			<!--  SEARCH DATA AREA  -->
 			<p:tab id="searchPanel"
-				titleStyle="background: WhiteSmoke; color: black" title="PROMOTION TYPE">
+				titleStyle="background: WhiteSmoke; color: black"
+				title="PROMOTION TYPE">
 				<p:panelGrid columns="2" layout="grid"
 					style="text-align: center; align-items: center;">
-					<p:panel header="Search Promotion Type">
-						<p:outputLabel id="dateSearchLabel" for="searchDate"
-							value="Search Date: " />
+					<p:panel header="Search Promotion Type Criteria">
+						<p:outputPanel id="dataCriteriaPanel">
+							<p:selectOneRadio id="searchCriteriaRowButton" layout="custom" immediate="true" 
+								value="#{promotionTypeController.historicSearchDataCriteria}">
+								<f:selectItem id="historicCriteria"
+									itemLabel="Show Historic Data" itemValue="true" />
+								<f:selectItem id="dateCriteria" itemLabel="Show Data for Date"
+									itemValue="false" />
+							</p:selectOneRadio>
 
-						<p:inputMask id="searchDate" required="true" immediate="true"
-							value="#{promotionTypeController.searchDate}" mask="99/99/9999"
-							style="width:10rem" styleClass="p-mx-3"
-							valueChangeListener="#{promotionTypeController.changeSearchDate}"
-							requiredMessage="The date value to search is null. Please fill the search date field">
-							<f:converter
-								converterId="com.comasw.converter.localDateTimeConverter" />
-						</p:inputMask>
+							<p:panelGrid columns="3" columnClasses="ui-grid-col-4"
+								layout="flex" contentStyleClass="align-items-baseline ui-fluid"
+								style="border:0px none; background-color:transparent; align:left">
 
-						<p:commandButton id="searchDataButton" value="Search"
-							icon="#{uiValue.searchIcon}"
-							actionListener="#{promotionTypeController.pushSearchButton()}"
-							ajax="true" immediate="true" update=":form:growlMessage"
-							style="width:7rem" oncomplete="#{updateDataTable}"
-							styleClass="p-mx-3" class="ui-button-success rounded-button">
-						</p:commandButton>
+								<p:panel>
+									<p:radioButton id="historicRowButton"
+										for="searchCriteriaRowButton" itemIndex="0" />
+									<h:outputLabel for="historicRowButton"
+										value="Show Historic Data"
+										style="font-family:Arial Black; text-align: left; font-size: 11px; margin-left: .5rem" />
+								</p:panel>
+								
+								<p:panel>
+									<p:radioButton id="dateRowButton" for="searchCriteriaRowButton"
+										itemIndex="1" />
+									<h:outputLabel for="dateRowButton" value="Show Data for Date:"
+										style="font-family:Arial Black; text-align: left; font-size: 11px; margin-left: .5rem" />
+
+									<p:inputMask id="searchDate" required="false" immediate="true"
+										value="#{promotionTypeController.searchDate}" mask="99/99/9999"
+										style="width:7rem; height:2rem" styleClass="p-mx-3"
+										valueChangeListener="#{promotionTypeController.changeSearchDate}"
+										requiredMessage="The date value to search is null. Please fill the search date field">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+									</p:inputMask>
+								</p:panel>
+								
+								<p:commandButton id="searchDataButton" value="Search"
+									icon="#{uiValue.searchIcon}" ajax="true" 
+									actionListener="#{promotionTypeController.pushSearchButton()}"
+									update=":form:growlMessage"
+									style="width:7rem" oncomplete="#{updateDataTable}"
+									styleClass="p-mx-3" class="ui-button-success rounded-button">
+								</p:commandButton>
+							</p:panelGrid>
+						</p:outputPanel>
 					</p:panel>
 
 					<p:panel header="Create New Promotion Type"
@@ -97,57 +131,56 @@
 				<p:overlayPanel id="searchList" for="searchDataButton"
 					my="center top" at="center bottom" showCloseIcon="true"
 					dismissable="false" widgetVar="searchListWidget">
+					
+					<!--  DATA SEARCH TABLE -->
+					<p:dataTable id="dataTable" widgetVar="dataTableWidget" partialUpdate="disabled"
+						var="dataTable" value="#{promotionTypeController.dataList}"
+						filteredValue="#{promotionTypeController.filteredDataList}"
+						showGridlines="true" stripedRows="true" scrollable="true"
+						reflow="true" editable="true" rowIndexVar="rowIndexSearchTable"
+						rowKey="(#{dataTable.promotionTypeId} #{dataTable.startDate} #{dataTable.endDate})"
+						selection="#{promotionTypeController.selectedData}"
+						selectionMode="single" paginator="true" rows="5" size="small"
+						paginatorPosition="bottom">
 
-						<p />
-					Promotion Type Data - Click on row button to see the historic records of the promotion type			<p />
-						<!--  DATA SEARCH TABLE -->
-						<p:dataTable id="dataTable" widgetVar="dataTableWidget"
-							var="dataTable" value="#{promotionTypeController.dataList}"
-							filteredValue="#{promotionTypeController.filteredDataList}"
-							showGridlines="true" stripedRows="true" scrollable="true"
-							reflow="true" editable="true" rowIndexVar="rowIndexSearchTable"
-							rowKey="(#{dataTable.promotionTypeId} #{dataTable.startDate} #{dataTable.endDate})"
-							selection="#{promotionTypeController.injectSelectedData}"
-							selectionMode="single" paginator="true" rows="5" size="small"
-							paginatorPosition="bottom">
+						<!--  DATA TABLE - HEADER -->
+						<f:facet name="header">
+							<p:outputLabel id="title"
+								value="#{promotionTypeController.searchDataTableTitle}" />
+						</f:facet>
 
-							<!--  DATA TABLE - HEADER -->
-							<f:facet name="header">
-							</f:facet>
+						<!--  DATA TABLE - FOOTER -->
+						<f:facet id="facetFooter" name="footer">
+						</f:facet>
 
-							<!--  DATA TABLE - FOOTER -->
-							<f:facet id="facetFooter" name="footer">
-							</f:facet>
-
-							<!--  DATA TABLE - ACTION COLUMNS -->
-							<p:column id="showHistoricData" headerText="Show Historic"
-								style="font-family:Arial Black;
+						<!--  DATA TABLE - ACTION COLUMNS -->
+						<p:column id="showHistoricData" headerText="Show Historic"
+							style="font-family:Arial Black;
                                   text-align: center;
                                   font-size: 11px;
                                   width: 30px;    
                                   overflow: hidden">
 
-								<p:commandButton id="historicButton"
-									styleClass="ui-button-warning rounded-button"
-									icon="#{uiValue.viewIcon}" immediate="true" ajax="true"
-									actionListener="#{promotionTypeController.pushShowDetailRowButton()}"
-									update="form:accordionPanel:selectedTablePanel
+							<p:commandButton id="historicButton"
+								styleClass="ui-button-warning rounded-button"
+								icon="#{uiValue.viewIcon}" immediate="true" ajax="true"
+								actionListener="#{promotionTypeController.pushShowDetailRowButton()}"
+								update="form:accordionPanel:selectedTablePanel
 								form:accordionPanel:emptyHistoricTablePanel
 								form:accordionPanel:historicTablePanel"
-									oncomplete="{updateHistoricTable()}">
-								</p:commandButton>
-							</p:column>
+								oncomplete="{updateHistoricTable()}">
+							</p:commandButton>
+						</p:column>
 
-							<!--  DATA TABLE - DATA COLUMNS -->
+						<!--  DATA TABLE - DATA COLUMNS -->
 
-							<p:column id="searchCode"
+						<p:column id="searchCode"
 							style="font-family:Arial Black;
                                   text-align: left;
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
-							headerText="CODE" rendered="true"
-							sortBy="#{dataTable.code}"
+							headerText="CODE" rendered="true" sortBy="#{dataTable.code}"
 							filterBy="#{dataTable.code}" filterMatchMode="contains">
 							<h:outputText id="searchCodeText" value="#{dataTable.code}" />
 						</p:column>
@@ -159,8 +192,8 @@
                                   width: 100px;    
                                   overflow: hidden"
 							headerText="START DATE" rendered="true"
-							sortBy="#{dataTable.startDate}"
-							filterBy="#{dataTable.startDate}" filterMatchMode="exact">
+							sortBy="#{dataTable.startDate}" filterBy="#{dataTable.startDate}"
+							filterMatchMode="exact">
 							<f:facet id="searchStartDateFilter" name="filter">
 								<p:datePicker id="searchStartDateFilterPicker"
 									onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
@@ -184,8 +217,8 @@
                                   width: 100px;    
                                   overflow: hidden"
 							headerText="END DATE" rendered="true"
-							sortBy="#{dataTable.endDate}"
-							filterBy="#{dataTable.endDate}" filterMatchMode="exact">
+							sortBy="#{dataTable.endDate}" filterBy="#{dataTable.endDate}"
+							filterMatchMode="exact">
 							<f:facet id="searchEndDateFilter" name="filter">
 								<p:datePicker id="searchEndDateFilterPicker"
 									onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
@@ -195,8 +228,7 @@
 										converterId="com.comasw.converter.localDateTimeConverter" />
 								</p:datePicker>
 							</f:facet>
-							<h:outputText id="searchEndDateText"
-								value="#{dataTable.endDate}">
+							<h:outputText id="searchEndDateText" value="#{dataTable.endDate}">
 								<f:converter
 									converterId="com.comasw.converter.localDateTimeConverter" />
 							</h:outputText>
@@ -208,8 +240,7 @@
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
-							headerText="NAME" rendered="true"
-							sortBy="#{dataTable.name}"
+							headerText="NAME" rendered="true" sortBy="#{dataTable.name}"
 							filterBy="#{dataTable.name}" filterMatchMode="contains">
 							<h:outputText id="searchNameText" value="#{dataTable.name}" />
 						</p:column>
@@ -222,8 +253,7 @@
                                   overflow: hidden"
 							headerText="DESCRIPTION" rendered="true"
 							sortBy="#{dataTable.description}"
-							filterBy="#{dataTable.description}"
-							filterMatchMode="contains">
+							filterBy="#{dataTable.description}" filterMatchMode="contains">
 							<h:outputText id="searchDescriptionText"
 								value="#{dataTable.description}" />
 						</p:column>
@@ -261,8 +291,7 @@
                                   width: 100px;    
                                   overflow: hidden"
 							headerText="DISCOUNT TYPE" rendered="true"
-							filterBy="#{dataTable.discountTypeId}"
-							filterMatchMode="exact">
+							filterBy="#{dataTable.discountTypeId}" filterMatchMode="exact">
 							<f:facet id="searchDiscountTypeFilter" name="filter">
 								<p:selectOneMenu id="searchDiscountTypeFilterMenu"
 									onchange="PF('dataTableWidget').filter()">
@@ -306,16 +335,15 @@
 								<p:selectOneMenu id="statusFilterMenu"
 									onchange="PF('dataTableWidget').filter()">
 									<f:selectItems id="searchStatusFilterSelectItems"
-										value="#{promotionTypeController.statusSelectItems()}" />
+										value="#{promotionTypeController.statusCatalogSelectItems()}" />
 								</p:selectOneMenu>
 							</f:facet>
 
 							<p:selectOneMenu id="searchStatusOutput" editable="false"
-								disabled="true" immediate="true"
-								value="#{dataTable.statusId}">
+								disabled="true" immediate="true" value="#{dataTable.statusId}">
 								<f:selectItems id="selectItemsSearchStatusOutput"
 									itemDisabled="true" var="Status"
-									value="#{promotionTypeController.statusSelectItems()}"
+									value="#{promotionTypeController.statusCatalogSelectItems()}"
 									itemValue="#{dataTable.statusId}" />
 							</p:selectOneMenu>
 						</p:column>
@@ -326,10 +354,10 @@
 					visible="#{promotionTypeController.showSelectedData}">
 
 					<p:dataTable id="selectedTable" widgetVar="selectedTableWidget"
-						var="selectedDataTable" value="#{promotionTypeController.selectedData}"
-						rendered="true" size="small" scrollable="true"
-						emptyMessage="No data to show" showGridlines="true"
-						paginatorPosition="bottom">
+						var="selectedDataTable"
+						value="#{promotionTypeController.selectedDataList}" rendered="true"
+						size="small" scrollable="true" emptyMessage="No data to show"
+						showGridlines="true" paginatorPosition="bottom">
 
 						<p:column id="code"
 							style="font-family:Arial Black;
@@ -448,7 +476,7 @@
 								value="#{selectedDataTable.statusId}">
 								<f:selectItems id="selectItemsStatusOutput" itemDisabled="true"
 									var="Status"
-									value="#{promotionTypeController.statusSelectItems()}"
+									value="#{promotionTypeController.statusCatalogSelectItems()}"
 									itemValue="#{selectedDataTable.statusId}" />
 							</p:selectOneMenu>
 						</p:column>
@@ -475,7 +503,7 @@
 						value="#{promotionTypeController.historicDataList}"
 						rowKey="(#{historicDataTable.promotionTypeId} #{historicDataTable.startDate} #{historicDataTable.endDate})"
 						rowIndexVar="rowIndexHistoricTable" selectionMode="single"
-						selection="#{promotionTypeController.injectSelectedHistoricData}"
+						selection="#{promotionTypeController.selectedHistoricData}"
 						filteredValue="#{promotionTypeController.filteredHistoricDataList}"
 						showGridlines="true" stripedRows="true" scrollable="true"
 						emptyMessage="No data to show" size="small" paginator="true"
@@ -486,7 +514,7 @@
 								<p:commandButton id="refreshHistoricTable"
 									style="margin-left: 1rem; margin-right: .5rem"
 									icon="#{uiValue.refreshIcon}" ajax="true"
-									actionListener="#{promotionTypeController.refreshHistoricDataTable()}"
+									actionListener="#{promotionTypeController.refreshHistoricDataTable}"
 									onclick="{updateHistoricTable()}"
 									styleClass="ui-button-warning rounded-button">
 
@@ -533,7 +561,7 @@
 									target="#{promotionTypeController.rowHistoricSelected}" />
 
 								<f:setPropertyActionListener value="#{historicDataTable}"
-									target="#{promotionTypeController.injectSelectedHistoricData}" />
+									target="#{promotionTypeController.selectedHistoricData}" />
 							</p:commandButton>
 						</p:column>
 
@@ -803,7 +831,7 @@
 								<p:selectOneMenu id="statusFilterMenuHist"
 									onchange="PF('historicTableWidget').filter()">
 									<f:selectItems id="statusFilterSelectItemsHist"
-										value="#{promotionTypeController.statusSelectItems()}" />
+										value="#{promotionTypeController.statusCatalogSelectItems()}" />
 								</p:selectOneMenu>
 							</f:facet>
 							<p:cellEditor id="statusHistCellEditor">
@@ -812,7 +840,7 @@
 										disabled="true" immediate="true"
 										value="#{historicDataTable.statusId}">
 										<f:selectItems
-											value="#{promotionTypeController.statusSelectItems()}"
+											value="#{promotionTypeController.statusCatalogSelectItems()}"
 											id="selectItemsStatusHistOutput" itemDisabled="true"
 											var="Status" itemValue="#{historicDataTable.statusId}" />
 									</p:selectOneMenu>
@@ -822,7 +850,7 @@
 										valueChangeListener="#{promotionTypeController.changeStatus}"
 										value="#{historicDataTable.statusId}" immediate="true">
 										<f:selectItems
-											value="#{promotionTypeController.statusSelectItems()}"
+											value="#{promotionTypeController.statusCatalogSelectItems()}"
 											id="selectItemsStatusHistInput" var="Status"
 											itemValue="#{historicDataTable.statusId}">
 										</f:selectItems>
@@ -842,16 +870,16 @@
 
 		<!--  CREATE NEW DIALOG -->
 		<p:dialog id="createNewDialog"
-			header="#{promotionTypeController.dialogHeaderText}" showEffect="fade"
-			responsive="true" widgetVar="createNewDialogWidget">
+			header="#{promotionTypeController.dialogHeaderText}"
+			showEffect="fade" responsive="true" widgetVar="createNewDialogWidget">
 
 			<h:panelGrid id="createNewDialogPanelData" columns="2"
 				cellpadding="5">
 
 				<p:outputLabel id="newStartDateLabel" value="StartDate " />
 				<p:inputMask id="newStartDateInput"
-					value="#{promotionTypeController.injectNewData.startDate}" mask="99/99/9999"
-					style="width:96%">
+					value="#{promotionTypeController.newData.startDate}"
+					mask="99/99/9999" style="width:96%">
 					<f:converter
 						converterId="com.comasw.converter.localDateTimeConverter" />
 					<p:ajax event="change" update="newStartDateInput" />
@@ -859,77 +887,77 @@
 
 				<p:outputLabel id="newEndDateLabel" value="StartDate " />
 				<p:inputMask id="newEndDateInput"
-					value="#{promotionTypeController.injectNewData.endDate}" mask="99/99/9999"
-					style="width:96%">
+					value="#{promotionTypeController.newData.endDate}"
+					mask="99/99/9999" style="width:96%">
 					<f:converter
 						converterId="com.comasw.converter.localDateTimeConverter" />
 					<p:ajax event="change" update="newEndDateInput" />
 				</p:inputMask>
-				
+
 				<p:outputLabel id="newCodeLabel" value="Code: " />
 				<p:inputText id="newCodeInput" label="Code"
-					value="#{promotionTypeController.injectNewData.code}">
+					value="#{promotionTypeController.newData.code}">
 				</p:inputText>
 
 				<p:outputLabel id="newNameLabel" value="Name: " />
 				<p:inputText id="newNameInput" label="Name"
-					value="#{promotionTypeController.injectNewData.name}">
+					value="#{promotionTypeController.newData.name}">
 				</p:inputText>
 
 				<p:outputLabel id="newDescriptionLabel" value="Description: " />
 				<p:inputText id="newDescriptionInput" label="Description"
-					value="#{promotionTypeController.injectNewData.description}">
+					value="#{promotionTypeController.newData.description}">
 				</p:inputText>
 
 				<p:outputLabel id="newApplicationLevelLabel"
 					value="Application Level: " />
 				<p:selectOneMenu id="applicationLevelInput"
-					value="#{promotionTypeController.injectNewData.applicationLevelId}"
+					value="#{promotionTypeController.newData.applicationLevelId}"
 					immediate="true">
 					<f:selectItems
 						value="#{promotionTypeController.applicationLevelSelectItems()}"
 						id="selectItemsApplicationLevelInput" var="ApplicationLevel"
-						itemValue="#{promotionTypeController.injectNewData.applicationLevelId}">
+						itemValue="#{promotionTypeController.newData.applicationLevelId}">
 					</f:selectItems>
 				</p:selectOneMenu>
 
 				<p:outputLabel id="newDiscountTypeLabel" value="Discount Type: " />
 				<p:selectOneMenu id="discountTypeInput"
-					value="#{promotionTypeController.injectNewData.discountTypeId}"
+					value="#{promotionTypeController.newData.discountTypeId}"
 					immediate="true">
 					<f:selectItems
 						value="#{promotionTypeController.discountTypeSelectItems()}"
 						id="selectItemsDiscountTypeInput" var="DiscountType"
-						itemValue="#{promotionTypeController.injectNewData.discountTypeId}">
+						itemValue="#{promotionTypeController.newData.discountTypeId}">
 					</f:selectItems>
 				</p:selectOneMenu>
 
 				<p:outputLabel id="newDiscountValueLabel" value="Discount Value: " />
 				<p:inputNumber id="newDiscountValueInput" label="DiscountValue"
 					decimalPlaces="4"
-					value="#{promotionTypeController.injectNewData.discountValue}">
+					value="#{promotionTypeController.newData.discountValue}">
 				</p:inputNumber>
 
 
 				<p:outputLabel id="newStatusLabel" value="Status: " />
 				<p:selectOneMenu id="statusInput"
-					value="#{promotionTypeController.injectNewData.statusId}"
+					value="#{promotionTypeController.newData.statusId}"
 					immediate="true">
 					<f:selectItems
-						value="#{promotionTypeController.statusSelectItems()}"
+						value="#{promotionTypeController.statusCatalogSelectItems()}"
 						id="selectItemsStatusInput" var="Status"
-						itemValue="#{promotionTypeController.injectNewData.statusId}">
+						itemValue="#{promotionTypeController.newData.statusId}">
 					</f:selectItems>
 				</p:selectOneMenu>
 			</h:panelGrid>
-			
+
 			<h:panelGrid id="createNewDialogPanelButtons" columns="3"
 				cellpadding="5">
 				<p:commandButton id="createNewDialogConfirm"
 					value="#{uiValue.okLabel}" update="form:growlMessage"
 					actionListener="#{promotionTypeController.pushConfirmButtonCreateNewDialog()}"
 					styleClass="ui-confirmdialog-yes" icon="#{uiValue.okCircleIcon}"
-					oncomplete="if (!args.validationFailed) {updateSelectedTable(); updateHistoricTable()}">
+					oncomplete="if (!args.validationFailed) {updatePanelData(); updateSelectedTable(); updateHistoricTable()}">
 				</p:commandButton>
 				<p:commandButton id="createNewDialogCancel"
 					value="#{uiValue.cancelLabel}" icon="#{uiValue.cancelCircleIcon}"
@@ -956,7 +984,7 @@
 				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
 				actionListener="#{promotionTypeController.pushConfirmButtonDeleteDialog()}"
 				immediate="true"
-				oncomplete="{updateSelectedTable(); updateHistoricTable()}; PF('deleteRowDialogWidget').hide()"
+				oncomplete="{updatePanelData(); updateSelectedTable(); updateHistoricTable()}; PF('deleteRowDialogWidget').hide()"
 				process="@this" icon="#{uiValue.okCircleIcon}" />
 			<p:commandButton id="deleteDialogCancel"
 				value="#{uiValue.cancelLabel}" styleClass="ui-confirmdialog-no"

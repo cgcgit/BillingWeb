@@ -37,11 +37,9 @@ import com.comasw.interfaces.IEditableTable;
  */
 public class DiscountTypeController extends BasicType<PtDiscountType> implements Serializable, IEditableTable {
 
-
 	private static final long serialVersionUID = 2143390534598584457L;
 
 	Logger logger = (Logger) LogManager.getLogger(DiscountTypeController.class);
-
 
 	@Inject
 	private ExternalContext externalContext;
@@ -51,51 +49,14 @@ public class DiscountTypeController extends BasicType<PtDiscountType> implements
 	@EJB
 	private DiscountTypeEJBLocal discountTypeEJB;
 
-	
-
-	/**
-	 * Selected data row in the table
-	 */
-	@Inject
-	private PtDiscountType selectedData;
-
-
-	
-	// --------------------
-	// GETTERS AND SETTERS
-	// -------------------
-	
-
-	/**
-	 * @return the selectedData
-	 */
-	public PtDiscountType getSelectedData() {
-		return selectedData;
-	}
-
-
-	/**
-	 * @param selectedData the selectedData to set
-	 */
-	public void setSelectedData(PtDiscountType selectedData) {
-		this.selectedData = selectedData;
-	}
-
-
-	
-	
-	
 
 	// -------------------
 	// METHODS
 	// -------------------
-	
 
-	
 	public DiscountTypeController() {
 		// TODO Auto-generated constructor stub
 	}
-
 
 	@PostConstruct
 	public void init() {
@@ -109,7 +70,6 @@ public class DiscountTypeController extends BasicType<PtDiscountType> implements
 		}
 
 	}
-	
 
 	@Override
 	public void loadDataList() {
@@ -120,7 +80,7 @@ public class DiscountTypeController extends BasicType<PtDiscountType> implements
 		} else {
 			logger.info("Load data sucessful");
 		}
-		
+
 	}
 
 	@Override
@@ -152,7 +112,6 @@ public class DiscountTypeController extends BasicType<PtDiscountType> implements
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
-		
 	}
 
 	@Override
@@ -166,14 +125,13 @@ public class DiscountTypeController extends BasicType<PtDiscountType> implements
 		// Retrieved the data that was modified
 		dataObject = (PtDiscountType) event.getObject();
 
-				
 		try {
 
 			// Validates the data
 			if (this.objectValidation(dataObject)) {
 				discountTypeEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";
-				logger.info("Update discount type: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Update discount type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 				this.setControlVariablesToDefault();
 			} else {
@@ -206,15 +164,15 @@ public class DiscountTypeController extends BasicType<PtDiscountType> implements
 			if (error) {
 				FacesContext.getCurrentInstance().validationFailed();
 			} else {
-				
+
 				this.loadDataList();
 			}
 		}
-		
+
 	}
 
 	@Override
-	public void onRowCancel(RowEditEvent<?> event) {		
+	public void onRowCancel(RowEditEvent<?> event) {
 		String message, messageDetail;
 
 		message = "CANCEL UPDATE ROW";
@@ -222,24 +180,23 @@ public class DiscountTypeController extends BasicType<PtDiscountType> implements
 
 		this.refreshDataTable();
 		this.setControlVariablesToDefault();
-		
+
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
-		
+
 	}
 
-	
 	@Override
 	public void pushDeleteRowButton() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pushCreateNewButton() {
 		this.setSelectedData(new PtDiscountType());
 		PrimeFaces.current().executeScript("PF('createNewDialogWidget').show();");
-		
+
 	}
 
 	@Override
@@ -288,22 +245,22 @@ public class DiscountTypeController extends BasicType<PtDiscountType> implements
 			} else {
 				this.resetFilterDataTable();
 				this.loadDataList();
-				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();"); 
+				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();");
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void pushCancelButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void pushCleanButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -316,7 +273,7 @@ public class DiscountTypeController extends BasicType<PtDiscountType> implements
 			if (this.getSelectedData() != null) {
 				discountTypeEJB.deleteData(this.getSelectedData());
 				messageDetail = "Data deletes succesfully";
-				logger.info("Delete discount type: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Delete discount type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;
@@ -357,19 +314,19 @@ public class DiscountTypeController extends BasicType<PtDiscountType> implements
 				this.loadDataList();
 			}
 		}
-		
+
 	}
 
 	@Override
 	public void pushCancelButtonDeleteDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void resetObjectValues() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
@@ -400,12 +357,11 @@ public class DiscountTypeController extends BasicType<PtDiscountType> implements
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} else if (((Integer) objectToValidate.getCode().length())
-					.compareTo(BasicType.CODE_FIELD_LENGTH_MAX) > 0) {
+			} else if (((Integer) objectToValidate.getCode().length()).compareTo(BasicType.CODE_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The code of the discount type (" + objectToValidate.getCode().length()
-						+ " characters) exceeds the limit of "
-						+ BasicType.CODE_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicType.CODE_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -415,12 +371,11 @@ public class DiscountTypeController extends BasicType<PtDiscountType> implements
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} else if (((Integer) objectToValidate.getName().length())
-					.compareTo(BasicType.NAME_FIELD_LENGTH_MAX) > 0) {
+			} else if (((Integer) objectToValidate.getName().length()).compareTo(BasicType.NAME_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The name of the discount type (" + objectToValidate.getName().length()
-						+ " characters) exceeds the limit of "
-						+ BasicType.NAME_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicType.NAME_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -435,8 +390,7 @@ public class DiscountTypeController extends BasicType<PtDiscountType> implements
 					.compareTo(BasicType.DESCRIPTION_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The description of the discount type ("
-						+ objectToValidate.getDescription().length()
-						+ " characters) exceeds the limit of "
+						+ objectToValidate.getDescription().length() + " characters) exceeds the limit of "
 						+ BasicType.DESCRIPTION_FIELD_LENGTH_MAX.toString() + " characters";
 
 				logger.error(messageDetail);
@@ -461,9 +415,9 @@ public class DiscountTypeController extends BasicType<PtDiscountType> implements
 	@Override
 	public void retrieveBackupData() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
 	public void setInitVariablesToDefault() {
 		this.editingMode = false;
@@ -473,7 +427,7 @@ public class DiscountTypeController extends BasicType<PtDiscountType> implements
 	public void setControlVariablesToDefault() {
 		this.setInitVariablesToDefault();
 	}
-	
+
 	@Override
 	public void resetFilterDataTable() {
 		PrimeFaces current = PrimeFaces.current();
@@ -487,5 +441,5 @@ public class DiscountTypeController extends BasicType<PtDiscountType> implements
 		this.loadDataList();
 		Ajax.update(DATA_TABLE_ID);
 	}
-	
+
 }

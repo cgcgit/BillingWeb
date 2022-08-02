@@ -27,23 +27,17 @@ import com.comasw.ejb.miscelaneous.ApplicationMenuEJBLocal;
 public class ApplicationMenuController implements Serializable {
 
 	private static final long serialVersionUID = 1398156738340556972L;
-	
-	protected static ResourceBundle generalProperties = ResourceBundle
-			.getBundle("com.comasw.properties.general");
+
+	protected static ResourceBundle generalProperties = ResourceBundle.getBundle("com.comasw.properties.general");
 
 	private MenuModel model;
-	
-	Logger logger= (Logger) LogManager.getLogger(LoginController.class);	
+
+	Logger logger = (Logger) LogManager.getLogger(LoginController.class);
 
 	@EJB
 	private ApplicationMenuEJBLocal ejbMenu;
-	
+
 	private Boolean profileAdmin;
-	
-
-	
-
-
 
 	/**
 	 * @return the profileAdmin
@@ -58,14 +52,10 @@ public class ApplicationMenuController implements Serializable {
 	public void setProfileAdmin(Boolean profileAdmin) {
 		this.profileAdmin = profileAdmin;
 	}
-	
-	
-
-	
 
 	@PostConstruct
 	public void init() {
-		
+
 		if (model == null) {
 			model = new DefaultMenuModel();
 			this.createMenu(null, null);
@@ -101,12 +91,12 @@ public class ApplicationMenuController implements Serializable {
 		VwUsers user = (VwUsers) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.get("applicationUser");
 
-		logger.debug ("Menu for the profile " + user.getProfileCode());
-		
+		logger.debug("Menu for the profile " + user.getProfileCode());
+
 		if (parentMenuId == null) { // First iteration --> root elements
-			
-			menuList=Optional.ofNullable(ejbMenu.findMenuByProfileCode(user.getProfileCode()));
-			
+
+			menuList = Optional.ofNullable(ejbMenu.findMenuByProfileCode(user.getProfileCode()));
+
 			menuList = Optional.ofNullable(ejbMenu.findMenuByLevelAndProfileCode(user.getProfileCode(), 1));
 		} else { // not first iteration --> find the children
 			menuList = Optional
@@ -114,38 +104,38 @@ public class ApplicationMenuController implements Serializable {
 
 		}
 		if (menuList.isPresent()) {
-			//data menu find
+			// data menu find
 			for (MtApplicationMenuRecord p : menuList.get()) {
 				if (p.getApplicationParentMenuId() == null) {
 					// root element --> no functionality --> head of the main menu
 					if (p.getHasChildren()) {
-						
-						//add root data to parent submenu
+
+						// add root data to parent submenu
 						parentSubMenu = DefaultSubMenu.builder().label(p.getName()).build();
 						// search child menu data
-						createMenu(p.getApplicationMenuId(), parentSubMenu);						
-						//add the parent submenu to he model
+						createMenu(p.getApplicationMenuId(), parentSubMenu);
+						// add the parent submenu to he model
 						model.getElements().add(parentSubMenu);
 
 					}
 				} else {
-					//not root element					
+					// not root element
 
 					if (p.getHasChildren()) {
-						//intermediate element --> no functionality --> head of the intermediate menu
-						//create an intermediate submenu and add the data
+						// intermediate element --> no functionality --> head of the intermediate menu
+						// create an intermediate submenu and add the data
 						DefaultSubMenu intermediateSubMenu = DefaultSubMenu.builder().label(p.getName()).build();
-						//search child menu data
+						// search child menu data
 						createMenu(p.getApplicationMenuId(), intermediateSubMenu);
-						//add the intermediate menu to the given subMenu
+						// add the intermediate menu to the given subMenu
 						subMenu.getElements().add(intermediateSubMenu);
-						
 
 					} else {
-						//final element --> with functionality --> item for the submenu						
-						DefaultMenuItem item = DefaultMenuItem.builder().value(p.getName())
-								.url(generalProperties.getString("ROOT_APP_FILE_URL") + p.getPage() + "?faces-redirect=true").ajax(true).build();
-						//add item to the given subMenu
+						// final element --> with functionality --> item for the submenu
+						DefaultMenuItem item = DefaultMenuItem.builder().value(p.getName()).url(
+								generalProperties.getString("ROOT_APP_FILE_URL") + p.getPage() + "?faces-redirect=true")
+								.ajax(true).build();
+						// add item to the given subMenu
 						subMenu.getElements().add(item);
 
 					}
@@ -154,26 +144,24 @@ public class ApplicationMenuController implements Serializable {
 			}
 		}
 	}
-	
-	
-	public String goToUserProfile () {
+
+	public String goToUserProfile() {
 		return "user_profile.xhtml" + "?faces-redirect=true";
 	}
-	
-	public String goToManageUser () {
+
+	public String goToManageUser() {
 		return "manage_user.xhtml" + "?faces-redirect=true";
 	}
-	
+
 	public boolean viewEditUserProfilesOption() {
 		VwUsers user = (VwUsers) FacesContext.getCurrentInstance().getExternalContext().getSessionMap()
 				.get("applicationUser");
 		boolean result = false;
-		
+
 		if (user.getProfileCode().equalsIgnoreCase("ADMIN")) {
 			result = true;
 		}
 		return result;
 	}
-
 
 }

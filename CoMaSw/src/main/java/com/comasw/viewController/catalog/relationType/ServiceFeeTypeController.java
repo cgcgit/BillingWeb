@@ -48,15 +48,14 @@ import com.comasw.interfaces.ISimpleHistoricRelationsTable;
  *
  */
 public class ServiceFeeTypeController extends SimpleHistoricRelationWithList<CtServiceType, VwServiceFeeType, CtFeeType>
-implements Serializable, ISimpleHistoricRelationsTable {
+		implements Serializable, ISimpleHistoricRelationsTable {
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5935396738312152046L;
-	
+
 	Logger logger = (Logger) LogManager.getLogger(ServiceFeeTypeController.class);
 
-	
 	@Inject
 	private ExternalContext externalContext;
 	@Inject
@@ -67,7 +66,7 @@ implements Serializable, ISimpleHistoricRelationsTable {
 
 	@EJB
 	private ServiceFeeTypeEJBLocal serviceFeeTypeEJB;
-	
+
 	@EJB
 	private FeeTypeEJBLocal feeTypeEJB;
 
@@ -77,19 +76,19 @@ implements Serializable, ISimpleHistoricRelationsTable {
 	/**
 	 * Selected main data
 	 */
-	@Inject
+	
 	private CtServiceType injectSelectedData;
 
 	/**
 	 * Selected candidate data
 	 */
-	@Inject
+	
 	private CtFeeType injectSelectedCandidateData;
 
 	/**
 	 * Selected related data
 	 */
-	@Inject
+	
 	private VwServiceFeeType injectSelectedRelatedData;
 
 	// --------------------
@@ -142,15 +141,13 @@ implements Serializable, ISimpleHistoricRelationsTable {
 	// METHODS
 	// -------------------
 
-	
-
 	/**
 	 * 
 	 */
 	public ServiceFeeTypeController() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	@PostConstruct
 	public void init() {
 
@@ -210,7 +207,7 @@ implements Serializable, ISimpleHistoricRelationsTable {
 			logger.info("Load parent data sucessful");
 		}
 	}
-	
+
 	@Override
 	public void loadHistoricCandidateDataList() {
 		String errorMessage;
@@ -254,8 +251,7 @@ implements Serializable, ISimpleHistoricRelationsTable {
 		}
 
 	}
-	
-	
+
 	@Override
 	public void loadRelatedDataList() {
 		String errorMessage;
@@ -345,7 +341,7 @@ implements Serializable, ISimpleHistoricRelationsTable {
 		}
 
 	}
-	
+
 	@Override
 	public void pushShowHistoricCandidateRowButton() {
 		String message = "SHOW HISTORIC CANDIDATE DATA";
@@ -531,6 +527,12 @@ implements Serializable, ISimpleHistoricRelationsTable {
 	@Override
 	public void refreshCandidateDataTable() {
 		if (this.isShowDependentData()) {
+			if (this.getSelectedData() == null) {
+				// recover the selected data from the selected table
+				if (this.getSelectedDataList().get(0) != null) {
+					this.setSelectedData(this.getSelectedDataList().get(0));
+				}
+			}
 			this.resetFilterCandidateDataTable();
 			this.loadCandidateDataList();
 			Ajax.update(CANDIDATE_DATA_TABLE_ID);
@@ -546,15 +548,17 @@ implements Serializable, ISimpleHistoricRelationsTable {
 	@Override
 	public void refreshRelatedDataTable() {
 		if (this.isShowDependentData()) {
+			if (this.getSelectedData() == null) {
+				// recover the selected data from the selected table
+				if (this.getSelectedDataList().get(0) != null) {
+					this.setSelectedData(this.getSelectedDataList().get(0));
+				}
+			}
 			this.resetFilterRelatedDataTable();
 			this.loadRelatedDataList();
 			Ajax.update(RELATED_DATA_TABLE_ID);
 		}
 	}
-
-	
-
-	
 
 	@Override
 	public void resetFilterHistoricCandidateDataTable() {
@@ -592,8 +596,9 @@ implements Serializable, ISimpleHistoricRelationsTable {
 
 		messageDetail = "Editing service_fee_type: ";
 		logger.info(messageDetail + dataObject.toString());
-		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail
-				+ " for service: " + dataObjectView.getServiceTypeCode() + " and fee: " + dataObjectView.getFeeTypeCode());
+		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
+				messageDetail + " for service: " + dataObjectView.getServiceTypeCode() + " and fee: "
+						+ dataObjectView.getFeeTypeCode());
 
 	}
 
@@ -668,21 +673,27 @@ implements Serializable, ISimpleHistoricRelationsTable {
 				messageDetail + dataObjectView.toString());
 
 	}
-	
+
 	@Override
 	public void changeSearchDate(ValueChangeEvent e) {
 		LocalDateTime newSearchDate = (LocalDateTime) e.getNewValue();
 		String message, messageDetail;
-		
-		message="CHANGE SEARCH DATE";
-		
+
+		message = "CHANGE SEARCH DATE";
+
 		if (newSearchDate != null) {
-			this.setSearchDate(newSearchDate);			
+			this.setSearchDate(newSearchDate);
 		} else {
 			messageDetail = "ERROR - The search date can not be null";
 			logger.fatal(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 		}
+	}
+
+	@Override
+	public void changeSearchDataTableTitle() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

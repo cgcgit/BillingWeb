@@ -127,7 +127,7 @@ public class StartDateValidator implements Validator<Object> {
 				// throw new ValidatorException(faces_message);
 				validation = false;
 			}
-			
+
 			if ((validation) && currentStartDate.isAfter(currentEndDate)) {
 				errorMessageDetail = "Error - The current Start Date must be less or equal to current End Date";
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);

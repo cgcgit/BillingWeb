@@ -140,7 +140,7 @@
 				filterBy="#{dataTable.code}" filterMatchMode="contains">
 				<h:outputText id="codeOutput" value="#{dataTable.code}" />
 			</p:column>
-			
+
 			<p:column id="name"
 				style="font-family:Arial Black;
                                   text-align: left;
@@ -161,7 +161,7 @@
 					</f:facet>
 				</p:cellEditor>
 			</p:column>
-			
+
 			<p:column id="description"
 				style="font-family:Arial Black;
                                   text-align: left;
@@ -184,7 +184,7 @@
 					</f:facet>
 				</p:cellEditor>
 			</p:column>
-			
+
 			<p:column id="corrective"
 				style="font-family:Arial Black;
                                   text-align: left;
@@ -331,7 +331,7 @@
 					<p:selectOneMenu id="statusFilterMenu"
 						onchange="PF('dataTableWidget').filter()">
 						<f:selectItems id="statusFilterSelectItems"
-							value="#{billCycleTypeController.statusSelectItems()}" />
+							value="#{billCycleTypeController.statusCatalogSelectItems()}" />
 					</p:selectOneMenu>
 				</f:facet>
 				<p:cellEditor id="statusIdCellEditor">
@@ -339,7 +339,7 @@
 						<p:selectOneMenu id="statusOutput" editable="false"
 							disabled="true" immediate="true" value="#{dataTable.statusId}">
 							<f:selectItems
-								value="#{billCycleTypeController.statusSelectItems()}"
+								value="#{billCycleTypeController.statusCatalogSelectItems()}"
 								id="selectItemsStatusOutput" itemDisabled="true" var="Status"
 								itemValue="#{dataTable.statusId}" />
 						</p:selectOneMenu>
@@ -348,7 +348,7 @@
 						<p:selectOneMenu id="statusnput" value="#{dataTable.statusId}"
 							immediate="true">
 							<f:selectItems
-								value="#{billCycleTypeController.statusSelectItems()}"
+								value="#{billCycleTypeController.statusCatalogSelectItems()}"
 								id="selectItemsStatusInput" var="Status"
 								itemValue="#{dataTable.statusId}">
 
@@ -422,7 +422,7 @@
 					value="#{billCycleTypeController.selectedData.statusId}"
 					immediate="true">
 					<f:selectItems
-						value="#{billCycleTypeController.statusSelectItems()}"
+						value="#{billCycleTypeController.statusCatalogSelectItems()}"
 						id="selectItemsStatusInput" var="Status"
 						itemValue="#{billCycleTypeController.selectedData.statusId}">
 					</f:selectItems>
@@ -455,8 +455,7 @@
 		<!--  DELETE ROW DIALOG -->
 		<p:confirmDialog global="true" styleClass="change-position"
 			showEffect="fade" responsive="true" widgetVar="deleteRowDialogWidget"
-			header="DELETE ROW"
-			message="Do you really want to delete this row?">
+			header="DELETE ROW" message="Do you really want to delete this row?">
 			<p:commandButton id="deleteDialogConfirm" value="#{uiValue.okLabel}"
 				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
 				actionListener="#{billCycleTypeController.pushConfirmButtonDeleteDialog()}"

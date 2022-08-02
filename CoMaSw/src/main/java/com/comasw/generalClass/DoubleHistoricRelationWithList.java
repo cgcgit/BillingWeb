@@ -9,18 +9,17 @@ import java.time.LocalDateTime;
  * @author catuxa
  *
  */
-public class DoubleHistoricRelationWithList<T, S, U> extends SimpleHistoricRelationWithList<T, S, U>{
-	
+public class DoubleHistoricRelationWithList<T, S, U> extends SimpleHistoricRelationWithList<T, S, U> {
+
 	/**
 	 * Second search date
 	 */
 	protected LocalDateTime secondSearchDate;
-	
 
 	// --------------------
 	// GETTERS AND SETTERS
 	// -------------------
-	
+
 	/**
 	 * @return the secondSearchDate
 	 */
@@ -34,6 +33,5 @@ public class DoubleHistoricRelationWithList<T, S, U> extends SimpleHistoricRelat
 	public void setSecondSearchDate(LocalDateTime secondSearchDate) {
 		this.secondSearchDate = secondSearchDate;
 	}
-	
-	
+
 }

@@ -27,19 +27,18 @@ import com.comasw.exception.CoMaSwDataAccessException;
  */
 @Stateless
 public class ProductTypeEJB implements ProductTypeEJBLocal {
-	
+
 	Logger logger = (Logger) LogManager.getLogger(ProductTypeEJB.class);
 
 	@Resource(lookup = "java:jboss/datasources/db_comasw")
 	private DataSource ds;
 
-
-    /**
-     * Default constructor. 
-     */
-    public ProductTypeEJB() {
-        // TODO Auto-generated constructor stub
-    }
+	/**
+	 * Default constructor.
+	 */
+	public ProductTypeEJB() {
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public List<CtProductType> findAllData() throws CoMaSwDataAccessException {
@@ -48,10 +47,7 @@ public class ProductTypeEJB implements ProductTypeEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(CT_PRODUCT_TYPE)
-					.orderBy(CT_PRODUCT_TYPE.CODE)
-					.fetch()
-					.into(CtProductType.class);		
+			result = create.selectFrom(CT_PRODUCT_TYPE).orderBy(CT_PRODUCT_TYPE.CODE).fetch().into(CtProductType.class);
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find all the product types - " + e.getMessage();
@@ -67,13 +63,10 @@ public class ProductTypeEJB implements ProductTypeEJBLocal {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtProductType> result = null;
 		String errorMessage;
-		
+
 		try {
-			result = create.selectFrom(CT_PRODUCT_TYPE)
-					.where(CT_PRODUCT_TYPE.PRODUCT_TYPE_ID.eq(val(productTypeId)))
-					.orderBy(CT_PRODUCT_TYPE.CODE)
-					.fetch()
-					.into(CtProductType.class);
+			result = create.selectFrom(CT_PRODUCT_TYPE).where(CT_PRODUCT_TYPE.PRODUCT_TYPE_ID.eq(val(productTypeId)))
+					.orderBy(CT_PRODUCT_TYPE.CODE).fetch().into(CtProductType.class);
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the product type for product_type_id : " + productTypeId
@@ -82,14 +75,15 @@ public class ProductTypeEJB implements ProductTypeEJBLocal {
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
 				return result.get(0);
-			}			
+			}
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the product type for product_type_id: " + productTypeId + " - " + e.getMessage();
+			errorMessage = "Error while try to find the product type for product_type_id: " + productTypeId + " - "
+					+ e.getMessage();
 			logger.error(errorMessage);
-			throw new CoMaSwDataAccessException(errorMessage, e);		
+			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
@@ -97,15 +91,11 @@ public class ProductTypeEJB implements ProductTypeEJBLocal {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtProductType> result = null;
 		String errorMessage;
-		
 
 		try {
-			result = create.selectFrom(CT_PRODUCT_TYPE)
-					.where(CT_PRODUCT_TYPE.CODE.eq(val(code)))
-					.orderBy(CT_PRODUCT_TYPE.CODE)
-					.fetch()
-					.into(CtProductType.class);
-			
+			result = create.selectFrom(CT_PRODUCT_TYPE).where(CT_PRODUCT_TYPE.CODE.eq(val(code)))
+					.orderBy(CT_PRODUCT_TYPE.CODE).fetch().into(CtProductType.class);
+
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the product type for code : " + code
 						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
@@ -113,60 +103,62 @@ public class ProductTypeEJB implements ProductTypeEJBLocal {
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
 				return result.get(0);
-			}				
+			}
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the product type for code " + code + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
 	public void insertData(CtProductType dataObject) throws CoMaSwDataAccessException {
-		String errorMessage;		
+		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);			
-			CtProductTypeDao daoObject = new CtProductTypeDao(configuration);			
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
+			CtProductTypeDao daoObject = new CtProductTypeDao(configuration);
 			daoObject.insert(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error inserting the product type object (value: " + dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error inserting the product type object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
 	public void updateData(CtProductType dataObject) throws CoMaSwDataAccessException {
-		String errorMessage;		
+		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);			
-			CtProductTypeDao daoObject = new CtProductTypeDao(configuration);			
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
+			CtProductTypeDao daoObject = new CtProductTypeDao(configuration);
 			daoObject.update(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error updating the product type object (value: " + dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error updating the product type object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
 	public void deleteData(CtProductType dataObject) throws CoMaSwDataAccessException {
 		String errorMessage;
 		try {
-			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);		
+			Configuration configuration = new DefaultConfiguration().set(ds.getConnection()).set(SQLDialect.POSTGRES);
 			CtProductTypeDao daoObject = new CtProductTypeDao(configuration);
 			daoObject.delete(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error deleting the product type object (value: "
-					+ dataObject.toString() + ") - " + e.getMessage();
+			errorMessage = "Error deleting the product type object (value: " + dataObject.toString() + ") - "
+					+ e.getMessage();
 			logger.error(errorMessage);
-			throw new CoMaSwDataAccessException(errorMessage, e);			
+			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 }

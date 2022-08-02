@@ -47,8 +47,7 @@ import com.comasw.interfaces.ISimpleHistoricRelationsTable;
  * @author catuxa
  *
  */
-public class ProductFeeTypeController
-		extends SimpleHistoricRelationWithList<CtProductType, VwProductFeeType, CtFeeType>
+public class ProductFeeTypeController extends SimpleHistoricRelationWithList<CtProductType, VwProductFeeType, CtFeeType>
 		implements Serializable, ISimpleHistoricRelationsTable {
 
 	private static final long serialVersionUID = 2176506681704512988L;
@@ -72,77 +71,10 @@ public class ProductFeeTypeController
 	@EJB
 	private StatusEJBLocal statusEJB;
 
-	/**
-	 * Selected main data
-	 */
-	@Inject
-	private CtProductType injectSelectedData;
-
-	/**
-	 * Selected candidate data
-	 */
-	@Inject
-	private CtFeeType injectSelectedCandidateData;
-
-	/**
-	 * Selected related data
-	 */
-	@Inject
-	private VwProductFeeType injectSelectedRelatedData;
-
-
-	// --------------------
-	// GETTERS AND SETTERS
-	// -------------------
-
-	/**
-	 * @return the injectSelectedData
-	 */
-	public CtProductType getInjectSelectedData() {
-		return injectSelectedData;
-	}
-
-	/**
-	 * @param injectSelectedData the selectedParentData to set
-	 */
-	public void setInjectSelectedData(CtProductType injectSelectedData) {
-		this.injectSelectedData = injectSelectedData;
-	}
-
-	/**
-	 * @return the injectSelectedCandidateData
-	 */
-	public CtFeeType getInjectSelectedCandidateData() {
-		return injectSelectedCandidateData;
-	}
-
-	/**
-	 * @param injectSelectedCandidateData the selectedCandidateData to set
-	 */
-	public void setInjectSelectedCandidateData(CtFeeType injectSelectedCandidateData) {
-		this.injectSelectedCandidateData = injectSelectedCandidateData;
-	}
-
-	/**
-	 * @return the injectSelectedRelatedData
-	 */
-	public VwProductFeeType getInjectSelectedRelatedData() {
-		return injectSelectedRelatedData;
-	}
-
-	/**
-	 * @param selectedRelatedData the selectedRelatedData to set
-	 */
-	public void setInjectSelectedRelatedData(VwProductFeeType injectSelectedRelatedData) {
-		this.injectSelectedRelatedData = injectSelectedRelatedData;
-	}
-
-	
 	// -------------------
 	// METHODS
 	// -------------------
 
-	
 	/**
 	 *
 	 */
@@ -164,6 +96,14 @@ public class ProductFeeTypeController
 		if (this.getFilteredDataList() == null) {
 			this.setFilteredDataList(new ArrayList<CtProductType>());
 		}
+		
+		if (this.getSelectedDataList()== null) {
+			this.setSelectedDataList(new ArrayList<CtProductType>());
+		}
+		
+		if (this.getFilteredSelectedDataList()== null) {
+			this.setFilteredSelectedDataList(new ArrayList<CtProductType>());
+		}
 
 		if (this.getSelectedData() == null) {
 			this.setSelectedData(new CtProductType());
@@ -176,6 +116,10 @@ public class ProductFeeTypeController
 		if (this.getFilteredCandidateDataList() == null) {
 			this.setFilteredCandidateDataList(new ArrayList<CtFeeType>());
 		}
+		
+		if (this.getSelectedCandidateData() == null) {
+			this.setSelectedCandidateData(new CtFeeType());
+		}
 
 		if (this.getHistoricCandidateDataList() == null) {
 			this.setHistoricCandidateDataList(new ArrayList<CtFeeType>());
@@ -184,6 +128,10 @@ public class ProductFeeTypeController
 		if (this.getFilteredHistoricCandidateDataList() == null) {
 			this.setFilteredHistoricCandidateDataList(new ArrayList<CtFeeType>());
 		}
+		
+		if (this.getSelectedHistoricCandidateData()== null) {
+			this.setSelectedHistoricCandidateData(new CtFeeType());
+		}
 
 		if (this.getRelatedDataList() == null) {
 			this.setRelatedDataList(new ArrayList<VwProductFeeType>());
@@ -191,6 +139,10 @@ public class ProductFeeTypeController
 
 		if (this.getFilteredRelatedDataList() == null) {
 			this.setFilteredRelatedDataList(new ArrayList<VwProductFeeType>());
+		}
+		
+		if (this.getSelectedRelatedData()== null) {
+			this.setSelectedRelatedData(new VwProductFeeType());
 		}
 
 		if (this.getLoggedUser() == null) {
@@ -209,7 +161,7 @@ public class ProductFeeTypeController
 			logger.info("Load parent data sucessful");
 		}
 	}
-	
+
 	@Override
 	public void loadHistoricCandidateDataList() {
 		String errorMessage;
@@ -253,8 +205,7 @@ public class ProductFeeTypeController
 		}
 
 	}
-	
-	
+
 	@Override
 	public void loadRelatedDataList() {
 		String errorMessage;
@@ -316,16 +267,18 @@ public class ProductFeeTypeController
 		DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent(DATA_TABLE_ID);
 
 		// Gets the selected data
-		this.setInjectSelectedData((CtProductType) dataTable.getRowData());
+		this.setSelectedData((CtProductType) dataTable.getRowData());
 
-		if (this.getInjectSelectedData() == null | this.getInjectSelectedData().getProductTypeId() == null
-				|| this.getInjectSelectedData().getProductTypeId() == 0) {
+		if (this.getSelectedData() == null | this.getSelectedData().getProductTypeId() == null
+				|| this.getSelectedData().getProductTypeId() == 0) {
 			messageDetail = "The product type is null";
 			logger.error(message + " - " + messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 
-		} else {
-			this.setSelectedData(this.getInjectSelectedData());
+		} else {			
+			this.getSelectedDataList().clear();
+			this.getSelectedDataList().add(this.getSelectedData());
+			
 			this.loadCandidateDataList();
 			this.loadRelatedDataList();
 			this.setShowDependentData(true);
@@ -344,7 +297,7 @@ public class ProductFeeTypeController
 		}
 
 	}
-	
+
 	@Override
 	public void pushShowHistoricCandidateRowButton() {
 		String message = "SHOW HISTORIC CANDIDATE DATA";
@@ -364,7 +317,7 @@ public class ProductFeeTypeController
 			facesContext.validationFailed();
 		} else {
 			// Gets selectedData
-			this.setSelectedCandidateData(dataObject);
+			this.setSelectedCandidateData(dataObject);			
 			this.loadHistoricCandidateDataList();
 			this.resetFilterHistoricCandidateDataTable();
 
@@ -404,11 +357,11 @@ public class ProductFeeTypeController
 				facesContext.validationFailed();
 			} else {
 				// Gets selectedData
-				this.injectSelectedCandidateData = (CtFeeType) mainDataTable.getSelection();
+				this.setSelectedCandidateData ((CtFeeType) mainDataTable.getSelection());
 
 				CtProdFeeType dataObject = new CtProdFeeType();
 				dataObject.setProductTypeId(this.getSelectedData().getProductTypeId());
-				dataObject.setFeeTypeId(this.getInjectSelectedCandidateData().getFeeTypeId());
+				dataObject.setFeeTypeId(this.getSelectedCandidateData().getFeeTypeId());
 				dataObject.setInputUser(this.loggedUser.getUserCode());
 				dataObject.setInputDate(LocalDateTime.now());
 				dataObject.setStatusId((Integer) statusEJB.findDataByCode(ACTIVE_STATUS_CODE).getStatusId());
@@ -437,7 +390,7 @@ public class ProductFeeTypeController
 					facesContext.validationFailed();
 				}
 
-				this.injectSelectedCandidateData = null;
+				this.setSelectedCandidateData (null);
 
 			}
 		}
@@ -473,10 +426,10 @@ public class ProductFeeTypeController
 				facesContext.validationFailed();
 			} else {
 				// Gets selectedData
-				this.setInjectSelectedRelatedData((VwProductFeeType) mainDataTable.getSelection());
+				this.setSelectedRelatedData((VwProductFeeType) mainDataTable.getSelection());
 
 				CtProdFeeType dataObject = productFeeTypeEJB
-						.findEntityRelationType(this.injectSelectedRelatedData.getProdFeeTypeId());
+						.findEntityRelationType(this.getSelectedRelatedData().getProdFeeTypeId());
 				try {
 					productFeeTypeEJB.deleteData(dataObject);
 					this.loadCandidateDataList();
@@ -502,7 +455,7 @@ public class ProductFeeTypeController
 					facesContext.validationFailed();
 				}
 
-				this.injectSelectedRelatedData = null;
+				this.setSelectedRelatedData(null);
 			}
 		}
 
@@ -530,6 +483,12 @@ public class ProductFeeTypeController
 	@Override
 	public void refreshCandidateDataTable() {
 		if (this.isShowDependentData()) {
+			if (this.getSelectedData() == null) {
+				// recover the selected data from the selected table
+				if (this.getSelectedDataList().get(0) != null) {
+					this.setSelectedData(this.getSelectedDataList().get(0));
+				}
+			}
 			this.resetFilterCandidateDataTable();
 			this.loadCandidateDataList();
 			Ajax.update(CANDIDATE_DATA_TABLE_ID);
@@ -545,15 +504,17 @@ public class ProductFeeTypeController
 	@Override
 	public void refreshRelatedDataTable() {
 		if (this.isShowDependentData()) {
+			if (this.getSelectedData() == null) {
+				// recover the selected data from the selected table
+				if (this.getSelectedDataList().get(0) != null) {
+					this.setSelectedData(this.getSelectedDataList().get(0));
+				}
+			}
 			this.resetFilterRelatedDataTable();
 			this.loadRelatedDataList();
 			Ajax.update(RELATED_DATA_TABLE_ID);
 		}
 	}
-
-	
-
-	
 
 	@Override
 	public void resetFilterHistoricCandidateDataTable() {
@@ -566,7 +527,6 @@ public class ProductFeeTypeController
 	public void setInitVariablesToDefault() {
 		this.setShowDependentData(false);
 		this.setHistoricRelatedDataCriteria(false);
-		
 
 	}
 
@@ -592,8 +552,9 @@ public class ProductFeeTypeController
 
 		messageDetail = "Editing product_fee_type: ";
 		logger.info(messageDetail + dataObject.toString());
-		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail
-				+ " for product: " + dataObjectView.getProductTypeCode() + " and fee: " + dataObjectView.getFeeTypeCode());
+		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
+				messageDetail + " for product: " + dataObjectView.getProductTypeCode() + " and fee: "
+						+ dataObjectView.getFeeTypeCode());
 
 	}
 
@@ -668,22 +629,27 @@ public class ProductFeeTypeController
 				messageDetail + dataObjectView.toString());
 
 	}
-	
-	
+
 	@Override
 	public void changeSearchDate(ValueChangeEvent e) {
 		LocalDateTime newSearchDate = (LocalDateTime) e.getNewValue();
 		String message, messageDetail;
-		
-		message="CHANGE SEARCH DATE";
-		
+
+		message = "CHANGE SEARCH DATE";
+
 		if (newSearchDate != null) {
-			this.setSearchDate(newSearchDate);			
+			this.setSearchDate(newSearchDate);
 		} else {
 			messageDetail = "ERROR - The search date can not be null";
 			logger.fatal(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 		}
 	}
-	
+
+	@Override
+	public void changeSearchDataTableTitle() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

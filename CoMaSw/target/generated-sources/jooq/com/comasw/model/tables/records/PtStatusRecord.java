@@ -9,8 +9,8 @@ import com.comasw.model.tables.interfaces.IPtStatus;
 
 import org.jooq.Field;
 import org.jooq.Record1;
-import org.jooq.Record4;
-import org.jooq.Row4;
+import org.jooq.Record6;
+import org.jooq.Row6;
 import org.jooq.impl.UpdatableRecordImpl;
 
 
@@ -18,7 +18,7 @@ import org.jooq.impl.UpdatableRecordImpl;
  * Table that stores the status for the entities of the application
  */
 @SuppressWarnings({ "all", "unchecked", "rawtypes" })
-public class PtStatusRecord extends UpdatableRecordImpl<PtStatusRecord> implements Record4<Integer, String, String, String>, IPtStatus {
+public class PtStatusRecord extends UpdatableRecordImpl<PtStatusRecord> implements Record6<Integer, String, String, String, Boolean, Boolean>, IPtStatus {
 
     private static final long serialVersionUID = 1L;
 
@@ -86,6 +86,38 @@ public class PtStatusRecord extends UpdatableRecordImpl<PtStatusRecord> implemen
         return (String) get(3);
     }
 
+    /**
+     * Setter for <code>public.pt_status.catalog</code>. Indicates if the status applies to catalog entities
+     */
+    @Override
+    public void setCatalog(Boolean value) {
+        set(4, value);
+    }
+
+    /**
+     * Getter for <code>public.pt_status.catalog</code>. Indicates if the status applies to catalog entities
+     */
+    @Override
+    public Boolean getCatalog() {
+        return (Boolean) get(4);
+    }
+
+    /**
+     * Setter for <code>public.pt_status.instance</code>. Indicates if the status applies to instance entities
+     */
+    @Override
+    public void setInstance(Boolean value) {
+        set(5, value);
+    }
+
+    /**
+     * Getter for <code>public.pt_status.instance</code>. Indicates if the status applies to instance entities
+     */
+    @Override
+    public Boolean getInstance() {
+        return (Boolean) get(5);
+    }
+
     // -------------------------------------------------------------------------
     // Primary key information
     // -------------------------------------------------------------------------
@@ -96,17 +128,17 @@ public class PtStatusRecord extends UpdatableRecordImpl<PtStatusRecord> implemen
     }
 
     // -------------------------------------------------------------------------
-    // Record4 type implementation
+    // Record6 type implementation
     // -------------------------------------------------------------------------
 
     @Override
-    public Row4<Integer, String, String, String> fieldsRow() {
-        return (Row4) super.fieldsRow();
+    public Row6<Integer, String, String, String, Boolean, Boolean> fieldsRow() {
+        return (Row6) super.fieldsRow();
     }
 
     @Override
-    public Row4<Integer, String, String, String> valuesRow() {
-        return (Row4) super.valuesRow();
+    public Row6<Integer, String, String, String, Boolean, Boolean> valuesRow() {
+        return (Row6) super.valuesRow();
     }
 
     @Override
@@ -130,6 +162,16 @@ public class PtStatusRecord extends UpdatableRecordImpl<PtStatusRecord> implemen
     }
 
     @Override
+    public Field<Boolean> field5() {
+        return PtStatus.PT_STATUS.CATALOG;
+    }
+
+    @Override
+    public Field<Boolean> field6() {
+        return PtStatus.PT_STATUS.INSTANCE;
+    }
+
+    @Override
     public Integer component1() {
         return getStatusId();
     }
@@ -150,6 +192,16 @@ public class PtStatusRecord extends UpdatableRecordImpl<PtStatusRecord> implemen
     }
 
     @Override
+    public Boolean component5() {
+        return getCatalog();
+    }
+
+    @Override
+    public Boolean component6() {
+        return getInstance();
+    }
+
+    @Override
     public Integer value1() {
         return getStatusId();
     }
@@ -167,6 +219,16 @@ public class PtStatusRecord extends UpdatableRecordImpl<PtStatusRecord> implemen
     @Override
     public String value4() {
         return getDescription();
+    }
+
+    @Override
+    public Boolean value5() {
+        return getCatalog();
+    }
+
+    @Override
+    public Boolean value6() {
+        return getInstance();
     }
 
     @Override
@@ -194,11 +256,25 @@ public class PtStatusRecord extends UpdatableRecordImpl<PtStatusRecord> implemen
     }
 
     @Override
-    public PtStatusRecord values(Integer value1, String value2, String value3, String value4) {
+    public PtStatusRecord value5(Boolean value) {
+        setCatalog(value);
+        return this;
+    }
+
+    @Override
+    public PtStatusRecord value6(Boolean value) {
+        setInstance(value);
+        return this;
+    }
+
+    @Override
+    public PtStatusRecord values(Integer value1, String value2, String value3, String value4, Boolean value5, Boolean value6) {
         value1(value1);
         value2(value2);
         value3(value3);
         value4(value4);
+        value5(value5);
+        value6(value6);
         return this;
     }
 
@@ -212,6 +288,8 @@ public class PtStatusRecord extends UpdatableRecordImpl<PtStatusRecord> implemen
         setCode(from.getCode());
         setName(from.getName());
         setDescription(from.getDescription());
+        setCatalog(from.getCatalog());
+        setInstance(from.getInstance());
     }
 
     @Override
@@ -234,12 +312,14 @@ public class PtStatusRecord extends UpdatableRecordImpl<PtStatusRecord> implemen
     /**
      * Create a detached, initialised PtStatusRecord
      */
-    public PtStatusRecord(Integer statusId, String code, String name, String description) {
+    public PtStatusRecord(Integer statusId, String code, String name, String description, Boolean catalog, Boolean instance) {
         super(PtStatus.PT_STATUS);
 
         setStatusId(statusId);
         setCode(code);
         setName(name);
         setDescription(description);
+        setCatalog(catalog);
+        setInstance(instance);
     }
 }

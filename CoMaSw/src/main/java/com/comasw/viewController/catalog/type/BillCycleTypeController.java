@@ -41,17 +41,15 @@ import com.comasw.interfaces.IEditableTable;
  * @author catuxa
  *
  */
-public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType> implements Serializable, IEditableTable {
+public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
+		implements Serializable, IEditableTable {
 
 	private static final long serialVersionUID = -1578875974294232064L;
-	
+
 	Logger logger = (Logger) LogManager.getLogger(BillCycleTypeController.class);
 
-	
 	private static final Integer CODENUM_FIELD_LENGTH_MAX = Integer
 			.valueOf(dbDefinitions.getString("BILL_CYCLE_TYPE_CODENUM_FIELD_LENGTH_MAX"));
-	
-	
 
 	@Inject
 	private ExternalContext externalContext;
@@ -60,46 +58,14 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 
 	@EJB
 	private BillCycleTypeEJBLocal billCycleTypeEJB;
-	
+
 	@EJB
 	private BillingPeriodEJBLocal billingPeriodEJB;
-
-	
-	/**
-	 * Selected data row in the table
-	 */
-	@Inject
-	private CtBillCycleType selectedData;
-
-	
-	// --------------------
-	// GETTERS AND SETTERS
-	// -------------------
-	
-	/**
-	 * @return the selectedData
-	 */
-	public CtBillCycleType getSelectedData() {
-		return selectedData;
-	}
-
-
-	/**
-	 * @param selectedData the selectedData to set
-	 */
-	public void setSelectedData(CtBillCycleType selectedData) {
-		this.selectedData = selectedData;
-	}
-
-
 
 	
 	// -------------------
 	// METHODS
 	// -------------------
-	
-
-	
 
 	/**
 	 * 
@@ -108,21 +74,18 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 		// TODO Auto-generated constructor stub
 	}
 
-	
 	@PostConstruct
 	public void init() {
 
-		if (selectedData == null) {
-			selectedData = new CtBillCycleType();
+		if (getSelectedData() == null) {
+			setSelectedData (new CtBillCycleType());
 		}
 
 		if (this.getLoggedUser() == null) {
 			this.setLoggedUser((VwUsers) externalContext.getSessionMap().get("applicationUser"));
 		}
 
-
 	}
-
 
 	@Override
 	public void loadDataList() {
@@ -133,11 +96,8 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 		} else {
 			logger.info("Load data sucessful");
 		}
-		
-		
+
 	}
-
-
 
 	@Override
 	public void onRowInit(RowEditEvent<?> event) {
@@ -152,7 +112,7 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 
 		// Gets the backup of the data to modify
 		dataObject = (CtBillCycleType) event.getObject();
-		
+
 		// If we are editing a row, we must disabled all the other buttons
 		this.editingMode = true;
 
@@ -167,10 +127,8 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 		messageDetail = "Editing bill cycle type: " + dataObject.getCode();
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
-		
+
 	}
-
-
 
 	@Override
 	public void onRowEdit(RowEditEvent<?> event) throws ValidatorException {
@@ -183,18 +141,17 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 		// Retrieved the data that was modified
 		dataObject = (CtBillCycleType) event.getObject();
 
-				
 		try {
 
 			// Validates the data
 			if (this.objectValidation(dataObject)) {
-				//sets the modif data
-				this.selectedData.setModifUser(this.loggedUser.getUserCode());
-				this.selectedData.setModifDate(LocalDateTime.now());
-				
+				// sets the modif data
+				this.getSelectedData().setModifUser(this.loggedUser.getUserCode());
+				this.getSelectedData().setModifDate(LocalDateTime.now());
+
 				billCycleTypeEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";
-				logger.info("Update bill cycle type: " + this.selectedData.toString() + " - " +messageDetail);
+				logger.info("Update bill cycle type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 				this.setControlVariablesToDefault();
 			} else {
@@ -226,50 +183,40 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 		} finally {
 			if (error) {
 				FacesContext.getCurrentInstance().validationFailed();
-			} else {				
+			} else {
 				this.loadDataList();
 			}
 		}
-		
+
 	}
 
-
-
 	@Override
-	public void onRowCancel(RowEditEvent<?> event) {	
+	public void onRowCancel(RowEditEvent<?> event) {
 		String message, messageDetail;
 
-		message = "CANCEL UPDATE ROW";		
+		message = "CANCEL UPDATE ROW";
 		messageDetail = "Cancelled the edition of the bill cycle type";
-		
+
 		this.refreshDataTable();
 		this.setControlVariablesToDefault();
-		
+
 		logger.info(messageDetail);
 		this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
-		
 	}
-
-
 
 	@Override
 	public void pushDeleteRowButton() {
 		// TODO Auto-generated method stub
-		
+
 	}
-
-
-
 
 	@Override
 	public void pushCreateNewButton() {
-		this.selectedData = new CtBillCycleType();
+		this.setSelectedData( new CtBillCycleType());
 		PrimeFaces.current().executeScript("PF('createNewDialogWidget').show();");
-		
+
 	}
-
-
 
 	@Override
 	public void pushConfirmButtonCreateNewDialog() {
@@ -278,15 +225,15 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 		Boolean error = false;
 
 		try {
-			if (objectValidation(this.selectedData)) {
-				//Set create values
-				
-				this.selectedData.setInputUser(this.loggedUser.getUserCode());
-				this.selectedData.setInputDate(LocalDateTime.now());
-				
-				billCycleTypeEJB.insertData(this.selectedData);
+			if (objectValidation(this.getSelectedData())) {
+				// Set create values
+
+				this.getSelectedData().setInputUser(this.loggedUser.getUserCode());
+				this.getSelectedData().setInputDate(LocalDateTime.now());
+
+				billCycleTypeEJB.insertData(this.getSelectedData());
 				messageDetail = "Data saves succesfully";
-				logger.info("Create bill cycle type: " + this.selectedData.toString() + " - " +messageDetail);
+				logger.info("Create bill cycle type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 			} else {
@@ -322,29 +269,23 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 			} else {
 				this.resetFilterDataTable();
 				this.loadDataList();
-				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();"); 
+				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();");
 			}
 		}
-		
+
 	}
-
-
 
 	@Override
 	public void pushCancelButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
-
-
 
 	@Override
 	public void pushCleanButtonCreateNewDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
-
-
 
 	@Override
 	public void pushConfirmButtonDeleteDialog() {
@@ -353,10 +294,10 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 		Boolean error = false;
 
 		try {
-			if (this.selectedData != null) {
-				billCycleTypeEJB.deleteData(this.selectedData);
+			if (this.getSelectedData() != null) {
+				billCycleTypeEJB.deleteData(this.getSelectedData());
 				messageDetail = "Data deletes succesfully";
-				logger.info("Delete bill cycle type: " + this.selectedData.toString() + " - " + messageDetail);
+				logger.info("Delete bill cycle type: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;
@@ -397,27 +338,20 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 				this.loadDataList();
 			}
 		}
-		
-		
+
 	}
-
-
 
 	@Override
 	public void pushCancelButtonDeleteDialog() {
 		// TODO Auto-generated method stub
-		
+
 	}
-
-
 
 	@Override
 	public void resetObjectValues() {
 		// TODO Auto-generated method stub
-		
+
 	}
-
-
 
 	@Override
 	public boolean objectValidation(Object dataObject) {
@@ -440,12 +374,12 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 
 			if (objectToValidate.getDescription() != null) {
 				objectToValidate.setDescription(objectToValidate.getDescription().trim());
-			}		
-			
+			}
+
 			if (objectToValidate.getBillCycleCodenum() != null) {
 				objectToValidate.setBillCycleCodenum(objectToValidate.getBillCycleCodenum().trim());
-			}			
-			
+			}
+
 			if (objectToValidate.getCode() == null || objectToValidate.getCode().length() == 0) {
 				messageDetail = "ERROR - The code of the bill cycle type can not be null";
 				logger.error(messageDetail);
@@ -455,8 +389,8 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 					.compareTo(BasicTypeWithLists.CODE_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The code of the bill cycle type (" + objectToValidate.getCode().length()
-						+ " characters) exceeds the limit of "
-						+ BasicTypeWithLists.CODE_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicTypeWithLists.CODE_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -470,8 +404,8 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 					.compareTo(BasicTypeWithLists.NAME_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The name of the bill cycle type (" + objectToValidate.getName().length()
-						+ " characters) exceeds the limit of "
-						+ BasicTypeWithLists.NAME_FIELD_LENGTH_MAX.toString() + " characters";
+						+ " characters) exceeds the limit of " + BasicTypeWithLists.NAME_FIELD_LENGTH_MAX.toString()
+						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
@@ -486,15 +420,14 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 					.compareTo(BasicTypeWithLists.DESCRIPTION_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The description of the bill cycle type ("
-						+ objectToValidate.getDescription().length()
-						+ " characters) exceeds the limit of "
+						+ objectToValidate.getDescription().length() + " characters) exceeds the limit of "
 						+ BasicTypeWithLists.DESCRIPTION_FIELD_LENGTH_MAX.toString() + " characters";
 
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
 			}
-			
+
 			if (objectToValidate.getCorrective() == null) {
 				result = false;
 				messageDetail = "ERROR - The corrective flag can not be null";
@@ -502,22 +435,23 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			}
 
-			
 			if (objectToValidate.getBillingPeriodId() == null) {
 				result = false;
 				messageDetail = "ERROR - The associated billing period can not be null";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			}
-			
-			if ((objectToValidate.getBillCycleDay() == null) || (objectToValidate.getBillCycleDay()<= 0) || (objectToValidate.getBillCycleDay()> 31)){
+
+			if ((objectToValidate.getBillCycleDay() == null) || (objectToValidate.getBillCycleDay() <= 0)
+					|| (objectToValidate.getBillCycleDay() > 31)) {
 				messageDetail = "ERROR - The cicle day must be a valid day (from 1 to 31)";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} 
-			
-			if (objectToValidate.getBillCycleCodenum() == null || objectToValidate.getBillCycleCodenum().length() == 0) {
+			}
+
+			if (objectToValidate.getBillCycleCodenum() == null
+					|| objectToValidate.getBillCycleCodenum().length() == 0) {
 				messageDetail = "ERROR - The code num can not be null";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
@@ -526,22 +460,20 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 					.compareTo(BillCycleTypeController.CODENUM_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The codenum of the bill cycle type ("
-						+ objectToValidate.getBillCycleCodenum().length()
-						+ " characters) exceeds the limit of "
+						+ objectToValidate.getBillCycleCodenum().length() + " characters) exceeds the limit of "
 						+ BillCycleTypeController.CODENUM_FIELD_LENGTH_MAX.toString() + " characters";
 
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
 			}
-			
+
 			if (objectToValidate.getStatusId() == null) {
 				result = false;
 				messageDetail = "ERROR - The status can not be null";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			}
-			
 
 			if (result) {
 				// no error --> update panel
@@ -557,14 +489,12 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 		return result;
 	}
 
-
-
 	@Override
 	public void retrieveBackupData() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
 	public void setInitVariablesToDefault() {
 		this.editingMode = false;
@@ -573,8 +503,8 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 	@Override
 	public void setControlVariablesToDefault() {
 		this.setInitVariablesToDefault();
-	}	
-	
+	}
+
 	public List<SelectItem> billingPeriodSelectItems() {
 		List<SelectItem> selectItem = new ArrayList<>();
 		List<PtBillingPeriod> list = billingPeriodEJB.findAllData();
@@ -596,7 +526,7 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 		}
 		return selectItem;
 	}
-	
+
 	@Override
 	public void resetFilterDataTable() {
 		PrimeFaces current = PrimeFaces.current();
@@ -611,6 +541,4 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 		Ajax.update(DATA_TABLE_ID);
 	}
 
-
-	
 }
