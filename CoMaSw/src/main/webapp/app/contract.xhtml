@@ -1,0 +1,354 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+<f:metadata>
+	<f:viewAction id="loadData"
+		action="#{contractController.loadDataList()}"
+		phase="INVOKE_APPLICATION">
+	</f:viewAction>
+	<f:viewAction id="defaultControlVariables"
+		action="#{contractController.setInitVariablesToDefault()}"
+		phase="INVOKE_APPLICATION">
+	</f:viewAction>
+</f:metadata>
+
+
+<title>#{pageTitle.contractPage}</title>
+
+<body>
+	<h:outputStylesheet library="webjars"
+		name="primeflex/2.0.0/primeflex.min.css" />
+
+	<header>
+		<ui:include id="mainTemplate"
+			src="/WEB-INF/templates/mainTemplate.xhtml">
+			<ui:param name="title" value="CONTRACT" />
+		</ui:include>
+	</header>
+	<h:form id="form">
+		<p:growl id="growlMessage" showDetail="true" keepAlive="true">
+			<p:autoUpdate />
+		</p:growl>
+
+
+
+		<!--  DATA TABLE -->
+
+		<p:remoteCommand id="remoteCommandUpdateDataTable"
+			name="updateDataTable" process="@this" update="form:dataTable" />
+			
+       		<p:remoteCommand id="remoteCommandUpdateCreateConfirmMessage"
+			name="updateCreateConfirmMessage" process="@this" update="form:confirmCreateMessageDialog" />			
+
+		<p:dataTable id="dataTable" widgetVar="dataTableWidget"
+			var="dataTable" value="#{contractController.dataList}"
+			filteredValue="#{contractController.filteredDataList}"
+			showGridlines="true" stripedRows="true" scrollable="true"
+			reflow="true" editable="true" rowIndexVar="rowIndexDataTable"
+			paginator="true" rows="10" size="small" paginatorPosition="bottom">
+
+			<!--  DATA TABLE - HEADER -->
+			<f:facet name="header">
+				<p:toolbar>
+					<p:toolbarGroup>
+						<h3>CONTRACT DATA TABLE</h3>
+						<p:divider layout="vertical">
+						</p:divider>
+						<p:commandButton id="createNewButton" value="New data"
+							icon="#{uiValue.addIcon}" ajax="true" immediate="true"
+							actionListener="#{contractController.pushCreateNewButton()}"
+							rendered="#{contractController.canUserModify()}"
+							disabled="#{contractController.editingMode}"
+							update=":form:createNewDialog :form:createNewDialogPanelData"
+							oncomplete="{updateDataTable()}"
+							styleClass="ui-button-info" style="margin-right: .5rem">
+							<p:resetInput target=":form:createNewDialogPanelData" />
+						</p:commandButton>
+					</p:toolbarGroup>
+				</p:toolbar>
+			</f:facet>
+
+			<!--  DATA TABLE - FOOTER -->
+			<f:facet id="facetFooter" name="footer">
+			</f:facet>
+
+			<!--  DATA TABLE - MANAGE EDIT EVENTS -->
+			<p:ajax id="ajaxRowEditInit" event="rowEditInit"
+				listener="#{contractController.onRowInit}"
+				disabled="#{contractController.editingMode}"
+				update="form:growlMessage createNewButton form:dataTable">
+			</p:ajax>
+			<p:ajax id="ajaxRowEdit" event="rowEdit"
+				listener="#{contractController.onRowEdit}"
+				update="form:growlMessage"
+				oncomplete="if (!args.validationFailed) {updateDataTable()}">
+			</p:ajax>
+			<p:ajax id="ajaxRowEditCancel" event="rowEditCancel"
+				listener="#{contractController.onRowCancel}"
+				update="form:growlMessage" oncomplete="updateDataTable()">
+			</p:ajax>
+
+
+			<!--  DATA TABLE - EDITABLE COLUMNS -->
+			<p:column id="deleteRow" exportable="false"
+				style="font-family:Arial Black;
+                                   text-align: center;
+                                   font-size: 11px;
+                                   width: 60px;    
+                                   overflow: hidden"
+				headerText="DEL ROW"
+				rendered="#{contractController.canUserModify()}">
+				<p:commandButton id="deleteRowButton"
+					class="ui-button-warning rounded-button"
+					icon="#{uiValue.deleteIcon}"
+					actionListener="#{contractController.pushDeleteRowButton()}"
+					immediate="true" onclick="PF('deleteRowDialogWidget').show()"
+					disabled="#{contractController.editingMode}"
+					oncomplete="if(!args.validationFailed) {updateDataTable()}"
+					rendered="#{contractController.canUserModify()}">
+					<f:setPropertyActionListener value="#{dataTable}"
+						target="#{contractController.selectedData}" />
+				</p:commandButton>
+			</p:column>
+			<p:column id="editRow"
+				style="font-family:Arial Black;
+                                  text-align: center;
+                                  font-size: 11px;
+                                  width: 60px;    
+                                  overflow: hidden"
+				headerText="EDIT ROW"
+				rendered="#{contractController.canUserModify()}">
+				<p:rowEditor id="editRowButton" editTitle="Edit Row"
+					cancelTitle="Cancel Edit" saveTitle="Save Row"
+					rendered="#{contractController.canUserModify()}">
+				</p:rowEditor>
+			</p:column>
+
+
+			<!--  DATA TABLE - DATA COLUMNS -->
+
+			<p:column id="contractNr"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="CODE" rendered="true"
+				sortBy="#{dataTable.contractNumber}"
+				filterBy="#{dataTable.contractNumber}" filterMatchMode="contains">
+				<h:outputText id="codeOutput" value="#{dataTable.contractNumber}" />
+			</p:column>
+
+			<p:column id="sendDate"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="SEND DATE" rendered="true"
+				sortBy="#{dataTable.sendDate}" filterBy="#{dataTable.sendDate}"
+				filterMatchMode="contains">
+				<f:facet id="sendDateFilter" name="filter">
+					<p:datePicker id="sendDateFilterPicker"
+						onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
+						monthNavigator="true" yearNavigator="true" mask="true"
+						pattern="dd/MM/yyyy">
+						<f:converter
+							converterId="com.comasw.converter.localDateTimeConverter" />
+					</p:datePicker>
+				</f:facet>
+				<p:cellEditor id="cellEditorSendDate">
+					<f:facet id="facetSendDateOutput" name="output">
+						<h:outputText id="sendDateOutput" value="#{dataTable.sendDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</f:facet>
+					<f:facet id="facetSendDateInput" name="input">
+						<p:inputMask id="sendDateInput" value="#{dataTable.sendDate}"
+							mask="99/99/9999" style="width:96%">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+							<p:ajax event="change" update="sendDateOutput" />
+						</p:inputMask>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+
+			<p:column id="signedDate"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="SIGNED DATE" rendered="true"
+				sortBy="#{dataTable.signedDate}" filterBy="#{dataTable.signedDate}"
+				filterMatchMode="contains">
+				<f:facet id="signedDateFilter" name="filter">
+					<p:datePicker id="signedDateFilterPicker"
+						onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
+						monthNavigator="true" yearNavigator="true" mask="true"
+						pattern="dd/MM/yyyy">
+						<f:converter
+							converterId="com.comasw.converter.localDateTimeConverter" />
+					</p:datePicker>
+				</f:facet>
+				<p:cellEditor id="cellEditorSignedDate">
+					<f:facet id="facetSignedDateOutput" name="output">
+						<h:outputText id="signedDateOutput"
+							value="#{dataTable.signedDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</f:facet>
+					<f:facet id="facetSignedDateInput" name="input">
+						<p:inputMask id="signedDateInput" value="#{dataTable.signedDate}"
+							mask="99/99/9999" style="width:96%">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+							<p:ajax event="change" update="signedDateOutput" />
+						</p:inputMask>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+			<p:column id="activedDate"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="ACTIVED DATE" rendered="true"
+				sortBy="#{dataTable.activedDate}"
+				filterBy="#{dataTable.activedDate}" filterMatchMode="contains">
+				<f:facet id="activedDateFilter" name="filter">
+					<p:datePicker id="activedDateFilterPicker"
+						onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
+						monthNavigator="true" yearNavigator="true" mask="true"
+						pattern="dd/MM/yyyy">
+						<f:converter
+							converterId="com.comasw.converter.localDateTimeConverter" />
+					</p:datePicker>
+				</f:facet>
+				<p:cellEditor id="cellEditorActivedDate">
+					<f:facet id="facetActivedDateOutput" name="output">
+						<h:outputText id="activedDateOutput"
+							value="#{dataTable.activedDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</f:facet>
+					<f:facet id="facetActivedDateInput" name="input">
+						<p:inputMask id="activedDateInput"
+							value="#{dataTable.activedDate}" mask="99/99/9999"
+							style="width:96%">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+							<p:ajax event="change" update="activedDateOutput" />
+						</p:inputMask>
+					</f:facet>
+				</p:cellEditor>
+			</p:column>
+		</p:dataTable>
+
+		<!--  CREATE NEW DIALOG -->
+		<p:dialog id="createNewDialog" header="Create new Contract - Null values result on default values"
+			showEffect="fade" responsive="true" widgetVar="createNewDialogWidget">
+
+			<h:panelGrid id="createNewDialogPanelData" columns="2"
+				cellpadding="5">
+				
+				<p:outputLabel id="newContractNumber" value="Contract Nr " />
+				<p:inputText id="newContractNrInput" label="ContractNumber"					
+					value="#{contractController.selectedData.contractNumber}">
+				</p:inputText>				
+
+				<p:outputLabel id="newSendDateLabel" value="SendDate " />
+				<p:inputMask id="newSendDateInput"
+					value="#{contractController.selectedData.sendDate}"
+					mask="99/99/9999" style="width:96%">
+					<f:converter
+						converterId="com.comasw.converter.localDateTimeConverter" />
+					<p:ajax event="change" update="newSendDateInput" />
+				</p:inputMask>
+
+
+				<p:outputLabel id="newSignedDateLabel" value="SignedDate " />
+				<p:inputMask id="newSignedDateInput"
+					value="#{contractController.selectedData.signedDate}"
+					mask="99/99/9999" style="width:96%">
+					<f:converter
+						converterId="com.comasw.converter.localDateTimeConverter" />
+					<p:ajax event="change" update="newSignedDateInput" />
+				</p:inputMask>
+
+				<p:outputLabel id="newActivedDateLabel" value="ActiveDate " />
+				<p:inputMask id="newActivedDateInput"
+					value="#{contractController.selectedData.activedDate}"
+					mask="99/99/9999" style="width:96%">
+					<f:converter
+						converterId="com.comasw.converter.localDateTimeConverter" />
+					<p:ajax event="change" update="newActivedDateInput" />
+				</p:inputMask>
+			</h:panelGrid>
+			<h:panelGrid id="createNewDialogPanelButtons" columns="3"
+				cellpadding="5">
+				<p:commandButton id="createNewDialogConfirm"
+					value="#{uiValue.okLabel}" update="form:growlMessage"
+					actionListener="#{contractController.pushConfirmButtonCreateNewDialog()}"
+					styleClass="ui-confirmdialog-yes" icon="#{uiValue.okCircleIcon}"
+					oncomplete="if (!args.validationFailed) {updateDataTable()}">
+				</p:commandButton>
+				<p:commandButton id="createNewDialogCancel"
+					value="#{uiValue.cancelLabel}" icon="#{uiValue.cancelCircleIcon}"
+					update="form:growlMessage"
+					onclick="PF('createNewDialogWidget').hide()"
+					class="ui-button-secondary" />
+				<p:commandButton id="createNewDialogClean"
+					value="#{uiValue.cleanLabel}" icon="#{uiValue.cleanCircleIcon}"
+					update="createNewDialogPanelData form:growlMessage" process="@this"
+					class="ui-button-secondary">
+					<p:resetInput target="createNewDialogPanelData" />
+				</p:commandButton>
+			</h:panelGrid>
+		</p:dialog>
+
+		<!--  DELETE ROW DIALOG -->
+		<p:confirmDialog global="true" styleClass="change-position"
+			showEffect="fade" responsive="true" widgetVar="deleteRowDialogWidget"
+			header="DELETE ROW" message="Do you really want to delete this row?">
+			<p:commandButton id="deleteDialogConfirm" value="#{uiValue.okLabel}"
+				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
+				actionListener="#{contractController.pushConfirmButtonDeleteDialog()}"
+				oncomplete="updateDataTable(); PF('deleteRowDialogWidget').hide()"
+				process="@this" icon="#{uiValue.okCircleIcon}" />
+			<p:commandButton id="deleteDialogCancel"
+				value="#{uiValue.cancelLabel}" styleClass="ui-confirmdialog-no"
+				update="form:growlMessage"
+				oncomplete="PF('deleteDialogConfirm').hide()" type="button"
+				process="@this" icon="#{uiValue.cancelCircleIcon}" />
+		</p:confirmDialog>
+
+
+		<!--  CONFIRM CREATE MESSAGE -->
+		<p:confirmDialog id="confirmCreateMessageDialog" global="true"
+			styleClass="change-position" showEffect="fade" responsive="true" 
+			widgetVar="confirmCreateMessageDialogWidget"
+			header="CREATED CONTRACT " 
+			message="#{contractController.confirmCreateMessage}">
+			<p:commandButton id="confirmCreateMessageButton"
+				value="#{uiValue.okLabel}" styleClass="ui-confirmdialog-yes"
+				update="form:growlMessage"
+				oncomplete="PF('confirmCreateMessageDialogWidget').hide()"
+				process="@this" icon="#{uiValue.okCircleIcon}" />
+		</p:confirmDialog>
+
+	</h:form>
+
+</body>
+</html>

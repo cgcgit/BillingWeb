@@ -5,6 +5,7 @@ package com.comasw.viewController.parameterization;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -69,6 +70,15 @@ public class TaxTypeController extends BasicType<PtTaxType> implements Serializa
 
 	@PostConstruct
 	public void init() {
+		
+		if (this.getDataList() == null) {
+			this.setDataList(new ArrayList<PtTaxType>());
+		}
+
+		if (this.getFilteredDataList() == null) {
+			this.setFilteredDataList(new ArrayList<PtTaxType>());
+		}
+
 
 		if (getSelectedData() == null) {
 			setSelectedData( new PtTaxType());

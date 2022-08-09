@@ -4,6 +4,7 @@
 package com.comasw.viewController.parameterization;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -64,6 +65,15 @@ public class BillingPeriodController extends BasicType<PtBillingPeriod> implemen
 	@PostConstruct
 	public void init() {
 
+		if (this.getDataList() == null) {
+			this.setDataList(new ArrayList<PtBillingPeriod>());
+		}
+
+		if (this.getFilteredDataList() == null) {
+			this.setFilteredDataList(new ArrayList<PtBillingPeriod>());
+		}
+
+		
 		if (this.getSelectedData() == null) {
 			this.setSelectedData(new PtBillingPeriod());
 		}

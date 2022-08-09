@@ -5,6 +5,7 @@ package com.comasw.viewController.catalog.type;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -72,6 +73,15 @@ public class CustomerTypeController extends BasicTypeWithLists<CtCustomerType> i
 
 	@PostConstruct
 	public void init() {
+		
+		if (this.getDataList() == null) {
+			this.setDataList(new ArrayList<CtCustomerType>());
+		}
+
+		if (this.getFilteredDataList() == null) {
+			this.setFilteredDataList(new ArrayList<CtCustomerType>());
+		}
+
 
 		if (getSelectedData() == null) {
 			setSelectedData(new CtCustomerType());
@@ -142,8 +152,8 @@ public class CustomerTypeController extends BasicTypeWithLists<CtCustomerType> i
 			// Validates the data
 			if (this.objectValidation(dataObject)) {
 				// sets the modif data
-				this.getSelectedData().setModifUser(this.loggedUser.getUserCode());
-				this.getSelectedData().setModifDate(LocalDateTime.now());
+				dataObject.setModifUser(this.loggedUser.getUserCode());
+				dataObject.setModifDate(LocalDateTime.now());
 
 				customerTypeEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";

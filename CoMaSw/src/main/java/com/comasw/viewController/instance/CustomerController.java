@@ -27,7 +27,7 @@ import org.primefaces.event.FlowEvent;
 import org.primefaces.event.RowEditEvent;
 
 import com.comasw.ejb.instance.CustomerEJBLocal;
-import com.comasw.generalClass.BasicHistoricWithLists;
+import com.comasw.generalClass.BasicInstanceClass;
 import com.comasw.interfaces.IEditableHistoricTable;
 import com.comasw.model.tables.pojos.ItCustomer;
 import com.comasw.model.tables.pojos.VwUsers;
@@ -36,9 +36,18 @@ import com.comasw.utilities.Utilities;
 
 @Named
 @ViewScoped
-public class CustomerController extends BasicHistoricWithLists<ItCustomer>
+public class CustomerController extends BasicInstanceClass<ItCustomer>
 		implements Serializable, IEditableHistoricTable {
 
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5656501787981937971L;
+
+	Logger logger = (Logger) LogManager.getLogger(CustomerController.class);
+	
+	
 	private static Integer GIVEN_NAME_LENGTH_MAX = Integer
 			.valueOf(dbDefinitions.getString("CUSTOMER_GIVEN_NAME_LENGTH_MAX"));
 	private static Integer FIRST_SURNAME_LENGTH_MAX = Integer
@@ -67,12 +76,6 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 	private static Integer STATUS_ID_PENDING_INSTANCE = Integer
 			.valueOf(dbDefinitions.getString("STATUS_ID_PENDING_INSTANCE"));
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 5656501787981937971L;
-
-	Logger logger = (Logger) LogManager.getLogger(CustomerController.class);
 
 	@Inject
 	private ExternalContext externalContext;
@@ -85,21 +88,6 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 	// ----- SELECTED DATA -----\\
 
 	
-	/**
-	 * Selected data from dataList
-	 */
-	private ItCustomer injectSelectedData;
-
-	/**
-	 * Selected data row in the table
-	 */
-	
-	private ItCustomer injectSelectedHistoricData;
-
-	// ----- NEW DATA -----\\
-
-	
-	private ItCustomer injectNewData;
 
 	// ---- SEARCH CRITERIA ----\\
 
@@ -111,48 +99,7 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 	// GETTERS AND SETTERS
 	// -------------------
 
-	/**
-	 * @return the selectedData
-	 */
-	public ItCustomer getInjectSelectedData() {
-		return injectSelectedData;
-	}
-
-	/**
-	 * @param selection the selectedData to set
-	 */
-	public void setInjectSelectedData(ItCustomer injectSelectedData) {
-		this.injectSelectedData = injectSelectedData;
-	}
-
-	/**
-	 * @return the selectedHistoricData
-	 */
-	public ItCustomer getInjectSelectedHistoricData() {
-		return injectSelectedHistoricData;
-	}
-
-	/**
-	 * @param selectedHistoricData the selectedHistoricData to set
-	 */
-	public void setInjectSelectedHistoricData(ItCustomer injectSelectedHistoricData) {
-		this.injectSelectedHistoricData = injectSelectedHistoricData;
-	}
-
-	/**
-	 * @return the newData
-	 */
-	public ItCustomer getInjectNewData() {
-		return injectNewData;
-	}
-
-	/**
-	 * @param newData the newData to set
-	 */
-	public void setInjectNewData(ItCustomer injectNewData) {
-		this.injectNewData = injectNewData;
-	}
-
+	
 	/**
 	 * @return the searchCustomerId
 	 */
@@ -191,6 +138,10 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 
 	@PostConstruct
 	public void init() {
+		
+		if (this.getNewData()== null) {
+			this.setNewData(new ItCustomer());
+		}
 
 		if (this.getSearchDate() == null) {
 			this.setSearchDate(LocalDate.now().atStartOfDay());
@@ -206,7 +157,7 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 
 		if (this.getFilteredDataList() == null) {
 			this.setFilteredDataList(new ArrayList<ItCustomer>());
-		}
+		}	
 
 		if (this.getSelectedData() == null) {
 			this.setSelectedData(new ItCustomer());
@@ -220,10 +171,16 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 			this.setFilteredHistoricDataList(new ArrayList<ItCustomer>());
 		}
 
+
 		if (this.getBackupHistoricDataList() == null) {
 			this.setBackupHistoricDataList(new ArrayList<ItCustomer>());
 		}
 
+		
+		if (this.getSelectedHistoricData() == null ) {
+			this.setSelectedHistoricData(new ItCustomer());
+		}
+		
 		if (this.getLoggedUser() == null) {
 			this.setLoggedUser((VwUsers) externalContext.getSessionMap().get("applicationUser"));
 		}
@@ -313,28 +270,28 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 
 		DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent(DATA_TABLE_ID);
 
-		if (this.getInjectSelectedData() == null) {
-			this.setInjectSelectedData(new ItCustomer());
+		if (this.getSelectedData() == null) {
+			this.setSelectedData(new ItCustomer());
 		}
 
 		// Gets the selected data
-		this.setInjectSelectedData((ItCustomer) dataTable.getRowData());
+		this.setSelectedData((ItCustomer) dataTable.getRowData());
 
-		if (this.getInjectSelectedData() == null || this.getInjectSelectedData().getCustomerId() == null
-				|| this.getInjectSelectedData().getCustomerId() == 0) {
+		if (this.getSelectedData() == null || this.getSelectedData().getCustomerId() == null
+				|| this.getSelectedData().getCustomerId() == 0) {
 			messageDetail = "The customer is null";
 			logger.error(message + " - " + messageDetail);
 			createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 
 		} else {
 			this.setShowSelectedData(true);
-			this.setSelectedData(this.getInjectSelectedData());
+			this.setSelectedData(this.getSelectedData());
 			loadHistoricalDataList();
 
 			messageDetail = "Shown data for customer: ";
-			logger.info(message + " - " + messageDetail + this.getInjectSelectedData().toString());
+			logger.info(message + " - " + messageDetail + this.getSelectedData().toString());
 			createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
-					messageDetail + injectSelectedData.getCustomerId().toString());
+					messageDetail + this.getSelectedData().getCustomerId().toString());
 
 			PrimeFaces.current().executeScript("PF('searchListWidget').hide();");
 			PrimeFaces.current().executeScript("PF('multipleAccordionPanelWidget').selectAll();");
@@ -563,19 +520,15 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 
 		// Retrieved the data that was modified
 		dataObject = (ItCustomer) event.getObject();
-
+		
+	
 		try {
-			this.loadHistoricalDataList();
-
-			messageDetail = "The changes for customer " + dataObject.toString() + " was cancelled";
+			this.refreshHistoricDataTable();
+			messageDetail = "The changes for promotion type " + dataObject.toString() + " was cancelled";
 			logger.info(messageDetail);
 			createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
-
 			// return the default values of the control variables
 			this.setControlVariablesToDefault();
-
-			// update the historic table
-			// Ajax.update(HISTORIC_DATA_TABLE_ID);
 
 		} catch (Exception e) {
 			messageDetail = "ERROR - " + e.getCause().toString();
@@ -604,10 +557,10 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 			// pos = dataTable.getRowIndex();
 			this.setCurrentHistoricRow(dataTable.getRowIndex());
 			currentData = (ItCustomer) dataTable.getRowData();
-			this.setInjectSelectedHistoricData((ItCustomer) Utilities.deepClone(currentData));
+			this.setSelectedHistoricData((ItCustomer) Utilities.deepClone(currentData));
 
-			this.injectNewData = new ItCustomer();
-			injectNewData.from(currentData);
+			this.setNewData(new ItCustomer());
+			this.getNewData().from(currentData);
 
 			// Sets the fromAddingRow value to true
 			this.setFromAddingRow(true);
@@ -651,7 +604,7 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 			// pos = dataTable.getRowIndex();
 			this.setCurrentHistoricRow(dataTable.getRowIndex());
 			currentData = (ItCustomer) dataTable.getRowData();
-			this.setInjectSelectedHistoricData((ItCustomer) Utilities.deepClone(currentData));
+			this.setSelectedHistoricData((ItCustomer) Utilities.deepClone(currentData));
 
 			this.changeDeleteMessage();
 
@@ -682,13 +635,13 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 	public void pushCreateNewButton() {
 
 		// Set the default dates and input values for the new data
-		this.injectNewData = new ItCustomer();
-		this.injectNewData.setStartDate(Formatter.stringToLocalDateTime(Formatter.DEFAULT_START_DATE));
-		this.injectNewData.setEndDate(Formatter.stringToLocalDateTime(Formatter.DEFAULT_END_DATE));
-		this.injectNewData.setInputUser(this.loggedUser.getUserCode());
-		this.injectNewData.setInputDate(LocalDateTime.now());		
+		this.setNewData(new ItCustomer());
+		this.getNewData().setStartDate(Formatter.stringToLocalDateTime(Formatter.DEFAULT_START_DATE));
+		this.getNewData().setEndDate(Formatter.stringToLocalDateTime(Formatter.DEFAULT_END_DATE));
+		this.getNewData().setInputUser(this.loggedUser.getUserCode());
+		this.getNewData().setInputDate(LocalDateTime.now());		
 		if (!this.isFromAddingRow()) {
-			this.injectNewData.setStatusId(STATUS_ID_PENDING_INSTANCE);
+			this.getNewData().setStatusId(STATUS_ID_PENDING_INSTANCE);
 		}
 
 		// Change the header to the new dialog
@@ -703,308 +656,30 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 		String message = "INSERT NEW DATA";
 		String messageDetail = "";
 		boolean error = false;
-		boolean coverGap = false;
 		Integer row = this.getCurrentHistoricRow();
-		ItCustomer originalPreviousDataRow, previousDataRow, subsequentDataRow;
+
 
 		try {
-			if (this.objectValidation(injectNewData)) {
-
+			if (this.objectValidation(this.getNewData())) {
 				if (this.isFromAddingRow()) {
 					// Gets the table
 					DataTable dataTable = (DataTable) facesContext.getViewRoot().findComponent(HISTORIC_DATA_TABLE_ID);
-					Integer totalRows = dataTable.getRowCount();
-
-					// The previous row from new data is the current row on the data table
-					previousDataRow = this.getBackupHistoricDataList().get(row);
-					// Gets original values from previous row --> backup
-					originalPreviousDataRow = (ItCustomer) Utilities.deepClone(previousDataRow);
-
-					// new historic version from existing object
-					if (!this.rangeDateValidation(facesContext, externalContext, previousDataRow.getStartDate(),
-							previousDataRow.getEndDate(), injectNewData.getStartDate(), injectNewData.getEndDate())) {
-						// not valid dates
-						error = true;
-					} else {
-						// validates other date condition
-						if (this.injectNewData.getStartDate()
-								.isEqual(Formatter.stringToLocalDateTime(Formatter.DEFAULT_START_DATE)) && (row != 0)) {
-							// new start date = minDate for a row different from first row ==> error
-							messageDetail = "Error in dates - Only the first row can sets the start date to the minimum allowed date.";
-							logger.info("Create customer: " + this.injectNewData.toString() + " - " + messageDetail);
-							this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
-									messageDetail);
-							error = true;
-
-						}
-						if (injectNewData.getEndDate()
-								.isEqual(Formatter.stringToLocalDateTime(Formatter.DEFAULT_END_DATE))
-								&& row != (totalRows - 1)) {
-							// new end date = maxDate for a row different from last row ==> error
-							messageDetail = "Error in dates - Only the last row can sets the end date to the maximum allowed date.";
-							logger.info("Create customer: " + this.injectNewData.toString() + " - " + messageDetail);
-							this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
-									messageDetail);
-							error = true;
-
-						}
-
-						if (!error) {
-							// dates are OK
-
-							if (row != totalRows - 1) {
-								// Check if de data to insert is to cover a gap
-								// Retrieve the subsequent record data
-								subsequentDataRow = this.backupHistoricDataList.get(row + 1);
-
-								if (previousDataRow.getEndDate().isEqual(injectNewData.getStartDate().minusDays(1))
-										&& injectNewData.getEndDate()
-												.isEqual(subsequentDataRow.getStartDate().minusDays(1))) {
-									// exceptional case: there is a gap between the records and the new record comes
-									// to cover it
-									// ==> inserts only the new record
-									// ...currentSD ............ currentED.....subsequentSD ........... subsequentED
-									// ...v .................... v.............v ...................... v
-									// ...[-----currentValue----]..............[-----subsequentValue----]
-									// ..........................[--newValue--]
-									// ..........................^ .......... ^
-									// .........................newSD ....... newED
-
-									customerEJB.insertNewHistoricDataRecord(injectNewData);
-
-									coverGap = true;
-								}
-							}
-
-							if (!coverGap) {
-								// normal case: the new record and the exist record are consecutives or overlaps
-
-								if ((injectNewData.getEndDate().isEqual(previousDataRow.getStartDate()))
-										|| (injectNewData.getEndDate().isBefore(previousDataRow.getStartDate()))) {
-									// .............currentSD ............ currentED
-									// .............v ................... v
-									// .............[-----currentValue----]
-									// [--newValue--]]
-									// ^ ......... ^^
-									// newSD ..... newED
-									if (row == 0) {
-										// first row ==> can be a record before the first record
-
-										if (previousDataRow.getStartDate()
-												.isEqual(injectNewData.getEndDate().plusDays(1))) {
-											// the current record not to be modify ==> inserts only the new record <p>
-											// ..............currentSD ............ currentED <p>
-											// ..............v ................... v <p>
-											// ..............[-----currentValue----] <p>
-											// [--newValue--] <p>
-											// ^ .......... ^ <p>
-											// newSD ..... newED <p>
-
-											customerEJB.insertNewHistoricDataRecord(injectNewData);
-										} else {
-											if (injectNewData.getEndDate().isEqual(previousDataRow.getStartDate())) {
-												// [current start date, current end date] <p>
-												// becomes to: <p>
-												// [new start date, new end date] <p>
-												// [new end date + 1, current end date] <p>
-
-												// ....currentSD'=newED+1 ............ currentED <p>
-												// ............. v ................... v <p>
-												// ..............[-----currentValue----] <p>
-												// [--newValue--] <p>
-												// ^ .......... ^ <p>
-												// newS ....... newED <p>
-
-												// set first section of the record with the new value
-												customerEJB.insertNewHistoricDataRecord(injectNewData);
-
-												// set the modified values
-												previousDataRow.setModifUser(this.loggedUser.getUserCode());
-												previousDataRow.setModifDate(LocalDateTime.now());
-												// set second section of the record with the original value (except
-												// dates)
-												previousDataRow.setStartDate(injectNewData.getEndDate().plusDays(1));
-
-												customerEJB.updateHistoricDataRecord(previousDataRow);
-
-												// delete the original record
-												customerEJB.deleteData(originalPreviousDataRow);
-											} else {
-												// no consecutive records ==> error
-												messageDetail = "Error in dates - The new and current dates are not consecutives.";
-												logger.info("Create customer: " + this.injectNewData.toString() + " - "
-														+ messageDetail);
-												this.createMessage(facesContext, externalContext,
-														FacesMessage.SEVERITY_INFO, message, messageDetail);
-												error = true;
-											}
-										}
-
-									} else {
-										// not the first row ==> not allowed
-										messageDetail = "Error in dates - The new end date can not be less than current start date.";
-										logger.info("Create customer: " + this.injectNewData.toString() + " - "
-												+ messageDetail);
-										this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO,
-												message, messageDetail);
-										error = true;
-									}
-								} else {
-									if (injectNewData.getStartDate().isEqual(previousDataRow.getStartDate())) {
-										// ..............currentSD .................. currentED <p>
-										// ..............v ........................... v <p>
-										// ..............[-----------------------------] <p>
-										// ..............[-----------] <p>
-										// ..............^ ......... ^ <p>
-										// ..............newSD ..... newED <p>
-										// becomes to: <p>
-										// ..................currentSD'=newED+1 ....... currentED <p>
-										// ...........................v ............... v <p>
-										// ...........................[--.currentValue--] <p>
-										// .............[--newValue--] <p>
-										// .............^ .......... ^ <p>
-										// .............newSD ...... newED <p>
-
-										// split the record --> set first section of the record with the new value
-										previousDataRow = (ItCustomer) Utilities.deepClone(injectNewData);
-										previousDataRow.setInputDate(LocalDateTime.now());
-										previousDataRow.setInputUser(this.getLoggedUser().getUserCode());
-
-										customerEJB.updateHistoricDataRecord(previousDataRow);
-
-										// split the record --> set second section of the record with the original value
-										// (except dates)
-										previousDataRow = (ItCustomer) Utilities.deepClone(originalPreviousDataRow);
-										// set the modified values
-										previousDataRow.setModifUser(this.loggedUser.getUserCode());
-										previousDataRow.setModifDate(LocalDateTime.now());
-										// set the new start date
-										previousDataRow.setStartDate(injectNewData.getEndDate().plusDays(1));
-										customerEJB.updateHistoricDataRecord(previousDataRow);
-
-										// delete the original record
-										customerEJB.deleteData(originalPreviousDataRow);
-
-									} else {
-										if (injectNewData.getEndDate().isEqual(previousDataRow.getEndDate())) {
-											// .............currentSD .................. currentED <p>
-											// .............v ........................... v <p>
-											// .............[-----------------------------] <p>
-											// ...............................[-----------] <p>
-											// ...............................^ ......... ^ <p>
-											// ...............................newSD ..... newED <p>
-											// becomes to: <p>
-											// .......currentSD........... currentED'=newSD-1 <p>
-											// .............v .............. v <p>
-											// .............[--currentValue--] <p>
-											// ...............................[--newValue--] <p>
-											// ...............................^ .......... ^ <p>
-											// ...............................newSD ...... newED <p>
-
-											// split the record --> set first section of the record with the original
-											// value
-											// (except dates)
-
-											// set the modified values
-											previousDataRow.setModifUser(this.loggedUser.getUserCode());
-											previousDataRow.setModifDate(LocalDateTime.now());
-											// set the new endDate
-											previousDataRow.setEndDate(injectNewData.getStartDate().minusDays(1));
-											customerEJB.updateHistoricDataRecord(previousDataRow);
-
-											// split the record --> set second section of the record with the new value
-											previousDataRow = (ItCustomer) Utilities.deepClone(injectNewData);
-											previousDataRow.setInputDate(LocalDateTime.now());
-											previousDataRow.setInputUser(this.getLoggedUser().getUserCode());
-											customerEJB.updateHistoricDataRecord(previousDataRow);
-
-											// delete the original record
-											customerEJB.deleteData(originalPreviousDataRow);
-
-										} else {
-											// ........currentSD ..................................... currentED <p>
-											// .........v ............................................. v <p>
-											// .........[-----------------------------------------------] <p>
-											// .....................[-----------] <p>
-											// .....................^ ......... ^
-											// .....................newSD ..... newED <p>
-											// becomes to: <p>
-											// ....currentSD............ currentED'=newSD-1 <p>
-											// .........v .............. v <p>
-											// .........[--currentValue--] <p>
-											// ...........................[--newValue--] <p>
-											// ...........................^ .......... ^ <p>
-											// ...........................newSD. ..... newED <p>
-											// .........................................[--currentValue--] <p>
-											// .........................................^ .............. ^ <p>
-											// ......................................otherSD=newED+1 ...
-											// otherED=currentED <p>
-											//
-
-											// split the record --> set first section of the record with the original
-											// value
-											// (except dates)
-											// set the modified values
-											previousDataRow.setModifUser(this.loggedUser.getUserCode());
-											previousDataRow.setModifDate(LocalDateTime.now());
-											// set the new endDate
-											previousDataRow.setEndDate(injectNewData.getStartDate().minusDays(1));
-											customerEJB.updateHistoricDataRecord(previousDataRow);
-
-											// split the record --> set second section of the record with the new value
-											previousDataRow = (ItCustomer) Utilities.deepClone(injectNewData);
-											previousDataRow.setInputDate(LocalDateTime.now());
-											previousDataRow.setInputUser(this.getLoggedUser().getUserCode());
-											customerEJB.updateHistoricDataRecord(previousDataRow);
-
-											// split the record --> set third section of the record with the original
-											// values
-											// (except dates)
-											previousDataRow = (ItCustomer) Utilities.deepClone(originalPreviousDataRow);
-											// set the modified values
-											previousDataRow.setModifUser(this.loggedUser.getUserCode());
-											previousDataRow.setModifDate(LocalDateTime.now());
-											// set the new startDate and endDate
-											previousDataRow.setStartDate(injectNewData.getEndDate().plusDays(1));
-											previousDataRow.setEndDate(originalPreviousDataRow.getEndDate());
-											customerEJB.updateHistoricDataRecord(previousDataRow);
-
-											// delete the original record
-											customerEJB.deleteData(originalPreviousDataRow);
-										}
-									}
-
-								}
-							}
-
-						}
-					}
+					error = splitRecords(dataTable, row, this.getNewData());
 				} else {
 					// create a new object
-					customerEJB.insertData(injectNewData);
+					customerEJB.insertData(this.getNewData());
+					ItCustomer object = customerEJB.findDataBySearchDateAndCustomerId(this.getNewData().getStartDate(),
+							this.getNewData().getCustomerId());
 
-					ItCustomer object = customerEJB.findDataBySearchDateAndCustomerId(this.injectNewData.getStartDate(),
-							this.injectNewData.getCustomerId());
+					this.setSelectedData(object);
+					this.getSelectedDataList().clear();
+					this.getSelectedDataList().add(this.getSelectedData());
+					// this.setInjectSelectedData(object);
 
 					messageDetail = "Data saves succesfully";
-					logger.info("Create customer: " + this.injectNewData.toString() + " - " + messageDetail);
+					logger.info("Create customer: " + this.getNewData().toString() + " - " + messageDetail);
 					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
 							messageDetail);
-
-					// Show the data for the new object
-					this.setShowSelectedData(true);
-					this.setSelectedData(object);
-					loadHistoricalDataList();
-
-					messageDetail = "Shown data for customer: ";
-					logger.info(message + " - " + messageDetail + this.injectNewData.toString());
-					createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
-							messageDetail + this.injectNewData.getCustomerId().toString());
-
-					this.resetFilterDataTable();
-					this.resetFilterHistoricDataTable();
-					PrimeFaces.current().executeScript("PF('multipleAccordionPanelWidget').selectAll();");
-
 				}
 
 			} else {
@@ -1038,19 +713,27 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 			if (error) {
 				facesContext.validationFailed();
 			} else {
+
+				// this.refreshSelectedDataAttribute();
+
 				if (this.isFromAddingRow()) {
 					this.resetFilterHistoricDataTable();
 					this.loadHistoricalDataList();
-					Ajax.update(HISTORIC_DATA_TABLE_ID);
-					this.setFromAddingRow(false);					
+					// Ajax.update(HISTORIC_DATA_TABLE_ID);
+					this.setFromAddingRow(false);
 
 				} else {
-					this.resetFilterDataTable();
-					this.loadDataList();
-					Ajax.update(DATA_TABLE_ID);
+					// Ajax.update(DATA_TABLE_ID);
+					this.resetFilterHistoricDataTable();
+					loadHistoricalDataList();
+					this.setShowSelectedData(true);
+					PrimeFaces.current().executeScript("PF('multipleAccordionPanelWidget').selectAll();");
+					messageDetail = "Shown data for customer: ";
+					logger.info(message + " - " + messageDetail + this.getNewData().toString());
+					createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
+							messageDetail + this.getNewData().getCustomerId());
 				}
 				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();");
-				
 
 			}
 		}
@@ -1088,7 +771,7 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 		lastPos = -1;
 
 		try {
-			if (this.injectSelectedHistoricData != null) {
+			if (this.getSelectedHistoricData() != null) {
 
 				// Gets the data
 				DataTable dataTable = (DataTable) facesContext.getViewRoot().findComponent(HISTORIC_DATA_TABLE_ID);
@@ -1124,10 +807,10 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 				}
 
 				// delete the selected data
-				customerEJB.deleteData(this.injectSelectedHistoricData);
+				customerEJB.deleteData(this.getSelectedHistoricData());
 
 				messageDetail = "Data deletes succesfully";
-				logger.info("Delete customer: " + this.injectSelectedHistoricData.toString() + " - " + messageDetail);
+				logger.info("Delete customer: " + this.getSelectedHistoricData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;
@@ -1290,11 +973,15 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 
 	@Override
 	public void refreshHistoricDataTable() {
-		if (this.getSelectedData() != null) {
+		if (this.getSelectedData() == null) {
+			// recover the selected data from the selected table
+			if (this.getSelectedDataList().get(0) != null) {
+				this.setSelectedData(this.getSelectedDataList().get(0));
+			}
+		}
 			this.resetFilterHistoricDataTable();
 			this.loadHistoricalDataList();
-			Ajax.update(HISTORIC_DATA_TABLE_ID);
-		}
+			Ajax.update(HISTORIC_DATA_TABLE_ID);		
 	}
 
 	@Override
@@ -1308,7 +995,7 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 				.findComponent(HISTORIC_DATA_TABLE_ID);
 		ItCustomer data = (ItCustomer) dataTable.getRowData();
 
-		this.injectSelectedHistoricData = data;
+		this.setSelectedHistoricData(data);
 
 		// Gets the row of the current User
 		String row = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
@@ -1360,7 +1047,7 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 		boolean error = false;
 
 		try {
-			if (this.injectSelectedHistoricData != null) {
+			if (this.getSelectedHistoricData() != null) {
 
 				// Gets the data
 				DataTable dataTable = (DataTable) facesContext.getViewRoot().findComponent(HISTORIC_DATA_TABLE_ID);
@@ -1381,7 +1068,7 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 					dataTable.setRowIndex(currentPos);
 
 					messageDetail = "Subsequent status change succesfully";
-					logger.info("Change status customer: " + this.injectSelectedHistoricData.toString() + " - "
+					logger.info("Change status customer: " + this.getSelectedHistoricData().toString() + " - "
 							+ messageDetail);
 					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
 							messageDetail);
@@ -1484,22 +1171,22 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 
 	@Override
 	public void changeDeleteMessage() {
-		this.setDeleteMessageDialog("Customer " + this.injectSelectedHistoricData.getGivenName() + " "
-				+ this.injectSelectedHistoricData.getFirstSurname() + " "
-				+ this.injectSelectedHistoricData.getSecondSurname()
+		this.setDeleteMessageDialog("Customer " + this.getSelectedHistoricData().getGivenName() + " "
+				+ this.getSelectedHistoricData().getFirstSurname() + " "
+				+ this.getSelectedHistoricData().getSecondSurname()
 				+ " - Do you really want to delete historic period ["
-				+ Formatter.localDateTimeToString(this.injectSelectedHistoricData.getStartDate()) + ", "
-				+ Formatter.localDateTimeToString(this.injectSelectedHistoricData.getEndDate()) + "]? ");
+				+ Formatter.localDateTimeToString(this.getSelectedHistoricData().getStartDate()) + ", "
+				+ Formatter.localDateTimeToString(this.getSelectedHistoricData().getEndDate()) + "]? ");
 	}
 
 	@Override
 	public void changeStatusMessage() {
-		this.setCancelMessageDialog("Customer " + this.injectSelectedHistoricData.getGivenName() + " "
-				+ this.injectSelectedHistoricData.getFirstSurname() + " "
-				+ this.injectSelectedHistoricData.getSecondSurname()
+		this.setCancelMessageDialog("Customer " + this.getSelectedHistoricData().getGivenName() + " "
+				+ this.getSelectedHistoricData().getFirstSurname() + " "
+				+ this.getSelectedHistoricData().getSecondSurname()
 				+ " - Do you really want to set the status to cancel from historic period ["
-				+ Formatter.localDateTimeToString(this.injectSelectedHistoricData.getStartDate()) + ", "
-				+ Formatter.localDateTimeToString(this.injectSelectedHistoricData.getEndDate()) + "] onwards?");
+				+ Formatter.localDateTimeToString(this.getSelectedHistoricData().getStartDate()) + ", "
+				+ Formatter.localDateTimeToString(this.getSelectedHistoricData().getEndDate()) + "] onwards?");
 	}
 
 	@Override
@@ -1539,25 +1226,25 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 			}
 		}
 
-		if (this.injectNewData.getCustomerTypeId() == null) {
+		if (this.getNewData().getCustomerTypeId() == null) {
 			messageDetail = "ERROR - The customer type of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
 		}
 
-		if (this.injectNewData.getStartDate() == null) {
+		if (this.getNewData().getStartDate() == null) {
 			messageDetail = "ERROR - The start date of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (this.injectNewData.getStartDate().compareTo(minDate) < 0) {
+		} else if (this.getNewData().getStartDate().compareTo(minDate) < 0) {
 			messageDetail = "ERROR - The start date of the customer can not be less than "
 					+ Formatter.localDateTimeToString(minDate);
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (this.injectNewData.getStartDate().compareTo(maxDate) > 0) {
+		} else if (this.getNewData().getStartDate().compareTo(maxDate) > 0) {
 			messageDetail = "ERROR - The start date of the customer can not be greater than "
 					+ Formatter.localDateTimeToString(maxDate);
 			logger.error(messageDetail);
@@ -1565,18 +1252,18 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 			validation = false;
 		}
 
-		if (this.injectNewData.getEndDate() == null) {
+		if (this.getNewData().getEndDate() == null) {
 			messageDetail = "ERROR - The end date of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (this.injectNewData.getEndDate().compareTo(minDate) < 0) {
+		} else if (this.getNewData().getEndDate().compareTo(minDate) < 0) {
 			messageDetail = "ERROR - The end date of the customer can not be less than "
 					+ Formatter.localDateTimeToString(minDate);
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (this.injectNewData.getEndDate().compareTo(maxDate) > 0) {
+		} else if (this.getNewData().getEndDate().compareTo(maxDate) > 0) {
 			messageDetail = "ERROR - The end date of the customer can not be greater than "
 					+ Formatter.localDateTimeToString(maxDate);
 			logger.error(messageDetail);
@@ -1606,31 +1293,31 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 			}
 		}
 
-		if (this.injectNewData.getGivenName() != null) {
-			this.injectNewData.setGivenName(this.injectNewData.getGivenName().trim());
+		if (this.getNewData().getGivenName() != null) {
+			this.getNewData().setGivenName(this.getNewData().getGivenName().trim());
 		}
 
-		if (this.injectNewData.getFirstSurname() != null) {
-			this.injectNewData.setFirstSurname(this.injectNewData.getFirstSurname().trim());
+		if (this.getNewData().getFirstSurname() != null) {
+			this.getNewData().setFirstSurname(this.getNewData().getFirstSurname().trim());
 		}
 
-		if (this.injectNewData.getSecondSurname() != null) {
-			this.injectNewData.setSecondSurname(this.injectNewData.getSecondSurname().trim());
+		if (this.getNewData().getSecondSurname() != null) {
+			this.getNewData().setSecondSurname(this.getNewData().getSecondSurname().trim());
 		}
 
-		if (this.injectNewData.getIdentityCard() != null) {
-			this.injectNewData.setIdentityCard(this.injectNewData.getIdentityCard().toUpperCase().trim());
+		if (this.getNewData().getIdentityCard() != null) {
+			this.getNewData().setIdentityCard(this.getNewData().getIdentityCard().toUpperCase().trim());
 		}
 
-		if (this.injectNewData.getGivenName() == null || this.injectNewData.getGivenName().isEmpty()) {
+		if (this.getNewData().getGivenName() == null || this.getNewData().getGivenName().isEmpty()) {
 			messageDetail = "ERROR - The given name of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (((Integer) this.injectNewData.getGivenName().length())
+		} else if (((Integer) this.getNewData().getGivenName().length())
 				.compareTo(CustomerController.GIVEN_NAME_LENGTH_MAX) > 0) {
 			// length characters exceeds the maximum length
-			messageDetail = "Error - The given name of the customer (" + this.injectNewData.getGivenName().length()
+			messageDetail = "Error - The given name of the customer (" + this.getNewData().getGivenName().length()
 					+ " characters) exceeds the limit of " + CustomerController.GIVEN_NAME_LENGTH_MAX.toString()
 					+ " characters";
 			logger.error(messageDetail);
@@ -1638,28 +1325,28 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 			validation = false;
 		}
 
-		if (this.injectNewData.getFirstSurname() == null || this.injectNewData.getFirstSurname().isEmpty()) {
+		if (this.getNewData().getFirstSurname() == null || this.getNewData().getFirstSurname().isEmpty()) {
 			messageDetail = "ERROR - The first surname of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (((Integer) this.injectNewData.getFirstSurname().length())
+		} else if (((Integer) this.getNewData().getFirstSurname().length())
 				.compareTo(CustomerController.FIRST_SURNAME_LENGTH_MAX) > 0) {
 			// length characters exceeds the maximum length
 			messageDetail = "Error - The first surname of the customer ("
-					+ this.injectNewData.getFirstSurname().length() + " characters) exceeds the limit of "
+					+ this.getNewData().getFirstSurname().length() + " characters) exceeds the limit of "
 					+ CustomerController.FIRST_SURNAME_LENGTH_MAX.toString() + " characters";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
 		}
 
-		if (this.injectNewData.getSecondSurname() != null && (!this.injectNewData.getSecondSurname().isEmpty())) {
-			if (((Integer) this.injectNewData.getSecondSurname().length())
+		if (this.getNewData().getSecondSurname() != null && (!this.getNewData().getSecondSurname().isEmpty())) {
+			if (((Integer) this.getNewData().getSecondSurname().length())
 					.compareTo(CustomerController.SECOND_SURNAME_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The second surname of the customer ("
-						+ this.injectNewData.getSecondSurname().length() + " characters) exceeds the limit of "
+						+ this.getNewData().getSecondSurname().length() + " characters) exceeds the limit of "
 						+ CustomerController.SECOND_SURNAME_LENGTH_MAX.toString() + " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
@@ -1667,35 +1354,35 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 			}
 		}
 
-		if (this.injectNewData.getIdentityCardTypeId() == null) {
+		if (this.getNewData().getIdentityCardTypeId() == null) {
 			messageDetail = "ERROR - The identity card type of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
 		}
 
-		if (this.injectNewData.getIdentityCard() == null || this.injectNewData.getIdentityCard().isEmpty()) {
+		if (this.getNewData().getIdentityCard() == null || this.getNewData().getIdentityCard().isEmpty()) {
 			messageDetail = "ERROR - The identity card of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (((Integer) this.injectNewData.getIdentityCard().length())
+		} else if (((Integer) this.getNewData().getIdentityCard().length())
 				.compareTo(CustomerController.IDENTITY_CARD_LENGTH_MAX) > 0) {
 			// length characters exceeds the maximum length
 			messageDetail = "Error - The identity card of the customer ("
-					+ this.injectNewData.getIdentityCard().length() + " characters) exceeds the limit of "
+					+ this.getNewData().getIdentityCard().length() + " characters) exceeds the limit of "
 					+ CustomerController.SECOND_SURNAME_LENGTH_MAX.toString() + " characters";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
 		}
 
-		if (this.injectNewData.getContactPhone() != null && !this.injectNewData.getContactPhone().isEmpty()) {
-			if (((Integer) this.injectNewData.getContactPhone().length())
+		if (this.getNewData().getContactPhone() != null && !this.getNewData().getContactPhone().isEmpty()) {
+			if (((Integer) this.getNewData().getContactPhone().length())
 					.compareTo(CustomerController.CONTACT_PHONE_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The contact phone of the customer ("
-						+ this.injectNewData.getContactPhone().length() + " characters) exceeds the limit of "
+						+ this.getNewData().getContactPhone().length() + " characters) exceeds the limit of "
 						+ CustomerController.CONTACT_PHONE_LENGTH_MAX.toString() + " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
@@ -1724,35 +1411,35 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 			}
 		}
 
-		if (this.injectNewData.getAddress() != null) {
-			this.injectNewData.setAddress(this.injectNewData.getAddress().trim());
+		if (this.getNewData().getAddress() != null) {
+			this.getNewData().setAddress(this.getNewData().getAddress().trim());
 		}
 
-		if (this.injectNewData.getCity() != null) {
-			this.injectNewData.setCity(this.injectNewData.getCity().trim());
+		if (this.getNewData().getCity() != null) {
+			this.getNewData().setCity(this.getNewData().getCity().trim());
 		}
 
-		if (this.injectNewData.getState() != null) {
-			this.injectNewData.setState(this.injectNewData.getState().trim());
+		if (this.getNewData().getState() != null) {
+			this.getNewData().setState(this.getNewData().getState().trim());
 		}
 
-		if (this.injectNewData.getCountry() != null) {
-			this.injectNewData.setCountry(this.injectNewData.getCountry().trim());
+		if (this.getNewData().getCountry() != null) {
+			this.getNewData().setCountry(this.getNewData().getCountry().trim());
 		}
 
-		if (this.injectNewData.getPostCode() != null) {
-			this.injectNewData.setPostCode(this.injectNewData.getPostCode().trim());
+		if (this.getNewData().getPostCode() != null) {
+			this.getNewData().setPostCode(this.getNewData().getPostCode().trim());
 		}
 
-		if (this.injectNewData.getAddress() == null || this.injectNewData.getAddress().isEmpty()) {
+		if (this.getNewData().getAddress() == null || this.getNewData().getAddress().isEmpty()) {
 			messageDetail = "ERROR - The address of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (((Integer) this.injectNewData.getAddress().length())
+		} else if (((Integer) this.getNewData().getAddress().length())
 				.compareTo(CustomerController.ADDRESS_LENGTH_MAX) > 0) {
 			// length characters exceeds the maximum length
-			messageDetail = "Error - The address of the customer (" + this.injectNewData.getAddress().length()
+			messageDetail = "Error - The address of the customer (" + this.getNewData().getAddress().length()
 					+ " characters) exceeds the limit of " + CustomerController.ADDRESS_LENGTH_MAX.toString()
 					+ " characters";
 			logger.error(messageDetail);
@@ -1760,15 +1447,15 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 			validation = false;
 		}
 
-		if (this.injectNewData.getCity() == null || this.injectNewData.getCity().isEmpty()) {
+		if (this.getNewData().getCity() == null || this.getNewData().getCity().isEmpty()) {
 			messageDetail = "ERROR - The city of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (((Integer) this.injectNewData.getCity().length())
+		} else if (((Integer) this.getNewData().getCity().length())
 				.compareTo(CustomerController.CITY_LENGTH_MAX) > 0) {
 			// length characters exceeds the maximum length
-			messageDetail = "Error - The city of the customer (" + this.injectNewData.getCity().length()
+			messageDetail = "Error - The city of the customer (" + this.getNewData().getCity().length()
 					+ " characters) exceeds the limit of " + CustomerController.CITY_LENGTH_MAX.toString()
 					+ " characters";
 			logger.error(messageDetail);
@@ -1776,15 +1463,15 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 			validation = false;
 		}
 
-		if (this.injectNewData.getState() == null || this.injectNewData.getState().isEmpty()) {
+		if (this.getNewData().getState() == null || this.getNewData().getState().isEmpty()) {
 			messageDetail = "ERROR - The state of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (((Integer) this.injectNewData.getState().length())
+		} else if (((Integer) this.getNewData().getState().length())
 				.compareTo(CustomerController.STATE_LENGTH_MAX) > 0) {
 			// length characters exceeds the maximum length
-			messageDetail = "Error - The state of the customer (" + this.injectNewData.getState().length()
+			messageDetail = "Error - The state of the customer (" + this.getNewData().getState().length()
 					+ " characters) exceeds the limit of " + CustomerController.STATE_LENGTH_MAX.toString()
 					+ " characters";
 			logger.error(messageDetail);
@@ -1792,15 +1479,15 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 			validation = false;
 		}
 
-		if (this.injectNewData.getCountry() == null || this.injectNewData.getCountry().isEmpty()) {
+		if (this.getNewData().getCountry() == null || this.getNewData().getCountry().isEmpty()) {
 			messageDetail = "ERROR - The country of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (((Integer) this.injectNewData.getCountry().length())
+		} else if (((Integer) this.getNewData().getCountry().length())
 				.compareTo(CustomerController.COUNTRY_LENGTH_MAX) > 0) {
 			// length characters exceeds the maximum length
-			messageDetail = "Error - The country of the customer (" + this.injectNewData.getCountry().length()
+			messageDetail = "Error - The country of the customer (" + this.getNewData().getCountry().length()
 					+ " characters) exceeds the limit of " + CustomerController.COUNTRY_LENGTH_MAX.toString()
 					+ " characters";
 			logger.error(messageDetail);
@@ -1808,15 +1495,15 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 			validation = false;
 		}
 
-		if (this.injectNewData.getPostCode() == null || this.injectNewData.getPostCode().isEmpty()) {
+		if (this.getNewData().getPostCode() == null || this.getNewData().getPostCode().isEmpty()) {
 			messageDetail = "ERROR - The post code of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (((Integer) this.injectNewData.getPostCode().length())
+		} else if (((Integer) this.getNewData().getPostCode().length())
 				.compareTo(CustomerController.POST_CODE_LENGTH_MAX) > 0) {
 			// length characters exceeds the maximum length
-			messageDetail = "Error - The post code of the customer (" + this.injectNewData.getPostCode().length()
+			messageDetail = "Error - The post code of the customer (" + this.getNewData().getPostCode().length()
 					+ " characters) exceeds the limit of " + CustomerController.POST_CODE_LENGTH_MAX.toString()
 					+ " characters";
 			logger.error(messageDetail);
@@ -1846,25 +1533,25 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 			}
 		}
 
-		if (this.injectNewData.getContactPhone() != null) {
-			this.injectNewData.setContactPhone(this.injectNewData.getContactPhone().trim());
+		if (this.getNewData().getContactPhone() != null) {
+			this.getNewData().setContactPhone(this.getNewData().getContactPhone().trim());
 		}
 
-		if (this.injectNewData.getEMail() != null) {
-			this.injectNewData.setEMail(this.injectNewData.getEMail().trim());
+		if (this.getNewData().getEMail() != null) {
+			this.getNewData().setEMail(this.getNewData().getEMail().trim());
 		}
-		if (this.injectNewData.getContactPhone() != null && !this.injectNewData.getContactPhone().isEmpty()) {
-			if (((Integer) this.injectNewData.getContactPhone().length())
+		if (this.getNewData().getContactPhone() != null && !this.getNewData().getContactPhone().isEmpty()) {
+			if (((Integer) this.getNewData().getContactPhone().length())
 					.compareTo(CustomerController.CONTACT_PHONE_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The contact phone of the customer ("
-						+ this.injectNewData.getContactPhone().length() + " characters) exceeds the limit of "
+						+ this.getNewData().getContactPhone().length() + " characters) exceeds the limit of "
 						+ CustomerController.CONTACT_PHONE_LENGTH_MAX.toString() + " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			} else {
-				if (!Utilities.phoneNumberValidation(this.injectNewData.getContactPhone())) {
+				if (!Utilities.phoneNumberValidation(this.getNewData().getContactPhone())) {
 					messageDetail = "Error - Contact phone wrong format";
 					logger.error(messageDetail);
 					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message,
@@ -1874,18 +1561,18 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 			}
 		}
 
-		if (this.injectNewData.getEMail() != null && !this.injectNewData.getEMail().isEmpty()) {
-			if (((Integer) this.injectNewData.getEMail().length())
+		if (this.getNewData().getEMail() != null && !this.getNewData().getEMail().isEmpty()) {
+			if (((Integer) this.getNewData().getEMail().length())
 					.compareTo(CustomerController.E_MAIL_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
-				messageDetail = "Error - The e-mail of the customer (" + this.injectNewData.getEMail().length()
+				messageDetail = "Error - The e-mail of the customer (" + this.getNewData().getEMail().length()
 						+ " characters) exceeds the limit of " + CustomerController.E_MAIL_LENGTH_MAX.toString()
 						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			} else {
-				if (!Utilities.emailValidation(this.injectNewData.getEMail())) {
+				if (!Utilities.emailValidation(this.getNewData().getEMail())) {
 					messageDetail = "Error - E-mail wrong format";
 					logger.error(messageDetail);
 					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message,
@@ -1918,24 +1605,24 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 			}
 		}
 
-		if (this.injectNewData.getIban() != null) {
-			this.injectNewData.setIban(this.injectNewData.getIban().toUpperCase().trim());
+		if (this.getNewData().getIban() != null) {
+			this.getNewData().setIban(this.getNewData().getIban().toUpperCase().trim());
 		}
 
-		if ((this.injectNewData.getIban() == null || this.injectNewData.getIban().isEmpty())
-				&& (this.injectNewData.getBankEntity() == null || this.injectNewData.getBankEntity().isEmpty())
-				&& (this.injectNewData.getBankControlDigit() == null
-						|| this.injectNewData.getBankControlDigit().isEmpty())
-				&& (this.injectNewData.getBankAccountNumber() == null
-						|| this.injectNewData.getBankAccountNumber().isEmpty())) {
+		if ((this.getNewData().getIban() == null || this.getNewData().getIban().isEmpty())
+				&& (this.getNewData().getBankEntity() == null || this.getNewData().getBankEntity().isEmpty())
+				&& (this.getNewData().getBankControlDigit() == null
+						|| this.getNewData().getBankControlDigit().isEmpty())
+				&& (this.getNewData().getBankAccountNumber() == null
+						|| this.getNewData().getBankAccountNumber().isEmpty())) {
 			// no one of data bank field was filled
 			filledBankData = false;
 		} else {
-			if (this.injectNewData.getIban() != null && (! this.injectNewData.getIban().isEmpty()) 
-					&& this.injectNewData.getBankEntity() != null && (! this.injectNewData.getBankEntity().isEmpty())
-					&& this.injectNewData.getBankBranch() != null && (! this.injectNewData.getBankBranch().isEmpty())
-					&& this.injectNewData.getBankControlDigit() != null && (! this.injectNewData.getBankControlDigit().isEmpty())
-					&& this.injectNewData.getBankAccountNumber() != null && (! this.injectNewData.getBankAccountNumber().isEmpty())) {
+			if (this.getNewData().getIban() != null && (! this.getNewData().getIban().isEmpty()) 
+					&& this.getNewData().getBankEntity() != null && (! this.getNewData().getBankEntity().isEmpty())
+					&& this.getNewData().getBankBranch() != null && (! this.getNewData().getBankBranch().isEmpty())
+					&& this.getNewData().getBankControlDigit() != null && (! this.getNewData().getBankControlDigit().isEmpty())
+					&& this.getNewData().getBankAccountNumber() != null && (! this.getNewData().getBankAccountNumber().isEmpty())) {
 				// all data bank field was filled
 				filledBankData = true;
 			} else {
@@ -1951,53 +1638,53 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 
 		if (filledBankData) {
 			// Validates the bank data
-			if (((Integer) this.injectNewData.getIban().length()).compareTo(CustomerController.IBAN_LENGTH) != 0) {
+			if (((Integer) this.getNewData().getIban().length()).compareTo(CustomerController.IBAN_LENGTH) != 0) {
 				// length characters exceeds the maximum length
-				messageDetail = "Error - The IBAN of the customer (" + this.injectNewData.getIban().length()
+				messageDetail = "Error - The IBAN of the customer (" + this.getNewData().getIban().length()
 						+ " characters) must be " + CustomerController.IBAN_LENGTH.toString() + " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			}
 
-			if (((Integer) this.injectNewData.getBankEntity().length())
+			if (((Integer) this.getNewData().getBankEntity().length())
 					.compareTo(CustomerController.BANK_ENTITY_LENGTH) != 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The bank entity of the customer ("
-						+ this.injectNewData.getBankEntity().length() + " characters) must be "
+						+ this.getNewData().getBankEntity().length() + " characters) must be "
 						+ CustomerController.BANK_ENTITY_LENGTH.toString() + " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			}
 
-			if (((Integer) this.injectNewData.getBankBranch().length())
+			if (((Integer) this.getNewData().getBankBranch().length())
 					.compareTo(CustomerController.BANK_BRANCH_LENGTH) != 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The bank branch of the customer ("
-						+ this.injectNewData.getBankBranch().length() + " characters) must be "
+						+ this.getNewData().getBankBranch().length() + " characters) must be "
 						+ CustomerController.BANK_BRANCH_LENGTH.toString() + " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			}
 
-			if (((Integer) this.injectNewData.getBankControlDigit().length())
+			if (((Integer) this.getNewData().getBankControlDigit().length())
 					.compareTo(CustomerController.BANK_CONTROL_DIGIT_LENGTH) != 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The bank control digit of the customer ("
-						+ this.injectNewData.getBankControlDigit().length() + " characters) must be "
+						+ this.getNewData().getBankControlDigit().length() + " characters) must be "
 						+ CustomerController.BANK_CONTROL_DIGIT_LENGTH.toString() + " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			}
 
-			if (((Integer) this.injectNewData.getBankAccountNumber().length())
+			if (((Integer) this.getNewData().getBankAccountNumber().length())
 					.compareTo(CustomerController.BANK_ACCOUNT_NUMBER_LENGTH) != 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The bank account number of the customer ("
-						+ this.injectNewData.getBankAccountNumber().length() + " characters) must be "
+						+ this.getNewData().getBankAccountNumber().length() + " characters) must be "
 						+ CustomerController.BANK_ACCOUNT_NUMBER_LENGTH.toString() + " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
@@ -2051,10 +1738,311 @@ public class CustomerController extends BasicHistoricWithLists<ItCustomer>
 		}
 	}
 
+	@SuppressWarnings("finally")
 	@Override
 	public boolean splitRecords(DataTable dataTable, int row, Object newRow) {
-		// TODO Auto-generated method stub
-		return false;
+		String message = "INSERT NEW DATA";
+		String messageDetail = "";
+		boolean error = false;
+		boolean coverGap = false;
+		ItCustomer newObject, originalPreviousDataRow, previousDataRow, subsequentDataRow;
+
+		try {
+
+			newObject = (ItCustomer) newRow;
+
+			Integer totalRows = dataTable.getRowCount();
+
+			// The previous row from new data is the current row on the data table
+			previousDataRow = this.getBackupHistoricDataList().get(row);
+			// Gets original values from previous row --> backup
+			originalPreviousDataRow = (ItCustomer) Utilities.deepClone(previousDataRow);
+
+			// new historic version from existing object
+			if (!this.rangeDateValidation(facesContext, externalContext, previousDataRow.getStartDate(),
+					previousDataRow.getEndDate(), newObject.getStartDate(), newObject.getEndDate())) {
+				// not valid dates
+				error = true;
+			} else {
+				// validates other date condition
+				if (newObject.getStartDate().isEqual(Formatter.stringToLocalDateTime(Formatter.DEFAULT_START_DATE))
+						&& (row != 0)) {
+					// new start date = minDate for a row different from first row ==> error
+					messageDetail = "Error in dates - Only the first row can sets the start date to the minimum allowed date.";
+					logger.info("Create promotion type: " + newObject.toString() + " - " + messageDetail);
+					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
+							messageDetail);
+					error = true;
+
+				}
+				if (newObject.getEndDate().isEqual(Formatter.stringToLocalDateTime(Formatter.DEFAULT_END_DATE))
+						&& row != (totalRows - 1)) {
+					// new end date = maxDate for a row different from last row ==> error
+					messageDetail = "Error in dates - Only the last row can sets the end date to the maximum allowed date.";
+					logger.info("Create promotion type: " + newObject.toString() + " - " + messageDetail);
+					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
+							messageDetail);
+					error = true;
+
+				}
+
+				if (!error) {
+					// dates are OK
+
+					if (row != totalRows - 1) {
+						// Check if de data to insert is to cover a gap
+						// Retrieve the subsequent record data
+						subsequentDataRow = this.backupHistoricDataList.get(row + 1);
+
+						if (previousDataRow.getEndDate().isEqual(newObject.getStartDate().minusDays(1))
+								&& newObject.getEndDate().isEqual(subsequentDataRow.getStartDate().minusDays(1))) {
+							// exceptional case: there is a gap between the records and the new record comes
+							// to cover it
+							// ==> inserts only the new record
+							// ...currentSD ............ currentED.....subsequentSD ........... subsequentED
+							// ...v .................... v.............v ...................... v
+							// ...[-----currentValue----]..............[-----subsequentValue----]
+							// ..........................[--newValue--]
+							// ..........................^ .......... ^
+							// .........................newSD ....... newED
+
+							customerEJB.insertNewHistoricDataRecord(newObject);
+
+							coverGap = true;
+						}
+					}
+
+					if (!coverGap) {
+						// normal case: the new record and the exist record are consecutives or overlaps
+
+						if ((newObject.getEndDate().isEqual(previousDataRow.getStartDate()))
+								|| (newObject.getEndDate().isBefore(previousDataRow.getStartDate()))) {
+							// .............currentSD ............ currentED
+							// .............v ................... v
+							// .............[-----currentValue----]
+							// [--newValue--]]
+							// ^ ......... ^^
+							// newSD ..... newED
+							if (row == 0) {
+								// first row ==> can be a record before the first record
+
+								if (previousDataRow.getStartDate().isEqual(newObject.getEndDate().plusDays(1))) {
+									// the current record not to be modify ==> inserts only the new record <p>
+									// ..............currentSD ............ currentED <p>
+									// ..............v ................... v <p>
+									// ..............[-----currentValue----] <p>
+									// [--newValue--] <p>
+									// ^ .......... ^ <p>
+									// newSD ..... newED <p>
+
+									customerEJB.insertNewHistoricDataRecord(newObject);
+								} else {
+									if (newObject.getEndDate().isEqual(previousDataRow.getStartDate())) {
+										// [current start date, current end date] <p>
+										// becomes to: <p>
+										// [new start date, new end date] <p>
+										// [new end date + 1, current end date] <p>
+
+										// ....currentSD'=newED+1 ............ currentED <p>
+										// ............. v ................... v <p>
+										// ..............[-----currentValue----] <p>
+										// [--newValue--] <p>
+										// ^ .......... ^ <p>
+										// newS ....... newED <p>
+
+										// set first section of the record with the new value
+										customerEJB.insertNewHistoricDataRecord(newObject);
+
+										// delete the original record (to eliminate overlapping)
+										customerEJB.deleteData(originalPreviousDataRow);
+
+										// set the modified values
+										previousDataRow.setModifUser(this.loggedUser.getUserCode());
+										previousDataRow.setModifDate(LocalDateTime.now());
+										// set second section of the record with the original value (except
+										// dates)
+										previousDataRow.setStartDate(newObject.getEndDate().plusDays(1));
+
+										customerEJB.updateHistoricDataRecord(previousDataRow);
+
+									} else {
+										// no consecutive records ==> error
+										messageDetail = "Error in dates - The new and current dates are not consecutives.";
+										logger.info("Create promotion type: " + newObject.toString() + " - "
+												+ messageDetail);
+										this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO,
+												message, messageDetail);
+										error = true;
+									}
+								}
+
+							} else {
+								// not the first row ==> not allowed
+								messageDetail = "Error in dates - The new end date can not be less than current start date.";
+								logger.info("Create promotion type: " + newObject.toString() + " - " + messageDetail);
+								this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
+										messageDetail);
+								error = true;
+							}
+						} else {
+							if (newObject.getStartDate().isEqual(previousDataRow.getStartDate())) {
+								// ..............currentSD .................. currentED <p>
+								// ..............v ........................... v <p>
+								// ..............[-----------------------------] <p>
+								// ..............[-----------] <p>
+								// ..............^ ......... ^ <p>
+								// ..............newSD ..... newED <p>
+								// becomes to: <p>
+								// ..................currentSD'=newED+1 ....... currentED <p>
+								// ...........................v ............... v <p>
+								// ...........................[--.currentValue--] <p>
+								// .............[--newValue--] <p>
+								// .............^ .......... ^ <p>
+								// .............newSD ...... newED <p>
+
+								// delete the original record (to eliminate overlapping)
+								customerEJB.deleteData(originalPreviousDataRow);
+
+								// split the record --> set first section of the record with the new value
+								previousDataRow = (ItCustomer) Utilities.deepClone(newObject);
+								previousDataRow.setInputDate(LocalDateTime.now());
+								previousDataRow.setInputUser(this.getLoggedUser().getUserCode());
+
+								customerEJB.updateHistoricDataRecord(previousDataRow);
+
+								// split the record --> set second section of the record with the original value
+								// (except dates)
+								previousDataRow = (ItCustomer) Utilities.deepClone(originalPreviousDataRow);
+								// set the modified values
+								previousDataRow.setModifUser(this.loggedUser.getUserCode());
+								previousDataRow.setModifDate(LocalDateTime.now());
+								// set the new start date
+								previousDataRow.setStartDate(newObject.getEndDate().plusDays(1));
+								customerEJB.updateHistoricDataRecord(previousDataRow);
+
+							} else {
+								if (newObject.getEndDate().isEqual(previousDataRow.getEndDate())) {
+									// .............currentSD .................. currentED <p>
+									// .............v ........................... v <p>
+									// .............[-----------------------------] <p>
+									// ...............................[-----------] <p>
+									// ...............................^ ......... ^ <p>
+									// ...............................newSD ..... newED <p>
+									// becomes to: <p>
+									// .......currentSD........... currentED'=newSD-1 <p>
+									// .............v .............. v <p>
+									// .............[--currentValue--] <p>
+									// ...............................[--newValue--] <p>
+									// ...............................^ .......... ^ <p>
+									// ...............................newSD ...... newED <p>
+
+									// split the record --> set first section of the record with the original
+									// value
+									// (except dates)
+
+									// delete the original record (to eliminate overlapping)
+									customerEJB.deleteData(originalPreviousDataRow);
+
+									// set the modified values
+									previousDataRow.setModifUser(this.loggedUser.getUserCode());
+									previousDataRow.setModifDate(LocalDateTime.now());
+									// set the new endDate
+									previousDataRow.setEndDate(newObject.getStartDate().minusDays(1));
+									customerEJB.updateHistoricDataRecord(previousDataRow);
+
+									// split the record --> set second section of the record with the new value
+									previousDataRow = (ItCustomer) Utilities.deepClone(newObject);
+									previousDataRow.setInputDate(LocalDateTime.now());
+									previousDataRow.setInputUser(this.getLoggedUser().getUserCode());
+									customerEJB.updateHistoricDataRecord(previousDataRow);
+
+								} else {
+									// ........currentSD ..................................... currentED <p>
+									// .........v ............................................. v <p>
+									// .........[-----------------------------------------------] <p>
+									// .....................[-----------] <p>
+									// .....................^ ......... ^
+									// .....................newSD ..... newED <p>
+									// becomes to: <p>
+									// ....currentSD............ currentED'=newSD-1 <p>
+									// .........v .............. v <p>
+									// .........[--currentValue--] <p>
+									// ...........................[--newValue--] <p>
+									// ...........................^ .......... ^ <p>
+									// ...........................newSD. ..... newED <p>
+									// .........................................[--currentValue--] <p>
+									// .........................................^ .............. ^ <p>
+									// ......................................otherSD=newED+1 ...
+									// otherED=currentED <p>
+									//
+
+									// delete the original record (to eliminate overlapping)
+									customerEJB.deleteData(originalPreviousDataRow);
+
+									// split the record --> set first section of the record with the original
+									// value
+									// (except dates)
+									// set the modified values
+									previousDataRow.setModifUser(this.loggedUser.getUserCode());
+									previousDataRow.setModifDate(LocalDateTime.now());
+									// set the new endDate
+									previousDataRow.setEndDate(newObject.getStartDate().minusDays(1));
+									customerEJB.updateHistoricDataRecord(previousDataRow);
+
+									// split the record --> set second section of the record with the new value
+									previousDataRow = (ItCustomer) Utilities.deepClone(newObject);
+									previousDataRow.setInputDate(LocalDateTime.now());
+									previousDataRow.setInputUser(this.getLoggedUser().getUserCode());
+									customerEJB.updateHistoricDataRecord(previousDataRow);
+
+									// split the record --> set third section of the record with the original
+									// values
+									// (except dates)
+									previousDataRow = (ItCustomer) Utilities.deepClone(originalPreviousDataRow);
+									// set the modified values
+									previousDataRow.setModifUser(this.loggedUser.getUserCode());
+									previousDataRow.setModifDate(LocalDateTime.now());
+									// set the new startDate and endDate
+									previousDataRow.setStartDate(newObject.getEndDate().plusDays(1));
+									previousDataRow.setEndDate(originalPreviousDataRow.getEndDate());
+									customerEJB.updateHistoricDataRecord(previousDataRow);
+
+								}
+							}
+
+						}
+					}
+
+				}
+			}
+
+		} catch (EJBException e) {
+			error = true;
+			Exception ne = (Exception) e.getCause();
+			if (ne.getClass().getName().equals("es.comasw.exception.CoMaSwDataAccessException")) {
+				messageDetail = "DATA ACCES ERROR - " + ne.getMessage();
+				logger.fatal(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_FATAL, message, messageDetail);
+
+			} else if (ne.getClass().getName().equals("es.comasw.exception.CoMaSwParseException")) {
+				messageDetail = "PARSE ERROR - " + ne.getMessage();
+				logger.fatal(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_FATAL, message, messageDetail);
+
+			} else {
+				messageDetail = "ERROR - " + ne.getMessage();
+				logger.fatal(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_FATAL, message, messageDetail);
+			}
+
+		} catch (Exception e) {
+			error = true;
+			messageDetail = "ERROR - " + e.getMessage();
+			logger.fatal(messageDetail);
+			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_FATAL, message, messageDetail);
+		} finally {
+			return error;
+		}
 	}
 
 	@Override

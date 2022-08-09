@@ -75,6 +75,15 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 
 	@PostConstruct
 	public void init() {
+		
+		if (this.getDataList() == null) {
+			this.setDataList(new ArrayList<CtAccountType>());
+		}
+
+		if (this.getFilteredDataList() == null) {
+			this.setFilteredDataList(new ArrayList<CtAccountType>());
+		}
+
 
 		if (getSelectedData() == null) {
 			setSelectedData ( new CtAccountType());
@@ -145,8 +154,8 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 			// Validates the data
 			if (this.objectValidation(dataObject)) {
 				// sets the modif data
-				this.getSelectedData().setModifUser(this.loggedUser.getUserCode());
-				this.getSelectedData().setModifDate(LocalDateTime.now());
+				dataObject.setModifUser(this.loggedUser.getUserCode());
+				dataObject.setModifDate(LocalDateTime.now());
 
 				accountTypeEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";

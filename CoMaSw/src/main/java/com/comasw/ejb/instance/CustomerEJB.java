@@ -227,7 +227,7 @@ public class CustomerEJB implements CustomerEJBLocal {
 		try {
 			id = Math.toIntExact(create.nextval(SEQ_CUSTOMER_ID));
 		} catch (Exception e) {
-			errorMessage = "Error obtaining the id for the new fee type" + " - " + e.getMessage();
+			errorMessage = "Error obtaining the id for the new customer " + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
@@ -258,7 +258,7 @@ public class CustomerEJB implements CustomerEJBLocal {
 				daoObject.insert(dataObject);
 			}
 		} catch (Exception e) {
-			errorMessage = "Error inserting the fee type object (value: " + dataObject.toString() + ") - "
+			errorMessage = "Error inserting the customer object (value: " + dataObject.toString() + ") - "
 					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
@@ -276,7 +276,7 @@ public class CustomerEJB implements CustomerEJBLocal {
 			daoObject.insert(dataObject);
 
 		} catch (Exception e) {
-			errorMessage = "Error inserting the fee type object (value: " + dataObject.toString() + ") - "
+			errorMessage = "Error inserting the customer object (value: " + dataObject.toString() + ") - "
 					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
@@ -295,7 +295,7 @@ public class CustomerEJB implements CustomerEJBLocal {
 			record.store();
 
 		} catch (Exception e) {
-			errorMessage = "Error inserting the fee type object (value: " + dataObject.toString() + ") - "
+			errorMessage = "Error inserting the customer object (value: " + dataObject.toString() + ") - "
 					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
@@ -312,7 +312,7 @@ public class CustomerEJB implements CustomerEJBLocal {
 			ItCustomerDao daoObject = new ItCustomerDao(configuration);
 			daoObject.update(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error updating the fee type object (value: " + dataObject.toString() + ") - "
+			errorMessage = "Error updating the customer object (value: " + dataObject.toString() + ") - "
 					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
@@ -328,7 +328,7 @@ public class CustomerEJB implements CustomerEJBLocal {
 			ItCustomerDao daoObject = new ItCustomerDao(configuration);
 			daoObject.delete(dataObject);
 		} catch (Exception e) {
-			errorMessage = "Error deleting the fee type object (value: " + dataObject.toString() + ") - "
+			errorMessage = "Error deleting the customer object (value: " + dataObject.toString() + ") - "
 					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);

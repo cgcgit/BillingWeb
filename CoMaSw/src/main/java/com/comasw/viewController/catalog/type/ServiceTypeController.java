@@ -5,6 +5,7 @@ package com.comasw.viewController.catalog.type;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -69,6 +70,15 @@ public class ServiceTypeController extends BasicTypeWithLists<CtServiceType> imp
 
 	@PostConstruct
 	public void init() {
+		
+		if (this.getDataList() == null) {
+			this.setDataList(new ArrayList<CtServiceType>());
+		}
+
+		if (this.getFilteredDataList() == null) {
+			this.setFilteredDataList(new ArrayList<CtServiceType>());
+		}
+
 
 		if (getSelectedData()== null) {
 			setSelectedData(new CtServiceType());
@@ -139,8 +149,8 @@ public class ServiceTypeController extends BasicTypeWithLists<CtServiceType> imp
 			// Validates the data
 			if (this.objectValidation(dataObject)) {
 				// sets the modif data
-				this.getSelectedData().setModifUser(this.loggedUser.getUserCode());
-				this.getSelectedData().setModifDate(LocalDateTime.now());
+				dataObject.setModifUser(this.loggedUser.getUserCode());
+				dataObject.setModifDate(LocalDateTime.now());
 
 				serviceTypeEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";

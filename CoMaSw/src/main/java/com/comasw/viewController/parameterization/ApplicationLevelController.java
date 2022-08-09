@@ -4,6 +4,7 @@
 package com.comasw.viewController.parameterization;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -49,7 +50,6 @@ public class ApplicationLevelController extends BasicType<PtApplicationLevel> im
 	@EJB
 	private ApplicationLevelEJBLocal applicationLevelEJB;
 
-	
 	// -------------------
 	// METHODS
 	// -------------------
@@ -64,6 +64,14 @@ public class ApplicationLevelController extends BasicType<PtApplicationLevel> im
 	@PostConstruct
 	public void init() {
 
+		if (this.getDataList() == null) {
+			this.setDataList(new ArrayList<PtApplicationLevel>());
+		}
+
+		if (this.getFilteredDataList() == null) {
+			this.setFilteredDataList(new ArrayList<PtApplicationLevel>());
+		}
+		
 		if (this.getSelectedData() == null) {
 			this.setSelectedData(new PtApplicationLevel());
 		}
@@ -77,7 +85,7 @@ public class ApplicationLevelController extends BasicType<PtApplicationLevel> im
 	@Override
 	public void loadDataList() {
 		this.setDataList(applicationLevelEJB.findAllData());
-		;
+		
 		if (this.getDataList().isEmpty()) {
 			logger.info("No data to show");
 
@@ -282,12 +290,14 @@ public class ApplicationLevelController extends BasicType<PtApplicationLevel> im
 				applicationLevelEJB.deleteData(this.getSelectedData());
 				// this.selectedData = null;
 				messageDetail = "Data deletes succesfully";
-				logger.info("Delete application level data: " + this.getSelectedData().toString() + " - " + messageDetail);
+				logger.info(
+						"Delete application level data: " + this.getSelectedData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;
 				messageDetail = "ERROR - Selected data is null";
-				logger.fatal("Delete application level data: " + this.getSelectedData().getCode() + " - " + messageDetail);
+				logger.fatal(
+						"Delete application level data: " + this.getSelectedData().getCode() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_FATAL, message, messageDetail);
 
 			}

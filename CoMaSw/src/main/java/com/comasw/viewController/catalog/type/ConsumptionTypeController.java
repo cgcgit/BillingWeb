@@ -77,6 +77,15 @@ public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionT
 
 	@PostConstruct
 	public void init() {
+		
+		if (this.getDataList() == null) {
+			this.setDataList(new ArrayList<CtConsumptionType>());
+		}
+
+		if (this.getFilteredDataList() == null) {
+			this.setFilteredDataList(new ArrayList<CtConsumptionType>());
+		}
+
 
 		if (this.getSelectedData() == null) {
 			setSelectedData(new CtConsumptionType());
@@ -147,8 +156,8 @@ public class ConsumptionTypeController extends BasicTypeWithLists<CtConsumptionT
 			// Validates the data
 			if (this.objectValidation(dataObject)) {
 				// sets the modif data
-				this.getSelectedData().setModifUser(this.loggedUser.getUserCode());
-				this.getSelectedData().setModifDate(LocalDateTime.now());
+				dataObject.setModifUser(this.loggedUser.getUserCode());
+				dataObject.setModifDate(LocalDateTime.now());
 
 				consumptionTypeEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";

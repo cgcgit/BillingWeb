@@ -128,31 +128,6 @@ public class BasicTypeWithLists<T> extends BasicType<T> {
 		return selectItem;
 	}
 	
-	/*
-	 * Return the list of select items with the status data
-	 */
-	public List<SelectItem> statusInstanceSelectItems() {
-		List<SelectItem> selectItem = new ArrayList<>();
-		List<PtStatus> list = statusEJB.findDataForInstance();
-
-		SelectItem nullItem = new SelectItem();
-		nullItem.setLabel("Select One... ");
-		nullItem.setValue(null);
-		selectItem.add(nullItem);
-
-		if (list.isEmpty()) {
-			logger.error("ERROR - Not find status list");
-		} else {
-			for (PtStatus p : list) {
-				SelectItem item = new SelectItem();
-				item.setLabel(p.getCode());
-				item.setValue(p.getStatusId());
-				item.setDescription(p.getDescription());
-				selectItem.add(item);
-			}
-		}
-		return selectItem;
-	}
 
 	/*
 	 * Return the list of select items with the application level data

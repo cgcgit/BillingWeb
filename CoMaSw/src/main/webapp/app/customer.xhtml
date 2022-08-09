@@ -7,11 +7,7 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
-<f:metadata>
-	<f:viewAction id="loadData"
-		action="#{customerController.loadDataList()}"
-		phase="INVOKE_APPLICATION">
-	</f:viewAction>
+<f:metadata>	
 	<f:viewAction id="defaultControlVariables"
 		action="#{customerController.setInitVariablesToDefault()}"
 		phase="INVOKE_APPLICATION">
@@ -132,7 +128,7 @@
 						showGridlines="true" stripedRows="true" scrollable="true"
 						reflow="true" editable="true" rowIndexVar="rowIndexSearchTable"
 						rowKey="(#{dataTable.customerId} #{dataTable.startDate} #{dataTable.endDate})"
-						selection="#{customerController.injectSelectedData}"
+						selection="#{customerController.selectedData}"
 						selectionMode="single" paginator="true" rows="5" size="small"
 						paginatorPosition="bottom">
 
@@ -640,7 +636,7 @@
 						value="#{customerController.historicDataList}"
 						rowKey="(#{historicDataTable.customerId} #{historicDataTable.startDate} #{historicDataTable.endDate})"
 						rowIndexVar="rowIndexHistoricTable" selectionMode="single"
-						selection="#{customerController.injectSelectedHistoricData}"
+						selection="#{customerController.selectedHistoricData}"
 						filteredValue="#{customerController.filteredHistoricDataList}"
 						showGridlines="true" stripedRows="true" scrollable="true"
 						emptyMessage="No data to show" size="small" paginator="true"
@@ -696,7 +692,7 @@
 									target="#{customerController.rowHistoricSelected}" />
 
 								<f:setPropertyActionListener value="#{historicDataTable}"
-									target="#{customerController.injectSelectedHistoricData}" />
+									target="#{customerController.selectedHistoricData}" />
 							</p:commandButton>
 						</p:column>
 
@@ -1348,7 +1344,7 @@
 
 								<h:outputText id="newStartDateLabel" value="StartDate " />
 								<p:inputMask id="newStartDateInput"
-									value="#{customerController.injectNewData.startDate}"
+									value="#{customerController.newData.startDate}"
 									mask="99/99/9999" style="width:96%">
 									<f:converter
 										converterId="com.comasw.converter.localDateTimeConverter" />
@@ -1357,7 +1353,7 @@
 
 								<h:outputText id="newEndDateLabel" value="StartDate " />
 								<p:inputMask id="newEndDateInput"
-									value="#{customerController.injectNewData.endDate}"
+									value="#{customerController.newData.endDate}"
 									mask="99/99/9999" style="width:96%">
 									<f:converter
 										converterId="com.comasw.converter.localDateTimeConverter" />
@@ -1366,23 +1362,23 @@
 
 								<h:outputText id="newCustomerTypeOutput" value="Customer Type:" />
 								<p:selectOneMenu id="newCustomerTypeInput"
-									value="#{customerController.injectNewData.customerTypeId}"
+									value="#{customerController.newData.customerTypeId}"
 									disabled="#{customerController.fromAddingRow}" immediate="true">
 									<f:selectItems
 										value="#{customerController.customerTypeSelectItems()}"
 										id="selectItemsCustomerTypeInputNew" var="CustomerType"
-										itemValue="#{customerController.injectNewData.customerTypeId}">
+										itemValue="#{customerController.newData.customerTypeId}">
 									</f:selectItems>
 								</p:selectOneMenu>
 
 								<p:outputLabel id="newStatusLabel" value="Status:" />
 								<p:selectOneMenu id="newStatusInput" editable="false"
 									disabled="true" immediate="true"
-									value="#{customerController.injectNewData.statusId}">
+									value="#{customerController.newData.statusId}">
 									<f:selectItems id="selectItemsStatusOutputNew"
 										itemDisabled="true" var="Status"
 										value="#{customerController.statusInstanceSelectItems()}"
-										itemValue="#{customerController.injectNewData.statusId}" />
+										itemValue="#{customerController.newData.statusId}" />
 								</p:selectOneMenu>
 
 
@@ -1396,33 +1392,33 @@
 							<h:panelGrid columns="2" columnClasses="label, value">
 								<h:outputText id="newNameOutput" value="Name:" />
 								<p:inputText id="newNameInput"
-									value="#{customerController.injectNewData.givenName}"
+									value="#{customerController.newData.givenName}"
 									label="Name" />
 
 								<h:outputText id="new1stSurnameOutput" value="1st Surname:" />
 								<p:inputText id="new1stSurnameInput"
-									value="#{customerController.injectNewData.firstSurname}"
+									value="#{customerController.newData.firstSurname}"
 									label="FirstSurname" />
 
 								<h:outputText id="new2ndSurnameOutput" value="2nd Surname:" />
 								<p:inputText id="new2ndSurnameInput"
-									value="#{customerController.injectNewData.secondSurname}"
+									value="#{customerController.newData.secondSurname}"
 									label="SecondSurname" />
 
 								<h:outputText id="newIdCardTypeOutput" value="ID. Card Type:" />
 								<p:selectOneMenu id="newIdCardTypeInput"
-									value="#{customerController.injectNewData.identityCardTypeId}"
+									value="#{customerController.newData.identityCardTypeId}"
 									disabled="#{customerController.fromAddingRow}" immediate="true">
 									<f:selectItems
 										value="#{customerController.identityCardTypeSelectItems()}"
 										id="selectItemsIdCardTypeInputNew" var="IdCardType"
-										itemValue="#{customerController.injectNewData.identityCardTypeId}">
+										itemValue="#{customerController.newData.identityCardTypeId}">
 									</f:selectItems>
 								</p:selectOneMenu>
 
 								<h:outputText id="newIdCardOutput" value="ID. Card:" />
 								<p:inputText id="newIdCardInput"
-									value="#{customerController.injectNewData.identityCard}"
+									value="#{customerController.newData.identityCard}"
 									label="IdCard" disabled="#{customerController.fromAddingRow}" />
 							</h:panelGrid>
 						</p:panel>
@@ -1434,23 +1430,23 @@
 							<h:panelGrid columns="2" columnClasses="label, value">
 								<h:outputText id="newAddressOutput" value="Address:" />
 								<p:inputText id="newAddressInput"
-									value="#{customerController.injectNewData.address}" />
+									value="#{customerController.newData.address}" />
 
 								<h:outputText id="newPostCodeOutput" value="Postal Code:" />
 								<p:inputText id="newPostCodeInput"
-									value="#{customerController.injectNewData.postCode}" />
+									value="#{customerController.newData.postCode}" />
 
 								<h:outputText id="newCityOutput" value="City:" />
 								<p:inputText id="newCityIput"
-									value="#{customerController.injectNewData.city}" />
+									value="#{customerController.newData.city}" />
 
 								<h:outputText id="newStateOutput" value="State:" />
 								<p:inputText id="newStateIput"
-									value="#{customerController.injectNewData.state}" />
+									value="#{customerController.newData.state}" />
 
 								<h:outputText id="newCountryOutput" value="Country:" />
 								<p:inputText id="newCountryIput"
-									value="#{customerController.injectNewData.country}" />
+									value="#{customerController.newData.country}" />
 
 							</h:panelGrid>
 						</p:panel>
@@ -1462,12 +1458,12 @@
 							<h:panelGrid columns="2" columnClasses="label, value">
 								<h:outputText id="newContactPhoneOutput" value="Phone:" />
 								<p:inputText id="newContactPhoneInput"
-									value="#{customerController.injectNewData.contactPhone}" />
+									value="#{customerController.newData.contactPhone}" />
 
 
 								<h:outputText id="newEMailOutput" value="Email: *" />
 								<p:inputText id="newEMailInput"
-									value="#{customerController.injectNewData.EMail}" label="Email" />
+									value="#{customerController.newData.EMail}" label="Email" />
 							</h:panelGrid>
 						</p:panel>
 					</p:tab>
@@ -1478,27 +1474,27 @@
 							<h:panelGrid columns="2" columnClasses="label, value">
 								<h:outputText id="newIbanOutput" value="IBAN:" />
 								<h:inputText id="newIbanInput"
-									value="#{customerController.injectNewData.iban}" />
+									value="#{customerController.newData.iban}" />
 
 								<h:outputText id="newBankEntityOutput" value="Entity:" />
 								<h:inputText id="newBankEntityInput"
-									value="#{customerController.injectNewData.bankEntity}" />
+									value="#{customerController.newData.bankEntity}" />
 
 								<h:outputText id="newBankBranchOutput" value="Branch:" />
 								<h:inputText id="newBankBranchInput"
-									value="#{customerController.injectNewData.bankBranch}" />
+									value="#{customerController.newData.bankBranch}" />
 
 
 								<h:outputText id="newBankControlDigitOutput"
 									value="Control Digit:" />
 								<h:inputText id="newBankControlDigitInput"
-									value="#{customerController.injectNewData.bankControlDigit}" />
+									value="#{customerController.newData.bankControlDigit}" />
 
 
 								<h:outputText id="newBankAccountNumberOutput"
 									value="Account Nr:" />
 								<h:inputText id="newBankAccountNumberInput"
-									value="#{customerController.injectNewData.bankAccountNumber}" />
+									value="#{customerController.newData.bankAccountNumber}" />
 							</h:panelGrid>
 						</p:panel>
 					</p:tab>
@@ -1513,34 +1509,34 @@
 										<h:panelGrid columns="2" columnClasses="label, value">
 											<h:outputText id="confirmStartDateLabel" value="StartDate " />
 											<h:outputText id="confirmStartDateInput"
-												value="#{customerController.injectNewData.startDate}"
+												value="#{customerController.newData.startDate}"
 												style="width:96%" styleClass="outputLabel" />
 
 											<h:outputText id="confirmEndDateLabel" value="StartDate " />
 											<h:outputText id="confirmEndDateInput"
-												value="#{customerController.injectNewData.endDate}"
+												value="#{customerController.newData.endDate}"
 												style="width:96%" styleClass="outputLabel" />
 
 											<h:outputText id="confirmCustomerTypeOutput"
 												value="Customer Type:" />
 											<p:selectOneMenu id="confirmCustomerTypeInput"
-												value="#{customerController.injectNewData.customerTypeId}"
+												value="#{customerController.newData.customerTypeId}"
 												disabled="true" immediate="true">
 												<f:selectItems
 													value="#{customerController.customerTypeSelectItems()}"
 													id="selectItemsCustomerTypeInputConfirm" var="CustomerType"
-													itemValue="#{customerController.injectNewData.customerTypeId}">
+													itemValue="#{customerController.newData.customerTypeId}">
 												</f:selectItems>
 											</p:selectOneMenu>
 
 											<p:outputLabel id="confirmStatusLabel" value="Status:" />
 											<p:selectOneMenu id="confirmStatusInput" disabled="true"
 												immediate="true"
-												value="#{customerController.injectNewData.statusId}">
+												value="#{customerController.newData.statusId}">
 												<f:selectItems id="selectItemsStatusOutputConfirm"
 													itemDisabled="true" var="Status"
 													value="#{customerController.statusInstanceSelectItems()}"
-													itemValue="#{customerController.injectNewData.statusId}" />
+													itemValue="#{customerController.newData.statusId}" />
 											</p:selectOneMenu>
 										</h:panelGrid>
 									</p:fieldset>
@@ -1549,36 +1545,36 @@
 										<h:panelGrid columns="2" columnClasses="label, value">
 											<h:outputText id="confirmNameOutput" value="Name:" />
 											<h:outputText id="confirmNameInput"
-												value="#{customerController.injectNewData.givenName}"
+												value="#{customerController.newData.givenName}"
 												style="width:96%" styleClass="outputLabel" />
 
 											<h:outputText id="confirm1stSurnameOutput"
 												value="1st Surname:" />
 											<h:outputText id="confirm1stSurnameInput"
-												value="#{customerController.injectNewData.firstSurname}"
+												value="#{customerController.newData.firstSurname}"
 												style="width:96%" styleClass="outputLabel" />
 
 											<h:outputText id="confirm2ndSurnameOutput"
 												value="2nd Surname:" />
 											<h:outputText id="confirm2ndSurnameInput"
-												value="#{customerController.injectNewData.secondSurname}"
+												value="#{customerController.newData.secondSurname}"
 												style="width:96%" styleClass="outputLabel" />
 
 											<h:outputText id="confirmIdCardTypeOutput"
 												value="ID. Card Type:" />
 											<p:selectOneMenu id="confirmIdCardTypeInput"
-												value="#{customerController.injectNewData.identityCardTypeId}"
+												value="#{customerController.newData.identityCardTypeId}"
 												disabled="true" immediate="true">
 												<f:selectItems
 													value="#{customerController.identityCardTypeSelectItems()}"
 													id="selectItemsIdCardTypeInputConfirm" var="IdCardType"
-													itemValue="#{customerController.injectNewData.identityCardTypeId}">
+													itemValue="#{customerController.newData.identityCardTypeId}">
 												</f:selectItems>
 											</p:selectOneMenu>
 
 											<h:outputText id="confirmIdCardOutput" value="ID. Card:" />
 											<h:outputText id="confirmIdCardInput"
-												value="#{customerController.injectNewData.identityCard}"
+												value="#{customerController.newData.identityCard}"
 												style="width:96%" styleClass="outputLabel" />
 										</h:panelGrid>
 									</p:fieldset>
@@ -1588,27 +1584,27 @@
 
 											<h:outputText id="confirmAddressOutput" value="Address:" />
 											<h:outputText id="confirmAddressInput"
-												value="#{customerController.injectNewData.address}"
+												value="#{customerController.newData.address}"
 												style="width:96%" styleClass="outputLabel" />
 
 											<h:outputText id="confirmPostCodeOutput" value="Postal Code:" />
 											<h:outputText id="confirmPostCodeInput"
-												value="#{customerController.injectNewData.postCode}"
+												value="#{customerController.newData.postCode}"
 												style="width:96%" styleClass="outputLabel" />
 
 											<h:outputText id="confirmCityOutput" value="City:" />
 											<h:outputText id="confirmCityIput"
-												value="#{customerController.injectNewData.city}"
+												value="#{customerController.newData.city}"
 												style="width:96%" styleClass="outputLabel" />
 
 											<h:outputText id="confirmStateOutput" value="State:" />
 											<h:outputText id="confirmStateIput"
-												value="#{customerController.injectNewData.state}"
+												value="#{customerController.newData.state}"
 												style="width:96%" styleClass="outputLabel" />
 
 											<h:outputText id="confirmCountryOutput" value="Country:" />
 											<h:outputText id="confirmCountryIput"
-												value="#{customerController.injectNewData.city}"
+												value="#{customerController.newData.city}"
 												style="width:96%" styleClass="outputLabel" />
 
 										</h:panelGrid>
@@ -1619,13 +1615,13 @@
 
 											<h:outputText id="confirmContactPhoneOutput" value="Phone:" />
 											<h:outputText id="confirmContactPhoneInput"
-												value="#{customerController.injectNewData.contactPhone}"
+												value="#{customerController.newData.contactPhone}"
 												style="width:96%" styleClass="outputLabel" />
 
 
 											<h:outputText id="confirmEMailOutput" value="Email: *" />
 											<h:outputText id="confirmEMailInput"
-												value="#{customerController.injectNewData.EMail}"
+												value="#{customerController.newData.EMail}"
 												label="Email" style="width:96%" styleClass="outputLabel" />
 
 										</h:panelGrid>
@@ -1637,31 +1633,31 @@
 
 											<h:outputText id="confirmIbanOutput" value="IBAN:" />
 											<h:outputText id="confirmIbanInput"
-												value="#{customerController.injectNewData.iban}"
+												value="#{customerController.newData.iban}"
 												style="width:96%" styleClass="outputLabel" />
 
 											<h:outputText id="confirmBankEntityOutput" value="Entity:" />
 											<h:outputText id="confirmBankEntityInput"
-												value="#{customerController.injectNewData.bankEntity}"
+												value="#{customerController.newData.bankEntity}"
 												style="width:96%" styleClass="outputLabel" />
 
 											<h:outputText id="confirmBankBranchOutput" value="Branch:" />
 											<h:outputText id="confirmBankBranchInput"
-												value="#{customerController.injectNewData.bankBranch}"
+												value="#{customerController.newData.bankBranch}"
 												style="width:96%" styleClass="outputLabel" />
 
 
 											<h:outputText id="confirmBankControlDigitOutput"
 												value="Control Digit:" />
 											<h:outputText id="confirmBankControlDigitInput"
-												value="#{customerController.injectNewData.bankControlDigit}"
+												value="#{customerController.newData.bankControlDigit}"
 												style="width:96%" styleClass="outputLabel" />
 
 
 											<h:outputText id="confirmBankAccountNumberOutput"
 												value="Account Nr:" />
 											<h:outputText id="confirmBankAccountNumberInput"
-												value="#{customerController.injectNewData.bankAccountNumber}"
+												value="#{customerController.newData.bankAccountNumber}"
 												style="width:96%" styleClass="outputLabel" />
 										</h:panelGrid>
 									</p:fieldset>

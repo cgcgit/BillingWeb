@@ -66,6 +66,15 @@ public class StatusController extends BasicType<PtStatus> implements Serializabl
 
 	@PostConstruct
 	public void init() {
+		
+		if (this.getDataList() == null) {
+			this.setDataList(new ArrayList<PtStatus>());
+		}
+
+		if (this.getFilteredDataList() == null) {
+			this.setFilteredDataList(new ArrayList<PtStatus>());
+		}
+
 
 		if (this.getSelectedData() == null) {
 			this.setSelectedData( new PtStatus());

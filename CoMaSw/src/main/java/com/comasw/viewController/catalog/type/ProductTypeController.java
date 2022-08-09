@@ -5,6 +5,7 @@ package com.comasw.viewController.catalog.type;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -69,6 +70,15 @@ public class ProductTypeController extends BasicTypeWithLists<CtProductType> imp
 
 	@PostConstruct
 	public void init() {
+		
+		if (this.getDataList() == null) {
+			this.setDataList(new ArrayList<CtProductType>());
+		}
+
+		if (this.getFilteredDataList() == null) {
+			this.setFilteredDataList(new ArrayList<CtProductType>());
+		}
+
 
 		if (getSelectedData() == null) {
 			setSelectedData(new CtProductType());
@@ -139,8 +149,8 @@ public class ProductTypeController extends BasicTypeWithLists<CtProductType> imp
 			// Validates the data
 			if (this.objectValidation(dataObject)) {
 				// sets the modif data
-				this.getSelectedData().setModifUser(this.loggedUser.getUserCode());
-				this.getSelectedData().setModifDate(LocalDateTime.now());
+				dataObject.setModifUser(this.loggedUser.getUserCode());
+				dataObject.setModifDate(LocalDateTime.now());
 
 				productTypeEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";

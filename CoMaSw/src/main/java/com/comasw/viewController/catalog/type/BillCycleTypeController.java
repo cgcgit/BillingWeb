@@ -76,6 +76,15 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 
 	@PostConstruct
 	public void init() {
+		
+		if (this.getDataList() == null) {
+			this.setDataList(new ArrayList<CtBillCycleType>());
+		}
+
+		if (this.getFilteredDataList() == null) {
+			this.setFilteredDataList(new ArrayList<CtBillCycleType>());
+		}
+
 
 		if (getSelectedData() == null) {
 			setSelectedData (new CtBillCycleType());
@@ -146,8 +155,8 @@ public class BillCycleTypeController extends BasicTypeWithLists<CtBillCycleType>
 			// Validates the data
 			if (this.objectValidation(dataObject)) {
 				// sets the modif data
-				this.getSelectedData().setModifUser(this.loggedUser.getUserCode());
-				this.getSelectedData().setModifDate(LocalDateTime.now());
+				dataObject.setModifUser(this.loggedUser.getUserCode());
+				dataObject.setModifDate(LocalDateTime.now());
 
 				billCycleTypeEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";

@@ -1,6 +1,7 @@
 package com.comasw.viewController.parameterization;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -58,6 +59,15 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 
 	@PostConstruct
 	public void init() {
+		
+		if (this.getDataList() == null) {
+			this.setDataList(new ArrayList<PtEntityType>());
+		}
+
+		if (this.getFilteredDataList() == null) {
+			this.setFilteredDataList(new ArrayList<PtEntityType>());
+		}
+
 
 		if (this.getSelectedData() == null) {
 			this.setSelectedData(new PtEntityType());

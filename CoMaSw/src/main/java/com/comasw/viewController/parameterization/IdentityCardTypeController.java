@@ -4,6 +4,7 @@
 package com.comasw.viewController.parameterization;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -69,6 +70,15 @@ public class IdentityCardTypeController  extends BasicType<PtIdentityCardType> i
 	
 	@PostConstruct
 	public void init() {
+		
+		if (this.getDataList() == null) {
+			this.setDataList(new ArrayList<PtIdentityCardType>());
+		}
+
+		if (this.getFilteredDataList() == null) {
+			this.setFilteredDataList(new ArrayList<PtIdentityCardType>());
+		}
+
 
 		if (this.getSelectedData() == null) {
 			this.setSelectedData(new PtIdentityCardType());
