@@ -1,0 +1,2469 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+<f:metadata>
+	<f:viewAction id="defaultControlVariables"
+		action="#{accountController.setInitVariablesToDefault()}"
+		phase="INVOKE_APPLICATION">
+	</f:viewAction>
+
+</f:metadata>
+
+
+<title>#{pageTitle.accountPage}</title>
+
+<body>
+	<h:outputStylesheet library="webjars"
+		name="primeflex/2.0.0/primeflex.min.css" />
+
+
+	<header>
+		<ui:include id="mainTemplate"
+			src="/WEB-INF/templates/mainTemplate.xhtml">
+			<ui:param name="title" value="ACCOUNTS" />
+		</ui:include>
+	</header>
+	<h:form id="form">
+		<p:growl id="growlMessage" showDetail="true" keepAlive="true">
+			<p:autoUpdate />
+		</p:growl>
+
+		<p:remoteCommand id="remoteCommandUpdateDataTable"
+			name="updateDataTable" process="@this"
+			update="form:accordionPanel:dataTable" />
+
+		<p:remoteCommand id="remoteCommandUpdateSelectedTable"
+			name="updateSelectedTable" process="@this"
+			update="form:accordionPanel:selectedTable" />
+
+		<p:remoteCommand id="remoteCommandUpdateHistoricTable"
+			name="updateHistoricTable" process="@this"
+			update="form:accordionPanel:historicTable" />
+
+		<p:remoteCommand id="remoteCommandUpdatePanelData"
+			name="updatePanelData" process="@this"
+			update="form:accordionPanel:selectedTablePanel
+			form:accordionPanel:historicTablePanel
+			form:accordionPanel:emptyHistoricTablePanel" />
+
+
+		<p:remoteCommand id="remoteCommandUpdateCustomerTable"
+			name="updateCustomerTable" process="@this"
+			update="form:customerSearchDataTable" />
+
+
+
+		<p:accordionPanel id="accordionPanel" multiple="true"
+			widgetVar="multipleAccordionPanelWidget">
+
+			<!--  MAIN DATA AREA  -->
+			<p:tab id="searchPanel"
+				titleStyle="background: WhiteSmoke; color: black" title="ACCOUNTS">
+
+				<p:panelGrid columns="2" columnClasses="ui-grid-col-8,ui-grid-col-4"
+					layout="grid"
+					style="border:0px none; background-color:transparent;">
+
+					<p:panel header="Search Account">
+						<p:panelGrid columns="3" columnClasses="ui-grid-col-3"
+							layout="flex" contentStyleClass="align-items-baseline ui-fluid"
+							style="border:0px none; background-color:transparent; align:left">
+
+
+							<p:panel header="Account Data">
+								<p:outputLabel id="contractNrLabel" for="contractNrCriteria"
+									value="Contract Nr:" />
+								<p:inputText id="contractNrCriteria" inmediate="true"
+									value="#{accountController.searchContractNr}">
+									<p:ajax event="valueChange" immediate="true" process="@this" />
+								</p:inputText>
+
+								<p:outputLabel id="accountIdLabel" for="accountIdCriteria"
+									value="Account Id:" />
+								<p:inputNumber id="accountIdCriteria" maxlength="10"
+									inmediate="true" value="#{accountController.searchAccountId}"
+									decimalPlaces="0">
+									<p:ajax event="valueChange" immediate="true" process="@this" />
+								</p:inputNumber>
+
+								<p:outputLabel id="accountIdCardLabel"
+									for="accountIdCardCriteria" value="Account Identity Card:" />
+								<p:inputText id="accountIdCardCriteria" inmediate="true"
+									value="#{accountController.searchAccountIdentityCard}">
+									<p:ajax event="valueChange" immediate="true" process="@this" />
+								</p:inputText>
+							</p:panel>
+							<p:panel header="Customer Data">
+								<p:outputLabel id="customerIdLabel" for="customerIdCriteria"
+									value="customer Id:" />
+								<p:inputNumber id="customerIdCriteria" maxlength="10"
+									inmediate="true" value="#{accountController.searchCustomerId}"
+									decimalPlaces="0">
+									<p:ajax event="valueChange" immediate="true" process="@this" />
+								</p:inputNumber>
+
+								<p:outputLabel id="customerIdCardLabel"
+									for="customerIdCardCriteria" value="Customer Identity Card:" />
+								<p:inputText id="customerIdCardCriteria" inmediate="true"
+									value="#{accountController.searchCustomerIdentityCard}">
+									<p:ajax event="valueChange" immediate="true" process="@this" />
+								</p:inputText>
+							</p:panel>
+
+							<p:panel>
+								<p:panel header="Search Date" styleClass="p-mx-3 p-my-2">
+									<p:outputLabel id="dateSearchLabel" for="searchDate"
+										value="Search Date:" />
+
+									<p:inputMask id="searchDate" required="true" immediate="true"
+										value="#{accountController.searchDate}" mask="99/99/9999"
+										requiredMessage="The date value to search is null. Please fill the search date field">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+										<p:ajax event="valueChange" immediate="true" process="@this" />
+									</p:inputMask>
+								</p:panel>
+								<p:commandButton id="searchDataButton" value="Search"
+									icon="#{uiValue.searchIcon}"
+									actionListener="#{accountController.pushSearchButton()}"
+									ajax="true" update=":form:growlMessage" style="width:7rem"
+									oncomplete="#{updateDataTable}" styleClass="p-mx-3"
+									class="ui-button-success rounded-button">
+								</p:commandButton>
+							</p:panel>
+						</p:panelGrid>
+					</p:panel>
+
+					<p:panel header="Create New Account" style="align-items: center"
+						rendered="#{accountController.canUserModify()}">
+						<div align="center">
+							<p:commandButton id="createNewButton" value="New data"
+								icon="#{uiValue.addIcon}" ajax="true"
+								actionListener="#{accountController.pushCreateNewButton()}"
+								rendered="#{accountController.canUserModify()}"
+								update=":form:createNewDialog :form:createNewDialogPanelData"
+								class="ui-button-primary" style="margin-right:.5rem">
+								<p:resetInput target=":form:createNewDialogPanelData" />
+							</p:commandButton>
+						</div>
+
+					</p:panel>
+
+				</p:panelGrid>
+
+				<p:overlayPanel id="searchList" for="searchDataButton"
+					showEvent="oncomplete" my="center top" at="center bottom"
+					showCloseIcon="true" dismissable="false"
+					widgetVar="searchListWidget">
+					<!--  DATA SEARCH TABLE -->
+					<p:dataTable id="dataTable" widgetVar="dataTableWidget"
+						var="dataTable" value="#{accountController.dataList}"
+						filteredValue="#{accountController.filteredDataList}"
+						showGridlines="true" stripedRows="true" scrollable="true"
+						reflow="true" editable="true" rowIndexVar="rowIndexSearchTable"
+						rowKey="(#{dataTable.customerId} #{dataTable.customerStartDate} #{dataTable.customerEndDate})"
+						selection="#{accountController.selectedData}"
+						selectionMode="single" paginator="true" rows="5" size="small"
+						paginatorPosition="bottom">
+
+						<!--  DATA TABLE - HEADER -->
+						<f:facet name="header">
+							<p:outputLabel id="title"
+								value="Account Data - Click on row button to see the historic records of the account instance" />
+						</f:facet>
+
+						<!--  DATA TABLE - FOOTER -->
+						<f:facet id="facetFooter" name="footer">
+						</f:facet>
+
+						<!--  DATA TABLE - ACTION COLUMNS -->
+						<p:column id="showHistoricData" headerText="Show Historic"
+							style="font-family:Arial Black;
+                                  text-align: center;
+                                  font-size: 11px;
+                                  width: 30px;    
+                                  overflow: hidden">
+
+							<p:commandButton id="historicButton"
+								styleClass="ui-button-warning rounded-button"
+								icon="#{uiValue.viewIcon}" immediate="true" ajax="true"
+								actionListener="#{accountController.pushShowDetailRowButton()}"
+								update="form:accordionPanel:selectedTablePanel
+								form:accordionPanel:emptyHistoricTablePanel
+								form:accordionPanel:historicTablePanel"
+								oncomplete="{updateHistoricTable()}">
+							</p:commandButton>
+						</p:column>
+
+						<!--  DATA TABLE - DATA COLUMNS -->
+
+						<p:column id="searchAccountId"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. ID" rendered="true"
+							sortBy="#{dataTable.accountId}" filterBy="#{dataTable.accountId}"
+							filterMatchMode="contains">
+							<h:outputText id="searchAccountIdText"
+								value="#{dataTable.accountId}" />
+						</p:column>
+
+						<p:column id="searchAccountCode"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. CODE" rendered="true"
+							sortBy="#{dataTable.accountCode}"
+							filterBy="#{dataTable.accountCode}" filterMatchMode="contains">
+							<h:outputText id="searchAccountCodeText"
+								value="#{dataTable.accountCode}" />
+						</p:column>
+
+						<p:column id="accountSearchStartDate"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. SD" rendered="true"
+							sortBy="#{dataTable.accountStartDate}"
+							filterBy="#{dataTable.accountStartDate}" filterMatchMode="exact">
+							<f:facet id="searchStartDateFilter" name="filter">
+								<p:datePicker id="searchStartDateFilterPicker"
+									onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
+									monthNavigator="true" yearNavigator="true" mask="true"
+									pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<h:outputText id="searchStartDateText"
+								value="#{dataTable.accountStartDate}">
+								<f:converter
+									converterId="com.comasw.converter.localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="searchAccountEndDate"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. ED" rendered="true"
+							sortBy="#{dataTable.accountEndDate}"
+							filterBy="#{dataTable.accountEndDate}" filterMatchMode="exact">
+							<f:facet id="searchEndDateFilter" name="filter">
+								<p:datePicker id="searchEndDateFilterPicker"
+									onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
+									monthNavigator="true" yearNavigator="true" mask="true"
+									pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<h:outputText id="searchEndDateText"
+								value="#{dataTable.accountEndDate}">
+								<f:converter
+									converterId="com.comasw.converter.localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="searchAccountStatus"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. STATUS" rendered="true"
+							filterBy="#{dataTable.accountStatusId}" filterMatchMode="exact">
+							<f:facet id="searchAccountStatusFilter" name="filter">
+								<p:selectOneMenu id="accountStatusFilterMenu"
+									onchange="PF('dataTableWidget').filter()">
+									<f:selectItems id="searchAccountStatusFilterSelectItems"
+										value="#{accountController.statusInstanceSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+
+							<p:selectOneMenu id="searchAccountStatusOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{dataTable.accountStatusId}">
+								<f:selectItems id="selectItemsSearchAccountStatusOutput"
+									itemDisabled="true" var="Status"
+									value="#{accountController.statusInstanceSelectItems()}"
+									itemValue="#{dataTable.accountStatusId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="searchContractNr"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CONTRACT NR" rendered="true"
+							sortBy="#{dataTable.contractNumber}"
+							filterBy="#{dataTable.contractNumber}" filterMatchMode="contains">
+							<h:outputText id="searchContractNrText"
+								value="#{dataTable.contractNumber}" />
+						</p:column>
+
+						<p:column id="searchAccountGivenName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. NAME" rendered="true"
+							sortBy="#{dataTable.accountGivenName}"
+							filterBy="#{dataTable.accountGivenName}"
+							filterMatchMode="contains">
+							<h:outputText id="searchAccountGivenNameText"
+								value="#{dataTable.accountGivenName}" />
+						</p:column>
+
+						<p:column id="searchAccountFirstSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. 1st SURNAME" rendered="true"
+							sortBy="#{dataTable.accountFirstSurname}"
+							filterBy="#{dataTable.accountFirstSurname}"
+							filterMatchMode="contains">
+							<h:outputText id="searchAccountFirstSurnameText"
+								value="#{dataTable.accountFirstSurname}" />
+						</p:column>
+
+						<p:column id="searchAccountSecondSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. 2nd SURNAME" rendered="true"
+							sortBy="#{dataTable.accountSecondSurname}"
+							filterBy="#{dataTable.accountSecondSurname}"
+							filterMatchMode="contains">
+							<h:outputText id="searchAccountSecondSurnameText"
+								value="#{dataTable.accountSecondSurname}" />
+						</p:column>
+
+						<p:column id="searchAccountIdCard"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. ID. CARD" rendered="true"
+							sortBy="#{dataTable.accountIdentityCard}"
+							filterBy="#{dataTable.accountIdentityCard}"
+							filterMatchMode="contains">
+							<h:outputText id="searchAccountIdCardText"
+								value="#{dataTable.accountIdentityCard}" />
+						</p:column>
+
+						<p:column id="searchCustomerId"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. ID" rendered="true"
+							sortBy="#{dataTable.customerId}"
+							filterBy="#{dataTable.customerId}" filterMatchMode="contains">
+							<h:outputText id="searchCustomerIdText"
+								value="#{dataTable.customerId}" />
+						</p:column>
+
+						<p:column id="customerSearchStartDate"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. SD" rendered="true"
+							sortBy="#{dataTable.customerStartDate}"
+							filterBy="#{dataTable.customerStartDate}" filterMatchMode="exact">
+							<f:facet id="searchStartDateFilter" name="filter">
+								<p:datePicker id="searchStartDateFilterPicker"
+									onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
+									monthNavigator="true" yearNavigator="true" mask="true"
+									pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<h:outputText id="searchStartDateText"
+								value="#{dataTable.customerStartDate}">
+								<f:converter
+									converterId="com.comasw.converter.localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="searchCustomerEndDate"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. ED" rendered="true"
+							sortBy="#{dataTable.customerEndDate}"
+							filterBy="#{dataTable.customerEndDate}" filterMatchMode="exact">
+							<f:facet id="searchEndDateFilter" name="filter">
+								<p:datePicker id="searchEndDateFilterPicker"
+									onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
+									monthNavigator="true" yearNavigator="true" mask="true"
+									pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<h:outputText id="searchEndDateText"
+								value="#{dataTable.customerEndDate}">
+								<f:converter
+									converterId="com.comasw.converter.localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="searchCustomerStatus"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. STATUS" rendered="true"
+							filterBy="#{dataTable.customerStatusId}" filterMatchMode="exact">
+							<f:facet id="searchCustomerStatusFilter" name="filter">
+								<p:selectOneMenu id="customerStatusFilterMenu"
+									onchange="PF('dataTableWidget').filter()">
+									<f:selectItems id="searchCustomerStatusFilterSelectItems"
+										value="#{customerController.statusInstanceSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+
+							<p:selectOneMenu id="searchCustomerStatusOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{dataTable.customerStatusId}">
+								<f:selectItems id="selectItemsSearchCustomerStatusOutput"
+									itemDisabled="true" var="Status"
+									value="#{customerController.statusInstanceSelectItems()}"
+									itemValue="#{dataTable.customerStatusId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="searchCustomerGivenName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. NAME" rendered="true"
+							sortBy="#{dataTable.customerGivenName}"
+							filterBy="#{dataTable.customerGivenName}"
+							filterMatchMode="contains">
+							<h:outputText id="searchCustomerGivenNameText"
+								value="#{dataTable.customerGivenName}" />
+						</p:column>
+
+						<p:column id="searchCustomerFirstSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. 1stSURNAME" rendered="true"
+							sortBy="#{dataTable.customerFirstSurname}"
+							filterBy="#{dataTable.customerFirstSurname}"
+							filterMatchMode="contains">
+							<h:outputText id="searchCustomerFirstSurnameText"
+								value="#{dataTable.customerFirstSurname}" />
+						</p:column>
+
+						<p:column id="searchCustomerSecondSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. 2ndSURNAME" rendered="true"
+							sortBy="#{dataTable.customerSecondSurname}"
+							filterBy="#{dataTable.customerSecondSurname}"
+							filterMatchMode="contains">
+							<h:outputText id="searchCustomerSecondSurnameText"
+								value="#{dataTable.customerSecondSurname}" />
+						</p:column>
+
+						<p:column id="searchCustomerIdCard"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. ID. CARD" rendered="true"
+							sortBy="#{dataTable.customerIdentityCard}"
+							filterBy="#{dataTable.customerIdentityCard}"
+							filterMatchMode="contains">
+							<h:outputText id="searchCustomerIdCardText"
+								value="#{dataTable.customerIdentityCard}" />
+						</p:column>
+
+					</p:dataTable>
+				</p:overlayPanel>
+
+				<p:panel id="selectedTablePanel"
+					visible="#{accountController.showSelectedData}">
+
+					<p:dataTable id="selectedTable" widgetVar="selectedTableWidget"
+						var="selectedDataTable" value="#{accountController.selectedData}"
+						rendered="true" size="small" scrollable="true"
+						emptyMessage="No data to show" showGridlines="true"
+						paginatorPosition="bottom">
+
+						<p:column id="accountId"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. ID" rendered="true">
+							<h:outputText id="accountIdText"
+								value="#{selectedDataTable.accountId}" />
+						</p:column>
+
+
+						<p:column id="accountType"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. TYPE" rendered="true">
+							<p:selectOneMenu id="accountTypeOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{selectedDataTable.accountTypeId}">
+								<f:selectItems id="selectItemsAccountTypeOutput"
+									itemDisabled="true" var="IdentityCardType"
+									value="#{accountController.accountTypeSelectItems()}"
+									itemValue="#{selectedDataTable.accountTypeId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="accountTypeDescription"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. TYPE DESCR." rendered="true">
+							<h:outputText id="accountTypeDescriptionText"
+								value="#{selectedDataTable.accountTypeDescription}" />
+						</p:column>
+						</p:column>
+
+						<p:column id="contractNr"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CONTRACT NR" rendered="true">
+							<h:outputText id="contractNrText"
+								value="#{selectedDataTable.contractNumber}" />
+						</p:column>
+
+						<p:column id="accountCode"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. CODE" rendered="true">
+							<h:outputText id="accountCodeText"
+								value="#{selectedDataTable.accountCode}" />
+						</p:column>
+
+						<p:column id="status"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="STATUS" rendered="true">
+							<p:selectOneMenu id="StatusOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{selectedDataTable.statusId}">
+								<f:selectItems id="selectItemsStatusOutput" itemDisabled="true"
+									var="Status"
+									value="#{accountController.statusInstanceSelectItems()}"
+									itemValue="#{selectedDataTable.statusId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="activeDate"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACTIVE DATE" rendered="true">
+							<h:outputText id="activeDateText"
+								value="#{selectedDataTable.accountActiveDate}">
+								<f:converter
+									converterId="com.comasw.converter.localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="cancelledDate"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CANCELLED DATE" rendered="true">
+							<h:outputText id="cancelledDateText"
+								value="#{selectedDataTable.accountCancelledDate}">
+								<f:converter
+									converterId="com.comasw.converter.localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="accountName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. NAME" rendered="true">
+							<h:outputText id="accountNameText"
+								value="#{selectedDataTable.accountGivenName}" />
+						</p:column>
+
+						<p:column id="account1stSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. 1st SURNAME" rendered="true">
+							<h:outputText id="account1stSurnameText"
+								value="#{selectedDataTable.accountFirstSurname}" />
+						</p:column>
+
+						<p:column id="account2ndSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. 2nd SURNAME" rendered="true">
+							<h:outputText id="account2ndSurnameText"
+								value="#{selectedDataTable.accountSecondSurname}" />
+						</p:column>
+
+
+						<p:column id="accountIdentityCardType"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;A
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. ID. CARD TYPE" rendered="true">
+							<p:selectOneMenu id="accountIdCardTypeOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{selectedDataTable.accountIdentityCardTypeId}">
+								<f:selectItems id="selectItemsAccountIdCardOutput"
+									itemDisabled="true" var="IdentityCardType"
+									value="#{accountController.identityCardTypeSelectItems()}"
+									itemValue="#{selectedDataTable.accountIdentityCardTypeId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="accountIdentityCard"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. ID. CARD" rendered="true">
+							<h:outputText id="idCardText"
+								value="#{selectedDataTable.accountIdentityCard}" />
+						</p:column>
+
+						<p:column id="accountContactPhone"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. PHONE" rendered="true">
+							<h:outputText id="accountContactPhoneText"
+								value="#{selectedDataTable.accountContactPhone}" />
+						</p:column>
+
+						<p:column id="accounteMail"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. E-MAIL" rendered="true">
+							<h:outputText id="accountEMailText"
+								value="#{selectedDataTable.accountEMail}" />
+						</p:column>
+
+						<p:column id="accountAddress"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. ADDRESS" rendered="true">
+							<h:outputText id="accountAddressText"
+								value="#{selectedDataTable.accountAddress}" />
+						</p:column>
+
+						<p:column id="city"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. CITY" rendered="true">
+							<h:outputText id="accountCityText"
+								value="#{selectedDataTable.accountCity}" />
+						</p:column>
+
+
+						<p:column id="accountState"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. STATE" rendered="true">
+							<h:outputText id="accountStateText"
+								value="#{selectedDataTable.accountState}" />
+						</p:column>
+
+						<p:column id="accountCountry"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. COUNTRY" rendered="true">
+							<h:outputText id="accountCountryText"
+								value="#{selectedDataTable.accountCountry}" />
+						</p:column>
+
+						<p:column id="accountPostCode"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. POST CODE" rendered="true">
+							<h:outputText id="accountPostCodeText"
+								value="#{selectedDataTable.accountPostCode}" />
+						</p:column>
+
+						<p:column id="accountPaymentCode"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. PAYMENT" rendered="true">
+							<h:outputText id="accountPaymentCode"
+								value="#{selectedDataTable.paymentCode}" />
+						</p:column>
+
+						<p:column id="accountPaymentDescription"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. PAYMENT DESCR." rendered="true">
+							<h:outputText id="accountPaymentDescription"
+								value="#{selectedDataTable.paymentDescription}" />
+						</p:column>
+
+						<p:column id="accountIban"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. IBAN" rendered="true">
+							<h:outputText id="accountIbanText"
+								value="#{selectedDataTable.accountIban}" />
+						</p:column>
+
+						<p:column id="accountBankEntity"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. B. ENTITY" rendered="true">
+							<h:outputText id="accountBankEntityText"
+								value="#{selectedDataTable.accountBankEntity}" />
+						</p:column>
+
+						<p:column id="accountBankBranch"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. B. BRANCH" rendered="true">
+							<h:outputText id="accountBankBranchText"
+								value="#{selectedDataTable.accountBankBranch}" />
+						</p:column>
+
+						<p:column id="accountBankControlDigit"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC.B. C.D" rendered="true">
+							<h:outputText id="accountBankControlDigitText"
+								value="#{selectedDataTable.accountBankControlDigit}" />
+						</p:column>
+
+						<p:column id="accountBankAccountNr"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. B. ACC. NR." rendered="true">
+							<h:outputText id="accountBankAccountNrText"
+								value="#{selectedDataTable.accountBankAccountNumber}" />
+						</p:column>
+
+						<p:column id="customerid"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. ID" rendered="true">
+							<h:outputText id="customerIdText"
+								value="#{selectedDataTable.customerId}" />
+						</p:column>
+
+						<p:column id="customerName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. NAME" rendered="true">
+							<h:outputText id="customerNameText"
+								value="#{selectedDataTable.customerGivenName}" />
+						</p:column>
+
+						<p:column id="customer1stSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. 1st SURNAME" rendered="true">
+							<h:outputText id="customer1stSurnameText"
+								value="#{selectedDataTable.customerFirstSurname}" />
+						</p:column>
+
+						<p:column id="customer2ndSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. 2nd SURNAME" rendered="true">
+							<h:outputText id="customer2ndSurnameText"
+								value="#{selectedDataTable.customerSecondSurname}" />
+						</p:column>
+
+
+						<p:column id="customerIdentityCardType"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;A
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. ID. CARD TYPE" rendered="true">
+							<p:selectOneMenu id="customerIdCardTypeOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{selectedDataTable.customerIdentityCardTypeId}">
+								<f:selectItems id="selectItemsCustomerIdCardOutput"
+									itemDisabled="true" var="IdentityCardType"
+									value="#{customerController.identityCardTypeSelectItems()}"
+									itemValue="#{selectedDataTable.customerIdentityCardTypeId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="customerIdentityCard"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. ID. CARD" rendered="true">
+							<h:outputText id="idCardText"
+								value="#{selectedDataTable.identityCard}" />
+						</p:column>
+
+					</p:dataTable>
+				</p:panel>
+
+			</p:tab>
+
+			<!--  HISTORIC DATA AREA   -->
+			<p:tab id="historicPanel"
+				titleStyle="background: WhiteSmoke; color: black"
+				title="CUSTOMER HISTORIC RECORDS">
+
+				<p:panel id="emptyHistoricTablePanel"
+					visible="#{!accountController.showSelectedData}">
+					No data to show. Please push the search button of the Search Account area and selecte one of the accounts.
+				</p:panel>
+
+				<p:panel id="historicTablePanel"
+					visible="#{accountController.showSelectedData}">
+
+
+					<p:dataTable id="historicTable" widgetVar="historicTableWidget"
+						styleClass="historicTable" var="historicDataTable"
+						value="#{accountController.historicDataList}"
+						rowKey="(#{historicDataTable.customerId} #{historicDataTable.startDate} #{historicDataTable.endDate})"
+						rowIndexVar="rowIndexHistoricTable" selectionMode="single"
+						selection="#{accountController.selectedHistoricData}"
+						filteredValue="#{accountController.filteredHistoricDataList}"
+						showGridlines="true" stripedRows="true" scrollable="true"
+						emptyMessage="No data to show" size="small" paginator="true"
+						rows="4" paginatorPosition="bottom" editable="true">
+						<f:facet name="header">
+							<f:facet name="header">
+							HISTORIC ACCOUNT DATA for CUSTOMER ID #{accountController.selectedData.customerId}	and ACCOUNT CODE #{accountController.selectedData.code} 						
+								<p:commandButton id="refreshHistoricTable"
+									style="margin-left: 1rem; margin-right: .5rem"
+									icon="#{uiValue.refreshIcon}" ajax="true"
+									actionListener="#{accountController.refreshHistoricDataTable()}"
+									onclick="{updateHistoricTable()}"
+									styleClass="ui-button-warning rounded-button">
+								</p:commandButton>
+								<p:tooltip for="refreshHistoricTable"
+									value="Refresh historic data" />
+							</f:facet>
+						</f:facet>
+
+						<!--  DATA TABLE - MANAGE EDIT EVENTS -->
+						<p:ajax id="ajaxRowEditInit" event="rowEditInit"
+							listener="#{accountController.onRowInit}"
+							update="form:growlMessage">
+						</p:ajax>
+						<p:ajax id="ajaxRowEdit" event="rowEdit"
+							listener="#{accountController.onRowEdit}"
+							update="form:growlMessage"
+							oncomplete="if (!args.validationFailed) {updateHistoricTable()}">
+						</p:ajax>
+						<p:ajax id="ajaxRowEditCancel" event="rowEditCancel"
+							listener="#{accountController.onRowCancel}"
+							update="form:growlMessage" oncomplete="{updateHistoricTable()}">
+						</p:ajax>
+
+
+
+						<!--  DATA TABLE - EDITABLE COLUMNS -->
+						<p:column id="deleteHistoricRow" exportable="false"
+							style="font-family:Arial Black;
+                                   text-align: center;
+                                   font-size: 11px;
+                                   width: 60px;    
+                                   overflow: hidden"
+							headerText="DEL ROW"
+							rendered="#{accountController.canUserModify()}">
+							<p:commandButton id="deleteHistoricRowButton"
+								class="ui-button-warning rounded-button"
+								icon="#{uiValue.deleteIcon}" ajax="true"
+								actionListener="#{accountController.pushDeleteRowButton()}"
+								rendered="#{accountController.canUserModify()}"
+								update=":form:deleteConfirmDialog">
+								<f:setPropertyActionListener value="#{rowIndexHistoricTable}"
+									target="#{accountController.rowHistoricSelected}" />
+
+								<f:setPropertyActionListener value="#{historicDataTable}"
+									target="#{accountController.selectedHistoricData}" />
+							</p:commandButton>
+						</p:column>
+
+						<p:column id="addHistoricRow" exportable="false"
+							style="font-family:Arial Black;
+                                   text-align: center;
+                                   font-size: 11px;
+                                   width: 60px;    
+                                   overflow: hidden"
+							headerText="ADD ROW"
+							rendered="#{accountController.canUserModify()}">
+							<p:commandButton id="addHistoricRowButton"
+								class="ui-button-success rounded-button"
+								icon="#{uiValue.addIcon}" ajax="true"
+								actionListener="#{accountController.pushAddNewRowButton()}"
+								rendered="#{accountController.canUserModify()}"
+								update=":form:createNewDialog :form:createNewDialogPanelData">
+								<p:resetInput target=":form:createNewDialogPanelData" />
+								<f:param name="currentHistoricalRow"
+									value="#{rowIndexHistoricTable}" />
+							</p:commandButton>
+						</p:column>
+
+						<p:column id="editHistoricRow"
+							style="font-family:Arial Black;
+                                  text-align: center;
+                                  font-size: 11px;
+                                  width: 60px;    
+                                  overflow: hidden"
+							headerText="EDIT ROW"
+							rendered="#{accountController.canUserModify()}">
+							<p:rowEditor id="editHistoricRowButton" editTitle="Edit Row"
+								cancelTitle="Cancel Edit" saveTitle="Save Row">
+							</p:rowEditor>
+						</p:column>
+
+
+						<!--  DATA TABLE - DATA COLUMNS -->
+						<p:column id="accountIdHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. ID" rendered="true">
+							<h:outputText id="accountIdOutHist"
+								value="#{historicDataTable.accountId}" />
+						</p:column>
+
+						<p:column id="accountTypeHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. TYPE" rendered="true"
+							filterBy="#{historicDataTable.accountTypeId}"
+							filterMatchMode="exact">
+							<f:facet id="facetAccountTypeFilterHist" name="filter">
+								<p:selectOneMenu id="accountTypeFilterMenuHist"
+									onchange="PF('historicTableWidget').filter()">
+									<f:selectItems id="accountTypeFilterSelectItemsHist"
+										value="#{accountController.accountTypeSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:selectOneMenu id="accountTypeHistOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{historicDataTable.accountTypeId}">
+								<f:selectItems
+									value="#{accountController.accountTypeSelectItems()}"
+									id="selectItemsAccountTypeHistOutput" itemDisabled="true"
+									var="AccountType"
+									itemValue="#{historicDataTable.accountTypeId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+
+						<p:column id="startDateHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="START DATE" rendered="true"
+							sortBy="#{historicDataTable.startDate}"
+							filterBy="#{historicDataTable.startDate}"
+							filterMatchMode="contains">
+							<f:facet id="historicStartDateFilter" name="filter">
+								<p:datePicker id="historicStartDateFilterPicker"
+									onchange="PF('historicTableWidget').filter()"
+									focusOnSelect="true" monthNavigator="true" yearNavigator="true"
+									mask="true" pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<p:cellEditor id="cellEditorStartDateHist">
+								<f:facet id="facetStartDateOutputHist" name="output">
+									<h:outputText id="startDateOutputHist"
+										value="#{historicDataTable.startDate}">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+									</h:outputText>
+								</f:facet>
+								<f:facet id="facetStartDateInputHist" name="input">
+									<p:inputMask id="startDateInputHist"
+										value="#{historicDataTable.startDate}" mask="99/99/9999"
+										validator="startDateValidator" style="width:96%">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+										<p:ajax event="change" update="startDateOutputHist" />
+									</p:inputMask>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="endDateHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="END DATE" rendered="true"
+							sortBy="#{historicDataTable.endDate}"
+							filterBy="#{historicDataTable.endDate}"
+							filterMatchMode="contains">
+							<f:facet id="historicEndDateFilter" name="filter">
+								<p:datePicker id="historicEndDateFilterPicker"
+									onchange="PF('historicTableWidget').filter()"
+									focusOnSelect="true" monthNavigator="true" yearNavigator="true"
+									mask="true" pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<p:cellEditor id="cellEditorEndDateHist">
+								<f:facet id="facetEndDateOutputHist" name="output">
+									<h:outputText id="endDateOutputHist"
+										value="#{historicDataTable.endDate}">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+									</h:outputText>
+								</f:facet>
+								<f:facet id="facetEndDateInputHist" name="input">
+									<p:inputMask id="endDateInputHist"
+										value="#{historicDataTable.endDate}" mask="99/99/9999"
+										validator="endDateValidator" style="width:96%">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+										<p:ajax event="change" update="endDateOutputHist" />
+									</p:inputMask>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="accountCodeHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CODE" rendered="true">
+							<h:outputText id="accountCodeOutHist"
+								value="#{historicDataTable.code}" />
+						</p:column>
+
+						<p:column id="customerIdHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. ID" rendered="true">
+							<h:outputText id="customerIdOutHist"
+								value="#{historicDataTable.customerId}" />
+						</p:column>
+
+						<p:column id="contractNrHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CONTRACT NR" rendered="true">
+							<h:outputText id="contractNrOutHist"
+								value="#{historicDataTable.contractNumber}" />
+						</p:column>
+
+						<p:column id="statusHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="STATUS" rendered="true"
+							filterBy="#{historicDataTable.statusId}" filterMatchMode="exact">
+							<f:facet id="statusFilter" name="filter">
+								<p:selectOneMenu id="statusFilterMenuHist"
+									onchange="PF('historicTableWidget').filter()">
+									<f:selectItems id="statusFilterSelectItemsHist"
+										value="#{accountController.statusInstanceSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:cellEditor id="statusHistCellEditor">
+								<f:facet id="statusHistOutputFacet" name="output">
+									<p:selectOneMenu id="statusHistOutput" editable="false"
+										disabled="true" immediate="true"
+										value="#{historicDataTable.statusId}">
+										<f:selectItems
+											value="#{accountController.statusInstanceSelectItems()}"
+											id="selectItemsStatusHistOutput" itemDisabled="true"
+											var="Status" itemValue="#{historicDataTable.statusId}" />
+									</p:selectOneMenu>
+								</f:facet>
+								<f:facet id="statusHistInputFacet" name="input">
+									<p:selectOneMenu id="statusHistInput"
+										valueChangeListener="#{accountController.changeStatus}"
+										value="#{historicDataTable.statusId}" immediate="true">
+										<f:selectItems
+											value="#{accountController.statusInstanceSelectItems()}"
+											id="selectItemsStatusHistInput" var="Status"
+											itemValue="#{historicDataTable.statusId}">
+										</f:selectItems>
+										<p:ajax event="change" immediate="true"
+											update="statusHistOutput :form:cancelStatusDialog" />
+
+										<f:param id="currentRowStatusHist" name="currentHistoricalRow"
+											value="#{rowIndexHistoricTable}" />
+									</p:selectOneMenu>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="givenNameHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="NAME" rendered="true"
+							sortBy="#{historicDataTable.givenName}"
+							filterBy="#{historicDataTable.givenName}"
+							filterMatchMode="contains">
+							<p:cellEditor id="cellEditorGivenNameHist">
+								<f:facet id="facetGivenNameOutputHist" name="output">
+									<h:outputText id="givenNameOutputHist"
+										value="#{historicDataTable.givenName}" />
+								</f:facet>
+								<f:facet id="facetGivenNameInputHist" name="input">
+									<p:inputText id="givenNameInputHist" label="GivenName"
+										value="#{historicDataTable.givenName}" style="width:96%">
+										<p:ajax event="change" update="givenNameOutputHist" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+
+						<p:column id="firstSurnameHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="1st Surname" rendered="true"
+							sortBy="#{historicDataTable.firstSurname}"
+							filterBy="#{historicDataTable.firstSurname}"
+							filterMatchMode="contains">
+							<p:cellEditor id="cellEditor1stSurnameHist">
+								<f:facet id="facet1stSurnameOutputHist" name="output">
+									<h:outputText id="firstSurnameOutputHist"
+										value="#{historicDataTable.firstSurname}" />
+								</f:facet>
+								<f:facet id="facet1stsurameInputHist" name="input">
+									<p:inputText id="firstSurnameInputHist" label="1stSurname"
+										value="#{historicDataTable.firstSurname}" style="width:96%">
+										<p:ajax event="change" update="firstSurnameOutputHist" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="secondSurnameHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="2nd Surname" rendered="true"
+							sortBy="#{historicDataTable.secondSurname}"
+							filterBy="#{historicDataTable.secondSurname}"
+							filterMatchMode="contains">
+							<p:cellEditor id="cellEditor2ndSurnameHist">
+								<f:facet id="facet2ndSurnameOutputHist" name="output">
+									<h:outputText id="secondSurnameOutputHist"
+										value="#{historicDataTable.secondSurname}" />
+								</f:facet>
+								<f:facet id="facet2ndsurameInputHist" name="input">
+									<p:inputText id="secondSurnameInputHist" label="2ndSurname"
+										value="#{historicDataTable.secondSurname}" style="width:96%">
+										<p:ajax event="change" update="secondSurnameOutputHist" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="identityCardTypeHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ID. CARD TYPE" rendered="true"
+							filterBy="#{historicDataTable.identityCardTypeId}"
+							filterMatchMode="exact">
+							<f:facet id="facetIdCardTypeFilterHist" name="filter">
+								<p:selectOneMenu id="idCardTypeFilterMenuHist"
+									onchange="PF('historicTableWidget').filter()">
+									<f:selectItems id="idCardTypeFilterSelectItemsHist"
+										value="#{accountController.identityCardTypeSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:selectOneMenu id="idCardTypeHistOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{historicDataTable.identityCardTypeId}">
+								<f:selectItems
+									value="#{accountController.identityCardTypeSelectItems()}"
+									id="selectItemsIdCardTypeHistOutput" itemDisabled="true"
+									var="IdCardType"
+									itemValue="#{historicDataTable.identityCardTypeId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="identityCardHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ID. CARD" rendered="true"
+							sortBy="#{historicDataTable.identityCard}"
+							filterBy="#{historicDataTable.identityCard}"
+							filterMatchMode="contains">
+							<h:outputText id="idCardOutHist"
+								value="#{historicDataTable.identityCard}" />
+						</p:column>
+
+						<p:column id="contactPhoneHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="PHONE" rendered="true"
+							sortBy="#{historicDataTable.contactPhone}"
+							filterBy="#{historicDataTable.contactPhone}"
+							filterMatchMode="contains">
+							<p:cellEditor id="cellEditorContactPhoneHist">
+								<f:facet id="facetContactPhoneOutputHist" name="output">
+									<h:outputText id="contactPhoneOutputHist"
+										value="#{historicDataTable.contactPhone}" />
+								</f:facet>
+								<f:facet id="facetContactPhoneInputHist" name="input">
+									<p:inputText id="contactPhoneInputHist" label="ContactPhone"
+										value="#{historicDataTable.contactPhone}" style="width:96%">
+										<p:ajax event="change" update="contactPhoneOutputHist" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="eMailHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="E-MAIL" rendered="true"
+							sortBy="#{historicDataTable.EMail}"
+							filterBy="#{historicDataTable.EMail}" filterMatchMode="contains">
+							<p:cellEditor id="cellEditorEMailHist">
+								<f:facet id="facetEMailOutputHist" name="output">
+									<h:outputText id="eMailOutputHist"
+										value="#{historicDataTable.EMail}" />
+								</f:facet>
+								<f:facet id="facetEMailInputHist" name="input">
+									<p:inputText id="eMailInputHist" label="E-Mail"
+										value="#{historicDataTable.EMail}" style="width:96%">
+										<p:ajax event="change" update="eMailOutputHist" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="addressHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ADDRESS" rendered="true"
+							sortBy="#{historicDataTable.address}"
+							filterBy="#{historicDataTable.address}"
+							filterMatchMode="contains">
+							<p:cellEditor id="cellEditorAddressHist">
+								<f:facet id="facetAddressOutputHist" name="output">
+									<h:outputText id="addressOutputHist"
+										value="#{historicDataTable.address}" />
+								</f:facet>
+								<f:facet id="facetAddressInputHist" name="input">
+									<p:inputText id="addressInputHist" label="Address"
+										value="#{historicDataTable.address}" style="width:96%">
+										<p:ajax event="change" update="addressOutputHist" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="cityHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							sortBy="#{historicDataTable.city}"
+							filterBy="#{historicDataTable.city}" filterMatchMode="contains">
+							<p:cellEditor id="cellEditorCityHist">
+								<f:facet id="facetCityOutputHist" name="output">
+									<h:outputText id="cityOutputHist"
+										value="#{historicDataTable.city}" />
+								</f:facet>
+								<f:facet id="facetCityInputHist" name="input">
+									<p:inputText id="cityInputHist" label="City"
+										value="#{historicDataTable.city}" style="width:96%">
+										<p:ajax event="change" update="cityOutputHist" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+
+						<p:column id="stateHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="STATE" rendered="true"
+							sortBy="#{historicDataTable.state}"
+							filterBy="#{historicDataTable.state}" filterMatchMode="contains">
+							<p:cellEditor id="cellEditorStateHist">
+								<f:facet id="facetStateOutputHist" name="output">
+									<h:outputText id="stateOutputHist"
+										value="#{historicDataTable.state}" />
+								</f:facet>
+								<f:facet id="facetStateInputHist" name="input">
+									<p:inputText id="stateInputHist" label="State"
+										value="#{historicDataTable.state}" style="width:96%">
+										<p:ajax event="change" update="stateOutputHist" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="countryHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="COUNTRY" rendered="true"
+							sortBy="#{historicDataTable.country}"
+							filterBy="#{historicDataTable.country}"
+							filterMatchMode="contains">
+							<p:cellEditor id="cellEditorCountryHist">
+								<f:facet id="facetCountryOutputHist" name="output">
+									<h:outputText id="countryOutputHist"
+										value="#{historicDataTable.country}" />
+								</f:facet>
+								<f:facet id="facetCountryInputHist" name="input">
+									<p:inputText id="countryInputHist" label="Country"
+										value="#{historicDataTable.country}" style="width:96%">
+										<p:ajax event="change" update="countryOutputHist" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="postCodeHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="POST CODE" rendered="true"
+							sortBy="#{historicDataTable.postCode}"
+							filterBy="#{historicDataTable.postCode}"
+							filterMatchMode="contains">
+							<p:cellEditor id="cellEditorPostCodeHist">
+								<f:facet id="facetPostCodeOutputHist" name="output">
+									<h:outputText id="postCodeOutputHist"
+										value="#{historicDataTable.postCode}" />
+								</f:facet>
+								<f:facet id="facetPostCodeInputHist" name="input">
+									<p:inputText id="postCodeInputHist" label="PostCode"
+										value="#{historicDataTable.postCode}" style="width:96%">
+										<p:ajax event="change" update="postCodeOutputHist" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="ibanHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="IBAN" rendered="true"
+							sortBy="#{historicDataTable.iban}"
+							filterBy="#{historicDataTable.iban}" filterMatchMode="contains">
+							<p:cellEditor id="cellEditorIbanHist">
+								<f:facet id="facetIbanOutputHist" name="output">
+									<h:outputText id="ibanOutputHist"
+										value="#{historicDataTable.iban}" />
+								</f:facet>
+								<f:facet id="facetIbanInputHist" name="input">
+									<p:inputText id="ibanInputHist" label="Iban"
+										value="#{historicDataTable.iban}" style="width:96%">
+										<p:ajax event="change" update="ibanOutputHist" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="bankEntityHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="BANK ENTITY" rendered="true"
+							sortBy="#{historicDataTable.bankEntity}"
+							filterBy="#{historicDataTable.bankEntity}"
+							filterMatchMode="contains">
+							<p:cellEditor id="cellEditorBankEntityHist">
+								<f:facet id="facetBankEntityOutputHist" name="output">
+									<h:outputText id="bankEntityOutputHist"
+										value="#{historicDataTable.bankEntity}" />
+								</f:facet>
+								<f:facet id="facetBankEntityInputHist" name="input">
+									<p:inputText id="bankEntityInputHist" label="BankEntity"
+										value="#{historicDataTable.bankEntity}" style="width:96%">
+										<p:ajax event="change" update="bankEntityOutputHist" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="bankBranchHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="BANK BRANCH" rendered="true"
+							sortBy="#{historicDataTable.bankBranch}"
+							filterBy="#{historicDataTable.bankBranch}"
+							filterMatchMode="contains">
+							<p:cellEditor id="cellEditorBankBranchHist">
+								<f:facet id="facetBankBranchOutputHist" name="output">
+									<h:outputText id="bankBranchOutputHist"
+										value="#{historicDataTable.bankBranch}" />
+								</f:facet>
+								<f:facet id="facetBankBranchInputHist" name="input">
+									<p:inputText id="bankBranchInputHist" label="BankBranch"
+										value="#{historicDataTable.bankBranch}" style="width:96%">
+										<p:ajax event="change" update="bankBranchOutputHist" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="bankControlDigitHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="BANK CONTROL DIGIT" rendered="true"
+							sortBy="#{historicDataTable.bankControlDigit}"
+							filterBy="#{historicDataTable.bankControlDigit}"
+							filterMatchMode="contains">
+							<p:cellEditor id="cellEditorBankControlDigitHist">
+								<f:facet id="facetBankControlDigitOutputHist" name="output">
+									<h:outputText id="bankControlDigitOutputHist"
+										value="#{historicDataTable.bankControlDigit}" />
+								</f:facet>
+								<f:facet id="facetBankControlDigitInputHist" name="input">
+									<p:inputText id="bankControlDigitInputHist"
+										label="BankControlDigit"
+										value="#{historicDataTable.bankControlDigit}"
+										style="width:96%">
+										<p:ajax event="change" update="bankControlDigitOutputHist" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="bankAccountNrHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="BANK ACC. NR." rendered="true"
+							sortBy="#{historicDataTable.bankAccountNumber}"
+							filterBy="#{historicDataTable.bankAccountNumber}"
+							filterMatchMode="contains">
+							<p:cellEditor id="cellEditorBankAccountNrHist">
+								<f:facet id="facetBankAccountNrOutputHist" name="output">
+									<h:outputText id="bankAccountNrOutputHist"
+										value="#{historicDataTable.bankAccountNumber}" />
+								</f:facet>
+								<f:facet id="facetBankAccountNrInputHist" name="input">
+									<p:inputText id="bankAccountNrInputHist" label="BankAccountNr"
+										value="#{historicDataTable.bankAccountNumber}"
+										style="width:96%">
+										<p:ajax event="change" update="bankAccountNrOutputHist" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="activeDateHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACTIVE DATE" rendered="true"
+							sortBy="#{historicDataTable.activeDate}"
+							filterBy="#{historicDataTable.activeDate}"
+							filterMatchMode="contains">
+							<f:facet id="historicActiveDateFilter" name="filter">
+								<p:datePicker id="historicActiveDateFilterPicker"
+									onchange="PF('historicTableWidget').filter()"
+									focusOnSelect="true" monthNavigator="true" yearNavigator="true"
+									mask="true" pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>							
+							<p:cellEditor id="cellEditorActiveDateHist">
+								<f:facet id="facetActiveDateOutputHist" name="output">
+									<h:outputText id="activeDateOutputHist"
+										value="#{historicDataTable.activeDate}">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+									</h:outputText>
+								</f:facet>
+								<f:facet id="facetActiveDateInputHist" name="input">
+									<p:inputMask id="activeDateInputHist"
+										valueChangeListener="#{productController.changeActiveDate}"
+										value="#{historicDataTable.activeDate}" mask="99/99/9999"
+										style="width:96%">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+										<f:param id="currentRowActiveDateHist" name="currentHistoricalRow"
+											value="#{rowIndexHistoricTable}" />
+										<p:ajax event="change" immediate="true"
+											update="activeDateOutputHist" />
+									</p:inputMask>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="cancelledDateHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CANCELLED DATE" rendered="true"
+							sortBy="#{historicDataTable.cancelledDate}"
+							filterBy="#{historicDataTable.cancelledDate}"
+							filterMatchMode="contains">
+							<f:facet id="historicCancelledDateFilter" name="filter">
+								<p:datePicker id="historicCancelledDateFilterPicker"
+									onchange="PF('historicTableWidget').filter()"
+									focusOnSelect="true" monthNavigator="true" yearNavigator="true"
+									mask="true" pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<p:cellEditor id="cellEditorCancelledDateHist">
+								<f:facet id="facetCancelledDateOutputHist" name="output">
+									<h:outputText id="cancelledDateOutputHist"
+										value="#{historicDataTable.cancelledDate}">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+									</h:outputText>
+								</f:facet>
+								<f:facet id="facetCancelledDateInputHist" name="input">
+									<p:inputMask id="cancelledDateInputHist"
+										value="#{historicDataTable.cancelledDate}" mask="99/99/9999"
+										style="width:96%">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+											<f:param id="currentRowCancelledDateHist" name="currentHistoricalRow"
+											value="#{rowIndexHistoricTable}" />										
+										<p:ajax event="change" update="" />
+									</p:inputMask>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+			</p:tab>
+
+		</p:accordionPanel>
+
+		<!--  CREATE NEW DIALOG -->
+		<p:dialog id="createNewDialog"
+			header="#{accountController.dialogHeaderText}" showEffect="fade"
+			responsive="true" widgetVar="createNewDialogWidget">
+
+			<h:panelGrid id="createNewDialogPanelData">
+				<p:wizard id="createNewWizard"
+					flowListener="#{accountController.onFlowProcess}"
+					widgetVar="createNewWizarWidget">
+					<p:tab id="relatedDataTab" title="Contract and Customer Data">
+						<p:panel id="newContractPanel" header="Contract Data"
+							widgetVar="newContractPanelWidget">
+							<p:messages />
+							<p:outputPanel id="newContractCriteriaPanel">
+
+								<p:panelGrid id="createNewContractNrPanel" columns="2"
+									columnClasses="ui-grid-col-6" layout="flex"
+									contentStyleClass="align-items-baseline ui-fluid"
+									style="border:0px none; background-color:transparent; align:left">
+									<p:panel>
+										<h:outputLabel id="newContractNrLabel" value="Contract Nr:"
+											for="newContractNrText" />
+										<p:inputText id="newContractNrText"
+											disabled="#{accountController.fromAddingRow}"
+											value="#{accountController.newData.contractNumber}">
+											<p:ajax event="valueChange" immediate="true" process="@this" />
+										</p:inputText>
+									</p:panel>
+									<p:panel visible="#{!accountController.fromAddingRow}">
+										<p:commandButton id="createNewContractNrButton"
+											rendered="#{!accountController.fromAddingRow}"
+											style="width: 150px; height: 30px; " value="New Contract Nr"
+											styleClass="ui-confirmdialog-no" update="newContractNrText"
+											actionListener="#{accountController.createNewContract()}"
+											process="@this" />
+									</p:panel>
+								</p:panelGrid>
+							</p:outputPanel>
+						</p:panel>
+						<p:panel id="newCustomerPanel" header="Customer Data"
+							widgetVar="newCustomerPanelWidget">
+							<p:panelGrid columns="2" columnClasses="ui-grid-col-6"
+								layout="flex" contentStyleClass="align-items-baseline ui-fluid"
+								style="border:0px none; background-color:transparent; align:left">
+								<p:outputPanel id="searchCustomerDataArea">
+									<p:panelGrid id="searchCustomerData" columns="2"
+										columnClasses="ui-grid-col-4" layout="flex"
+										contentStyleClass="align-items-baseline ui-fluid"
+										style="border:0px none; background-color:transparent; align:left">
+										<h:outputText id="newCustomerIdCardLabel"
+											rendered="#{!accountController.fromAddingRow}"
+											value="Customer Identity Card:" />
+										<p:inputText id="newCustomerIdCardText"
+											rendered="#{!accountController.fromAddingRow}"
+											value="#{accountController.searchCustomerIdentityCardForNew}"
+											label="CustomerIdentityCard">
+											<p:ajax event="valueChange" immediate="true" process="@this" />
+										</p:inputText>
+
+										<h:outputText id="newCustomerIdLabel" value="Customer Id:" />
+										<p:inputNumber id="newCustomerIdText" decimalPlaces="0"
+											disabled="#{accountController.fromAddingRow}"
+											value="#{accountController.newData.customerId}"
+											label="CustomerId">
+											<p:ajax event="valueChange" immediate="true" process="@this" />
+										</p:inputNumber>
+									</p:panelGrid>
+								</p:outputPanel>
+								<p:panel id="searchCustomerArea"
+									visible="#{!accountController.fromAddingRow}"
+									widgetVar="searchCustomerAreaWidget">
+									<p:commandButton id="searchCustomerDataButton" value="Search"
+										icon="#{uiValue.searchIcon}"
+										actionListener="#{accountController.pushSearchParentButton()}"
+										ajax="true"
+										update=":form:growlMessage :form:customerSearchList"
+										style="width:7rem" styleClass="p-mx-3"
+										class="ui-button-success rounded-button"
+										oncomplete="if (!args.validationFailed) {#{updateCustomerTable} PF('searchCustomerListWidget').show('#{component.clientId}')}">
+									</p:commandButton>
+									<p:divider type="dashed" />
+									<p:selectBooleanCheckbox id="copyDataFromCustomer"
+										value="#{accountController.copyDataFromCustomerFlag}"
+										valueChangeListener="#{accountController.changeCopyFromCustomer}"
+										itemLabel="Copy Data from Customer to Account?">
+										<p:ajax event="valueChange" immediate="true" process="@this" />
+									</p:selectBooleanCheckbox>
+								</p:panel>
+							</p:panelGrid>
+
+							<p:overlayPanel id="customerSearchList" showEvent="oncomplete"
+								for="searchCustomerDataButton" my="left top" at="left top"
+								showCloseIcon="true" dismissable="false"
+								widgetVar="searchCustomerListWidget">
+								<!--  DATA SEARCH TABLE -->
+								<p:dataTable id="customerSearchDataTable"
+									partialUpdate="disabled" widgetVar="customerDataTableWidget"
+									var="customerSearchDataTable"
+									value="#{accountController.parentSearchDataList}"
+									filteredValue="#{accountController.filteredParentSearchDataList}"
+									showGridlines="true" stripedRows="true" scrollable="true"
+									reflow="true" editable="true"
+									rowIndexVar="rowIndexCustomerSearchTable"
+									rowKey="(#{customerSearchDataTable.customerId} #{customerSearchDataTable.customerStartDate} #{customerSearchDataTable.customerEndDate})"
+									selection="#{accountController.selectedParentSearchData}"
+									selectionMode="single" paginator="true" rows="5" size="small"
+									paginatorPosition="bottom">
+
+									<!--  DATA TABLE - HEADER -->
+									<f:facet name="header">
+										<p:outputLabel id="title"
+											value="Customer Data - Click on row button to selected as Customer parent of the account to create" />
+									</f:facet>
+
+									<!--  DATA TABLE - FOOTER -->
+									<f:facet id="facetFooter" name="footer">
+									</f:facet>
+
+									<!--  DATA TABLE - ACTION COLUMNS -->
+									<p:column id="relatedCustomerData" headerText="Select"
+										style="font-family:Arial Black;
+                                  text-align: center;
+                                  font-size: 11px;
+                                  width: 30px;    
+                                  overflow: hidden">
+										<p:commandButton id="relatedCustomerButton"
+											styleClass="ui-button-warning rounded-button"
+											icon="#{uiValue.addIcon}" ajax="true"
+											actionListener="#{accountController.addParentToInstanceRowButton()}"
+											update="form:newCustomerPanel form:searchCustomerDataArea">
+										</p:commandButton>
+									</p:column>
+
+									<!--  DATA TABLE - DATA COLUMNS -->
+
+									<p:column id="searchCustomerId"
+										style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+										headerText="CUST. ID" rendered="true"
+										sortBy="#{customerSearchDataTable.customerId}"
+										filterBy="#{customerSearchDataTable.customerId}"
+										filterMatchMode="contains">
+										<h:outputText id="searchCustomerIdText"
+											value="#{customerSearchDataTable.customerId}" />
+									</p:column>
+
+									<p:column id="searchCustomerStartDate"
+										style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+										headerText="START DATE" rendered="true"
+										sortBy="#{customerSearchDataTable.customerStartDate}"
+										filterBy="#{customerSearchDataTable.customerStartDate}"
+										filterMatchMode="exact">
+										<f:facet id="searchCustomerStartDateFilter" name="filter">
+											<p:datePicker id="searchCustomerStartDateFilterPicker"
+												onchange="PF('customerDataTableWidget').filter()"
+												focusOnSelect="true" monthNavigator="true"
+												yearNavigator="true" mask="true" pattern="dd/MM/yyyy">
+												<f:converter
+													converterId="com.comasw.converter.localDateTimeConverter" />
+											</p:datePicker>
+										</f:facet>
+										<h:outputText id="searchCustomerStartDateText"
+											value="#{customerSearchDataTable.customerStartDate}">
+											<f:converter
+												converterId="com.comasw.converter.localDateTimeConverter" />
+										</h:outputText>
+									</p:column>
+
+									<p:column id="searchCustomerEndDate"
+										style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+										headerText="END DATE" rendered="true"
+										sortBy="#{customerSearchDataTable.customerEndDate}"
+										filterBy="#{customerSearchDataTable.customerEndDate}"
+										filterMatchMode="exact">
+										<f:facet id="searchCustomerEndDateFilter" name="filter">
+											<p:datePicker id="searchCustomerEndDateFilterPicker"
+												onchange="PF('customerDataTableWidget').filter()"
+												focusOnSelect="true" monthNavigator="true"
+												yearNavigator="true" mask="true" pattern="dd/MM/yyyy">
+												<f:converter
+													converterId="com.comasw.converter.localDateTimeConverter" />
+											</p:datePicker>
+										</f:facet>
+										<h:outputText id="searchCustomerEndDateText"
+											value="#{customerSearchDataTable.customerEndDate}">
+											<f:converter
+												converterId="com.comasw.converter.localDateTimeConverter" />
+										</h:outputText>
+									</p:column>
+
+									<p:column id="searchCustomerGivenName"
+										style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+										headerText="NAME" rendered="true"
+										sortBy="#{customerSearchDataTable.customerGivenName}"
+										filterBy="#{customerSearchDataTable.customerGivenName}"
+										filterMatchMode="contains">
+										<h:outputText id="searchCustomerGivenNameText"
+											value="#{customerSearchDataTable.customerGivenName}" />
+									</p:column>
+
+									<p:column id="searchCustomerFirstSurname"
+										style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+										headerText="1st SURNAME" rendered="true"
+										sortBy="#{customerSearchDataTable.customerFirstSurname}"
+										filterBy="#{customerSearchDataTable.customerFirstSurname}"
+										filterMatchMode="contains">
+										<h:outputText id="searchCustomerFirstSurnameText"
+											value="#{customerSearchDataTable.customerFirstSurname}" />
+									</p:column>
+
+									<p:column id="searchCustomerSecondSurname"
+										style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+										headerText="2nd SURNAME" rendered="true"
+										sortBy="#{customerSearchDataTable.customerSecondSurname}"
+										filterBy="#{customerSearchDataTable.customerSecondSurname}"
+										filterMatchMode="contains">
+										<h:outputText id="searchCustomerSecondSurnameText"
+											value="#{customerSearchDataTable.customerSecondSurname}" />
+									</p:column>
+
+									<p:column id="searchCustomerIdCardType"
+										style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+										headerText="ID. CARD TYPE" rendered="true"
+										filterBy="#{customerSearchDataTable.customerIdentityCardTypeId}"
+										filterMatchMode="exact">
+										<f:facet id="searchCustomerIdCardTypeFilter" name="filter">
+											<p:selectOneMenu id="searchCustomerIdCardTypeFilterMenu"
+												onchange="PF('customerDataTableWidget').filter()">
+												<f:selectItems
+													id="searchCustomerIdCardTypeFilterSelectItems"
+													value="#{customerController.identityCardTypeSelectItems()}" />
+											</p:selectOneMenu>
+										</f:facet>
+										<p:selectOneMenu id="searchCustomerIdCardTypeOutput"
+											editable="false" disabled="true" immediate="true"
+											value="#{customerSearchDataTable.customerIdentityCardTypeId}">
+											<f:selectItems id="selectItemsSearchCustomerIdCardTypeOutput"
+												itemDisabled="true" var="SearchIdCardType"
+												value="#{customerController.identityCardTypeSelectItems()}"
+												itemValue="#{customerSearchDataTable.customerIdentityCardTypeId}" />
+										</p:selectOneMenu>
+									</p:column>
+
+									<p:column id="searchCustomerIdCard"
+										style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+										headerText="ID. CARD" rendered="true"
+										sortBy="#{customerSearchDataTable.identityCard}"
+										filterBy="#{customerSearchDataTable.identityCard}"
+										filterMatchMode="contains">
+										<h:outputText id="searchCustomerIdCardText"
+											value="#{customerSearchDataTable.identityCard}" />
+									</p:column>
+
+									<p:column id="searchCustomerContactPhone"
+										style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+										headerText="PHONE" rendered="true"
+										sortBy="#{customerSearchDataTable.customerContactPhone}"
+										filterBy="#{customerSearchDataTable.customerContactPhone}"
+										filterMatchMode="contains">
+										<h:outputText id="searchCustomerContactPhoneText"
+											value="#{customerSearchDataTable.customerContactPhone}" />
+									</p:column>
+
+									<p:column id="searchCustomerEMail"
+										style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+										headerText="E-MAIL" rendered="true"
+										sortBy="#{customerSearchDataTable.customerEMail}"
+										filterBy="#{customerSearchDataTable.customerEMail}"
+										filterMatchMode="contains">
+										<h:outputText id="searchCustomerEMailText"
+											value="#{customerSearchDataTable.customerEMail}" />
+									</p:column>
+								</p:dataTable>
+							</p:overlayPanel>
+						</p:panel>
+
+					</p:tab>
+
+					<p:tab id="instanceDataTab" title="Instance">
+						<p:panel id="instanceDetails" header="Instance Details">
+							<p:messages />
+							<h:panelGrid columns="2" columnClasses="label, value">
+
+								<h:outputText id="newStartDateLabel" value="StartDate " />
+								<p:inputMask id="newStartDateInput"
+									value="#{accountController.newData.startDate}"
+									mask="99/99/9999" style="width:96%">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+									<p:ajax event="change" update="newStartDateInput" />
+								</p:inputMask>
+
+								<h:outputText id="newEndDateLabel" value="StartDate " />
+								<p:inputMask id="newEndDateInput"
+									value="#{accountController.newData.endDate}" mask="99/99/9999"
+									style="width:96%">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+									<p:ajax event="change" update="newEndDateInput" />
+								</p:inputMask>
+
+								<h:outputText id="newAccountTypeOutput" value="Account Type:" />
+								<p:selectOneMenu id="newAccountTypeInput"
+									disabled="#{accountController.fromAddingRow}"
+									value="#{accountController.newData.accountTypeId}"
+									immediate="true">
+									<f:selectItems
+										value="#{accountController.accountTypeSelectItems()}"
+										id="selectItemsAccountTypeInputNew" var="AccountType"
+										itemValue="#{accountController.newData.accountTypeId}">
+									</f:selectItems>
+								</p:selectOneMenu>
+								<h:outputText id="newCodeOutput" value="Code:" />
+								<p:inputText id="newCodeInput"
+									value="#{accountController.newData.code}" label="Code" />
+								<p:outputLabel id="newStatusLabel" value="Status:" />
+								<p:selectOneMenu id="newStatusInput" editable="false"
+									disabled="true" immediate="true"
+									value="#{accountController.newData.statusId}">
+									<f:selectItems id="selectItemsStatusOutputNew"
+										itemDisabled="true" var="Status"
+										value="#{accountController.statusInstanceSelectItems()}"
+										itemValue="#{accountController.newData.statusId}" />
+								</p:selectOneMenu>
+							</h:panelGrid>
+						</p:panel>
+					</p:tab>
+
+					<p:tab id="personalDataTab" title="Personal">
+						<p:panel id="personalDetails" header="Personal Details">
+							<p:messages />
+							<h:panelGrid id="newPersonalDataPanel" columns="2"
+								columnClasses="label, value">
+								<h:outputText id="newNameOutput" value="Name:" />
+								<p:inputText id="newNameInput"
+									value="#{accountController.newData.givenName}" label="Name" />
+
+								<h:outputText id="new1stSurnameOutput" value="1st Surname:" />
+								<p:inputText id="new1stSurnameInput"
+									value="#{accountController.newData.firstSurname}"
+									label="FirstSurname" />
+
+								<h:outputText id="new2ndSurnameOutput" value="2nd Surname:" />
+								<p:inputText id="new2ndSurnameInput"
+									value="#{accountController.newData.secondSurname}"
+									label="SecondSurname" />
+
+								<h:outputText id="newIdCardTypeOutput" value="ID. Card Type:" />
+								<p:selectOneMenu id="newIdCardTypeInput"
+									value="#{accountController.newData.identityCardTypeId}"
+									disabled="#{accountController.fromAddingRow}" immediate="true">
+									<f:selectItems
+										value="#{accountController.identityCardTypeSelectItems()}"
+										id="selectItemsIdCardTypeInputNew" var="IdCardType"
+										itemValue="#{accountController.newData.identityCardTypeId}">
+									</f:selectItems>
+								</p:selectOneMenu>
+
+								<h:outputText id="newIdCardOutput" value="ID. Card:" />
+								<p:inputText id="newIdCardInput"
+									value="#{accountController.newData.identityCard}"
+									label="IdCard" disabled="#{accountController.fromAddingRow}" />
+							</h:panelGrid>
+						</p:panel>
+					</p:tab>
+
+					<p:tab id="addressTab" title="Address">
+						<p:panel id="addressDetails" header="Address Details">
+							<p:messages />
+							<h:panelGrid columns="2" columnClasses="label, value">
+								<h:outputText id="newAddressOutput" value="Address:" />
+								<p:inputText id="newAddressInput"
+									value="#{accountController.newData.address}" />
+
+								<h:outputText id="newPostCodeOutput" value="Postal Code:" />
+								<p:inputText id="newPostCodeInput"
+									value="#{accountController.newData.postCode}" />
+
+								<h:outputText id="newCityOutput" value="City:" />
+								<p:inputText id="newCityIput"
+									value="#{accountController.newData.city}" />
+
+								<h:outputText id="newStateOutput" value="State:" />
+								<p:inputText id="newStateIput"
+									value="#{accountController.newData.state}" />
+
+								<h:outputText id="newCountryOutput" value="Country:" />
+								<p:inputText id="newCountryIput"
+									value="#{accountController.newData.country}" />
+
+							</h:panelGrid>
+						</p:panel>
+					</p:tab>
+
+					<p:tab id="contactTab" title="Contact">
+						<p:panel id="contactInformation" header="Contact Information">
+							<p:messages />
+							<h:panelGrid columns="2" columnClasses="label, value">
+								<h:outputText id="newContactPhoneOutput" value="Phone:" />
+								<p:inputText id="newContactPhoneInput"
+									value="#{accountController.newData.contactPhone}" />
+
+
+								<h:outputText id="newEMailOutput" value="Email: " />
+								<p:inputText id="newEMailInput"
+									value="#{accountController.newData.EMail}" label="Email" />
+							</h:panelGrid>
+						</p:panel>
+					</p:tab>
+
+					<p:tab id="bankAccountTab" title="Bank Account">
+						<p:panel id="bankAccountInformation"
+							header="Bank Account Information">
+							<p:messages />
+							<h:panelGrid columns="2" columnClasses="label, value">
+								<h:outputText id="newIbanOutput" value="IBAN:" />
+								<h:inputText id="newIbanInput"
+									value="#{accountController.newData.iban}" />
+
+								<h:outputText id="newBankEntityOutput" value="Entity:" />
+								<h:inputText id="newBankEntityInput"
+									value="#{accountController.newData.bankEntity}" />
+
+								<h:outputText id="newBankBranchOutput" value="Branch:" />
+								<h:inputText id="newBankBranchInput"
+									value="#{accountController.newData.bankBranch}" />
+
+
+								<h:outputText id="newBankControlDigitOutput"
+									value="Control Digit:" />
+								<h:inputText id="newBankControlDigitInput"
+									value="#{accountController.newData.bankControlDigit}" />
+
+
+								<h:outputText id="newBankAccountNumberOutput"
+									value="Account Nr:" />
+								<h:inputText id="newBankAccountNumberInput"
+									value="#{accountController.newData.bankAccountNumber}" />
+							</h:panelGrid>
+						</p:panel>
+					</p:tab>
+
+					<p:tab id="confirmTab" title="Confirmation">
+						<p:panel id="confirmationPanel" header="Confirmation">
+							<h:panelGrid id="confirmation" columns="3"
+								columnClasses="grid,grid,grid">
+								<h:panelGrid columns="3">
+
+									<p:fieldset legend="Related Data">
+										<h:panelGrid columns="2" columnClasses="label, value">
+											<h:outputText id="confirmCustomerId" value="Customer Id: " />
+											<h:outputText id="confirmCustomerIdInput"
+												value="#{accountController.newData.customerId}"
+												style="width:96%" styleClass="outputLabel" />
+
+											<h:outputText id="confirmContractNr" value="Contract Nr: " />
+											<h:outputText id="confirmContractNrInput"
+												value="#{accountController.newData.contractNumber}"
+												style="width:96%" styleClass="outputLabel" />
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Instance Data">
+										<h:panelGrid columns="2" columnClasses="label, value">
+											<h:outputText id="confirmStartDateLabel" value="StartDate " />
+											<h:outputText id="confirmStartDateInput"
+												value="#{accountController.newData.startDate}"
+												style="width:96%" styleClass="outputLabel" />
+
+											<h:outputText id="confirmEndDateLabel" value="StartDate " />
+											<h:outputText id="confirmEndDateInput"
+												value="#{accountController.newData.endDate}"
+												style="width:96%" styleClass="outputLabel" />
+
+											<h:outputText id="confirmAccountTypeOutput"
+												value="Account Type:" />
+											<p:selectOneMenu id="confirmAccountTypeInput"
+												value="#{accountController.newData.accountTypeId}"
+												disabled="true" immediate="true">
+												<f:selectItems
+													value="#{accountController.accountTypeSelectItems()}"
+													id="selectItemsAccountTypeInputConfirm" var="AccountType"
+													itemValue="#{accountController.newData.accountTypeId}">
+												</f:selectItems>
+											</p:selectOneMenu>
+
+											<h:outputText id="confirmCodeOutput" value="Code" />
+											<h:outputText id="confirmCodeInput"
+												value="#{accountController.newData.code}" style="width:96%"
+												styleClass="outputLabel" />
+
+											<p:outputLabel id="confirmStatusLabel" value="Status:" />
+											<p:selectOneMenu id="confirmStatusInput" disabled="true"
+												immediate="true"
+												value="#{accountController.newData.statusId}">
+												<f:selectItems id="selectItemsStatusOutputConfirm"
+													itemDisabled="true" var="Status"
+													value="#{accountController.statusInstanceSelectItems()}"
+													itemValue="#{accountController.newData.statusId}" />
+											</p:selectOneMenu>
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Personal Data">
+										<h:panelGrid columns="2" columnClasses="label, value">
+											<h:outputText id="confirmNameOutput" value="Name:" />
+											<h:outputText id="confirmNameInput"
+												value="#{accountController.newData.givenName}"
+												style="width:96%" styleClass="outputLabel" />
+
+											<h:outputText id="confirm1stSurnameOutput"
+												value="1st Surname:" />
+											<h:outputText id="confirm1stSurnameInput"
+												value="#{accountController.newData.firstSurname}"
+												style="width:96%" styleClass="outputLabel" />
+
+											<h:outputText id="confirm2ndSurnameOutput"
+												value="2nd Surname:" />
+											<h:outputText id="confirm2ndSurnameInput"
+												value="#{accountController.newData.secondSurname}"
+												style="width:96%" styleClass="outputLabel" />
+
+											<h:outputText id="confirmIdCardTypeOutput"
+												value="ID. Card Type:" />
+											<p:selectOneMenu id="confirmIdCardTypeInput"
+												value="#{accountController.newData.identityCardTypeId}"
+												disabled="true" immediate="true">
+												<f:selectItems
+													value="#{accountController.identityCardTypeSelectItems()}"
+													id="selectItemsIdCardTypeInputConfirm" var="IdCardType"
+													itemValue="#{accountController.newData.identityCardTypeId}">
+												</f:selectItems>
+											</p:selectOneMenu>
+
+											<h:outputText id="confirmIdCardOutput" value="ID. Card:" />
+											<h:outputText id="confirmIdCardInput"
+												value="#{accountController.newData.identityCard}"
+												style="width:96%" styleClass="outputLabel" />
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Adress Data">
+										<h:panelGrid columns="2" columnClasses="label, value">
+
+											<h:outputText id="confirmAddressOutput" value="Address:" />
+											<h:outputText id="confirmAddressInput"
+												value="#{accountController.newData.address}"
+												style="width:96%" styleClass="outputLabel" />
+
+											<h:outputText id="confirmPostCodeOutput" value="Postal Code:" />
+											<h:outputText id="confirmPostCodeInput"
+												value="#{accountController.newData.postCode}"
+												style="width:96%" styleClass="outputLabel" />
+
+											<h:outputText id="confirmCityOutput" value="City:" />
+											<h:outputText id="confirmCityIput"
+												value="#{accountController.newData.city}" style="width:96%"
+												styleClass="outputLabel" />
+
+											<h:outputText id="confirmStateOutput" value="State:" />
+											<h:outputText id="confirmStateIput"
+												value="#{accountController.newData.state}" style="width:96%"
+												styleClass="outputLabel" />
+
+											<h:outputText id="confirmCountryOutput" value="Country:" />
+											<h:outputText id="confirmCountryIput"
+												value="#{accountController.newData.city}" style="width:96%"
+												styleClass="outputLabel" />
+
+										</h:panelGrid>
+									</p:fieldset>
+
+									<p:fieldset legend="Contact Data">
+										<h:panelGrid columns="2" columnClasses="label, value">
+
+											<h:outputText id="confirmContactPhoneOutput" value="Phone:" />
+											<h:outputText id="confirmContactPhoneInput"
+												value="#{accountController.newData.contactPhone}"
+												style="width:96%" styleClass="outputLabel" />
+
+
+											<h:outputText id="confirmEMailOutput" value="Email: " />
+											<h:outputText id="confirmEMailInput"
+												value="#{accountController.newData.EMail}" label="Email"
+												style="width:96%" styleClass="outputLabel" />
+
+										</h:panelGrid>
+									</p:fieldset>
+
+
+									<p:fieldset legend="Bank Data">
+										<h:panelGrid columns="2" columnClasses="label, value">
+
+											<h:outputText id="confirmIbanOutput" value="IBAN:" />
+											<h:outputText id="confirmIbanInput"
+												value="#{accountController.newData.iban}" style="width:96%"
+												styleClass="outputLabel" />
+
+											<h:outputText id="confirmBankEntityOutput" value="Entity:" />
+											<h:outputText id="confirmBankEntityInput"
+												value="#{accountController.newData.bankEntity}"
+												style="width:96%" styleClass="outputLabel" />
+
+											<h:outputText id="confirmBankBranchOutput" value="Branch:" />
+											<h:outputText id="confirmBankBranchInput"
+												value="#{accountController.newData.bankBranch}"
+												style="width:96%" styleClass="outputLabel" />
+
+
+											<h:outputText id="confirmBankControlDigitOutput"
+												value="Control Digit:" />
+											<h:outputText id="confirmBankControlDigitInput"
+												value="#{accountController.newData.bankControlDigit}"
+												style="width:96%" styleClass="outputLabel" />
+
+
+											<h:outputText id="confirmBankAccountNumberOutput"
+												value="Account Nr:" />
+											<h:outputText id="confirmBankAccountNumberInput"
+												value="#{accountController.newData.bankAccountNumber}"
+												style="width:96%" styleClass="outputLabel" />
+										</h:panelGrid>
+									</p:fieldset>
+								</h:panelGrid>
+							</h:panelGrid>
+							<p:fieldset legend="SAVE DATA">
+								<h:panelGrid id="createNewDialogPanelButtons" columns="3"
+									style="align-items: center" cellpadding="5">
+									<p:commandButton id="createNewDialogConfirm"
+										value="#{uiValue.okLabel}" update="form:growlMessage"
+										actionListener="#{accountController.pushConfirmButtonCreateNewDialog()}"
+										styleClass="ui-confirmdialog-yes"
+										icon="#{uiValue.okCircleIcon}"
+										oncomplete="if (!args.validationFailed) {updatePanelData(); updateSelectedTable(); updateHistoricTable()}">
+									</p:commandButton>
+									<p:commandButton id="createNewDialogCancel"
+										value="#{uiValue.cancelLabel}"
+										icon="#{uiValue.cancelCircleIcon}"
+										actionListener="#{accountController.pushCancelButtonCreateNewDialog()}"
+										update="form:growlMessage"
+										onclick="PF('createNewDialogWidget').hide()"
+										class="ui-button-secondary" />
+
+								</h:panelGrid>
+							</p:fieldset>
+						</p:panel>
+					</p:tab>
+				</p:wizard>
+			</h:panelGrid>
+		</p:dialog>
+
+
+		<!--  DELETE ROW DIALOG -->
+		<p:confirmDialog global="true" id="deleteConfirmDialog"
+			styleClass="change-position" showEffect="fade" responsive="true"
+			widgetVar="deleteRowDialogWidget" header="DELETE ROW"
+			message="#{accountController.deleteMessageDialog}">
+			<p:commandButton id="deleteDialogConfirm" value="#{uiValue.okLabel}"
+				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
+				actionListener="#{accountController.pushConfirmButtonDeleteDialog()}"
+				immediate="true"
+				oncomplete="{updatePanelData(); updateSelectedTable(); updateHistoricTable()}; PF('deleteRowDialogWidget').hide()"
+				process="@this" icon="#{uiValue.okCircleIcon}" />
+			<p:commandButton id="deleteDialogCancel"
+				value="#{uiValue.cancelLabel}" styleClass="ui-confirmdialog-no"
+				update="form:growlMessage"
+				oncomplete="PF('deleteDialogConfirm').hide()" type="button"
+				process="@this" icon="#{uiValue.cancelCircleIcon}" />
+		</p:confirmDialog>
+
+
+
+		<!-- Confirm dialog to cancel records -->
+		<p:confirmDialog global="true" id="cancelStatusDialog"
+			styleClass="change-position" widgetVar="cancelStatusDialogWidget"
+			header="CANCEL RECORDS"
+			message="#{accountController.cancelMessageDialog}">
+
+			<p:commandButton value="#{uiValue.okLabel}"
+				update="form:growlMessage"
+				actionListener="#{accountController.pushConfirmButtonChangeStatus()}"
+				styleClass="ui-confirmdialog-yes" icon="#{uiValue.okCircleIcon}"
+				process="@this" oncomplete="PF('cancelStatusDialogWidget').hide()" />
+			<p:commandButton value="#{uiValue.cancelLabel}"
+				icon="#{uiValue.cancelCircleIcon}" update="form:growlMessage"
+				onclick="PF('cancelStatusDialogWidget').hide()" process="@this"
+				class="ui-button-secondary" />
+
+		</p:confirmDialog>
+
+
+	</h:form>
+
+</body>
+</html>

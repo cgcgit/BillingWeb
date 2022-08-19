@@ -1,0 +1,1600 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+<f:metadata>
+	<f:viewAction id="defaultControlVariables"
+		action="#{productController.setInitVariablesToDefault()}"
+		phase="INVOKE_APPLICATION">
+	</f:viewAction>
+
+</f:metadata>
+
+
+<title>#{pageTitle.productPage}</title>
+
+<body>
+	<h:outputStylesheet library="webjars"
+		name="primeflex/2.0.0/primeflex.min.css" />
+
+
+	<header>
+		<ui:include id="mainTemplate"
+			src="/WEB-INF/templates/mainTemplate.xhtml">
+			<ui:param name="title" value="PRODUCT " />
+		</ui:include>
+	</header>
+	<h:form id="form">
+		<p:growl id="growlMessage" showDetail="true" keepAlive="true">
+			<p:autoUpdate />
+		</p:growl>
+
+		<p:remoteCommand id="remoteCommandUpdateDataTable"
+			name="updateDataTable" process="@this"
+			update="form:accordionPanel:dataTable" />
+
+		<p:remoteCommand id="remoteCommandUpdateSelectedTable"
+			name="updateSelectedTable" process="@this"
+			update="form:accordionPanel:selectedTable" />
+
+		<p:remoteCommand id="remoteCommandUpdateHistoricTable"
+			name="updateHistoricTable" process="@this"
+			update="form:accordionPanel:historicTable" />
+
+		<p:remoteCommand id="remoteCommandUpdatePanelData"
+			name="updatePanelData" process="@this"
+			update="form:accordionPanel:selectedTablePanel
+			form:accordionPanel:historicTablePanel
+			form:accordionPanel:emptyHistoricTablePanel" />
+
+
+		<p:accordionPanel id="accordionPanel" multiple="true"
+			widgetVar="multipleAccordionPanelWidget">
+
+			<!--  SEARCH DATA AREA  -->
+			<p:tab id="searchPanel"
+				titleStyle="background: WhiteSmoke; color: black" title="PRODUCT">
+				<p:panelGrid columns="2" columnClasses="ui-grid-col-8,ui-grid-col-4"
+					layout="grid"
+					style="border:0px none; background-color:transparent;">
+
+					<p:panel header="Search Account">
+						<p:panelGrid columns="4" columnClasses="ui-grid-col-3"
+							layout="flex" contentStyleClass="align-items-baseline ui-fluid"
+							style="border:0px none; background-color:transparent; align:left">
+
+							<p:panel header="Account Data">
+								<p:outputLabel id="contractNrLabel" for="contractNrCriteria"
+									value="Contract Nr:" />
+								<p:inputText id="contractNrCriteria" inmediate="true"
+									value="#{productController.searchContractNr}">
+									<p:ajax event="valueChange" immediate="true" process="@this" />
+								</p:inputText>
+
+								<p:outputLabel id="accountIdLabel" for="accountIdCriteria"
+									value="Account Id:" />
+								<p:inputNumber id="accountIdCriteria" maxlength="10"
+									inmediate="true" value="#{productController.searchAccountId}"
+									decimalPlaces="0">
+									<p:ajax event="valueChange" immediate="true" process="@this" />
+								</p:inputNumber>
+
+								<p:outputLabel id="accountIdCardLabel"
+									for="accountIdCardCriteria" value="Account Identity Card:" />
+								<p:inputText id="accountIdCardCriteria" inmediate="true"
+									value="#{productController.searchAccountIdentityCard}">
+									<p:ajax event="valueChange" immediate="true" process="@this" />
+								</p:inputText>
+							</p:panel>
+							<p:panel header="Customer Data">
+								<p:outputLabel id="customerIdLabel" for="customerIdCriteria"
+									value="customer Id:" />
+								<p:inputNumber id="customerIdCriteria" maxlength="10"
+									inmediate="true" value="#{productController.searchCustomerId}"
+									decimalPlaces="0">
+									<p:ajax event="valueChange" immediate="true" process="@this" />
+								</p:inputNumber>
+
+								<p:outputLabel id="customerIdCardLabel"
+									for="customerIdCardCriteria" value="Customer Identity Card:" />
+								<p:inputText id="customerIdCardCriteria" inmediate="true"
+									value="#{productController.searchCustomerIdentityCard}">
+									<p:ajax event="valueChange" immediate="true" process="@this" />
+								</p:inputText>
+							</p:panel>
+
+							<p:panel header="Product Data">
+								<p:outputLabel id="productIdLabel" for="productIdCriteria"
+									value="Product Id:" />
+								<p:inputNumber id="productIdCriteria" maxlength="10"
+									inmediate="true" value="#{productController.searchProductId}"
+									decimalPlaces="0">
+									<p:ajax event="valueChange" immediate="true" process="@this" />
+								</p:inputNumber>
+								<p:selectBooleanCheckbox id="includeCancelledData"
+									value="#{productController.includeCanceledDataFlag}"
+									itemLabel="Include Canceled Data?">
+									<p:ajax event="valueChange" immediate="true" process="@this" />
+								</p:selectBooleanCheckbox>
+							</p:panel>
+
+							<p:panel>
+								<p:panel header="Search Date" styleClass="p-mx-3 p-my-2">
+									<p:outputLabel id="dateSearchLabel" for="searchDate"
+										value="Search Date:" />
+									<p:inputMask id="searchDate" required="true" immediate="true"
+										value="#{productController.searchDate}" mask="99/99/9999"
+										requiredMessage="The date value to search is null. Please fill the search date field">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+										<p:ajax event="valueChange" immediate="true" process="@this" />
+									</p:inputMask>
+								</p:panel>
+								<p:commandButton id="searchDataButton" value="Search"
+									icon="#{uiValue.searchIcon}"
+									actionListener="#{productController.pushSearchButton()}"
+									ajax="true" update=":form:growlMessage" style="width:7rem"
+									oncomplete="#{updateDataTable}" styleClass="p-mx-3"
+									class="ui-button-success rounded-button">
+								</p:commandButton>
+							</p:panel>
+						</p:panelGrid>
+					</p:panel>
+
+					<p:panel header="Create New Product" style="align-items: center"
+						rendered="#{productController.canUserModify()}">
+						<div align="center">
+							<p:commandButton id="createNewButton" value="New data"
+								icon="#{uiValue.addIcon}" ajax="true"
+								actionListener="#{productController.pushCreateNewButton()}"
+								rendered="#{productController.canUserModify()}"
+								update=":form:createNewDialog :form:createNewDialogPanelData"
+								class="ui-button-primary" style="margin-right:.5rem">
+								<p:resetInput target=":form:createNewDialogPanelData" />
+							</p:commandButton>
+						</div>
+					</p:panel>
+				</p:panelGrid>
+
+				<p:overlayPanel id="searchList" for="searchDataButton"
+					showEvent="oncomplete" my="center top" at="center bottom"
+					showCloseIcon="true" dismissable="false"
+					widgetVar="searchListWidget">
+					<!--  DATA SEARCH TABLE -->
+					<p:dataTable id="dataTable" widgetVar="dataTableWidget"
+						partialUpdate="disabled" var="dataTable"
+						value="#{productController.dataList}"
+						filteredValue="#{productController.filteredDataList}"
+						showGridlines="true" stripedRows="true" scrollable="true"
+						reflow="true" editable="true" rowIndexVar="rowIndexSearchTable"
+						rowKey="(#{dataTable.productId} #{dataTable.productStartDate} #{dataTable.productEndDate}
+						#{dataTable.accountId} #{dataTable.accountStartDate} #{dataTable.accountEndDate}
+						#{dataTable.customerId} #{dataTable.customerStartDate} #{dataTable.customerEndDate})"
+						selection="#{productController.selectedData}"
+						selectionMode="single" paginator="true" rows="5" size="small"
+						paginatorPosition="bottom">
+
+						<!--  DATA TABLE - HEADER -->
+						<f:facet name="header">
+							<p:outputLabel id="title"
+								value="#{productController.searchDataTableTitle}" />
+						</f:facet>
+
+						<!--  DATA TABLE - FOOTER -->
+						<f:facet id="facetFooter" name="footer">
+						</f:facet>
+
+						<!--  DATA TABLE - ACTION COLUMNS -->
+						<p:column id="showHistoricData" headerText="Show Historic"
+							style="font-family:Arial Black;
+                                  text-align: center;
+                                  font-size: 11px;
+                                  width: 30px;    
+                                  overflow: hidden">
+
+							<p:commandButton id="historicButton"
+								styleClass="ui-button-warning rounded-button"
+								icon="#{uiValue.viewIcon}" immediate="true" ajax="true"
+								actionListener="#{productController.pushShowDetailRowButton()}"
+								update="form:accordionPanel:selectedTablePanel
+								form:accordionPanel:emptyHistoricTablePanel
+								form:accordionPanel:historicTablePanel"
+								oncomplete="{updateHistoricTable()}">
+							</p:commandButton>
+						</p:column>
+
+						<!--  DATA TABLE - DATA COLUMNS -->
+
+						<p:column id="searchCode"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CODE" rendered="true"
+							sortBy="#{dataTable.productCode}"
+							filterBy="#{dataTable.productCode}" filterMatchMode="contains">
+							<h:outputText id="searchCodeText"
+								value="#{dataTable.productCode}" />
+						</p:column>
+
+						<p:column id="searchProductStartDate"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="START DATE" rendered="true"
+							sortBy="#{dataTable.productStartDate}"
+							filterBy="#{dataTable.productStartDate}" filterMatchMode="exact">
+							<f:facet id="searchProductStartDateFilter" name="filter">
+								<p:datePicker id="searchProductStartDateFilterPicker"
+									onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
+									monthNavigator="true" yearNavigator="true" mask="true"
+									pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<h:outputText id="searchProductStartDateText"
+								value="#{dataTable.productStartDate}">
+								<f:converter
+									converterId="com.comasw.converter.localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="searchProductEndDate"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="END DATE" rendered="true"
+							sortBy="#{dataTable.productEndDate}"
+							filterBy="#{dataTable.productEndDate}" filterMatchMode="exact">
+							<f:facet id="searchProductEndDateFilter" name="filter">
+								<p:datePicker id="searchProductEndDateFilterPicker"
+									onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
+									monthNavigator="true" yearNavigator="true" mask="true"
+									pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<h:outputText id="searchProductEndDateText"
+								value="#{dataTable.productEndDate}">
+								<f:converter
+									converterId="com.comasw.converter.localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="searchProductStatus"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="PRODUCT STATUS" rendered="true"
+							filterBy="#{dataTable.productStatusId}" filterMatchMode="exact">
+							<f:facet id="searchProductStatusFilter" name="filter">
+								<p:selectOneMenu id="productStatusFilterMenu"
+									onchange="PF('dataTableWidget').filter()">
+									<f:selectItems id="searchProductStatusFilterSelectItems"
+										value="#{productController.statusInstanceSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+
+							<p:selectOneMenu id="searchProductStatusOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{dataTable.productStatusId}">
+								<f:selectItems id="selectItemsSearchProductStatusOutput"
+									itemDisabled="true" var="Status"
+									value="#{productController.statusInstanceSelectItems()}"
+									itemValue="#{dataTable.productStatusId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="searchContractNr"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CONTRACT NR" rendered="true"
+							sortBy="#{dataTable.contractNumber}"
+							filterBy="#{dataTable.contractNumber}" filterMatchMode="contains">
+							<h:outputText id="searchContractNrText"
+								value="#{dataTable.contractNumber}" />
+						</p:column>
+
+						<p:column id="searchAccountId"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. ID" rendered="true"
+							sortBy="#{dataTable.accountId}" filterBy="#{dataTable.accountId}"
+							filterMatchMode="contains">
+							<h:outputText id="searchAccountIdText"
+								value="#{dataTable.accountId}" />
+						</p:column>
+
+						<p:column id="searchAccountCode"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. CODE" rendered="true"
+							sortBy="#{dataTable.accountCode}"
+							filterBy="#{dataTable.accountCode}" filterMatchMode="contains">
+							<h:outputText id="searchAccountCodeText"
+								value="#{dataTable.accountCode}" />
+						</p:column>
+
+						<p:column id="searchAccountIdCard"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. ID. CARD" rendered="true"
+							sortBy="#{dataTable.accountIdentityCard}"
+							filterBy="#{dataTable.accountIdentityCard}"
+							filterMatchMode="contains">
+							<h:outputText id="searchAccountIdCardText"
+								value="#{dataTable.accountIdentityCard}" />
+						</p:column>
+
+						<p:column id="searchAccountName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. NAME" rendered="true"
+							sortBy="#{dataTable.accountGivenName}"
+							filterBy="#{dataTable.accountGivenName}"
+							filterMatchMode="contains">
+							<h:outputText id="searchAccountNameText"
+								value="#{dataTable.accountGivenName}" />
+						</p:column>
+
+						<p:column id="searchAccount1stSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. 1st SURNAME" rendered="true"
+							sortBy="#{dataTable.accountFirstSurname}"
+							filterBy="#{dataTable.accountFirstSurname}"
+							filterMatchMode="contains">
+							<h:outputText id="searchAccount1stSurnameText"
+								value="#{dataTable.accountFirstSurname}" />
+						</p:column>
+
+						<p:column id="searchAccount2ndSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. 2nd SURNAME" rendered="true"
+							sortBy="#{dataTable.accountSecondSurname}"
+							filterBy="#{dataTable.accountSecondSurname}"
+							filterMatchMode="contains">
+							<h:outputText id="searchAccount2ndSurnameText"
+								value="#{dataTable.accountSecondSurname}" />
+						</p:column>
+
+						<p:column id="searchCustomerId"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. ID" rendered="true"
+							sortBy="#{dataTable.customerId}"
+							filterBy="#{dataTable.customerId}" filterMatchMode="contains">
+							<h:outputText id="searchCustomerIdText"
+								value="#{dataTable.customerId}" />
+						</p:column>
+
+						<p:column id="searchCustomerIdCard"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. ID. CARD" rendered="true"
+							sortBy="#{dataTable.customerIdentityCard}"
+							filterBy="#{dataTable.customerIdentityCard}"
+							filterMatchMode="contains">
+							<h:outputText id="searchCustomerIdCardText"
+								value="#{dataTable.customerIdentityCard}" />
+						</p:column>
+
+						<p:column id="searchCustomerName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. NAME" rendered="true"
+							sortBy="#{dataTable.customerGivenName}"
+							filterBy="#{dataTable.customerGivenName}"
+							filterMatchMode="contains">
+							<h:outputText id="searchCustomerNameText"
+								value="#{dataTable.customerGivenName}" />
+						</p:column>
+
+						<p:column id="searchCustomer1stSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. 1st SURNAME" rendered="true"
+							sortBy="#{dataTable.customerFirstSurname}"
+							filterBy="#{dataTable.customerFirstSurname}"
+							filterMatchMode="contains">
+							<h:outputText id="searchCustomer1stSurnameText"
+								value="#{dataTable.customerFirstSurname}" />
+						</p:column>
+
+						<p:column id="searchCustomer2ndSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. 2nd SURNAME" rendered="true"
+							sortBy="#{dataTable.customerSecondSurname}"
+							filterBy="#{dataTable.customerSecondSurname}"
+							filterMatchMode="contains">
+							<h:outputText id="searchCustomer2ndSurnameText"
+								value="#{dataTable.customerSecondSurname}" />
+						</p:column>
+					</p:dataTable>
+				</p:overlayPanel>
+
+
+				<p:panel id="selectedTablePanel" header="Product Data"
+					visible="#{productController.showSelectedData}">
+
+					<p:dataTable id="selectedTable" widgetVar="selectedTableWidget"
+						var="selectedDataTable"
+						value="#{productController.selectedDataList}" rendered="true"
+						size="small" scrollable="true" emptyMessage="No data to show"
+						rows="1" showGridlines="true">
+
+						<p:column id="code"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CODE" rendered="true">
+							<h:outputText id="codeText"
+								value="#{selectedDataTable.productCode}" />
+						</p:column>
+
+						<p:column id="productTypeName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="TYPE NAME" rendered="true">
+							<h:outputText id="productTypeNameText"
+								value="#{selectedDataTable.poductTypeName}" />
+						</p:column>
+
+						<p:column id="description"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CODE" rendered="true">
+							<h:outputText id="productDescriptionText"
+								value="#{selectedDataTable.productTypeDescription}" />
+						</p:column>
+
+						<p:column id="activeDate"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACTIVE DATE" rendered="true">
+							<h:outputText id="activeDateText"
+								value="#{selectedDataTable.productActiveDate}">
+								<f:converter
+									converterId="com.comasw.converter.localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="cancelledDate"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CANCELLED DATE" rendered="true">
+							<h:outputText id="cancelledDateText"
+								value="#{selectedDataTable.productCancelledDate}">
+								<f:converter
+									converterId="com.comasw.converter.localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="accountId"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. ID" rendered="true">
+							<h:outputText id="accountIdText"
+								value="#{selectedDataTable.accountId}" />
+						</p:column>
+
+
+
+						<p:column id="accountType"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. TYPE" rendered="true">
+							<p:selectOneMenu id="accountTypeOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{selectedDataTable.accountTypeId}">
+								<f:selectItems id="selectItemsAccountTypeOutput"
+									itemDisabled="true" var="AccountType"
+									value="#{productController.accountTypeSelectItems()}"
+									itemValue="#{selectedDataTable.accountTypeId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="accountCode"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. CODE" rendered="true">
+							<h:outputText id="accountCodeText"
+								value="#{selectedDataTable.accountCode}" />
+						</p:column>
+
+
+						<p:column id="accountIdCardType"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. ID. CARD TYPE" rendered="true">
+							<p:selectOneMenu id="accountIdCardTypeOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{selectedDataTable.accountIdentityCardTypeId}">
+								<f:selectItems id="selectItemsAccountIdCardTypeOutput"
+									itemDisabled="true" var="AccountIdCardType"
+									value="#{productController.identityCardTypeSelectItems()}"
+									itemValue="#{selectedDataTable.accountIdentityCardTypeId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="accountIdCard"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. ID. CARD" rendered="true">
+							<h:outputText id="accountIdCardText"
+								value="#{selectedDataTable.accountIdentityCard}" />
+						</p:column>
+
+						<p:column id="contractNr"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CONTRACT Nr." rendered="true">
+							<h:outputText id="contractNrText"
+								value="#{selectedDataTable.contractNumber}" />
+						</p:column>
+
+
+
+						<p:column id="accountName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. NAME" rendered="true">
+							<h:outputText id="accountNameText"
+								value="#{selectedDataTable.accountGivenName}" />
+						</p:column>
+
+						<p:column id="account1stSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. 1st SURNAME" rendered="true">
+							<h:outputText id="account1stSurnameText"
+								value="#{selectedDataTable.accountFirstSurname}" />
+						</p:column>
+
+						<p:column id="account2ndSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. 2nd SURNAME" rendered="true">
+							<h:outputText id="account2ndSurnameText"
+								value="#{selectedDataTable.accountSecondSurname}" />
+						</p:column>
+
+
+						<p:column id="customerId"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. ID" rendered="true">
+							<h:outputText id="customerIdText"
+								value="#{selectedDataTable.customerId}" />
+						</p:column>
+
+
+						<p:column id="customerType"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. TYPE" rendered="true">
+							<p:selectOneMenu id="customerTypeOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{selectedDataTable.customerTypeId}">
+								<f:selectItems id="selectItemsCustomerTypeOutput"
+									itemDisabled="true" var="CustomerType"
+									value="#{productController.customerTypeSelectItems()}"
+									itemValue="#{selectedDataTable.customerTypeId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+
+						<p:column id="customerIdCardType"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. ID. CARD TYPE" rendered="true">
+							<p:selectOneMenu id="customerIdCardTypeOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{selectedDataTable.customerIdentityCardTypeId}">
+								<f:selectItems id="selectItemsCustomerIdCardTypeOutput"
+									itemDisabled="true" var="CustomerIdCardType"
+									value="#{productController.identityCardTypeSelectItems()}"
+									itemValue="#{selectedDataTable.customerIdentityCardTypeId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="customerIdCard"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. ID. CARD" rendered="true">
+							<h:outputText id="customerIdCardText"
+								value="#{selectedDataTable.customerIdentityCard}" />
+						</p:column>
+
+
+						<p:column id="customerName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. NAME" rendered="true">
+							<h:outputText id="customerNameText"
+								value="#{selectedDataTable.customerGivenName}" />
+						</p:column>
+
+						<p:column id="customer1stSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. 1st SURNAME" rendered="true">
+							<h:outputText id="customer1stSurnameText"
+								value="#{selectedDataTable.customerFirstSurname}" />
+						</p:column>
+
+						<p:column id="customer2ndSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. 2nd SURNAME" rendered="true">
+							<h:outputText id="customer2ndSurnameText"
+								value="#{selectedDataTable.customerSecondSurname}" />
+						</p:column>
+
+					</p:dataTable>
+				</p:panel>
+
+			</p:tab>
+
+			<!--  HISTORIC DATA AREA   -->
+			<p:tab id="historicPanel"
+				titleStyle="background: WhiteSmoke; color: black"
+				title="PRODUCT INSTANCE HISTORIC RECORDS">
+
+				<p:panel id="emptyHistoricTablePanel"
+					visible="#{!productController.showSelectedData}">
+					No data to show. Please push the search button of the Search Product area and selecte one of the product instances.
+				</p:panel>
+
+				<p:panel id="historicTablePanel"
+					visible="#{productController.showSelectedData}">
+
+
+					<p:dataTable id="historicTable" widgetVar="historicTableWidget"
+						styleClass="historicTable" var="historicDataTable"
+						value="#{productController.historicDataList}"
+						rowKey="(#{historicDataTable.productId} #{historicDataTable.startDate} #{historicDataTable.endDate})"
+						rowIndexVar="rowIndexHistoricTable" selectionMode="single"
+						selection="#{productController.selectedHistoricData}"
+						filteredValue="#{productController.filteredHistoricDataList}"
+						showGridlines="true" stripedRows="true" scrollable="true"
+						emptyMessage="No data to show" size="small" paginator="true"
+						rows="4" paginatorPosition="bottom" editable="true">
+						<f:facet name="header">
+							<f:facet name="header">
+							HISTORIC PRODUCT DATA for #{productController.selectedData.productCode}							
+								<p:commandButton id="refreshHistoricTable"
+									style="margin-left: 1rem; margin-right: .5rem"
+									icon="#{uiValue.refreshIcon}" ajax="true"
+									actionListener="#{productController.refreshHistoricDataTable()}"
+									styleClass="ui-button-warning rounded-button">
+								</p:commandButton>
+								<p:tooltip for="refreshHistoricTable"
+									value="Refresh historic data" />
+							</f:facet>
+						</f:facet>
+
+						<!--  DATA TABLE - MANAGE EDIT EVENTS -->
+						<p:ajax id="ajaxRowEditInit" event="rowEditInit"
+							listener="#{productController.onRowInit}"
+							update="form:growlMessage">
+						</p:ajax>
+						<p:ajax id="ajaxRowEdit" event="rowEdit"
+							listener="#{productController.onRowEdit}"
+							update="form:growlMessage"
+							oncomplete="if (!args.validationFailed) {updateHistoricTable()}">
+						</p:ajax>
+						<p:ajax id="ajaxRowEditCancel" event="rowEditCancel"
+							listener="#{productController.onRowCancel}"
+							update="form:growlMessage" oncomplete="{updateHistoricTable()}">
+						</p:ajax>
+
+
+
+						<!--  DATA TABLE - EDITABLE COLUMNS -->
+						<p:column id="deleteHistoricRow" exportable="false"
+							style="font-family:Arial Black;
+                                   text-align: center;
+                                   font-size: 11px;
+                                   width: 60px;    
+                                   overflow: hidden"
+							headerText="DEL ROW"
+							rendered="#{productController.canUserModify()}">
+							<p:commandButton id="deleteHistoricRowButton"
+								class="ui-button-warning rounded-button"
+								icon="#{uiValue.deleteIcon}" ajax="true"
+								actionListener="#{productController.pushDeleteRowButton()}"
+								rendered="#{productController.canUserModify()}"
+								update=":form:deleteConfirmDialog">
+								<f:setPropertyActionListener value="#{rowIndexHistoricTable}"
+									target="#{productController.rowHistoricSelected}" />
+
+								<f:setPropertyActionListener value="#{historicDataTable}"
+									target="#{productController.selectedHistoricData}" />
+							</p:commandButton>
+						</p:column>
+
+						<p:column id="addHistoricRow" exportable="false"
+							style="font-family:Arial Black;
+                                   text-align: center;
+                                   font-size: 11px;
+                                   width: 60px;    
+                                   overflow: hidden"
+							headerText="ADD ROW"
+							rendered="#{productController.canUserModify()}">
+							<p:commandButton id="addHistoricRowButton"
+								class="ui-button-success rounded-button"
+								icon="#{uiValue.addIcon}" ajax="true"
+								actionListener="#{productController.pushAddNewRowButton()}"
+								rendered="#{productController.canUserModify()}"
+								update=":form:createNewDialog :form:createNewDialogPanelData">
+								<p:resetInput target=":form:createNewDialogPanelData" />
+								<f:param name="currentHistoricalRow"
+									value="#{rowIndexHistoricTable}" />
+							</p:commandButton>
+						</p:column>
+
+						<p:column id="editHistoricRow"
+							style="font-family:Arial Black;
+                                  text-align: center;
+                                  font-size: 11px;
+                                  width: 60px;    
+                                  overflow: hidden"
+							headerText="EDIT ROW"
+							rendered="#{productController.canUserModify()}">
+							<p:rowEditor id="editHistoricRowButton" editTitle="Edit Row"
+								cancelTitle="Cancel Edit" saveTitle="Save Row">
+							</p:rowEditor>
+						</p:column>
+
+
+						<!--  DATA TABLE - DATA COLUMNS -->
+						<p:column id="productIdHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 40px;    
+                                  overflow: hidden;
+                                  visibility: hidden"
+							headerText="PRODUCT ID" rendered="false">
+							<h:outputText value="#{historicDataTable.productId}" />
+						</p:column>
+
+						<p:column id="codeHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CODE" rendered="true"
+							sortBy="#{historicDataTable.code}"
+							filterBy="#{historicDataTable.code}" filterMatchMode="contains">
+							<h:outputText id="codeOutputHist"
+								value="#{historicDataTable.code}" />
+						</p:column>
+
+
+						<p:column id="startDateHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="START DATE" rendered="true"
+							sortBy="#{historicDataTable.startDate}"
+							filterBy="#{historicDataTable.startDate}"
+							filterMatchMode="contains">
+							<f:facet id="historicStartDateFilter" name="filter">
+								<p:datePicker id="historicStartDateFilterPicker"
+									onchange="PF('historicTableWidget').filter()"
+									focusOnSelect="true" monthNavigator="true" yearNavigator="true"
+									mask="true" pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<p:cellEditor id="cellEditorStartDateHist">
+								<f:facet id="facetStartDateOutputHist" name="output">
+									<h:outputText id="startDateOutputHist"
+										value="#{historicDataTable.startDate}">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+									</h:outputText>
+								</f:facet>
+								<f:facet id="facetStartDateInputHist" name="input">
+									<p:inputMask id="startDateInputHist"
+										value="#{historicDataTable.startDate}" mask="99/99/9999"
+										validator="startDateValidator" style="width:96%">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+										<p:ajax event="change" update="startDateOutputHist" />
+									</p:inputMask>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="endDateHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="END DATE" rendered="true"
+							sortBy="#{historicDataTable.endDate}"
+							filterBy="#{historicDataTable.endDate}"
+							filterMatchMode="contains">
+							<f:facet id="historicEndDateFilter" name="filter">
+								<p:datePicker id="historicEndDateFilterPicker"
+									onchange="PF('historicTableWidget').filter()"
+									focusOnSelect="true" monthNavigator="true" yearNavigator="true"
+									mask="true" pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<p:cellEditor id="cellEditorEndDateHist">
+								<f:facet id="facetEndDateOutputHist" name="output">
+									<h:outputText id="endDateOutputHist"
+										value="#{historicDataTable.endDate}">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+									</h:outputText>
+								</f:facet>
+								<f:facet id="facetEndDateInputHist" name="input">
+									<p:inputMask id="endDateInputHist"
+										value="#{historicDataTable.endDate}" mask="99/99/9999"
+										validator="endDateValidator" style="width:96%">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+										<p:ajax event="change" update="endDateOutputHist" />
+									</p:inputMask>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="activeDateHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACTIVE DATE" rendered="true"
+							sortBy="#{historicDataTable.activeDate}"
+							filterBy="#{historicDataTable.activeDate}"
+							filterMatchMode="contains">
+							<f:facet id="historicActiveDateFilter" name="filter">
+								<p:datePicker id="historicActiveDateFilterPicker"
+									onchange="PF('historicTableWidget').filter()"
+									focusOnSelect="true" monthNavigator="true" yearNavigator="true"
+									mask="true" pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>							
+							<p:cellEditor id="cellEditorActiveDateHist">
+								<f:facet id="facetActiveDateOutputHist" name="output">
+									<h:outputText id="activeDateOutputHist"
+										value="#{historicDataTable.activeDate}">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+									</h:outputText>
+								</f:facet>
+								<f:facet id="facetActiveDateInputHist" name="input">
+									<p:inputMask id="activeDateInputHist"
+										valueChangeListener="#{productController.changeActiveDate}"
+										value="#{historicDataTable.activeDate}" mask="99/99/9999"
+										style="width:96%">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+										<f:param id="currentRowActiveDateHist" name="currentHistoricalRow"
+											value="#{rowIndexHistoricTable}" />
+										<p:ajax event="change" immediate="true"
+											update="activeDateOutputHist" />
+									</p:inputMask>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="cancelledDateHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CANCELLED DATE" rendered="true"
+							sortBy="#{historicDataTable.cancelledDate}"
+							filterBy="#{historicDataTable.cancelledDate}"
+							filterMatchMode="contains">
+							<f:facet id="historicCancelledDateFilter" name="filter">
+								<p:datePicker id="historicCancelledDateFilterPicker"
+									onchange="PF('historicTableWidget').filter()"
+									focusOnSelect="true" monthNavigator="true" yearNavigator="true"
+									mask="true" pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<p:cellEditor id="cellEditorCancelledDateHist">
+								<f:facet id="facetCancelledDateOutputHist" name="output">
+									<h:outputText id="cancelledDateOutputHist"
+										value="#{historicDataTable.cancelledDate}">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+									</h:outputText>
+								</f:facet>
+								<f:facet id="facetCancelledDateInputHist" name="input">
+									<p:inputMask id="cancelledDateInputHist"
+										value="#{historicDataTable.cancelledDate}" mask="99/99/9999"
+										style="width:96%">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+											<f:param id="currentRowCancelledDateHist" name="currentHistoricalRow"
+											value="#{rowIndexHistoricTable}" />										
+										<p:ajax event="change" update="" />
+									</p:inputMask>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="statusHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="STATUS" rendered="true"
+							filterBy="#{historicDataTable.statusId}" filterMatchMode="exact">
+							<f:facet id="statusFilter" name="filter">
+								<p:selectOneMenu id="statusFilterMenuHist"
+									onchange="PF('historicTableWidget').filter()">
+									<f:selectItems id="statusFilterSelectItemsHist"
+										value="#{productController.statusInstanceSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:cellEditor id="statusHistCellEditor">
+								<f:facet id="statusHistOutputFacet" name="output">
+									<p:selectOneMenu id="statusHistOutput" editable="false"
+										disabled="true" immediate="true"
+										value="#{historicDataTable.statusId}">
+										<f:selectItems
+											value="#{productController.statusInstanceSelectItems()}"
+											id="selectItemsStatusHistOutput" itemDisabled="true"
+											var="Status" itemValue="#{historicDataTable.statusId}" />
+									</p:selectOneMenu>
+								</f:facet>
+								<f:facet id="statusHistInputFacet" name="input">
+									<p:selectOneMenu id="statusHistInput"
+										valueChangeListener="#{productController.changeStatus}"
+										value="#{historicDataTable.statusId}" immediate="true">
+										<f:selectItems
+											value="#{productController.statusInstanceSelectItems()}"
+											id="selectItemsStatusHistInput" var="Status"
+											itemValue="#{historicDataTable.statusId}">
+										</f:selectItems>
+										<p:ajax event="change" immediate="true"
+											update="statusHistOutput :form:cancelStatusDialog" />
+
+										<f:param id="currentRowStatusHist" name="currentHistoricalRow"
+											value="#{rowIndexHistoricTable}" />
+									</p:selectOneMenu>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+					</p:dataTable>
+				</p:panel>
+			</p:tab>
+
+		</p:accordionPanel>
+
+		<!--  CREATE NEW DIALOG -->
+		<p:dialog id="createNewDialog"
+			header="#{productController.dialogHeaderText}" showEffect="fade"
+			responsive="true" widgetVar="createNewDialogWidget">
+			<p:panel id="newParentPanel" header="Parent Data"
+				visible="#{!productController.fromAddingRow}"
+				widgetVar="newParentPanelWidget">
+
+				<p:panelGrid columns="3" columnClasses="ui-grid-col-4" layout="flex"
+					contentStyleClass="align-items-baseline ui-fluid"
+					style="border:0px none; background-color:transparent; align:left">
+					<p:panelGrid columns="2" columnClasses="ui-grid-col-6"
+						layout="flex" contentStyleClass="align-items-baseline ui-fluid"
+						style="border:0px none; background-color:transparent; align:left">
+						<p:panel header="Account Criteria">
+							<h:outputText id="newAccountIdCardLabel"
+								rendered="#{!productController.fromAddingRow}"
+								value="Account Identity Card:" />
+							<p:inputText id="newAccountIdCardText"
+								rendered="#{!productController.fromAddingRow}"
+								value="#{productController.searchAccountIdentityCardForNew}"
+								label="AccountIdentityCard">
+								<p:ajax event="valueChange" immediate="true" process="@this" />
+							</p:inputText>
+							<h:outputText id="newAccountIdLabelSearch" value="Account Id:" />
+							<p:inputNumber id="newAccountIdTextSearch" decimalPlaces="0"
+								disabled="#{productController.fromAddingRow}"
+								value="#{productController.searchAccountIdForNew}"
+								label="AccountId">
+								<p:ajax event="valueChange" immediate="true" process="@this" />
+							</p:inputNumber>
+							<h:outputText id="newContractNrLabel"
+								rendered="#{!productController.fromAddingRow}"
+								value="Contract Nr:" />
+							<p:inputText id="newContractNrText"
+								rendered="#{!productController.fromAddingRow}"
+								value="#{productController.searchContractNrForNew}"
+								label="ContractNr">
+								<p:ajax event="valueChange" immediate="true" process="@this" />
+							</p:inputText>
+						</p:panel>
+						<p:panel header="Customer Criteria"
+							visible="#{!productController.fromAddingRow}">
+							<h:outputText id="newCustomerIdCardLabel"
+								rendered="#{!productController.fromAddingRow}"
+								value="Customer Identity Card:" />
+							<p:inputText id="newCustomerIdCardText"
+								rendered="#{!productController.fromAddingRow}"
+								value="#{productController.searchCustomerIdentityCardForNew}"
+								label="CustomerIdentityCard">
+								<p:ajax event="valueChange" immediate="true" process="@this" />
+							</p:inputText>
+							<h:outputText id="newCustomerIdLabel" value="Customer Id:" />
+							<p:inputNumber id="newCustomerIdText" decimalPlaces="0"
+								disabled="#{productController.fromAddingRow}"
+								value="#{productController.searchCustomerIdForNew}"
+								label="CustomerId">
+								<p:ajax event="valueChange" immediate="true" process="@this" />
+							</p:inputNumber>
+						</p:panel>
+
+					</p:panelGrid>
+					<p:panel id="searchParentArea"
+						visible="#{!productController.fromAddingRow}"
+						widgetVar="searchCustomerAreaWidget">
+						<p:commandButton id="searchParentDataButton" value="Search"
+							icon="#{uiValue.searchIcon}"
+							actionListener="#{productController.pushSearchParentButton()}"
+							ajax="true" update=":form:growlMessage :form:parentSearchList"
+							style="width:7rem" styleClass="p-mx-3"
+							class="ui-button-success rounded-button"
+							oncomplete="if (!args.validationFailed) {#{updateCustomerTable} PF('searchParentListWidget').show('#{component.clientId}')}">
+						</p:commandButton>
+					</p:panel>
+				</p:panelGrid>
+				<p:overlayPanel id="parentSearchList" showEvent="oncomplete"
+					for="searchParentDataButton" my="rigth top" at="rigth bottom"
+					showCloseIcon="true" dismissable="false"
+					widgetVar="searchParentListWidget">
+					<!--  DATA SEARCH TABLE -->
+					<p:dataTable id="parentSearchDataTable" partialUpdate="disabled"
+						widgetVar="parentDataTableWidget" var="parentSearchDataTable"
+						value="#{productController.parentSearchDataList}"
+						filteredValue="#{productController.filteredParentSearchDataList}"
+						showGridlines="true" stripedRows="true" scrollable="true"
+						reflow="true" editable="true"
+						rowIndexVar="rowIndexParentSearchTable"
+						rowKey="(#{parentSearchDataTable.accountId} #{parentSearchDataTable.accountStartDate} #{parentSearchDataTable.accountEndDate}
+						#{parentSearchDataTable.customerId} #{parentSearchDataTable.customerStartDate} #{parentSearchDataTable.customerEndDate})"
+						selection="#{productController.selectedParentSearchData}"
+						selectionMode="single" paginator="true" rows="5" size="small"
+						paginatorPosition="bottom">
+
+						<!--  DATA TABLE - HEADER -->
+						<f:facet name="header">
+							<p:outputLabel id="title"
+								value="Account Data - Click on row button to selected as account parent of the product to create" />
+						</f:facet>
+
+						<!--  DATA TABLE - FOOTER -->
+						<f:facet id="facetFooter" name="footer">
+						</f:facet>
+
+						<!--  DATA TABLE - ACTION COLUMNS -->
+						<p:column id="relatedParentData" headerText="Select"
+							style="font-family:Arial Black;
+                                  text-align: center;
+                                  font-size: 11px;
+                                  width: 30px;    
+                                  overflow: hidden">
+							<p:commandButton id="relatedParentButton"
+								styleClass="ui-button-warning rounded-button"
+								icon="#{uiValue.addIcon}" ajax="true"
+								actionListener="#{productController.addParentToInstanceRowButton()}"
+								update="form:newParentPanel">
+							</p:commandButton>
+						</p:column>
+
+						<!--  DATA TABLE - DATA COLUMNS -->
+						<p:column id="searchParentContractNr"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CONTRACT NR" rendered="true"
+							sortBy="#{parentSearchDataTable.contractNumber}"
+							filterBy="#{parentSearchDataTable.contractNumber}"
+							filterMatchMode="contains">
+							<h:outputText id="searchParentContractNrText"
+								value="#{parentSearchDataTable.contractNumber}" />
+						</p:column>
+
+						<p:column id="searchParentAccountId"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. ID" rendered="true"
+							sortBy="#{parentSearchDataTable.accountId}"
+							filterBy="#{parentSearchDataTable.accountId}"
+							filterMatchMode="contains">
+							<h:outputText id="searchParentAccountIdText"
+								value="#{parentSearchDataTable.accountId}" />
+						</p:column>
+
+						<p:column id="searchParentAccountStartDate"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. SD" rendered="true"
+							sortBy="#{parentSearchDataTable.accountStartDate}"
+							filterBy="#{parentSearchDataTable.accountStartDate}"
+							filterMatchMode="exact">
+							<f:facet id="searchParentAccountStartDateFilter" name="filter">
+								<p:datePicker id="searchParentAccountStartDateFilterPicker"
+									onchange="PF('parentDataTableWidget').filter()"
+									focusOnSelect="true" monthNavigator="true" yearNavigator="true"
+									mask="true" pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<h:outputText id="searchParentAccountStartDateText"
+								value="#{parentSearchDataTable.accountStartDate}">
+								<f:converter
+									converterId="com.comasw.converter.localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="searchParentAccountEndDate"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. ED" rendered="true"
+							sortBy="#{parentSearchDataTable.accountEndDate}"
+							filterBy="#{parentSearchDataTable.accountEndDate}"
+							filterMatchMode="exact">
+							<f:facet id="searchParentAccountEndDateFilter" name="filter">
+								<p:datePicker id="searchParentAccountEndDateFilterPicker"
+									onchange="PF('parentDataTableWidget').filter()"
+									focusOnSelect="true" monthNavigator="true" yearNavigator="true"
+									mask="true" pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<h:outputText id="searchParentAccountEndDateText"
+								value="#{parentSearchDataTable.accountEndDate}">
+								<f:converter
+									converterId="com.comasw.converter.localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="searchParentAccountGivenName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. NAME" rendered="true"
+							sortBy="#{parentSearchDataTable.accountGivenName}"
+							filterBy="#{parentSearchDataTable.accountGivenName}"
+							filterMatchMode="contains">
+							<h:outputText id="searchParentAccountGivenNameText"
+								value="#{parentSearchDataTable.accountGivenName}" />
+						</p:column>
+
+						<p:column id="searchParentAccountFirstSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. 1stSURNAME" rendered="true"
+							sortBy="#{parentSearchDataTable.accountFirstSurname}"
+							filterBy="#{parentSearchDataTable.accountFirstSurname}"
+							filterMatchMode="contains">
+							<h:outputText id="searchParentAccountFirstSurnameText"
+								value="#{parentSearchDataTable.accountFirstSurname}" />
+						</p:column>
+
+						<p:column id="searchParentAccountSecondSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC. 2ndSURNAME" rendered="true"
+							sortBy="#{parentSearchDataTable.accountSecondSurname}"
+							filterBy="#{parentSearchDataTable.accountSecondSurname}"
+							filterMatchMode="contains">
+							<h:outputText id="searchParentAccountSecondSurnameText"
+								value="#{parentSearchDataTable.accountSecondSurname}" />
+						</p:column>
+
+
+						<p:column id="searchParentAccountIdCard"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="ACC.ID. CARD" rendered="true"
+							sortBy="#{parentSearchDataTable.accountIdentityCard}"
+							filterBy="#{parentSearchDataTable.accountIdentityCard}"
+							filterMatchMode="contains">
+							<h:outputText id="searchParentAccountIdCardText"
+								value="#{parentSearchDataTable.accountIdentityCard}" />
+						</p:column>
+
+
+						<p:column id="searchParentCustomerId"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. ID" rendered="true"
+							sortBy="#{parentSearchDataTable.customerId}"
+							filterBy="#{parentSearchDataTable.customerId}"
+							filterMatchMode="contains">
+							<h:outputText id="searchParentCustomerIdText"
+								value="#{parentSearchDataTable.customerId}" />
+						</p:column>
+
+						<p:column id="searchParentCustomerStartDate"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. SD" rendered="true"
+							sortBy="#{parentSearchDataTable.customerStartDate}"
+							filterBy="#{parentSearchDataTable.customerStartDate}"
+							filterMatchMode="exact">
+							<f:facet id="searchParentCustomerStartDateFilter" name="filter">
+								<p:datePicker id="searchParentCustomerStartDateFilterPicker"
+									onchange="PF('parentDataTableWidget').filter()"
+									focusOnSelect="true" monthNavigator="true" yearNavigator="true"
+									mask="true" pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<h:outputText id="searchParentCustomerStartDateText"
+								value="#{parentSearchDataTable.customerStartDate}">
+								<f:converter
+									converterId="com.comasw.converter.localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="searchParentCustomerEndDate"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. ED" rendered="true"
+							sortBy="#{parentSearchDataTable.customerEndDate}"
+							filterBy="#{parentSearchDataTable.customerEndDate}"
+							filterMatchMode="exact">
+							<f:facet id="searchParentCustomerEndDateFilter" name="filter">
+								<p:datePicker id="searchParentCustomerEndDateFilterPicker"
+									onchange="PF('parentDataTableWidget').filter()"
+									focusOnSelect="true" monthNavigator="true" yearNavigator="true"
+									mask="true" pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<h:outputText id="searchParentCustomerEndDateText"
+								value="#{parentSearchDataTable.customerEndDate}">
+								<f:converter
+									converterId="com.comasw.converter.localDateTimeConverter" />
+							</h:outputText>
+						</p:column>
+
+						<p:column id="searchParentCustomerGivenName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. NAME" rendered="true"
+							sortBy="#{parentSearchDataTable.customerGivenName}"
+							filterBy="#{parentSearchDataTable.customerGivenName}"
+							filterMatchMode="contains">
+							<h:outputText id="searchParentCustomerGivenNameText"
+								value="#{parentSearchDataTable.customerGivenName}" />
+						</p:column>
+
+						<p:column id="searchParentCustomerFirstSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. 1stSURNAME" rendered="true"
+							sortBy="#{parentSearchDataTable.customerFirstSurname}"
+							filterBy="#{parentSearchDataTable.customerFirstSurname}"
+							filterMatchMode="contains">
+							<h:outputText id="searchParentCustomerFirstSurnameText"
+								value="#{parentSearchDataTable.customerFirstSurname}" />
+						</p:column>
+
+						<p:column id="searchParentCustomerSecondSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. 2ndSURNAME" rendered="true"
+							sortBy="#{parentSearchDataTable.customerSecondSurname}"
+							filterBy="#{parentSearchDataTable.customerSecondSurname}"
+							filterMatchMode="contains">
+							<h:outputText id="searchParentCustomerSecondSurnameText"
+								value="#{parentSearchDataTable.customerSecondSurname}" />
+						</p:column>
+						<p:column id="searchParentCustomerIdCard"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST.ID. CARD" rendered="true"
+							sortBy="#{parentSearchDataTable.customerIdentityCard}"
+							filterBy="#{parentSearchDataTable.customerIdentityCard}"
+							filterMatchMode="contains">
+							<h:outputText id="searchParentCustomerIdCardText"
+								value="#{parentSearchDataTable.customerIdentityCard}" />
+						</p:column>
+					</p:dataTable>
+				</p:overlayPanel>
+			</p:panel>
+
+			<h:panelGrid id="createNewDialogPanelData" columns="2"
+				cellpadding="5">
+
+
+				<h:outputText id="newAccountIdLabel"
+					rendered="#{productController.fromAddingRow}"
+					value="Account Identity Card:" />
+				<p:inputText id="newAccountIdText"
+					disabled="#{productController.fromAddingRow}"
+					rendered="#{productController.fromAddingRow}"
+					value="#{productController.newData.accountId}"
+					label="AccountIdentityCard" />
+				<p:outputLabel id="newStartDateLabel" value="StartDate " />
+				<p:inputMask id="newStartDateInput"
+					value="#{productController.newData.startDate}" mask="99/99/9999"
+					style="width:96%">
+					<f:converter
+						converterId="com.comasw.converter.localDateTimeConverter" />
+					<p:ajax event="change" update="newStartDateInput" />
+				</p:inputMask>
+
+				<p:outputLabel id="newEndDateLabel" value="StartDate " />
+				<p:inputMask id="newEndDateInput"
+					value="#{productController.newData.endDate}" mask="99/99/9999"
+					style="width:96%">
+					<f:converter
+						converterId="com.comasw.converter.localDateTimeConverter" />
+					<p:ajax event="change" update="newEndDateInput" />
+				</p:inputMask>
+
+				<p:outputLabel id="newProductTypeLabel" value="Product Type: " />
+				<p:selectOneMenu id="productTypeInput"
+					value="#{productController.newData.productTypeId}"
+					disabled="#{productController.fromAddingRow}" immediate="true">
+					<f:selectItems
+						value="#{productController.productTypeSelectItems()}"
+						id="selectItemsProductTypeInput" var="ProductType"
+						itemValue="#{productController.newData.productTypeId}">
+					</f:selectItems>
+				</p:selectOneMenu>
+
+				<p:outputLabel id="newStatusLabel" value="Status: " />
+				<p:selectOneMenu id="statusInput"
+					value="#{productController.newData.statusId}" immediate="true">
+					<f:selectItems
+						value="#{productController.statusInstanceSelectItems()}"
+						id="selectItemsStatusInput" var="Status"
+						itemValue="#{productController.newData.statusId}">
+					</f:selectItems>
+				</p:selectOneMenu>
+
+			</h:panelGrid>
+			<h:panelGrid id="createNewDialogPanelButtons" columns="3"
+				cellpadding="5">
+				<p:commandButton id="createNewDialogConfirm"
+					value="#{uiValue.okLabel}" update="form:growlMessage"
+					actionListener="#{productController.pushConfirmButtonCreateNewDialog()}"
+					styleClass="ui-confirmdialog-yes" icon="#{uiValue.okCircleIcon}"
+					oncomplete="if (!args.validationFailed) {updatePanelData();  updateSelectedTable(); updateHistoricTable()}">
+				</p:commandButton>
+				<p:commandButton id="createNewDialogCancel"
+					value="#{uiValue.cancelLabel}" icon="#{uiValue.cancelCircleIcon}"
+					actionListener="#{productController.pushCancelButtonCreateNewDialog()}"
+					update="form:growlMessage"
+					onclick="PF('createNewDialogWidget').hide()"
+					class="ui-button-secondary" />
+				<p:commandButton id="createNewDialogClean"
+					value="#{uiValue.cleanLabel}" icon="#{uiValue.cleanCircleIcon}"
+					update="createNewDialogPanelData form:growlMessage" process="@this"
+					class="ui-button-secondary">
+					<p:resetInput target="createNewDialogPanelData" />
+				</p:commandButton>
+			</h:panelGrid>
+		</p:dialog>
+
+
+		<!--  DELETE ROW DIALOG -->
+		<p:confirmDialog global="true" id="deleteConfirmDialog"
+			styleClass="change-position" showEffect="fade" responsive="true"
+			widgetVar="deleteRowDialogWidget" header="DELETE ROW"
+			message="#{productController.deleteMessageDialog}">
+			<p:commandButton id="deleteDialogConfirm" value="#{uiValue.okLabel}"
+				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
+				actionListener="#{productController.pushConfirmButtonDeleteDialog()}"
+				immediate="true"
+				oncomplete="{updatePanelData(); updateSelectedTable(); updateHistoricTable()}; PF('deleteRowDialogWidget').hide()"
+				process="@this" icon="#{uiValue.okCircleIcon}" />
+			<p:commandButton id="deleteDialogCancel"
+				value="#{uiValue.cancelLabel}" styleClass="ui-confirmdialog-no"
+				update="form:growlMessage"
+				oncomplete="PF('deleteDialogConfirm').hide()" type="button"
+				process="@this" icon="#{uiValue.cancelCircleIcon}" />
+		</p:confirmDialog>
+
+
+
+		<!-- Confirm dialog to cancel records -->
+		<p:confirmDialog global="true" id="cancelStatusDialog"
+			styleClass="change-position" widgetVar="cancelStatusDialogWidget"
+			header="CANCEL RECORDS"
+			message="#{productController.cancelMessageDialog}">
+
+			<p:commandButton value="#{uiValue.okLabel}"
+				update="form:growlMessage"
+				actionListener="#{productController.pushConfirmButtonChangeStatus()}"
+				styleClass="ui-confirmdialog-yes" icon="#{uiValue.okCircleIcon}"
+				process="@this" oncomplete="PF('cancelStatusDialogWidget').hide()" />
+			<p:commandButton value="#{uiValue.cancelLabel}"
+				icon="#{uiValue.cancelCircleIcon}" update="form:growlMessage"
+				onclick="PF('cancelStatusDialogWidget').hide()" process="@this"
+				class="ui-button-secondary" />
+
+		</p:confirmDialog>
+
+	</h:form>
+
+</body>
+</html>
