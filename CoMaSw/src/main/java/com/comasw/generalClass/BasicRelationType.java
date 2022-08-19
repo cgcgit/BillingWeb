@@ -2,7 +2,7 @@ package com.comasw.generalClass;
 
 import java.util.List;
 
-public class RelationBasicTypeWithList<T, S, U> extends BasicTypeWithLists<T> {
+public class BasicRelationType<T, S, U> extends BasicTypeWithLists<T> {
 
 	protected String DATA_TABLE_ID = "form:accordionPanel:" + uiValues.getString("dataTableID");
 

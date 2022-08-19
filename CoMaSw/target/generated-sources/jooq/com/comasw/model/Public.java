@@ -21,6 +21,7 @@ import com.comasw.model.tables.CtServFeeType;
 import com.comasw.model.tables.CtServiceType;
 import com.comasw.model.tables.IdtAccount;
 import com.comasw.model.tables.IdtCustomer;
+import com.comasw.model.tables.IdtFee;
 import com.comasw.model.tables.IdtFeeType;
 import com.comasw.model.tables.IdtProduct;
 import com.comasw.model.tables.IdtProductFee;
@@ -34,7 +35,11 @@ import com.comasw.model.tables.IdtServicePromotion;
 import com.comasw.model.tables.ItAccount;
 import com.comasw.model.tables.ItContract;
 import com.comasw.model.tables.ItCustomer;
+import com.comasw.model.tables.ItFee;
+import com.comasw.model.tables.ItProduct;
 import com.comasw.model.tables.ItProfiles;
+import com.comasw.model.tables.ItPromotion;
+import com.comasw.model.tables.ItService;
 import com.comasw.model.tables.ItUsers;
 import com.comasw.model.tables.MtApplicationMenu;
 import com.comasw.model.tables.PtApplicationLevel;
@@ -46,7 +51,10 @@ import com.comasw.model.tables.PtIdentityCardType;
 import com.comasw.model.tables.PtPaymentMethod;
 import com.comasw.model.tables.PtStatus;
 import com.comasw.model.tables.PtTaxType;
+import com.comasw.model.tables.VwAccountInstance;
+import com.comasw.model.tables.VwCustomerInstance;
 import com.comasw.model.tables.VwProductFeeType;
+import com.comasw.model.tables.VwProductInstance;
 import com.comasw.model.tables.VwProductServiceType;
 import com.comasw.model.tables.VwPromoConsumTypeDiscount;
 import com.comasw.model.tables.VwPromotionFeeTypeDiscount;
@@ -163,6 +171,11 @@ public class Public extends SchemaImpl {
     public final IdtCustomer IDT_CUSTOMER = IdtCustomer.IDT_CUSTOMER;
 
     /**
+     * Table that stores the fee instance ids
+     */
+    public final IdtFee IDT_FEE = IdtFee.IDT_FEE;
+
+    /**
      * Table that stores the fee_type_id for the fee types of the catalog for the application
      */
     public final IdtFeeType IDT_FEE_TYPE = IdtFeeType.IDT_FEE_TYPE;
@@ -228,9 +241,29 @@ public class Public extends SchemaImpl {
     public final ItCustomer IT_CUSTOMER = ItCustomer.IT_CUSTOMER;
 
     /**
+     * Table that stores the fee instance data
+     */
+    public final ItFee IT_FEE = ItFee.IT_FEE;
+
+    /**
+     * Table that stores the product instance data
+     */
+    public final ItProduct IT_PRODUCT = ItProduct.IT_PRODUCT;
+
+    /**
      * Table that stores application profiles
      */
     public final ItProfiles IT_PROFILES = ItProfiles.IT_PROFILES;
+
+    /**
+     * Table that stores the promotion instance data
+     */
+    public final ItPromotion IT_PROMOTION = ItPromotion.IT_PROMOTION;
+
+    /**
+     * Table that stores the service instance data
+     */
+    public final ItService IT_SERVICE = ItService.IT_SERVICE;
 
     /**
      * Table that stores application users
@@ -288,9 +321,24 @@ public class Public extends SchemaImpl {
     public final PtTaxType PT_TAX_TYPE = PtTaxType.PT_TAX_TYPE;
 
     /**
+     * The table <code>public.vw_account_instance</code>.
+     */
+    public final VwAccountInstance VW_ACCOUNT_INSTANCE = VwAccountInstance.VW_ACCOUNT_INSTANCE;
+
+    /**
+     * The table <code>public.vw_customer_instance</code>.
+     */
+    public final VwCustomerInstance VW_CUSTOMER_INSTANCE = VwCustomerInstance.VW_CUSTOMER_INSTANCE;
+
+    /**
      * The table <code>public.vw_product_fee_type</code>.
      */
     public final VwProductFeeType VW_PRODUCT_FEE_TYPE = VwProductFeeType.VW_PRODUCT_FEE_TYPE;
+
+    /**
+     * The table <code>public.vw_product_instance</code>.
+     */
+    public final VwProductInstance VW_PRODUCT_INSTANCE = VwProductInstance.VW_PRODUCT_INSTANCE;
 
     /**
      * View showing the relationship between product types and the service types associated with them - related to ct_prod_serv_type
@@ -356,6 +404,7 @@ public class Public extends SchemaImpl {
             Sequences.SEQ_CUSTOMER_TYPE_ID,
             Sequences.SEQ_DISCOUNT_TYPE_ID,
             Sequences.SEQ_ENTITY_TYPE_ID,
+            Sequences.SEQ_FEE_ID,
             Sequences.SEQ_FEE_TYPE_ID,
             Sequences.SEQ_IDENTITY_CARD_TYPE_ID,
             Sequences.SEQ_PAYMENT_METHOD_ID,
@@ -403,6 +452,7 @@ public class Public extends SchemaImpl {
             CtServiceType.CT_SERVICE_TYPE,
             IdtAccount.IDT_ACCOUNT,
             IdtCustomer.IDT_CUSTOMER,
+            IdtFee.IDT_FEE,
             IdtFeeType.IDT_FEE_TYPE,
             IdtProduct.IDT_PRODUCT,
             IdtProductFee.IDT_PRODUCT_FEE,
@@ -416,7 +466,11 @@ public class Public extends SchemaImpl {
             ItAccount.IT_ACCOUNT,
             ItContract.IT_CONTRACT,
             ItCustomer.IT_CUSTOMER,
+            ItFee.IT_FEE,
+            ItProduct.IT_PRODUCT,
             ItProfiles.IT_PROFILES,
+            ItPromotion.IT_PROMOTION,
+            ItService.IT_SERVICE,
             ItUsers.IT_USERS,
             MtApplicationMenu.MT_APPLICATION_MENU,
             PtApplicationLevel.PT_APPLICATION_LEVEL,
@@ -428,7 +482,10 @@ public class Public extends SchemaImpl {
             PtPaymentMethod.PT_PAYMENT_METHOD,
             PtStatus.PT_STATUS,
             PtTaxType.PT_TAX_TYPE,
+            VwAccountInstance.VW_ACCOUNT_INSTANCE,
+            VwCustomerInstance.VW_CUSTOMER_INSTANCE,
             VwProductFeeType.VW_PRODUCT_FEE_TYPE,
+            VwProductInstance.VW_PRODUCT_INSTANCE,
             VwProductServiceType.VW_PRODUCT_SERVICE_TYPE,
             VwPromoConsumTypeDiscount.VW_PROMO_CONSUM_TYPE_DISCOUNT,
             VwPromotionFeeTypeDiscount.VW_PROMOTION_FEE_TYPE_DISCOUNT,

@@ -28,14 +28,14 @@ import org.primefaces.event.RowEditEvent;
 import com.comasw.model.tables.pojos.CtFeeType;
 import com.comasw.model.tables.pojos.VwUsers;
 import com.comasw.ejb.catalog.type.FeeTypeEJBLocal;
-import com.comasw.generalClass.BasicHistoricWithLists;
+import com.comasw.generalClass.BasicHistoricType;
 import com.comasw.interfaces.IEditableHistoricTable;
 import com.comasw.utilities.Formatter;
 import com.comasw.utilities.Utilities;
 
 @Named
 @ViewScoped
-public class FeeTypeController extends BasicHistoricWithLists<CtFeeType>
+public class FeeTypeController extends BasicHistoricType<CtFeeType>
 		implements Serializable, IEditableHistoricTable {
 
 	/**
@@ -151,19 +151,19 @@ public class FeeTypeController extends BasicHistoricWithLists<CtFeeType>
 
 	@Override
 	public void loadHistoricalDataList() {
-		Integer promotionTypeId;
+		Integer id;
 		if (this.getSelectedData() == null) {
 			logger.error("The promotion type select is null");
 			createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, "LOAD HISTORIC DATA",
 					"The promotion type select is null");
 		} else {
-			promotionTypeId = this.getSelectedData().getFeeTypeId();
-			this.setHistoricDataList(feeTypeEJB.findDataByFeeTypeId(promotionTypeId));
+			id = this.getSelectedData().getFeeTypeId();
+			this.setHistoricDataList(feeTypeEJB.findDataByFeeTypeId(id));
 			if (this.getHistoricDataList().isEmpty()) {
-				logger.info("No historical data data to show for promotion_type_id " + promotionTypeId);
+				logger.info("No historical data data to show for promotion_type_id " + id);
 
 			} else {
-				logger.info("Load historical data sucessful for promotion_type_id " + promotionTypeId);
+				logger.info("Load historical data sucessful for promotion_type_id " + id);
 				System.out.println("datalist: " + historicDataList.toString());
 			}
 
@@ -210,7 +210,7 @@ public class FeeTypeController extends BasicHistoricWithLists<CtFeeType>
 			this.setShowSelectedData(true);
 			this.getSelectedDataList().clear();
 			this.getSelectedDataList().add(this.getSelectedData());
-			loadHistoricalDataList();
+			this.refreshHistoricDataTable();
 
 			messageDetail = "Shown data for promotion: ";
 			logger.info(message + " - " + messageDetail + this.getSelectedData().toString());
@@ -219,7 +219,7 @@ public class FeeTypeController extends BasicHistoricWithLists<CtFeeType>
 
 			PrimeFaces.current().executeScript("PF('searchListWidget').hide();");
 			PrimeFaces.current().executeScript("PF('multipleAccordionPanelWidget').selectAll();");
-			resetFilterHistoricDataTable();
+			
 
 		}
 
@@ -279,7 +279,7 @@ public class FeeTypeController extends BasicHistoricWithLists<CtFeeType>
 		boolean validation = false;
 		CtFeeType originalDataObject;
 		CtFeeType otherRecordDataObject;
-		boolean changeHistoricRecords = false;
+		//boolean changeHistoricRecords = false;
 
 		message = "SAVE EDIT ROW";
 
@@ -330,7 +330,7 @@ public class FeeTypeController extends BasicHistoricWithLists<CtFeeType>
 									otherRecordDataObject = this.backupHistoricDataList.get(pos - 1);
 									feeTypeEJB.deleteData(otherRecordDataObject);
 
-									changeHistoricRecords = true;
+									//changeHistoricRecords = true;
 								}
 
 							}
@@ -354,22 +354,23 @@ public class FeeTypeController extends BasicHistoricWithLists<CtFeeType>
 									otherRecordDataObject = this.backupHistoricDataList.get(pos + 1);
 									feeTypeEJB.deleteData(otherRecordDataObject);
 
-									changeHistoricRecords = true;
+									//changeHistoricRecords = true;
 								}
 							}
 						}
 					}
 				}
 
-				if (changeHistoricRecords) {
+				// if (changeHistoricRecords) {
 
-					// update the current data record
-					feeTypeEJB.updateHistoricDataRecord(dataObject);
-					// delete the original data of the record
-					feeTypeEJB.deleteData(originalDataObject);
-				} else {
-					feeTypeEJB.updateData(dataObject);
-				}
+				// delete the original data of the record
+				feeTypeEJB.deleteData(originalDataObject);
+				// update the current data record
+				feeTypeEJB.updateHistoricDataRecord(dataObject);
+
+				// } else {
+				// feeTypeEJB.updateData(dataObject);
+				// }
 
 				// Check if the status was changed to cancel --> if so, we must update the
 				// status of the subsequent rows
@@ -637,15 +638,13 @@ public class FeeTypeController extends BasicHistoricWithLists<CtFeeType>
 				// this.refreshSelectedDataAttribute();
 
 				if (this.isFromAddingRow()) {
-					this.resetFilterHistoricDataTable();
-					this.loadHistoricalDataList();
+					this.refreshHistoricDataTable();
 					// Ajax.update(HISTORIC_DATA_TABLE_ID);
 					this.setFromAddingRow(false);
 
 				} else {
 					// Ajax.update(DATA_TABLE_ID);
-					this.resetFilterHistoricDataTable();
-					loadHistoricalDataList();
+					this.refreshHistoricDataTable();
 					this.setShowSelectedData(true);
 					PrimeFaces.current().executeScript("PF('multipleAccordionPanelWidget').selectAll();");
 					messageDetail = "Shown data for promotion: ";
@@ -663,9 +662,8 @@ public class FeeTypeController extends BasicHistoricWithLists<CtFeeType>
 	@Override
 	public void pushCancelButtonCreateNewDialog() {
 		if (this.isFromAddingRow()) {
-			this.resetFilterHistoricDataTable();
 			this.setFromAddingRow(false);
-			this.loadHistoricalDataList();
+			this.refreshHistoricDataTable();
 		}
 		this.changeNewDialogHeader();
 		DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot()
@@ -727,8 +725,8 @@ public class FeeTypeController extends BasicHistoricWithLists<CtFeeType>
 					feeTypeEJB.updateHistoricDataRecord(previousRecord);
 
 					messageDetail = "Data deletes succesfully";
-					logger.info("Delete promotion type: " + this.getSelectedHistoricData().toString() + " - "
-							+ messageDetail);
+					logger.info(
+							"Delete fee type: " + this.getSelectedHistoricData().toString() + " - " + messageDetail);
 					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
 							messageDetail);
 
@@ -739,8 +737,8 @@ public class FeeTypeController extends BasicHistoricWithLists<CtFeeType>
 					feeTypeEJB.deleteData(this.getSelectedHistoricData());
 
 					messageDetail = "Data deletes succesfully";
-					logger.info("Delete promotion type: " + this.getSelectedHistoricData().toString() + " - "
-							+ messageDetail);
+					logger.info(
+							"Delete fee type: " + this.getSelectedHistoricData().toString() + " - " + messageDetail);
 					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
 							messageDetail);
 				}
@@ -780,15 +778,13 @@ public class FeeTypeController extends BasicHistoricWithLists<CtFeeType>
 			if (error) {
 				facesContext.validationFailed();
 			} else {
-				this.resetFilterHistoricDataTable();
-
 				if (lastPos == 0) {
 					// if it was only one row, reset the selected data
 					this.setSelectedData(null);
 					this.getSelectedDataList().clear();
 					this.getHistoricDataList().clear();
 				} else {
-					this.loadHistoricalDataList();
+					this.refreshHistoricDataTable();
 				}
 			}
 		}
@@ -885,10 +881,10 @@ public class FeeTypeController extends BasicHistoricWithLists<CtFeeType>
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			} else if (((Integer) objectToValidate.getCode().length())
-					.compareTo(BasicHistoricWithLists.CODE_FIELD_LENGTH_MAX) > 0) {
+					.compareTo(BasicHistoricType.CODE_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The code of the fee type (" + objectToValidate.getCode().length()
-						+ " characters) exceeds the limit of " + BasicHistoricWithLists.CODE_FIELD_LENGTH_MAX.toString()
+						+ " characters) exceeds the limit of " + BasicHistoricType.CODE_FIELD_LENGTH_MAX.toString()
 						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
@@ -900,10 +896,10 @@ public class FeeTypeController extends BasicHistoricWithLists<CtFeeType>
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			} else if (((Integer) objectToValidate.getName().length())
-					.compareTo(BasicHistoricWithLists.NAME_FIELD_LENGTH_MAX) > 0) {
+					.compareTo(BasicHistoricType.NAME_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The name of the fee type (" + objectToValidate.getName().length()
-						+ " characters) exceeds the limit of " + BasicHistoricWithLists.NAME_FIELD_LENGTH_MAX.toString()
+						+ " characters) exceeds the limit of " + BasicHistoricType.NAME_FIELD_LENGTH_MAX.toString()
 						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
@@ -916,11 +912,11 @@ public class FeeTypeController extends BasicHistoricWithLists<CtFeeType>
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			} else if (((Integer) objectToValidate.getDescription().length())
-					.compareTo(BasicHistoricWithLists.DESCRIPTION_FIELD_LENGTH_MAX) > 0) {
+					.compareTo(BasicHistoricType.DESCRIPTION_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The description of the fee type (" + objectToValidate.getDescription().length()
 						+ " characters) exceeds the limit of "
-						+ BasicHistoricWithLists.DESCRIPTION_FIELD_LENGTH_MAX.toString() + " characters";
+						+ BasicHistoricType.DESCRIPTION_FIELD_LENGTH_MAX.toString() + " characters";
 
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
@@ -1228,22 +1224,6 @@ public class FeeTypeController extends BasicHistoricWithLists<CtFeeType>
 				+ " - Do you really want to set the status to cancel from historic period ["
 				+ Formatter.localDateTimeToString(this.getSelectedHistoricData().getStartDate()) + ", "
 				+ Formatter.localDateTimeToString(this.getSelectedHistoricData().getEndDate()) + "] onwards?");
-	}
-
-	@Override
-	public void changeSearchDate(ValueChangeEvent e) {
-		LocalDateTime newSearchDate = (LocalDateTime) e.getNewValue();
-		String message, messageDetail;
-
-		message = "CHANGE SEARCH DATE";
-
-		if (newSearchDate != null) {
-			this.setSearchDate(newSearchDate);
-		} else {
-			messageDetail = "ERROR - The search date can not be null";
-			logger.fatal(messageDetail);
-			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-		}
 	}
 
 	@SuppressWarnings("finally")

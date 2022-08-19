@@ -14,7 +14,6 @@ import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
 import javax.faces.validator.ValidatorException;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -38,7 +37,7 @@ import com.comasw.ejb.catalog.type.ProductTypeEJBLocal;
 import com.comasw.ejb.catalog.type.PromotionTypeEJBLocal;
 import com.comasw.ejb.parameterization.StatusEJBLocal;
 import com.comasw.exception.CoMaSwDataAccessException;
-import com.comasw.generalClass.SimpleHistoricRelationWithList;
+import com.comasw.generalClass.SimpleHistoricRelation;
 import com.comasw.interfaces.ISimpleHistoricRelationsTable;
 
 @Named
@@ -48,7 +47,7 @@ import com.comasw.interfaces.ISimpleHistoricRelationsTable;
  *
  */
 public class ProductPromotionTypeController
-		extends SimpleHistoricRelationWithList<CtProductType, VwPromotionProductType, CtPromotionType>
+		extends SimpleHistoricRelation<CtProductType, VwPromotionProductType, CtPromotionType>
 		implements Serializable, ISimpleHistoricRelationsTable {
 
 	/**
@@ -686,22 +685,7 @@ public class ProductPromotionTypeController
 		this.setInitVariablesToDefault();
 
 	}
-
-	@Override
-	public void changeSearchDate(ValueChangeEvent e) {
-		LocalDateTime newSearchDate = (LocalDateTime) e.getNewValue();
-		String message, messageDetail;
-
-		message = "CHANGE SEARCH DATE";
-
-		if (newSearchDate != null) {
-			this.setSearchDate(newSearchDate);
-		} else {
-			messageDetail = "ERROR - The search date can not be null";
-			logger.fatal(messageDetail);
-			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-		}
-	}
+	
 
 	@Override
 	public void changeSearchDataTableTitle() {

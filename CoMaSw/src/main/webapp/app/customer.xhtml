@@ -7,7 +7,7 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
-<f:metadata>	
+<f:metadata>
 	<f:viewAction id="defaultControlVariables"
 		action="#{customerController.setInitVariablesToDefault()}"
 		phase="INVOKE_APPLICATION">
@@ -68,7 +68,9 @@
 								value="Customer Id:" />
 							<p:inputNumber id="customerIdCriteria" maxlength="10"
 								inmediate="true" value="#{customerController.searchCustomerId}"
-								decimalPlaces="0"></p:inputNumber>
+								decimalPlaces="0">
+								<p:ajax event="valueChange" immediate="true" process="@this" />
+							</p:inputNumber>
 
 
 							<p:outputLabel id="dateSearchLabel" for="searchDate"
@@ -76,10 +78,10 @@
 
 							<p:inputMask id="searchDate" required="true" immediate="true"
 								value="#{customerController.searchDate}" mask="99/99/9999"
-								valueChangeListener="#{customerController.changeSearchDate}"
 								requiredMessage="The date value to search is null. Please fill the search date field">
 								<f:converter
 									converterId="com.comasw.converter.localDateTimeConverter" />
+								<p:ajax event="valueChange" immediate="true" process="@this" />
 							</p:inputMask>
 
 
@@ -87,15 +89,16 @@
 								value="Identity Card:" />
 							<p:inputText id="idCardCriteria" inmediate="true"
 								value="#{customerController.searchIdentityCard}">
+								<p:ajax event="valueChange" immediate="true" process="@this" />
 							</p:inputText>
 
 
 							<p:commandButton id="searchDataButton" value="Search"
 								icon="#{uiValue.searchIcon}"
 								actionListener="#{customerController.pushSearchButton()}"
-								ajax="true" immediate="true" update=":form:growlMessage"
-								style="width:7rem" oncomplete="#{updateDataTable}"
-								styleClass="p-mx-3" class="ui-button-success rounded-button">
+								ajax="true" update=":form:growlMessage" style="width:7rem"
+								oncomplete="#{updateDataTable}" styleClass="p-mx-3"
+								class="ui-button-success rounded-button">
 							</p:commandButton>
 
 						</p:panelGrid>
@@ -119,15 +122,17 @@
 				</p:panelGrid>
 
 				<p:overlayPanel id="searchList" for="searchDataButton"
-					my="center top" at="center bottom" showCloseIcon="true"
-					dismissable="false" widgetVar="searchListWidget">
+					showEvent="oncomplete" my="center top" at="center bottom"
+					showCloseIcon="true" dismissable="false"
+					widgetVar="searchListWidget">
 					<!--  DATA SEARCH TABLE -->
+
 					<p:dataTable id="dataTable" widgetVar="dataTableWidget"
 						var="dataTable" value="#{customerController.dataList}"
 						filteredValue="#{customerController.filteredDataList}"
 						showGridlines="true" stripedRows="true" scrollable="true"
 						reflow="true" editable="true" rowIndexVar="rowIndexSearchTable"
-						rowKey="(#{dataTable.customerId} #{dataTable.startDate} #{dataTable.endDate})"
+						rowKey="(#{dataTable.customerId} #{dataTable.customerStartDate} #{dataTable.customerEndDate})"
 						selection="#{customerController.selectedData}"
 						selectionMode="single" paginator="true" rows="5" size="small"
 						paginatorPosition="bottom">
@@ -183,8 +188,8 @@
                                   width: 100px;    
                                   overflow: hidden"
 							headerText="START DATE" rendered="true"
-							sortBy="#{dataTable.startDate}" filterBy="#{dataTable.startDate}"
-							filterMatchMode="exact">
+							sortBy="#{dataTable.customerStartDate}"
+							filterBy="#{dataTable.customerStartDate}" filterMatchMode="exact">
 							<f:facet id="searchStartDateFilter" name="filter">
 								<p:datePicker id="searchStartDateFilterPicker"
 									onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
@@ -195,7 +200,7 @@
 								</p:datePicker>
 							</f:facet>
 							<h:outputText id="searchStartDateText"
-								value="#{dataTable.startDate}">
+								value="#{dataTable.customerStartDate}">
 								<f:converter
 									converterId="com.comasw.converter.localDateTimeConverter" />
 							</h:outputText>
@@ -208,8 +213,8 @@
                                   width: 100px;    
                                   overflow: hidden"
 							headerText="END DATE" rendered="true"
-							sortBy="#{dataTable.endDate}" filterBy="#{dataTable.endDate}"
-							filterMatchMode="exact">
+							sortBy="#{dataTable.customerEndDate}"
+							filterBy="#{dataTable.customerEndDate}" filterMatchMode="exact">
 							<f:facet id="searchEndDateFilter" name="filter">
 								<p:datePicker id="searchEndDateFilterPicker"
 									onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
@@ -219,22 +224,24 @@
 										converterId="com.comasw.converter.localDateTimeConverter" />
 								</p:datePicker>
 							</f:facet>
-							<h:outputText id="searchEndDateText" value="#{dataTable.endDate}">
+							<h:outputText id="searchEndDateText"
+								value="#{dataTable.customerEndDate}">
 								<f:converter
 									converterId="com.comasw.converter.localDateTimeConverter" />
 							</h:outputText>
 						</p:column>
-
 						<p:column id="searchGivenName"
 							style="font-family:Arial Black;
                                   text-align: left;
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
-							headerText="NAME" rendered="true" sortBy="#{dataTable.givenName}"
-							filterBy="#{dataTable.givenName}" filterMatchMode="contains">
+							headerText="NAME" rendered="true"
+							sortBy="#{dataTable.customerGivenName}"
+							filterBy="#{dataTable.customerGivenName}"
+							filterMatchMode="contains">
 							<h:outputText id="searchGivenNameText"
-								value="#{dataTable.givenName}" />
+								value="#{dataTable.customerGivenName}" />
 						</p:column>
 
 						<p:column id="searchFirstSurname"
@@ -243,11 +250,12 @@
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
-							headerText="NAME" rendered="true"
-							sortBy="#{dataTable.firstSurname}"
-							filterBy="#{dataTable.firstSurname}" filterMatchMode="contains">
+							headerText="1stSURNAME" rendered="true"
+							sortBy="#{dataTable.customerFirstSurname}"
+							filterBy="#{dataTable.customerFirstSurname}"
+							filterMatchMode="contains">
 							<h:outputText id="searchFirstSurnameText"
-								value="#{dataTable.firstSurname}" />
+								value="#{dataTable.customerFirstSurname}" />
 						</p:column>
 
 						<p:column id="searchSecondSurname"
@@ -256,37 +264,12 @@
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
-							headerText="NAME" rendered="true"
-							sortBy="#{dataTable.secondSurname}"
-							filterBy="#{dataTable.secondSurname}" filterMatchMode="contains">
+							headerText="2ndSURNAME" rendered="true"
+							sortBy="#{dataTable.customerSecondSurname}"
+							filterBy="#{dataTable.customerSecondSurname}"
+							filterMatchMode="contains">
 							<h:outputText id="searchSecondSurnameText"
-								value="#{dataTable.secondSurname}" />
-						</p:column>
-
-						<p:column id="searchIdCardType"
-							style="font-family:Arial Black;
-                                  text-align: left;
-                                  font-size: 11px;
-                                  width: 100px;    
-                                  overflow: hidden"
-							headerText="ID. CARD TYPE" rendered="true"
-							filterBy="#{dataTable.identityCardTypeId}"
-							filterMatchMode="exact">
-							<f:facet id="searchIdCardTypeFilter" name="filter">
-								<p:selectOneMenu id="searchIdCardTypeFilterMenu"
-									onchange="PF('dataTableWidget').filter()">
-									<f:selectItems id="searchIdCardTypeFilterSelectItems"
-										value="#{customerController.identityCardTypeSelectItems()}" />
-								</p:selectOneMenu>
-							</f:facet>
-							<p:selectOneMenu id="searchIdCardTypeOutput" editable="false"
-								disabled="true" immediate="true"
-								value="#{dataTable.identityCardTypeId}">
-								<f:selectItems id="selectItemsSearchIdCardTypeOutput"
-									itemDisabled="true" var="SearchIdCardType"
-									value="#{customerController.identityCardTypeSelectItems()}"
-									itemValue="#{dataTable.identityCardTypeId}" />
-							</p:selectOneMenu>
+								value="#{dataTable.customerSecondSurname}" />
 						</p:column>
 
 						<p:column id="searchIdCard"
@@ -296,10 +279,11 @@
                                   width: 100px;    
                                   overflow: hidden"
 							headerText="ID. CARD" rendered="true"
-							sortBy="#{dataTable.identityCard}"
-							filterBy="#{dataTable.identityCard}" filterMatchMode="contains">
+							sortBy="#{dataTable.customerIdentityCard}"
+							filterBy="#{dataTable.customerIdentityCard}"
+							filterMatchMode="contains">
 							<h:outputText id="searchIdCardText"
-								value="#{dataTable.identityCard}" />
+								value="#{dataTable.customerIdentityCard}" />
 						</p:column>
 
 						<p:column id="searchContactPhone"
@@ -309,10 +293,11 @@
                                   width: 100px;    
                                   overflow: hidden"
 							headerText="PHONE" rendered="true"
-							sortBy="#{dataTable.contactPhone}"
-							filterBy="#{dataTable.contactPhone}" filterMatchMode="contains">
+							sortBy="#{dataTable.customerContactPhone}"
+							filterBy="#{dataTable.customerContactPhone}"
+							filterMatchMode="contains">
 							<h:outputText id="searchContactPhoneText"
-								value="#{dataTable.contactPhone}" />
+								value="#{dataTable.customerContactPhone}" />
 						</p:column>
 
 						<p:column id="searchEMail"
@@ -321,11 +306,15 @@
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
-							headerText="E-MAIL" rendered="true" sortBy="#{dataTable.EMail}"
-							filterBy="#{dataTable.EMail}" filterMatchMode="contains">
-							<h:outputText id="searchEMailText" value="#{dataTable.EMail}" />
+							headerText="E-MAIL" rendered="true"
+							sortBy="#{dataTable.customerEMail}"
+							filterBy="#{dataTable.customerEMail}" filterMatchMode="contains">
+							<h:outputText id="searchEMailText"
+								value="#{dataTable.customerEMail}" />
 						</p:column>
 					</p:dataTable>
+
+
 				</p:overlayPanel>
 
 				<p:panel id="selectedTablePanel"
@@ -333,7 +322,7 @@
 
 					<p:dataTable id="selectedTable" widgetVar="selectedTableWidget"
 						var="selectedDataTable" value="#{customerController.selectedData}"
-						rendered="true" size="small" scrollable="true"
+						rendered="true" size="small" scrollable="true" resizableColumns="true"
 						emptyMessage="No data to show" showGridlines="true"
 						paginatorPosition="bottom">
 
@@ -348,32 +337,33 @@
 								value="#{selectedDataTable.customerId}" />
 						</p:column>
 
-						<p:column id="startDate"
+
+						<p:column id="customerType"
 							style="font-family:Arial Black;
                                   text-align: left;
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
-							headerText="START DATE" rendered="true">
-							<h:outputText id="startDateText"
-								value="#{selectedDataTable.startDate}">
-								<f:converter
-									converterId="com.comasw.converter.localDateTimeConverter" />
-							</h:outputText>
+							headerText="CUST. TYPE" rendered="true">
+							<p:selectOneMenu id="customerTypeOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{selectedDataTable.customerTypeId}">
+								<f:selectItems id="selectItemsCustomerTypeOutput"
+									itemDisabled="true" var="IdentityCardType"
+									value="#{customerController.customerTypeSelectItems()}"
+									itemValue="#{selectedDataTable.customerTypeId}" />
+							</p:selectOneMenu>
 						</p:column>
 
-						<p:column id="endDate"
+						<p:column id="customerTypeDescription"
 							style="font-family:Arial Black;
                                   text-align: left;
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
-							headerText="END DATE" rendered="true">
-							<h:outputText id="endDateText"
-								value="#{selectedDataTable.endDate}">
-								<f:converter
-									converterId="com.comasw.converter.localDateTimeConverter" />
-							</h:outputText>
+							headerText="CUST. TYPE DESCR." rendered="true">
+							<h:outputText id="customerTypeDescriptionText"
+								value="#{selectedDataTable.customerTypeDescription}" />
 						</p:column>
 
 						<p:column id="status"
@@ -385,204 +375,13 @@
 							headerText="STATUS" rendered="true">
 							<p:selectOneMenu id="StatusOutput" editable="false"
 								disabled="true" immediate="true"
-								value="#{selectedDataTable.statusId}">
+								value="#{selectedDataTable.customerStatusId}">
 								<f:selectItems id="selectItemsStatusOutput" itemDisabled="true"
 									var="Status"
 									value="#{customerController.statusInstanceSelectItems()}"
-									itemValue="#{selectedDataTable.statusId}" />
+									itemValue="#{selectedDataTable.customerStatusId}" />
 							</p:selectOneMenu>
 						</p:column>
-
-						<p:column id="givenName"
-							style="font-family:Arial Black;
-                                  text-align: left;
-                                  font-size: 11px;
-                                  width: 100px;    
-                                  overflow: hidden"
-							headerText="NAME" rendered="true">
-							<h:outputText id="givenNameText"
-								value="#{selectedDataTable.givenName}" />
-						</p:column>
-
-						<p:column id="firstSurname"
-							style="font-family:Arial Black;
-                                  text-align: left;
-                                  font-size: 11px;
-                                  width: 100px;    
-                                  overflow: hidden"
-							headerText="1st Surname" rendered="true">
-							<h:outputText id="firstSurnameText"
-								value="#{selectedDataTable.firstSurname}" />
-						</p:column>
-
-						<p:column id="secondSurname"
-							style="font-family:Arial Black;
-                                  text-align: left;
-                                  font-size: 11px;
-                                  width: 100px;    
-                                  overflow: hidden"
-							headerText="2nd Surname" rendered="true">
-							<h:outputText id="secondSurnameText"
-								value="#{selectedDataTable.secondSurname}" />
-						</p:column>
-
-						<p:column id="identityCardType"
-							style="font-family:Arial Black;
-                                  text-align: left;
-                                  font-size: 11px;
-                                  width: 100px;    
-                                  overflow: hidden"
-							headerText="ID. CARD TYPE" rendered="true">
-							<p:selectOneMenu id="idCardTypeOutput" editable="false"
-								disabled="true" immediate="true"
-								value="#{selectedDataTable.identityCardTypeId}">
-								<f:selectItems id="selectItemsIdCardOutput" itemDisabled="true"
-									var="IdentityCardType"
-									value="#{customerController.identityCardTypeSelectItems()}"
-									itemValue="#{selectedDataTable.identityCardTypeId}" />
-							</p:selectOneMenu>
-						</p:column>
-
-						<p:column id="identityCard"
-							style="font-family:Arial Black;
-                                  text-align: left;
-                                  font-size: 11px;
-                                  width: 100px;    
-                                  overflow: hidden"
-							headerText="ID. CARD" rendered="true">
-							<h:outputText id="idCardText"
-								value="#{selectedDataTable.identityCard}" />
-						</p:column>
-
-						<p:column id="contactPhone"
-							style="font-family:Arial Black;
-                                  text-align: left;
-                                  font-size: 11px;
-                                  width: 100px;    
-                                  overflow: hidden"
-							headerText="PHONE" rendered="true">
-							<h:outputText id="contactPhoneText"
-								value="#{selectedDataTable.contactPhone}" />
-						</p:column>
-
-						<p:column id="eMail"
-							style="font-family:Arial Black;
-                                  text-align: left;
-                                  font-size: 11px;
-                                  width: 100px;    
-                                  overflow: hidden"
-							headerText="E-MAIL" rendered="true">
-							<h:outputText id="eMailText" value="#{selectedDataTable.EMail}" />
-						</p:column>
-
-						<p:column id="address"
-							style="font-family:Arial Black;
-                                  text-align: left;
-                                  font-size: 11px;
-                                  width: 100px;    
-                                  overflow: hidden"
-							headerText="ADDRESS" rendered="true">
-							<h:outputText id="addressText"
-								value="#{selectedDataTable.address}" />
-						</p:column>
-
-						<p:column id="city"
-							style="font-family:Arial Black;
-                                  text-align: left;
-                                  font-size: 11px;
-                                  width: 100px;    
-                                  overflow: hidden"
-							headerText="CITY" rendered="true">
-							<h:outputText id="cityText" value="#{selectedDataTable.city}" />
-						</p:column>
-
-
-						<p:column id="state"
-							style="font-family:Arial Black;
-                                  text-align: left;
-                                  font-size: 11px;
-                                  width: 100px;    
-                                  overflow: hidden"
-							headerText="STATE" rendered="true">
-							<h:outputText id="stateText" value="#{selectedDataTable.state}" />
-						</p:column>
-
-						<p:column id="Country"
-							style="font-family:Arial Black;
-                                  text-align: left;
-                                  font-size: 11px;
-                                  width: 100px;    
-                                  overflow: hidden"
-							headerText="COUNTRY" rendered="true">
-							<h:outputText id="countryText"
-								value="#{selectedDataTable.country}" />
-						</p:column>
-
-						<p:column id="postCode"
-							style="font-family:Arial Black;
-                                  text-align: left;
-                                  font-size: 11px;
-                                  width: 100px;    
-                                  overflow: hidden"
-							headerText="POST CODE" rendered="true">
-							<h:outputText id="postCodeText"
-								value="#{selectedDataTable.postCode}" />
-						</p:column>
-
-						<p:column id="iban"
-							style="font-family:Arial Black;
-                                  text-align: left;
-                                  font-size: 11px;
-                                  width: 100px;    
-                                  overflow: hidden"
-							headerText="IBAN" rendered="true">
-							<h:outputText id="ibanText" value="#{selectedDataTable.iban}" />
-						</p:column>
-
-						<p:column id="bankEntity"
-							style="font-family:Arial Black;
-                                  text-align: left;
-                                  font-size: 11px;
-                                  width: 100px;    
-                                  overflow: hidden"
-							headerText="BANK ENTITY" rendered="true">
-							<h:outputText id="bankEntityText"
-								value="#{selectedDataTable.bankEntity}" />
-						</p:column>
-
-						<p:column id="bankBranch"
-							style="font-family:Arial Black;
-                                  text-align: left;
-                                  font-size: 11px;
-                                  width: 100px;    
-                                  overflow: hidden"
-							headerText="BANK BRANCH" rendered="true">
-							<h:outputText id="bankBranchText"
-								value="#{selectedDataTable.bankBranch}" />
-						</p:column>
-
-						<p:column id="bankControlDigit"
-							style="font-family:Arial Black;
-                                  text-align: left;
-                                  font-size: 11px;
-                                  width: 100px;    
-                                  overflow: hidden"
-							headerText="BANK CONTROL DIGIT" rendered="true">
-							<h:outputText id="bankControlDigitText"
-								value="#{selectedDataTable.bankControlDigit}" />
-						</p:column>
-
-						<p:column id="bankAccountNr"
-							style="font-family:Arial Black;
-                                  text-align: left;
-                                  font-size: 11px;
-                                  width: 100px;    
-                                  overflow: hidden"
-							headerText="BANK ACC. NR." rendered="true">
-							<h:outputText id="bankAccountNrText"
-								value="#{selectedDataTable.bankAccountNumber}" />
-						</p:column>
-
 
 						<p:column id="activeDate"
 							style="font-family:Arial Black;
@@ -592,7 +391,7 @@
                                   overflow: hidden"
 							headerText="ACTIVE DATE" rendered="true">
 							<h:outputText id="activeDateText"
-								value="#{selectedDataTable.activeDate}">
+								value="#{selectedDataTable.customerActiveDate}">
 								<f:converter
 									converterId="com.comasw.converter.localDateTimeConverter" />
 							</h:outputText>
@@ -604,12 +403,207 @@
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
-							headerText="CANCEL. DATE" rendered="true">
+							headerText="CANCELLED DATE" rendered="true">
 							<h:outputText id="cancelledDateText"
-								value="#{selectedDataTable.cancelledDate}">
+								value="#{selectedDataTable.customerCancelledDate}">
 								<f:converter
 									converterId="com.comasw.converter.localDateTimeConverter" />
 							</h:outputText>
+						</p:column>
+
+						<p:column id="customerName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. NAME" rendered="true">
+							<h:outputText id="customerNameText"
+								value="#{selectedDataTable.customerGivenName}" />
+						</p:column>
+
+						<p:column id="customer1stSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. 1st SURNAME" rendered="true">
+							<h:outputText id="customer1stSurnameText"
+								value="#{selectedDataTable.customerFirstSurname}" />
+						</p:column>
+
+						<p:column id="customer2ndSurname"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. 2nd SURNAME" rendered="true">
+							<h:outputText id="customer2ndSurnameText"
+								value="#{selectedDataTable.customerSecondSurname}" />
+						</p:column>
+
+
+						<p:column id="customerIdentityCardType"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;A
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. ID. CARD TYPE" rendered="true">
+							<p:selectOneMenu id="customerIdCardTypeOutput" editable="false"
+								disabled="true" immediate="true"
+								value="#{selectedDataTable.customerIdentityCardTypeId}">
+								<f:selectItems id="selectItemsCustomerIdCardOutput"
+									itemDisabled="true" var="IdentityCardType"
+									value="#{customerController.identityCardTypeSelectItems()}"
+									itemValue="#{selectedDataTable.customerIdentityCardTypeId}" />
+							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="customerIdentityCard"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. ID. CARD" rendered="true">
+							<h:outputText id="idCardText"
+								value="#{selectedDataTable.customerIdentityCard}" />
+						</p:column>
+
+						<p:column id="customerContactPhone"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. PHONE" rendered="true">
+							<h:outputText id="customerContactPhoneText"
+								value="#{selectedDataTable.customerContactPhone}" />
+						</p:column>
+
+						<p:column id="customereMail"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. E-MAIL" rendered="true">
+							<h:outputText id="customerEMailText"
+								value="#{selectedDataTable.customerEMail}" />
+						</p:column>
+
+						<p:column id="customerAddress"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. ADDRESS" rendered="true">
+							<h:outputText id="customerAddressText"
+								value="#{selectedDataTable.customerAddress}" />
+						</p:column>
+
+						<p:column id="city"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. CITY" rendered="true">
+							<h:outputText id="customerCityText"
+								value="#{selectedDataTable.customerCity}" />
+						</p:column>
+
+
+						<p:column id="customerState"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. STATE" rendered="true">
+							<h:outputText id="customerStateText"
+								value="#{selectedDataTable.customerState}" />
+						</p:column>
+
+						<p:column id="customerCountry"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. COUNTRY" rendered="true">
+							<h:outputText id="customerCountryText"
+								value="#{selectedDataTable.customerCountry}" />
+						</p:column>
+
+						<p:column id="customerPostCode"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. POST CODE" rendered="true">
+							<h:outputText id="customerPostCodeText"
+								value="#{selectedDataTable.customerPostCode}" />
+						</p:column>
+
+						<p:column id="customerIban"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. IBAN" rendered="true">
+							<h:outputText id="customerIbanText"
+								value="#{selectedDataTable.customerIban}" />
+						</p:column>
+
+						<p:column id="customerBankEntity"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. B. ENTITY" rendered="true">
+							<h:outputText id="customerBankEntityText"
+								value="#{selectedDataTable.customerBankEntity}" />
+						</p:column>
+
+						<p:column id="customerBankBranch"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. B. BRANCH" rendered="true">
+							<h:outputText id="customerBankBranchText"
+								value="#{selectedDataTable.customerBankBranch}" />
+						</p:column>
+
+						<p:column id="customerBankControlDigit"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST.B. C.D" rendered="true">
+							<h:outputText id="customerBankControlDigitText"
+								value="#{selectedDataTable.customerBankControlDigit}" />
+						</p:column>
+
+						<p:column id="customerBankAccountNr"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="CUST. B. CUST. NR." rendered="true">
+							<h:outputText id="customerBankAccountNrText"
+								value="#{selectedDataTable.customerBankAccountNumber}" />
 						</p:column>
 
 					</p:dataTable>
@@ -1300,12 +1294,41 @@
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
-							headerText="ACTIVE DATE" rendered="true">
-							<h:outputText id="activeDateOutHist"
-								value="#{historicDataTable.activeDate}">
-								<f:converter
-									converterId="com.comasw.converter.localDateTimeConverter" />
-							</h:outputText>
+							headerText="ACTIVE DATE" rendered="true"
+							sortBy="#{historicDataTable.activeDate}"
+							filterBy="#{historicDataTable.activeDate}"
+							filterMatchMode="contains">
+							<f:facet id="historicActiveDateFilter" name="filter">
+								<p:datePicker id="historicActiveDateFilterPicker"
+									onchange="PF('historicTableWidget').filter()"
+									focusOnSelect="true" monthNavigator="true" yearNavigator="true"
+									mask="true" pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<p:cellEditor id="cellEditorActiveDateHist">
+								<f:facet id="facetActiveDateOutputHist" name="output">
+									<h:outputText id="activeDateOutputHist"
+										value="#{historicDataTable.activeDate}">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+									</h:outputText>
+								</f:facet>
+								<f:facet id="facetActiveDateInputHist" name="input">
+									<p:inputMask id="activeDateInputHist"
+										valueChangeListener="#{productController.changeActiveDate}"
+										value="#{historicDataTable.activeDate}" mask="99/99/9999"
+										style="width:96%">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+										<f:param id="currentRowActiveDateHist"
+											name="currentHistoricalRow" value="#{rowIndexHistoricTable}" />
+										<p:ajax event="change" immediate="true"
+											update="activeDateOutputHist" />
+									</p:inputMask>
+								</f:facet>
+							</p:cellEditor>
 						</p:column>
 
 						<p:column id="cancelledDateHist"
@@ -1314,12 +1337,39 @@
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
-							headerText="CANCEL. DATE" rendered="true">
-							<h:outputText id="cancelledDateOutHist"
-								value="#{historicDataTable.cancelledDate}">
-								<f:converter
-									converterId="com.comasw.converter.localDateTimeConverter" />
-							</h:outputText>
+							headerText="CANCELLED DATE" rendered="true"
+							sortBy="#{historicDataTable.cancelledDate}"
+							filterBy="#{historicDataTable.cancelledDate}"
+							filterMatchMode="contains">
+							<f:facet id="historicCancelledDateFilter" name="filter">
+								<p:datePicker id="historicCancelledDateFilterPicker"
+									onchange="PF('historicTableWidget').filter()"
+									focusOnSelect="true" monthNavigator="true" yearNavigator="true"
+									mask="true" pattern="dd/MM/yyyy">
+									<f:converter
+										converterId="com.comasw.converter.localDateTimeConverter" />
+								</p:datePicker>
+							</f:facet>
+							<p:cellEditor id="cellEditorCancelledDateHist">
+								<f:facet id="facetCancelledDateOutputHist" name="output">
+									<h:outputText id="cancelledDateOutputHist"
+										value="#{historicDataTable.cancelledDate}">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+									</h:outputText>
+								</f:facet>
+								<f:facet id="facetCancelledDateInputHist" name="input">
+									<p:inputMask id="cancelledDateInputHist"
+										value="#{historicDataTable.cancelledDate}" mask="99/99/9999"
+										style="width:96%">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+										<f:param id="currentRowCancelledDateHist"
+											name="currentHistoricalRow" value="#{rowIndexHistoricTable}" />
+										<p:ajax event="change" update="" />
+									</p:inputMask>
+								</f:facet>
+							</p:cellEditor>
 						</p:column>
 					</p:dataTable>
 				</p:panel>
@@ -1353,8 +1403,8 @@
 
 								<h:outputText id="newEndDateLabel" value="StartDate " />
 								<p:inputMask id="newEndDateInput"
-									value="#{customerController.newData.endDate}"
-									mask="99/99/9999" style="width:96%">
+									value="#{customerController.newData.endDate}" mask="99/99/9999"
+									style="width:96%">
 									<f:converter
 										converterId="com.comasw.converter.localDateTimeConverter" />
 									<p:ajax event="change" update="newEndDateInput" />
@@ -1392,8 +1442,7 @@
 							<h:panelGrid columns="2" columnClasses="label, value">
 								<h:outputText id="newNameOutput" value="Name:" />
 								<p:inputText id="newNameInput"
-									value="#{customerController.newData.givenName}"
-									label="Name" />
+									value="#{customerController.newData.givenName}" label="Name" />
 
 								<h:outputText id="new1stSurnameOutput" value="1st Surname:" />
 								<p:inputText id="new1stSurnameInput"
@@ -1461,7 +1510,7 @@
 									value="#{customerController.newData.contactPhone}" />
 
 
-								<h:outputText id="newEMailOutput" value="Email: *" />
+								<h:outputText id="newEMailOutput" value="Email: " />
 								<p:inputText id="newEMailInput"
 									value="#{customerController.newData.EMail}" label="Email" />
 							</h:panelGrid>
@@ -1471,6 +1520,7 @@
 					<p:tab id="bankAccountTab" title="Bank Account">
 						<p:panel id="bankAccountInformation"
 							header="Bank Account Information">
+							<p:messages />
 							<h:panelGrid columns="2" columnClasses="label, value">
 								<h:outputText id="newIbanOutput" value="IBAN:" />
 								<h:inputText id="newIbanInput"
@@ -1594,8 +1644,8 @@
 
 											<h:outputText id="confirmCityOutput" value="City:" />
 											<h:outputText id="confirmCityIput"
-												value="#{customerController.newData.city}"
-												style="width:96%" styleClass="outputLabel" />
+												value="#{customerController.newData.city}" style="width:96%"
+												styleClass="outputLabel" />
 
 											<h:outputText id="confirmStateOutput" value="State:" />
 											<h:outputText id="confirmStateIput"
@@ -1604,8 +1654,8 @@
 
 											<h:outputText id="confirmCountryOutput" value="Country:" />
 											<h:outputText id="confirmCountryIput"
-												value="#{customerController.newData.city}"
-												style="width:96%" styleClass="outputLabel" />
+												value="#{customerController.newData.city}" style="width:96%"
+												styleClass="outputLabel" />
 
 										</h:panelGrid>
 									</p:fieldset>
@@ -1618,11 +1668,10 @@
 												value="#{customerController.newData.contactPhone}"
 												style="width:96%" styleClass="outputLabel" />
 
-
-											<h:outputText id="confirmEMailOutput" value="Email: *" />
+											<h:outputText id="confirmEMailOutput" value="Email:" />
 											<h:outputText id="confirmEMailInput"
-												value="#{customerController.newData.EMail}"
-												label="Email" style="width:96%" styleClass="outputLabel" />
+												value="#{customerController.newData.EMail}" label="Email"
+												style="width:96%" styleClass="outputLabel" />
 
 										</h:panelGrid>
 									</p:fieldset>
@@ -1633,8 +1682,8 @@
 
 											<h:outputText id="confirmIbanOutput" value="IBAN:" />
 											<h:outputText id="confirmIbanInput"
-												value="#{customerController.newData.iban}"
-												style="width:96%" styleClass="outputLabel" />
+												value="#{customerController.newData.iban}" style="width:96%"
+												styleClass="outputLabel" />
 
 											<h:outputText id="confirmBankEntityOutput" value="Entity:" />
 											<h:outputText id="confirmBankEntityInput"
@@ -1663,32 +1712,32 @@
 									</p:fieldset>
 								</h:panelGrid>
 							</h:panelGrid>
-							<p:fieldset legend="SAVE DATA" >
-									<h:panelGrid id="createNewDialogPanelButtons" columns="3" style="align-items: center"
-										cellpadding="5">
-										<p:commandButton id="createNewDialogConfirm"
-											value="#{uiValue.okLabel}" update="form:growlMessage"
-											actionListener="#{customerController.pushConfirmButtonCreateNewDialog()}"
-											styleClass="ui-confirmdialog-yes"
-											icon="#{uiValue.okCircleIcon}"
-											oncomplete="if (!args.validationFailed) {updateSelectedTable(); updateHistoricTable()}">
-										</p:commandButton>
-										<p:commandButton id="createNewDialogCancel"
-											value="#{uiValue.cancelLabel}"
-											icon="#{uiValue.cancelCircleIcon}"
-											actionListener="#{customerController.pushCancelButtonCreateNewDialog()}"
-											update="form:growlMessage"
-											onclick="PF('createNewDialogWidget').hide()"
-											class="ui-button-secondary" />
-										<p:commandButton id="createNewDialogClean"
-											value="#{uiValue.cleanLabel}"
-											icon="#{uiValue.cleanCircleIcon}"
-											update="createNewDialogPanelData form:growlMessage"
-											process="@this" class="ui-button-secondary">
-											<p:resetInput target="createNewDialogPanelData" />
-										</p:commandButton>
-									</h:panelGrid>
-								</p:fieldset>
+							<p:fieldset legend="SAVE DATA">
+								<h:panelGrid id="createNewDialogPanelButtons" columns="3"
+									style="align-items: center" cellpadding="5">
+									<p:commandButton id="createNewDialogConfirm"
+										value="#{uiValue.okLabel}" update="form:growlMessage"
+										actionListener="#{customerController.pushConfirmButtonCreateNewDialog()}"
+										styleClass="ui-confirmdialog-yes"
+										icon="#{uiValue.okCircleIcon}"
+										oncomplete="if (!args.validationFailed) {updateSelectedTable(); updateHistoricTable()}">
+									</p:commandButton>
+									<p:commandButton id="createNewDialogCancel"
+										value="#{uiValue.cancelLabel}"
+										icon="#{uiValue.cancelCircleIcon}"
+										actionListener="#{customerController.pushCancelButtonCreateNewDialog()}"
+										update="form:growlMessage"
+										onclick="PF('createNewDialogWidget').hide()"
+										class="ui-button-secondary" />
+									<p:commandButton id="createNewDialogClean"
+										value="#{uiValue.cleanLabel}"
+										icon="#{uiValue.cleanCircleIcon}"
+										update="createNewDialogPanelData form:growlMessage"
+										process="@this" class="ui-button-secondary">
+										<p:resetInput target="createNewDialogPanelData" />
+									</p:commandButton>
+								</h:panelGrid>
+							</p:fieldset>
 						</p:panel>
 					</p:tab>
 				</p:wizard>

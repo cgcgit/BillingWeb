@@ -27,27 +27,26 @@ import org.primefaces.event.FlowEvent;
 import org.primefaces.event.RowEditEvent;
 
 import com.comasw.ejb.instance.CustomerEJBLocal;
-import com.comasw.generalClass.BasicInstanceClass;
-import com.comasw.interfaces.IEditableHistoricTable;
+import com.comasw.generalClass.BasicInstance;
+import com.comasw.interfaces.IInstanceTable;
 import com.comasw.model.tables.pojos.ItCustomer;
+import com.comasw.model.tables.pojos.VwCustomerInstance;
 import com.comasw.model.tables.pojos.VwUsers;
 import com.comasw.utilities.Formatter;
 import com.comasw.utilities.Utilities;
 
 @Named
 @ViewScoped
-public class CustomerController extends BasicInstanceClass<ItCustomer>
-		implements Serializable, IEditableHistoricTable {
+public class CustomerController extends BasicInstance<VwCustomerInstance, ItCustomer, VwCustomerInstance>
+		implements Serializable, IInstanceTable {
 
-	
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 5656501787981937971L;
 
 	Logger logger = (Logger) LogManager.getLogger(CustomerController.class);
-	
-	
+
 	private static Integer GIVEN_NAME_LENGTH_MAX = Integer
 			.valueOf(dbDefinitions.getString("CUSTOMER_GIVEN_NAME_LENGTH_MAX"));
 	private static Integer FIRST_SURNAME_LENGTH_MAX = Integer
@@ -72,10 +71,6 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 			.valueOf(dbDefinitions.getString("CUSTOMER_BANK_CONTROL_DIGIT_LENGTH"));
 	private static Integer BANK_ACCOUNT_NUMBER_LENGTH = Integer
 			.valueOf(dbDefinitions.getString("CUSTOMER_BANK_ACCOUNT_NUMBER_LENGTH"));
-	
-	private static Integer STATUS_ID_PENDING_INSTANCE = Integer
-			.valueOf(dbDefinitions.getString("STATUS_ID_PENDING_INSTANCE"));
-
 
 	@Inject
 	private ExternalContext externalContext;
@@ -87,8 +82,6 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 
 	// ----- SELECTED DATA -----\\
 
-	
-
 	// ---- SEARCH CRITERIA ----\\
 
 	private Integer searchCustomerId;
@@ -99,7 +92,6 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 	// GETTERS AND SETTERS
 	// -------------------
 
-	
 	/**
 	 * @return the searchCustomerId
 	 */
@@ -138,8 +130,8 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 
 	@PostConstruct
 	public void init() {
-		
-		if (this.getNewData()== null) {
+
+		if (this.getNewData() == null) {
 			this.setNewData(new ItCustomer());
 		}
 
@@ -152,15 +144,23 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 		}
 
 		if (this.getDataList() == null) {
-			this.setDataList(new ArrayList<ItCustomer>());
+			this.setDataList(new ArrayList<VwCustomerInstance>());
 		}
 
 		if (this.getFilteredDataList() == null) {
-			this.setFilteredDataList(new ArrayList<ItCustomer>());
-		}	
+			this.setFilteredDataList(new ArrayList<VwCustomerInstance>());
+		}
 
 		if (this.getSelectedData() == null) {
-			this.setSelectedData(new ItCustomer());
+			this.setSelectedData(new VwCustomerInstance());
+		}
+
+		if (this.getSelectedDataList() == null) {
+			this.setSelectedDataList(new ArrayList<VwCustomerInstance>());
+		}
+
+		if (this.getFilteredSelectedDataList() == null) {
+			this.setFilteredSelectedDataList(new ArrayList<VwCustomerInstance>());
 		}
 
 		if (this.getHistoricDataList() == null) {
@@ -171,16 +171,14 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 			this.setFilteredHistoricDataList(new ArrayList<ItCustomer>());
 		}
 
-
 		if (this.getBackupHistoricDataList() == null) {
 			this.setBackupHistoricDataList(new ArrayList<ItCustomer>());
 		}
 
-		
-		if (this.getSelectedHistoricData() == null ) {
+		if (this.getSelectedHistoricData() == null) {
 			this.setSelectedHistoricData(new ItCustomer());
 		}
-		
+
 		if (this.getLoggedUser() == null) {
 			this.setLoggedUser((VwUsers) externalContext.getSessionMap().get("applicationUser"));
 		}
@@ -197,7 +195,7 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 			FacesContext.getCurrentInstance().validationFailed();
 			throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_FATAL, message, messageDetail));
 		} else {
-			this.setDataList(customerEJB.findInstanceWithParameters(Optional.ofNullable(this.getSearchDate()),
+			this.setDataList(customerEJB.findInstanceViewWithParameters(Optional.ofNullable(this.getSearchDate()),
 					Optional.ofNullable(this.getSearchCustomerId()), Optional.empty(), Optional.empty(),
 					Optional.ofNullable(this.getSearchIdentityCard()), Optional.empty(), Optional.empty(),
 					Optional.empty(), Optional.empty()));
@@ -213,19 +211,19 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 
 	@Override
 	public void loadHistoricalDataList() {
-		Integer customerId;
+		Integer id;
 		if (this.getSelectedData() == null) {
 			logger.error("The customer select is null");
 			createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, "LOAD HISTORIC DATA",
 					"The customer select is null");
 		} else {
-			customerId = this.getSelectedData().getCustomerId();
-			this.setHistoricDataList(customerEJB.findDataByCustomerId(customerId));
+			id = this.getSelectedData().getCustomerId();
+			this.setHistoricDataList(customerEJB.findDataByCustomerId(id));
 			if (this.getHistoricDataList().isEmpty()) {
-				logger.info("No historical data data to show for customer id " + customerId);
+				logger.info("No historical data data to show for customer id " + id);
 
 			} else {
-				logger.info("Load historical data sucessful for customer id " + customerId);
+				logger.info("Load historical data sucessful for customer id " + id);
 				System.out.println("datalist: " + historicDataList.toString());
 			}
 
@@ -270,12 +268,8 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 
 		DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent(DATA_TABLE_ID);
 
-		if (this.getSelectedData() == null) {
-			this.setSelectedData(new ItCustomer());
-		}
-
 		// Gets the selected data
-		this.setSelectedData((ItCustomer) dataTable.getRowData());
+		this.setSelectedData((VwCustomerInstance) dataTable.getRowData());
 
 		if (this.getSelectedData() == null || this.getSelectedData().getCustomerId() == null
 				|| this.getSelectedData().getCustomerId() == 0) {
@@ -285,8 +279,9 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 
 		} else {
 			this.setShowSelectedData(true);
-			this.setSelectedData(this.getSelectedData());
-			loadHistoricalDataList();
+			this.getSelectedDataList().clear();
+			this.getSelectedDataList().add(this.getSelectedData());
+			this.refreshHistoricDataTable();
 
 			messageDetail = "Shown data for customer: ";
 			logger.info(message + " - " + messageDetail + this.getSelectedData().toString());
@@ -295,7 +290,6 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 
 			PrimeFaces.current().executeScript("PF('searchListWidget').hide();");
 			PrimeFaces.current().executeScript("PF('multipleAccordionPanelWidget').selectAll();");
-			resetFilterHistoricDataTable();
 
 		}
 
@@ -355,7 +349,6 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 		boolean validation = false;
 		ItCustomer originalDataObject;
 		ItCustomer otherRecordDataObject;
-		boolean changeHistoricRecords = false;
 
 		message = "SAVE EDIT ROW";
 
@@ -405,8 +398,6 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 									// deletes the original data for this record
 									otherRecordDataObject = this.backupHistoricDataList.get(pos - 1);
 									customerEJB.deleteData(otherRecordDataObject);
-
-									changeHistoricRecords = true;
 								}
 
 							}
@@ -430,32 +421,36 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 									otherRecordDataObject = this.backupHistoricDataList.get(pos + 1);
 									customerEJB.deleteData(otherRecordDataObject);
 
-									changeHistoricRecords = true;
 								}
 							}
 						}
 					}
 				}
 
-				if (changeHistoricRecords) {
+				// delete the original data of the record
+				customerEJB.deleteData(originalDataObject);
+				// update the current data record
+				customerEJB.updateHistoricDataRecord(dataObject);
 
-					// update the current data record
-					customerEJB.updateHistoricDataRecord(dataObject);
-					// delete the original data of the record
-					customerEJB.deleteData(originalDataObject);
-				} else {
-					customerEJB.updateData(dataObject);
-				}
-
-				// Check if the status was changed to cancel --> if so, we must update the
-				// status of the subsequent rows
-				if (this.isToCancel()) {
+				// Check if the status was changed to cancel or if activeDateChanged --> if so,
+				// we must update other rows
+				if (this.isToCancel() || this.isActiveDateChanged() || this.isCancelledDateChanged()) {
 					int i;
-					for (i = pos + 1; i <= lastRow; i++) {
-						dataTable.setRowIndex(i);
-						dataObject = (ItCustomer) dataTable.getRowData();
-						// customerEJB.updateHistoricDataRecord(dataObject);
-						customerEJB.updateData(dataObject);
+					if (this.isActiveDateChanged() || this.isCancelledDateChanged()) {
+						// update all the data table
+						for (i = 0; i <= lastRow; i++) {
+							dataTable.setRowIndex(i);
+							dataObject = (ItCustomer) dataTable.getRowData();
+							// accountEJB.updateHistoricDataRecord(dataObject);
+							customerEJB.updateData(dataObject);
+						}
+					} else { // only the subsequent rows
+						for (i = pos + 1; i <= lastRow; i++) {
+							dataTable.setRowIndex(i);
+							dataObject = (ItCustomer) dataTable.getRowData();
+							// accountEJB.updateHistoricDataRecord(dataObject);
+							customerEJB.updateData(dataObject);
+						}
 					}
 
 					logger.info("Updated the status to cancel for the subsequent rows");
@@ -520,11 +515,10 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 
 		// Retrieved the data that was modified
 		dataObject = (ItCustomer) event.getObject();
-		
-	
+
 		try {
 			this.refreshHistoricDataTable();
-			messageDetail = "The changes for promotion type " + dataObject.toString() + " was cancelled";
+			messageDetail = "The changes for custom " + dataObject.toString() + " was cancelled";
 			logger.info(messageDetail);
 			createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			// return the default values of the control variables
@@ -636,10 +630,10 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 
 		// Set the default dates and input values for the new data
 		this.setNewData(new ItCustomer());
-		this.getNewData().setStartDate(Formatter.stringToLocalDateTime(Formatter.DEFAULT_START_DATE));
+		this.getNewData().setStartDate(LocalDateTime.now());
 		this.getNewData().setEndDate(Formatter.stringToLocalDateTime(Formatter.DEFAULT_END_DATE));
 		this.getNewData().setInputUser(this.loggedUser.getUserCode());
-		this.getNewData().setInputDate(LocalDateTime.now());		
+		this.getNewData().setInputDate(LocalDateTime.now());
 		if (!this.isFromAddingRow()) {
 			this.getNewData().setStatusId(STATUS_ID_PENDING_INSTANCE);
 		}
@@ -657,7 +651,7 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 		String messageDetail = "";
 		boolean error = false;
 		Integer row = this.getCurrentHistoricRow();
-
+		Integer id;
 
 		try {
 			if (this.objectValidation(this.getNewData())) {
@@ -667,9 +661,12 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 					error = splitRecords(dataTable, row, this.getNewData());
 				} else {
 					// create a new object
-					customerEJB.insertData(this.getNewData());
-					ItCustomer object = customerEJB.findDataBySearchDateAndCustomerId(this.getNewData().getStartDate(),
-							this.getNewData().getCustomerId());
+					id = customerEJB.insertData(this.getNewData());
+					VwCustomerInstance object = customerEJB
+							.findInstanceViewWithParameters(Optional.ofNullable(this.getNewData().getStartDate()),
+									Optional.ofNullable(id), Optional.empty(), Optional.empty(), Optional.empty(),
+									Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty())
+							.get(0);
 
 					this.setSelectedData(object);
 					this.getSelectedDataList().clear();
@@ -717,15 +714,13 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 				// this.refreshSelectedDataAttribute();
 
 				if (this.isFromAddingRow()) {
-					this.resetFilterHistoricDataTable();
-					this.loadHistoricalDataList();
+					this.refreshHistoricDataTable();
 					// Ajax.update(HISTORIC_DATA_TABLE_ID);
 					this.setFromAddingRow(false);
 
 				} else {
 					// Ajax.update(DATA_TABLE_ID);
-					this.resetFilterHistoricDataTable();
-					loadHistoricalDataList();
+					this.refreshHistoricDataTable();
 					this.setShowSelectedData(true);
 					PrimeFaces.current().executeScript("PF('multipleAccordionPanelWidget').selectAll();");
 					messageDetail = "Shown data for customer: ";
@@ -743,9 +738,8 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 	@Override
 	public void pushCancelButtonCreateNewDialog() {
 		if (this.isFromAddingRow()) {
-			this.resetFilterHistoricDataTable();
+			this.refreshHistoricDataTable();
 			this.setFromAddingRow(false);
-			this.loadHistoricalDataList();
 		}
 		this.changeNewDialogHeader();
 		DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot()
@@ -772,7 +766,6 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 
 		try {
 			if (this.getSelectedHistoricData() != null) {
-
 				// Gets the data
 				DataTable dataTable = (DataTable) facesContext.getViewRoot().findComponent(HISTORIC_DATA_TABLE_ID);
 				currentPos = this.getRowHistoricSelected();
@@ -798,20 +791,34 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 					previousRecord.setModifDate(LocalDateTime.now());
 					previousRecord.setModifUser(this.getLoggedUser().getUserCode());
 
-					// Update the previous record with the new endDate
-					customerEJB.updateHistoricDataRecord(previousRecord);
-					// delete the original previous record
+					// delete the selected data
+					customerEJB.deleteData(this.getSelectedHistoricData());
+
+					// delete the original previous record (to eliminate overlaps)
 					customerEJB.deleteData(previousRecordOriginalData);
 
+					// Update the previous record with the new endDate
+					customerEJB.updateHistoricDataRecord(previousRecord);
+
+					messageDetail = "Data deletes succesfully";
+					logger.info(
+							"Delete customer: " + this.getSelectedHistoricData().toString() + " - " + messageDetail);
+					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
+							messageDetail);
+
 					logger.info("Update the previous record end date sucessfully");
+				} else {
+
+					// delete the selected data
+					customerEJB.deleteData(this.getSelectedHistoricData());
+
+					messageDetail = "Data deletes succesfully";
+					logger.info(
+							"Delete customer: " + this.getSelectedHistoricData().toString() + " - " + messageDetail);
+					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
+							messageDetail);
 				}
 
-				// delete the selected data
-				customerEJB.deleteData(this.getSelectedHistoricData());
-
-				messageDetail = "Data deletes succesfully";
-				logger.info("Delete customer: " + this.getSelectedHistoricData().toString() + " - " + messageDetail);
-				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 			} else {
 				error = true;
 				messageDetail = "ERROR - Selected data is null";
@@ -847,17 +854,17 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 			if (error) {
 				facesContext.validationFailed();
 			} else {
-				this.resetFilterHistoricDataTable();
-				this.loadHistoricalDataList();
 
 				if (lastPos == 0) {
 					// if it was only one row, reset the selected data
 					this.setSelectedData(null);
+					this.getSelectedDataList().clear();
+					this.getHistoricDataList().clear();
+				} else {
+					this.refreshHistoricDataTable();
 				}
-
 			}
 		}
-
 	}
 
 	@Override
@@ -876,9 +883,9 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 	public boolean objectValidation(Object dataObject) {
 
 		String message, messageDetail;
-		ItCustomer objectToValidate;		
+		ItCustomer objectToValidate;
 		boolean validation = true;
-		
+
 		if (this.isFromAddingRow()) {
 			message = "ADD NEW CUSTOMER ROW VALIDATION";
 		} else {
@@ -892,27 +899,27 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 		objectToValidate = (ItCustomer) dataObject;
 
 		if (objectToValidate != null) {
-			
-			if (!this.validateNewInstance()) {
-				validation=false;
-			}
-			
-			if (!this.validateNewPersonal()) {
-				validation=false;
-			}
-			
-			if (!this.validateNewAddress()){
-				validation=false;
-			}
-			
-			if (!this.validateNewContact()) {
-				validation=false;
+
+			if (!this.validateNewInstance(dataObject)) {
+				validation = false;
 			}
 
-			if (!this.validateNewBankAccount()) {
-				validation=false;
+			if (!this.validateNewPersonal(dataObject)) {
+				validation = false;
 			}
-			
+
+			if (!this.validateNewAddress(dataObject)) {
+				validation = false;
+			}
+
+			if (!this.validateNewContact(dataObject)) {
+				validation = false;
+			}
+
+			if (!this.validateNewBankAccount(dataObject)) {
+				validation = false;
+			}
+
 			if (validation) {
 				// no error --> update panel
 				Ajax.update(NEW_PANEL_DATA_ID);
@@ -979,9 +986,9 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 				this.setSelectedData(this.getSelectedDataList().get(0));
 			}
 		}
-			this.resetFilterHistoricDataTable();
-			this.loadHistoricalDataList();
-			Ajax.update(HISTORIC_DATA_TABLE_ID);		
+		this.resetFilterHistoricDataTable();
+		this.loadHistoricalDataList();
+		Ajax.update(HISTORIC_DATA_TABLE_ID);
 	}
 
 	@Override
@@ -1045,6 +1052,7 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 		String messageDetail = "";
 		int i, currentPos, lastPos;
 		boolean error = false;
+		LocalDateTime cancelledDate;
 
 		try {
 			if (this.getSelectedHistoricData() != null) {
@@ -1072,6 +1080,19 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 							+ messageDetail);
 					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
 							messageDetail);
+				}
+				// set the cancelled date for all the records
+				if (this.getSelectedHistoricData().getCancelledDate() == null) {
+					cancelledDate = LocalDateTime.now();
+					this.setCancelledDateChanged(true);
+					// change status from subsequent rows
+					for (i = 0; i <= lastPos; i++) {
+						dataTable.setRowIndex(i);
+						((ItCustomer) dataTable.getRowData()).setCancelledDate(cancelledDate);
+						;
+						Ajax.updateRow(dataTable, i);
+
+					}
 				}
 
 			} else {
@@ -1189,29 +1210,15 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 				+ Formatter.localDateTimeToString(this.getSelectedHistoricData().getEndDate()) + "] onwards?");
 	}
 
-	@Override
-	public void changeSearchDate(ValueChangeEvent e) {
-		LocalDateTime newSearchDate = (LocalDateTime) e.getNewValue();
-		String message, messageDetail;
-
-		message = "CHANGE SEARCH DATE";
-
-		if (newSearchDate != null) {
-			this.setSearchDate(newSearchDate);
-		} else {
-			messageDetail = "ERROR - The search date can not be null";
-			logger.fatal(messageDetail);
-			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-		}
-	}
-
 	/**
 	 * Validates the instance tab of the wizard
 	 */
-	public boolean validateNewInstance() {
+	public boolean validateNewInstance(Object object) {
 		String message = "INSTANCE DATA VALIDATION";
 		String messageDetail;
 		boolean validation = true;
+		
+		ItCustomer objectToValidate= (ItCustomer) object;
 
 		LocalDateTime minDate = Formatter.stringToLocalDateTime("01/01/1900");
 		LocalDateTime maxDate = Formatter.stringToLocalDateTime("31/12/9999");
@@ -1226,25 +1233,25 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 			}
 		}
 
-		if (this.getNewData().getCustomerTypeId() == null) {
+		if (objectToValidate.getCustomerTypeId() == null) {
 			messageDetail = "ERROR - The customer type of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
 		}
 
-		if (this.getNewData().getStartDate() == null) {
+		if (objectToValidate.getStartDate() == null) {
 			messageDetail = "ERROR - The start date of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (this.getNewData().getStartDate().compareTo(minDate) < 0) {
+		} else if (objectToValidate.getStartDate().compareTo(minDate) < 0) {
 			messageDetail = "ERROR - The start date of the customer can not be less than "
 					+ Formatter.localDateTimeToString(minDate);
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (this.getNewData().getStartDate().compareTo(maxDate) > 0) {
+		} else if (objectToValidate.getStartDate().compareTo(maxDate) > 0) {
 			messageDetail = "ERROR - The start date of the customer can not be greater than "
 					+ Formatter.localDateTimeToString(maxDate);
 			logger.error(messageDetail);
@@ -1252,18 +1259,18 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 			validation = false;
 		}
 
-		if (this.getNewData().getEndDate() == null) {
+		if (objectToValidate.getEndDate() == null) {
 			messageDetail = "ERROR - The end date of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (this.getNewData().getEndDate().compareTo(minDate) < 0) {
+		} else if (objectToValidate.getEndDate().compareTo(minDate) < 0) {
 			messageDetail = "ERROR - The end date of the customer can not be less than "
 					+ Formatter.localDateTimeToString(minDate);
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (this.getNewData().getEndDate().compareTo(maxDate) > 0) {
+		} else if (objectToValidate.getEndDate().compareTo(maxDate) > 0) {
 			messageDetail = "ERROR - The end date of the customer can not be greater than "
 					+ Formatter.localDateTimeToString(maxDate);
 			logger.error(messageDetail);
@@ -1278,11 +1285,13 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 	/**
 	 * Validates the personal data tab of the wizard
 	 */
-	public boolean validateNewPersonal() {
+	public boolean validateNewPersonal(Object object) {
 		String message = "PERSONAL DATA VALIDATION";
 		String messageDetail;
 		boolean validation = true;
 
+		ItCustomer objectToValidate= (ItCustomer) object;
+		
 		if (this.isFromAddingRow()) {
 			message = "NEW CUSTOMER ROW " + message;
 		} else {
@@ -1293,31 +1302,31 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 			}
 		}
 
-		if (this.getNewData().getGivenName() != null) {
-			this.getNewData().setGivenName(this.getNewData().getGivenName().trim());
+		if (objectToValidate.getGivenName() != null) {
+			objectToValidate.setGivenName(objectToValidate.getGivenName().trim());
 		}
 
-		if (this.getNewData().getFirstSurname() != null) {
-			this.getNewData().setFirstSurname(this.getNewData().getFirstSurname().trim());
+		if (objectToValidate.getFirstSurname() != null) {
+			objectToValidate.setFirstSurname(objectToValidate.getFirstSurname().trim());
 		}
 
-		if (this.getNewData().getSecondSurname() != null) {
-			this.getNewData().setSecondSurname(this.getNewData().getSecondSurname().trim());
+		if (objectToValidate.getSecondSurname() != null) {
+			objectToValidate.setSecondSurname(objectToValidate.getSecondSurname().trim());
 		}
 
-		if (this.getNewData().getIdentityCard() != null) {
-			this.getNewData().setIdentityCard(this.getNewData().getIdentityCard().toUpperCase().trim());
+		if (objectToValidate.getIdentityCard() != null) {
+			objectToValidate.setIdentityCard(objectToValidate.getIdentityCard().toUpperCase().trim());
 		}
 
-		if (this.getNewData().getGivenName() == null || this.getNewData().getGivenName().isEmpty()) {
+		if (objectToValidate.getGivenName() == null || objectToValidate.getGivenName().isEmpty()) {
 			messageDetail = "ERROR - The given name of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (((Integer) this.getNewData().getGivenName().length())
+		} else if (((Integer) objectToValidate.getGivenName().length())
 				.compareTo(CustomerController.GIVEN_NAME_LENGTH_MAX) > 0) {
 			// length characters exceeds the maximum length
-			messageDetail = "Error - The given name of the customer (" + this.getNewData().getGivenName().length()
+			messageDetail = "Error - The given name of the customer (" + objectToValidate.getGivenName().length()
 					+ " characters) exceeds the limit of " + CustomerController.GIVEN_NAME_LENGTH_MAX.toString()
 					+ " characters";
 			logger.error(messageDetail);
@@ -1325,28 +1334,28 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 			validation = false;
 		}
 
-		if (this.getNewData().getFirstSurname() == null || this.getNewData().getFirstSurname().isEmpty()) {
+		if (objectToValidate.getFirstSurname() == null || objectToValidate.getFirstSurname().isEmpty()) {
 			messageDetail = "ERROR - The first surname of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (((Integer) this.getNewData().getFirstSurname().length())
+		} else if (((Integer) objectToValidate.getFirstSurname().length())
 				.compareTo(CustomerController.FIRST_SURNAME_LENGTH_MAX) > 0) {
 			// length characters exceeds the maximum length
-			messageDetail = "Error - The first surname of the customer ("
-					+ this.getNewData().getFirstSurname().length() + " characters) exceeds the limit of "
-					+ CustomerController.FIRST_SURNAME_LENGTH_MAX.toString() + " characters";
+			messageDetail = "Error - The first surname of the customer (" + objectToValidate.getFirstSurname().length()
+					+ " characters) exceeds the limit of " + CustomerController.FIRST_SURNAME_LENGTH_MAX.toString()
+					+ " characters";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
 		}
 
-		if (this.getNewData().getSecondSurname() != null && (!this.getNewData().getSecondSurname().isEmpty())) {
-			if (((Integer) this.getNewData().getSecondSurname().length())
+		if (objectToValidate.getSecondSurname() != null && (!objectToValidate.getSecondSurname().isEmpty())) {
+			if (((Integer) objectToValidate.getSecondSurname().length())
 					.compareTo(CustomerController.SECOND_SURNAME_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The second surname of the customer ("
-						+ this.getNewData().getSecondSurname().length() + " characters) exceeds the limit of "
+						+ objectToValidate.getSecondSurname().length() + " characters) exceeds the limit of "
 						+ CustomerController.SECOND_SURNAME_LENGTH_MAX.toString() + " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
@@ -1354,35 +1363,35 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 			}
 		}
 
-		if (this.getNewData().getIdentityCardTypeId() == null) {
+		if (objectToValidate.getIdentityCardTypeId() == null) {
 			messageDetail = "ERROR - The identity card type of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
 		}
 
-		if (this.getNewData().getIdentityCard() == null || this.getNewData().getIdentityCard().isEmpty()) {
+		if (objectToValidate.getIdentityCard() == null || objectToValidate.getIdentityCard().isEmpty()) {
 			messageDetail = "ERROR - The identity card of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (((Integer) this.getNewData().getIdentityCard().length())
+		} else if (((Integer) objectToValidate.getIdentityCard().length())
 				.compareTo(CustomerController.IDENTITY_CARD_LENGTH_MAX) > 0) {
 			// length characters exceeds the maximum length
-			messageDetail = "Error - The identity card of the customer ("
-					+ this.getNewData().getIdentityCard().length() + " characters) exceeds the limit of "
-					+ CustomerController.SECOND_SURNAME_LENGTH_MAX.toString() + " characters";
+			messageDetail = "Error - The identity card of the customer (" + objectToValidate.getIdentityCard().length()
+					+ " characters) exceeds the limit of " + CustomerController.SECOND_SURNAME_LENGTH_MAX.toString()
+					+ " characters";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
 		}
 
-		if (this.getNewData().getContactPhone() != null && !this.getNewData().getContactPhone().isEmpty()) {
-			if (((Integer) this.getNewData().getContactPhone().length())
+		if (objectToValidate.getContactPhone() != null && !objectToValidate.getContactPhone().isEmpty()) {
+			if (((Integer) objectToValidate.getContactPhone().length())
 					.compareTo(CustomerController.CONTACT_PHONE_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The contact phone of the customer ("
-						+ this.getNewData().getContactPhone().length() + " characters) exceeds the limit of "
+						+ objectToValidate.getContactPhone().length() + " characters) exceeds the limit of "
 						+ CustomerController.CONTACT_PHONE_LENGTH_MAX.toString() + " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
@@ -1396,10 +1405,12 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 	/**
 	 * Validates the address tab of the wizard
 	 */
-	public boolean validateNewAddress() {
+	public boolean validateNewAddress(Object object) {
 		String message = "ADDRESS DATA VALIDATION";
 		String messageDetail;
 		boolean validation = true;
+		
+		ItCustomer objectToValidate= (ItCustomer) object;
 
 		if (this.isFromAddingRow()) {
 			message = "NEW CUSTOMER ROW " + message;
@@ -1411,35 +1422,35 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 			}
 		}
 
-		if (this.getNewData().getAddress() != null) {
-			this.getNewData().setAddress(this.getNewData().getAddress().trim());
+		if (objectToValidate != null) {
+			objectToValidate.setAddress(objectToValidate.getAddress().trim());
 		}
 
-		if (this.getNewData().getCity() != null) {
-			this.getNewData().setCity(this.getNewData().getCity().trim());
+		if (objectToValidate != null) {
+			objectToValidate.setCity(objectToValidate.getCity().trim());
 		}
 
-		if (this.getNewData().getState() != null) {
-			this.getNewData().setState(this.getNewData().getState().trim());
+		if (objectToValidate.getState() != null) {
+			objectToValidate.setState(objectToValidate.getState().trim());
 		}
 
-		if (this.getNewData().getCountry() != null) {
-			this.getNewData().setCountry(this.getNewData().getCountry().trim());
+		if (objectToValidate.getCountry() != null) {
+			objectToValidate.setCountry(objectToValidate.getCountry().trim());
 		}
 
-		if (this.getNewData().getPostCode() != null) {
-			this.getNewData().setPostCode(this.getNewData().getPostCode().trim());
+		if (objectToValidate.getPostCode() != null) {
+			objectToValidate.setPostCode(objectToValidate.getPostCode().trim());
 		}
 
-		if (this.getNewData().getAddress() == null || this.getNewData().getAddress().isEmpty()) {
+		if (objectToValidate.getAddress() == null || objectToValidate.getAddress().isEmpty()) {
 			messageDetail = "ERROR - The address of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (((Integer) this.getNewData().getAddress().length())
+		} else if (((Integer) objectToValidate.getAddress().length())
 				.compareTo(CustomerController.ADDRESS_LENGTH_MAX) > 0) {
 			// length characters exceeds the maximum length
-			messageDetail = "Error - The address of the customer (" + this.getNewData().getAddress().length()
+			messageDetail = "Error - The address of the customer (" + objectToValidate.getAddress().length()
 					+ " characters) exceeds the limit of " + CustomerController.ADDRESS_LENGTH_MAX.toString()
 					+ " characters";
 			logger.error(messageDetail);
@@ -1447,15 +1458,14 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 			validation = false;
 		}
 
-		if (this.getNewData().getCity() == null || this.getNewData().getCity().isEmpty()) {
+		if (objectToValidate.getCity() == null || objectToValidate.getCity().isEmpty()) {
 			messageDetail = "ERROR - The city of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (((Integer) this.getNewData().getCity().length())
-				.compareTo(CustomerController.CITY_LENGTH_MAX) > 0) {
+		} else if (((Integer) objectToValidate.getCity().length()).compareTo(CustomerController.CITY_LENGTH_MAX) > 0) {
 			// length characters exceeds the maximum length
-			messageDetail = "Error - The city of the customer (" + this.getNewData().getCity().length()
+			messageDetail = "Error - The city of the customer (" + objectToValidate.getCity().length()
 					+ " characters) exceeds the limit of " + CustomerController.CITY_LENGTH_MAX.toString()
 					+ " characters";
 			logger.error(messageDetail);
@@ -1463,15 +1473,15 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 			validation = false;
 		}
 
-		if (this.getNewData().getState() == null || this.getNewData().getState().isEmpty()) {
+		if (objectToValidate.getState() == null || objectToValidate.getState().isEmpty()) {
 			messageDetail = "ERROR - The state of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (((Integer) this.getNewData().getState().length())
+		} else if (((Integer) objectToValidate.getState().length())
 				.compareTo(CustomerController.STATE_LENGTH_MAX) > 0) {
 			// length characters exceeds the maximum length
-			messageDetail = "Error - The state of the customer (" + this.getNewData().getState().length()
+			messageDetail = "Error - The state of the customer (" + objectToValidate.getState().length()
 					+ " characters) exceeds the limit of " + CustomerController.STATE_LENGTH_MAX.toString()
 					+ " characters";
 			logger.error(messageDetail);
@@ -1479,15 +1489,15 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 			validation = false;
 		}
 
-		if (this.getNewData().getCountry() == null || this.getNewData().getCountry().isEmpty()) {
+		if (objectToValidate.getCountry() == null || objectToValidate.getCountry().isEmpty()) {
 			messageDetail = "ERROR - The country of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (((Integer) this.getNewData().getCountry().length())
+		} else if (((Integer) objectToValidate.getCountry().length())
 				.compareTo(CustomerController.COUNTRY_LENGTH_MAX) > 0) {
 			// length characters exceeds the maximum length
-			messageDetail = "Error - The country of the customer (" + this.getNewData().getCountry().length()
+			messageDetail = "Error - The country of the customer (" + objectToValidate.getCountry().length()
 					+ " characters) exceeds the limit of " + CustomerController.COUNTRY_LENGTH_MAX.toString()
 					+ " characters";
 			logger.error(messageDetail);
@@ -1495,15 +1505,15 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 			validation = false;
 		}
 
-		if (this.getNewData().getPostCode() == null || this.getNewData().getPostCode().isEmpty()) {
+		if (objectToValidate.getPostCode() == null || objectToValidate.getPostCode().isEmpty()) {
 			messageDetail = "ERROR - The post code of the customer can not be null";
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (((Integer) this.getNewData().getPostCode().length())
+		} else if (((Integer) objectToValidate.getPostCode().length())
 				.compareTo(CustomerController.POST_CODE_LENGTH_MAX) > 0) {
 			// length characters exceeds the maximum length
-			messageDetail = "Error - The post code of the customer (" + this.getNewData().getPostCode().length()
+			messageDetail = "Error - The post code of the customer (" + objectToValidate.getPostCode().length()
 					+ " characters) exceeds the limit of " + CustomerController.POST_CODE_LENGTH_MAX.toString()
 					+ " characters";
 			logger.error(messageDetail);
@@ -1518,10 +1528,12 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 	/**
 	 * Validates the contact tab of the wizard
 	 */
-	public boolean validateNewContact() {
+	public boolean validateNewContact(Object object) {
 		String message = "CONTACT DATA VALIDATION";
 		String messageDetail;
 		boolean validation = true;
+		
+		ItCustomer objectToValidate= (ItCustomer) object;
 
 		if (this.isFromAddingRow()) {
 			message = "NEW CUSTOMER ROW " + message;
@@ -1533,25 +1545,25 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 			}
 		}
 
-		if (this.getNewData().getContactPhone() != null) {
-			this.getNewData().setContactPhone(this.getNewData().getContactPhone().trim());
+		if (objectToValidate.getContactPhone() != null) {
+			objectToValidate.setContactPhone(objectToValidate.getContactPhone().trim());
 		}
 
-		if (this.getNewData().getEMail() != null) {
-			this.getNewData().setEMail(this.getNewData().getEMail().trim());
+		if (objectToValidate.getEMail() != null) {
+			objectToValidate.setEMail(objectToValidate.getEMail().trim());
 		}
-		if (this.getNewData().getContactPhone() != null && !this.getNewData().getContactPhone().isEmpty()) {
-			if (((Integer) this.getNewData().getContactPhone().length())
+		if (objectToValidate.getContactPhone() != null && !objectToValidate.getContactPhone().isEmpty()) {
+			if (((Integer) objectToValidate.getContactPhone().length())
 					.compareTo(CustomerController.CONTACT_PHONE_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The contact phone of the customer ("
-						+ this.getNewData().getContactPhone().length() + " characters) exceeds the limit of "
+						+ objectToValidate.getContactPhone().length() + " characters) exceeds the limit of "
 						+ CustomerController.CONTACT_PHONE_LENGTH_MAX.toString() + " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			} else {
-				if (!Utilities.phoneNumberValidation(this.getNewData().getContactPhone())) {
+				if (!Utilities.phoneNumberValidation(objectToValidate.getContactPhone())) {
 					messageDetail = "Error - Contact phone wrong format";
 					logger.error(messageDetail);
 					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message,
@@ -1561,18 +1573,17 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 			}
 		}
 
-		if (this.getNewData().getEMail() != null && !this.getNewData().getEMail().isEmpty()) {
-			if (((Integer) this.getNewData().getEMail().length())
-					.compareTo(CustomerController.E_MAIL_LENGTH_MAX) > 0) {
+		if (objectToValidate.getEMail() != null && !objectToValidate.getEMail().isEmpty()) {
+			if (((Integer) objectToValidate.getEMail().length()).compareTo(CustomerController.E_MAIL_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
-				messageDetail = "Error - The e-mail of the customer (" + this.getNewData().getEMail().length()
+				messageDetail = "Error - The e-mail of the customer (" + objectToValidate.getEMail().length()
 						+ " characters) exceeds the limit of " + CustomerController.E_MAIL_LENGTH_MAX.toString()
 						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			} else {
-				if (!Utilities.emailValidation(this.getNewData().getEMail())) {
+				if (!Utilities.emailValidation(objectToValidate.getEMail())) {
 					messageDetail = "Error - E-mail wrong format";
 					logger.error(messageDetail);
 					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message,
@@ -1589,11 +1600,13 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 	/**
 	 * Validates the bank account tab of the wizard
 	 */
-	public boolean validateNewBankAccount() {
+	public boolean validateNewBankAccount(Object object) {
 		String message = "BANK ACCOUNT DATA VALIDATION";
 		String messageDetail;
 		boolean validation = true;
 		boolean filledBankData = true;
+		
+		ItCustomer objectToValidate= (ItCustomer) object;
 
 		if (this.isFromAddingRow()) {
 			message = "NEW CUSTOMER ROW " + message;
@@ -1605,24 +1618,26 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 			}
 		}
 
-		if (this.getNewData().getIban() != null) {
-			this.getNewData().setIban(this.getNewData().getIban().toUpperCase().trim());
+		if (objectToValidate.getIban() != null) {
+			objectToValidate.setIban(objectToValidate.getIban().toUpperCase().trim());
 		}
 
-		if ((this.getNewData().getIban() == null || this.getNewData().getIban().isEmpty())
-				&& (this.getNewData().getBankEntity() == null || this.getNewData().getBankEntity().isEmpty())
-				&& (this.getNewData().getBankControlDigit() == null
-						|| this.getNewData().getBankControlDigit().isEmpty())
-				&& (this.getNewData().getBankAccountNumber() == null
-						|| this.getNewData().getBankAccountNumber().isEmpty())) {
+		if ((objectToValidate.getIban() == null || objectToValidate.getIban().isEmpty())
+				&& (objectToValidate.getBankEntity() == null || objectToValidate.getBankEntity().isEmpty())
+				&& (objectToValidate.getBankControlDigit() == null
+						|| objectToValidate.getBankControlDigit().isEmpty())
+				&& (objectToValidate.getBankAccountNumber() == null
+						|| objectToValidate.getBankAccountNumber().isEmpty())) {
 			// no one of data bank field was filled
 			filledBankData = false;
 		} else {
-			if (this.getNewData().getIban() != null && (! this.getNewData().getIban().isEmpty()) 
-					&& this.getNewData().getBankEntity() != null && (! this.getNewData().getBankEntity().isEmpty())
-					&& this.getNewData().getBankBranch() != null && (! this.getNewData().getBankBranch().isEmpty())
-					&& this.getNewData().getBankControlDigit() != null && (! this.getNewData().getBankControlDigit().isEmpty())
-					&& this.getNewData().getBankAccountNumber() != null && (! this.getNewData().getBankAccountNumber().isEmpty())) {
+			if (objectToValidate.getIban() != null && (!objectToValidate.getIban().isEmpty())
+					&& objectToValidate.getBankEntity() != null && (!objectToValidate.getBankEntity().isEmpty())
+					&& objectToValidate.getBankBranch() != null && (!objectToValidate.getBankBranch().isEmpty())
+					&& objectToValidate.getBankControlDigit() != null
+					&& (!objectToValidate.getBankControlDigit().isEmpty())
+					&& objectToValidate.getBankAccountNumber() != null
+					&& (!objectToValidate.getBankAccountNumber().isEmpty())) {
 				// all data bank field was filled
 				filledBankData = true;
 			} else {
@@ -1633,58 +1648,55 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 				validation = false;
 				filledBankData = false;
 			}
-		}		
-		
+		}
 
 		if (filledBankData) {
 			// Validates the bank data
-			if (((Integer) this.getNewData().getIban().length()).compareTo(CustomerController.IBAN_LENGTH) != 0) {
+			if (((Integer) objectToValidate.getIban().length()).compareTo(CustomerController.IBAN_LENGTH) != 0) {
 				// length characters exceeds the maximum length
-				messageDetail = "Error - The IBAN of the customer (" + this.getNewData().getIban().length()
+				messageDetail = "Error - The IBAN of the customer (" + objectToValidate.getIban().length()
 						+ " characters) must be " + CustomerController.IBAN_LENGTH.toString() + " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			}
 
-			if (((Integer) this.getNewData().getBankEntity().length())
+			if (((Integer) objectToValidate.getBankEntity().length())
 					.compareTo(CustomerController.BANK_ENTITY_LENGTH) != 0) {
 				// length characters exceeds the maximum length
-				messageDetail = "Error - The bank entity of the customer ("
-						+ this.getNewData().getBankEntity().length() + " characters) must be "
-						+ CustomerController.BANK_ENTITY_LENGTH.toString() + " characters";
+				messageDetail = "Error - The bank entity of the customer (" + objectToValidate.getBankEntity().length()
+						+ " characters) must be " + CustomerController.BANK_ENTITY_LENGTH.toString() + " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			}
 
-			if (((Integer) this.getNewData().getBankBranch().length())
+			if (((Integer) objectToValidate.getBankBranch().length())
 					.compareTo(CustomerController.BANK_BRANCH_LENGTH) != 0) {
 				// length characters exceeds the maximum length
-				messageDetail = "Error - The bank branch of the customer ("
-						+ this.getNewData().getBankBranch().length() + " characters) must be "
-						+ CustomerController.BANK_BRANCH_LENGTH.toString() + " characters";
+				messageDetail = "Error - The bank branch of the customer (" + objectToValidate.getBankBranch().length()
+						+ " characters) must be " + CustomerController.BANK_BRANCH_LENGTH.toString() + " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			}
 
-			if (((Integer) this.getNewData().getBankControlDigit().length())
+			if (((Integer) objectToValidate.getBankControlDigit().length())
 					.compareTo(CustomerController.BANK_CONTROL_DIGIT_LENGTH) != 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The bank control digit of the customer ("
-						+ this.getNewData().getBankControlDigit().length() + " characters) must be "
+						+ objectToValidate.getBankControlDigit().length() + " characters) must be "
 						+ CustomerController.BANK_CONTROL_DIGIT_LENGTH.toString() + " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			}
 
-			if (((Integer) this.getNewData().getBankAccountNumber().length())
+			if (((Integer) objectToValidate.getBankAccountNumber().length())
 					.compareTo(CustomerController.BANK_ACCOUNT_NUMBER_LENGTH) != 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The bank account number of the customer ("
-						+ this.getNewData().getBankAccountNumber().length() + " characters) must be "
+						+ objectToValidate.getBankAccountNumber().length() + " characters) must be "
 						+ CustomerController.BANK_ACCOUNT_NUMBER_LENGTH.toString() + " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
@@ -1705,28 +1717,28 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 		switch (currentStep) {
 		case "instanceDataTab":
 
-			validate = this.validateNewInstance();
+			validate = this.validateNewInstance(this.getNewData());
 
 			break;
 		case "personalDataTab":
 			if (!stepToGo.equals("instanceDataTab")) {
-				validate = this.validateNewPersonal();
+				validate = this.validateNewPersonal(this.getNewData());
 			}
 			break;
 		case "addressTab":
 			if (!stepToGo.equals("personalDataTab")) {
-				validate = this.validateNewAddress();
+				validate = this.validateNewAddress(this.getNewData());
 			}
 			break;
 		case "contactTab":
 			if (!stepToGo.equals("addressTab")) {
-				validate = this.validateNewContact();
+				validate = this.validateNewContact(this.getNewData());
 			}
 			break;
 
 		case "bankAccountTab":
 			if (!stepToGo.equals("contactTab")) {
-				validate = this.validateNewBankAccount();
+				validate = this.validateNewBankAccount(this.getNewData());
 			}
 			break;
 		}
@@ -1769,7 +1781,7 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 						&& (row != 0)) {
 					// new start date = minDate for a row different from first row ==> error
 					messageDetail = "Error in dates - Only the first row can sets the start date to the minimum allowed date.";
-					logger.info("Create promotion type: " + newObject.toString() + " - " + messageDetail);
+					logger.info("Create customer: " + newObject.toString() + " - " + messageDetail);
 					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
 							messageDetail);
 					error = true;
@@ -1779,7 +1791,7 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 						&& row != (totalRows - 1)) {
 					// new end date = maxDate for a row different from last row ==> error
 					messageDetail = "Error in dates - Only the last row can sets the end date to the maximum allowed date.";
-					logger.info("Create promotion type: " + newObject.toString() + " - " + messageDetail);
+					logger.info("Create custom: " + newObject.toString() + " - " + messageDetail);
 					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
 							messageDetail);
 					error = true;
@@ -1868,8 +1880,7 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 									} else {
 										// no consecutive records ==> error
 										messageDetail = "Error in dates - The new and current dates are not consecutives.";
-										logger.info("Create promotion type: " + newObject.toString() + " - "
-												+ messageDetail);
+										logger.info("Create custom: " + newObject.toString() + " - " + messageDetail);
 										this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO,
 												message, messageDetail);
 										error = true;
@@ -1879,7 +1890,7 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 							} else {
 								// not the first row ==> not allowed
 								messageDetail = "Error in dates - The new end date can not be less than current start date.";
-								logger.info("Create promotion type: " + newObject.toString() + " - " + messageDetail);
+								logger.info("Create custom: " + newObject.toString() + " - " + messageDetail);
 								this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
 										messageDetail);
 								error = true;
@@ -2048,7 +2059,101 @@ public class CustomerController extends BasicInstanceClass<ItCustomer>
 	@Override
 	public void changeSearchDataTableTitle() {
 		// TODO Auto-generated method stub
-		
+
+	}
+	
+	
+	/**
+	 * Action to do when push the search customer button in create new account form
+	 */
+	@Override
+	public void pushSearchParentButton() {
+		// TODO Auto-generated method stub
+
+	}
+	
+	@Override
+	public void addParentToInstanceRowButton() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void changeActiveDate(ValueChangeEvent e) {
+		// Integer oldStatusId = (Integer) e.getOldValue();
+		LocalDateTime newActiveDate = (LocalDateTime) e.getNewValue();
+		LocalDateTime originalActiveDate;
+		int i;
+
+		// Gets the current User
+		DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot()
+				.findComponent(HISTORIC_DATA_TABLE_ID);
+		ItCustomer data = (ItCustomer) dataTable.getRowData();
+
+		this.setSelectedHistoricData(data);
+
+		// Gets the row of the current User
+		String row = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
+				.get("currentHistoricalRow");
+		this.setCurrentHistoricRow(Integer.parseInt(row));
+
+		// Gets the status Id previous to the edition of the row
+		originalActiveDate = this.getBackupHistoricDataList().get(this.getCurrentRow()).getActiveDate();
+
+		if ((originalActiveDate == null) || ((newActiveDate == null) && !(originalActiveDate == null))
+				|| (!originalActiveDate.isEqual(newActiveDate))) {
+
+			this.setActiveDateChanged(true);
+
+			// the active date was changed
+			for (i = 0; i < dataTable.getRowCount(); i++) {
+				dataTable.setRowIndex(i);
+				((ItCustomer) dataTable.getRowData()).setActiveDate(newActiveDate);
+				;
+				Ajax.updateRow(dataTable, i);
+
+			}
+
+		}
+	}
+
+	@Override
+	public void changeCancelledDate(ValueChangeEvent e) {
+		// Integer oldStatusId = (Integer) e.getOldValue();
+		LocalDateTime newCancelledDate = (LocalDateTime) e.getNewValue();
+		LocalDateTime originalCancelledDate;
+		int i;
+
+		// Gets the current User
+		DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot()
+				.findComponent(HISTORIC_DATA_TABLE_ID);
+		ItCustomer data = (ItCustomer) dataTable.getRowData();
+
+		this.setSelectedHistoricData(data);
+
+		// Gets the row of the current User
+		String row = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap()
+				.get("currentHistoricalRow");
+		this.setCurrentHistoricRow(Integer.parseInt(row));
+
+		// Gets the status Id previous to the edition of the row
+		originalCancelledDate = this.getBackupHistoricDataList().get(this.getCurrentRow()).getActiveDate();
+
+		if ((originalCancelledDate == null) || ((newCancelledDate == null) && !(originalCancelledDate == null))
+				|| (!originalCancelledDate.isEqual(newCancelledDate))) {
+
+			this.setCancelledDateChanged(true);
+
+			// the active date was changed
+			for (i = 0; i < dataTable.getRowCount(); i++) {
+				dataTable.setRowIndex(i);
+				((ItCustomer) dataTable.getRowData()).setActiveDate(newCancelledDate);
+				;
+				Ajax.updateRow(dataTable, i);
+
+			}
+
+		}
 	}
 
 }

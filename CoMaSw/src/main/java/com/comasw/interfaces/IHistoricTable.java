@@ -1,6 +1,5 @@
 package com.comasw.interfaces;
 
-import javax.faces.event.ValueChangeEvent;
 
 public interface IHistoricTable extends ITableAdd {
 
@@ -37,11 +36,5 @@ public interface IHistoricTable extends ITableAdd {
 	 */
 	public void refreshHistoricDataTable();
 
-	/**
-	 * Action to do when changes the search date
-	 * 
-	 * @param e - change event
-	 */
-	public void changeSearchDate(ValueChangeEvent e);
-
+	
 }

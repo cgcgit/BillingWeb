@@ -28,14 +28,14 @@ import org.primefaces.event.RowEditEvent;
 import com.comasw.model.tables.pojos.CtPromotionType;
 import com.comasw.model.tables.pojos.VwUsers;
 import com.comasw.ejb.catalog.type.PromotionTypeEJBLocal;
-import com.comasw.generalClass.BasicHistoricWithLists;
+import com.comasw.generalClass.BasicHistoricType;
 import com.comasw.interfaces.IEditableHistoricTable;
 import com.comasw.utilities.Formatter;
 import com.comasw.utilities.Utilities;
 
 @Named
 @ViewScoped
-public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionType>
+public class PromotionTypeController extends BasicHistoricType<CtPromotionType>
 		implements Serializable, IEditableHistoricTable {
 
 	/**
@@ -55,7 +55,6 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 	@EJB
 	private PromotionTypeEJBLocal promotionTypeEJB;
 
-	
 	// -------------------
 	// METHODS
 	// -------------------
@@ -85,7 +84,7 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 		if (this.getFilteredDataList() == null) {
 			this.setFilteredDataList(new ArrayList<CtPromotionType>());
 		}
-		
+
 		if (this.getSelectedDataList() == null) {
 			this.setSelectedDataList(new ArrayList<CtPromotionType>());
 		}
@@ -211,7 +210,7 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 			this.setShowSelectedData(true);
 			this.getSelectedDataList().clear();
 			this.getSelectedDataList().add(this.getSelectedData());
-			loadHistoricalDataList();
+			this.refreshHistoricDataTable();
 
 			messageDetail = "Shown data for promotion: ";
 			logger.info(message + " - " + messageDetail + this.getSelectedData().toString());
@@ -220,7 +219,6 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 
 			PrimeFaces.current().executeScript("PF('searchListWidget').hide();");
 			PrimeFaces.current().executeScript("PF('multipleAccordionPanelWidget').selectAll();");
-			resetFilterHistoricDataTable();
 
 		}
 
@@ -280,7 +278,6 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 		boolean validation = false;
 		CtPromotionType originalDataObject;
 		CtPromotionType otherRecordDataObject;
-		boolean changeHistoricRecords = false;
 
 		message = "SAVE EDIT ROW";
 
@@ -331,7 +328,6 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 									otherRecordDataObject = this.backupHistoricDataList.get(pos - 1);
 									promotionTypeEJB.deleteData(otherRecordDataObject);
 
-									changeHistoricRecords = true;
 								}
 
 							}
@@ -354,23 +350,16 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 									// deletes the original data for this record
 									otherRecordDataObject = this.backupHistoricDataList.get(pos + 1);
 									promotionTypeEJB.deleteData(otherRecordDataObject);
-
-									changeHistoricRecords = true;
 								}
 							}
 						}
 					}
 				}
 
-				if (changeHistoricRecords) {
-
-					// update the current data record
-					promotionTypeEJB.updateHistoricDataRecord(dataObject);
-					// delete the original data of the record
-					promotionTypeEJB.deleteData(originalDataObject);
-				} else {
-					promotionTypeEJB.updateData(dataObject);
-				}
+				// delete the original data of the record
+				promotionTypeEJB.deleteData(originalDataObject);
+				// update the current data record
+				promotionTypeEJB.updateHistoricDataRecord(dataObject);
 
 				// Check if the status was changed to cancel --> if so, we must update the
 				// status of the subsequent rows
@@ -583,7 +572,7 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 		try {
 			if (this.objectValidation(this.getNewData())) {
 				if (this.isFromAddingRow()) {
-					// Gets the table					
+					// Gets the table
 					DataTable dataTable = (DataTable) facesContext.getViewRoot().findComponent(HISTORIC_DATA_TABLE_ID);
 					error = splitRecords(dataTable, row, this.getNewData());
 				} else {
@@ -634,19 +623,17 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 			if (error) {
 				facesContext.validationFailed();
 			} else {
-				
-				//this.refreshSelectedDataAttribute();
-				
+
+				// this.refreshSelectedDataAttribute();
+
 				if (this.isFromAddingRow()) {
-					this.resetFilterHistoricDataTable();
-					this.loadHistoricalDataList();
+					this.refreshHistoricDataTable();
 					// Ajax.update(HISTORIC_DATA_TABLE_ID);
 					this.setFromAddingRow(false);
 
 				} else {
 					// Ajax.update(DATA_TABLE_ID);
-					this.resetFilterHistoricDataTable();
-					loadHistoricalDataList();
+					this.refreshHistoricDataTable();
 					this.setShowSelectedData(true);
 					PrimeFaces.current().executeScript("PF('multipleAccordionPanelWidget').selectAll();");
 					messageDetail = "Shown data for promotion: ";
@@ -664,9 +651,8 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 	@Override
 	public void pushCancelButtonCreateNewDialog() {
 		if (this.isFromAddingRow()) {
-			this.resetFilterHistoricDataTable();
+			this.refreshHistoricDataTable();
 			this.setFromAddingRow(false);
-			this.loadHistoricalDataList();
 		}
 		this.changeNewDialogHeader();
 		DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot()
@@ -745,7 +731,7 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
 							messageDetail);
 				}
-				
+
 			} else {
 				error = true;
 				messageDetail = "ERROR - Selected data is null";
@@ -781,7 +767,6 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 			if (error) {
 				facesContext.validationFailed();
 			} else {
-				this.resetFilterHistoricDataTable();
 
 				if (lastPos == 0) {
 					// if it was only one row, reset the selected data
@@ -789,9 +774,9 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 					this.getSelectedDataList().clear();
 					this.getHistoricDataList().clear();
 				} else {
-					this.loadHistoricalDataList();
+					this.refreshHistoricDataTable();
 				}
-			}			
+			}
 		}
 	}
 
@@ -879,10 +864,10 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			} else if (((Integer) objectToValidate.getCode().length())
-					.compareTo(BasicHistoricWithLists.CODE_FIELD_LENGTH_MAX) > 0) {
+					.compareTo(BasicHistoricType.CODE_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The code of the promotion type (" + objectToValidate.getCode().length()
-						+ " characters) exceeds the limit of " + BasicHistoricWithLists.CODE_FIELD_LENGTH_MAX.toString()
+						+ " characters) exceeds the limit of " + BasicHistoricType.CODE_FIELD_LENGTH_MAX.toString()
 						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
@@ -894,10 +879,10 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			} else if (((Integer) objectToValidate.getName().length())
-					.compareTo(BasicHistoricWithLists.NAME_FIELD_LENGTH_MAX) > 0) {
+					.compareTo(BasicHistoricType.NAME_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The name of the promotion type (" + objectToValidate.getName().length()
-						+ " characters) exceeds the limit of " + BasicHistoricWithLists.NAME_FIELD_LENGTH_MAX.toString()
+						+ " characters) exceeds the limit of " + BasicHistoricType.NAME_FIELD_LENGTH_MAX.toString()
 						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
@@ -910,11 +895,11 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			} else if (((Integer) objectToValidate.getDescription().length())
-					.compareTo(BasicHistoricWithLists.DESCRIPTION_FIELD_LENGTH_MAX) > 0) {
+					.compareTo(BasicHistoricType.DESCRIPTION_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The description of the promotion type ("
 						+ objectToValidate.getDescription().length() + " characters) exceeds the limit of "
-						+ BasicHistoricWithLists.DESCRIPTION_FIELD_LENGTH_MAX.toString() + " characters";
+						+ BasicHistoricType.DESCRIPTION_FIELD_LENGTH_MAX.toString() + " characters";
 
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
@@ -1017,9 +1002,9 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 				this.setSelectedData(this.getSelectedDataList().get(0));
 			}
 		}
-			this.resetFilterHistoricDataTable();
-			this.loadHistoricalDataList();
-			Ajax.update(HISTORIC_DATA_TABLE_ID);		
+		this.resetFilterHistoricDataTable();
+		this.loadHistoricalDataList();
+		Ajax.update(HISTORIC_DATA_TABLE_ID);
 	}
 
 	@Override
@@ -1222,22 +1207,6 @@ public class PromotionTypeController extends BasicHistoricWithLists<CtPromotionT
 				+ " - Do you really want to set the status to cancel from historic period ["
 				+ Formatter.localDateTimeToString(this.getSelectedHistoricData().getStartDate()) + ", "
 				+ Formatter.localDateTimeToString(this.getSelectedHistoricData().getEndDate()) + "] onwards?");
-	}
-
-	@Override
-	public void changeSearchDate(ValueChangeEvent e) {
-		LocalDateTime newSearchDate = (LocalDateTime) e.getNewValue();
-		String message, messageDetail;
-
-		message = "CHANGE SEARCH DATE";
-
-		if (newSearchDate != null) {
-			this.setSearchDate(newSearchDate);
-		} else {
-			messageDetail = "ERROR - The search date can not be null";
-			logger.fatal(messageDetail);
-			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-		}
 	}
 
 	@SuppressWarnings("finally")

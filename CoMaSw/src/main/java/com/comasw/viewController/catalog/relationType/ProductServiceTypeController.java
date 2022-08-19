@@ -33,7 +33,7 @@ import com.comasw.ejb.catalog.relationType.ProductServiceTypeEJBLocal;
 import com.comasw.ejb.catalog.type.ProductTypeEJBLocal;
 import com.comasw.ejb.parameterization.StatusEJBLocal;
 import com.comasw.exception.CoMaSwDataAccessException;
-import com.comasw.generalClass.RelationBasicTypeWithList;
+import com.comasw.generalClass.BasicRelationType;
 import com.comasw.interfaces.IRelationsTable;
 import com.comasw.model.tables.pojos.VwProductServiceType;
 
@@ -44,7 +44,7 @@ import com.comasw.model.tables.pojos.VwProductServiceType;
  *
  */
 public class ProductServiceTypeController
-		extends RelationBasicTypeWithList<CtProductType, VwProductServiceType, CtServiceType>
+		extends BasicRelationType<CtProductType, VwProductServiceType, CtServiceType>
 		implements Serializable, IRelationsTable {
 
 	/**

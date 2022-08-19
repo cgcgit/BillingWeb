@@ -58,13 +58,13 @@
 		<p:remoteCommand id="remoteCommandUpdateHistoricCandidateTable"
 			name="updateHistoricCandidateTable" process="@this"
 			update=":form:accordionPanel:historicCandidateTable" />
-			
+
 		<p:remoteCommand id="remoteCommandUpdatePanelData"
 			name="updatePanelData" process="@this"
 			update="form:accordionPanel:selectedTablePanel
 			form:accordionPanel:relatedTablePanel
 			form:accordionPanel:buttonPanel
-			form:accordionPanel:candidateTablePanel" />			
+			form:accordionPanel:candidateTablePanel" />
 
 
 		<p:accordionPanel id="accordionPanel" multiple="true"
@@ -77,19 +77,20 @@
 				<p:commandButton id="searchDataButton" value="Search"
 					icon="#{uiValue.searchIcon}"
 					actionListener="#{productFeeTypeController.pushSearchButton()}"
-					ajax="true" immediate="true" update=":form:growlMessage"
-					style="width:7rem" oncomplete="#{updateSearchTable}"
-					styleClass="p-mx-3" class="ui-button-success rounded-button">
+					ajax="true" update=":form:growlMessage" style="width:7rem"
+					oncomplete="#{updateSearchTable}" styleClass="p-mx-3"
+					class="ui-button-success rounded-button">
 				</p:commandButton>
 
 				<p:overlayPanel id="searchList" for="searchDataButton"
-					style="width:95%;" showCloseIcon="true" dismissable="true"
-					widgetVar="searchListWidget">
+					showEvent="oncomplete" style="width:95%;" showCloseIcon="true"
+					dismissable="true" widgetVar="searchListWidget">
 					<p />
 
 					<p />
-					<p:dataTable id="dataTable" widgetVar="dataTableWidget" partialUpdate="disabled"
-						var="dataTable" value="#{productFeeTypeController.dataList}"
+					<p:dataTable id="dataTable" widgetVar="dataTableWidget"
+						partialUpdate="disabled" var="dataTable"
+						value="#{productFeeTypeController.dataList}"
 						rowIndexVar="rowIndexSearchTable"
 						rowKey="#{dataTable.productTypeId}" selectionMode="single"
 						selection="#{productFeeTypeController.selectedData}"
@@ -197,9 +198,10 @@
 					visible="#{productFeeTypeController.showDependentData}">
 					<p:dataTable id="selectedTable" widgetVar="selectedTableWidget"
 						var="selectedDataTable"
-						value="#{productFeeTypeController.selectedDataList}" rendered="true"
-						size="small" scrollable="true" emptyMessage="No data to show"
-						showGridlines="true" paginatorPosition="bottom">
+						value="#{productFeeTypeController.selectedDataList}"
+						rendered="true" size="small" scrollable="true"
+						emptyMessage="No data to show" showGridlines="true"
+						paginatorPosition="bottom">
 
 
 						<p:column id="selectedCode"
@@ -319,10 +321,10 @@
 												value="#{productFeeTypeController.searchDate}"
 												mask="99/99/9999" style="width:7rem; height:2rem"
 												styleClass="p-mx-3"
-												valueChangeListener="#{productFeeTypeController.changeSearchDate}"
 												requiredMessage="The date value to search is null. Please fill the search date field">
 												<f:converter
 													converterId="com.comasw.converter.localDateTimeConverter" />
+												<p:ajax event="valueChange" immediate="true" process="@this" />
 											</p:inputMask>
 										</p:panel>
 										<p:commandButton id="refreshRelatedTable"
@@ -652,7 +654,7 @@
                                    width: 40px;    
                                    overflow: hidden"
 								class="ui-button-warning rounded-button"
-								icon="#{uiValue.viewIcon}" immediate="true" ajax="true"
+								icon="#{uiValue.viewIcon}" ajax="true"
 								actionListener="#{productFeeTypeController.pushShowHistoricCandidateRowButton}"
 								oncomplete="{updateHistoricCandidateTable()}  PF('historicCandidateListWidget').show('#{component.clientId}')">
 								<f:setPropertyActionListener value="#{candidateDataTable}"
@@ -697,7 +699,7 @@
 						</p:column>
 					</p:dataTable>
 
-					<p:overlayPanel id="historicCandidateList"
+					<p:overlayPanel id="historicCandidateList" showEvent="oncomplete"
 						style="width:95%;background: WhiteSmoke; color: black"
 						showCloseIcon="true" dismissable="false" dynamic="false"
 						my="center top" at="center bottom"

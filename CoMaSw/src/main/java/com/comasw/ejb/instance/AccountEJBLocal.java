@@ -8,10 +8,11 @@ import javax.ejb.Local;
 
 import com.comasw.exception.CoMaSwDataAccessException;
 import com.comasw.model.tables.pojos.ItAccount;
+import com.comasw.model.tables.pojos.VwAccountInstance;
 
 @Local
 public interface AccountEJBLocal {
-	
+
 	/**
 	 * Find all the account data stores in the system
 	 * 
@@ -19,8 +20,7 @@ public interface AccountEJBLocal {
 	 * @throws CoMaSwDataAccessException
 	 */
 	public List<ItAccount> findAllData() throws CoMaSwDataAccessException;
-	
-	
+
 	/**
 	 * Find the account data stores in the system for the given accountId
 	 * 
@@ -29,8 +29,7 @@ public interface AccountEJBLocal {
 	 * @throws CoMaSwDataAccessException
 	 */
 	public List<ItAccount> findDataByAccountId(Integer accountId) throws CoMaSwDataAccessException;
-	
-	
+
 	/**
 	 * Find the account data stores in the system for the given customerId
 	 * 
@@ -39,17 +38,15 @@ public interface AccountEJBLocal {
 	 * @throws CoMaSwDataAccessException
 	 */
 	public List<ItAccount> findDataByCustomerId(Integer customerId) throws CoMaSwDataAccessException;
-	
-	
+
 	/**
-	 * Find the account data stores in the system for the given contractId
+	 * Find the account data stores in the system for the given contractNr
 	 * 
-	 * @param contractId
-	 * @return type data in the system for the given contractId
+	 * @param contractNr
+	 * @return type data in the system for the given contractNr
 	 * @throws CoMaSwDataAccessException
 	 */
-	public List<ItAccount> findDataByContactId(Integer contractId) throws CoMaSwDataAccessException;
-	
+	public List<ItAccount> findDataByContractNr(String contractNr) throws CoMaSwDataAccessException;
 
 	/**
 	 * Find the account data stores in the system for the given searchDate
@@ -60,7 +57,6 @@ public interface AccountEJBLocal {
 	 */
 	public List<ItAccount> findDataBySearchDate(LocalDateTime searchDate) throws CoMaSwDataAccessException;
 
-	
 	/**
 	 * Find the account data stores in the system for the given accountId and
 	 * searchDate
@@ -72,22 +68,18 @@ public interface AccountEJBLocal {
 	 */
 	public ItAccount findDataBySearchDateAndAccountId(LocalDateTime searchDate, Integer accountId)
 			throws CoMaSwDataAccessException;
-	
 
 	/**
-	 * Find the account data stores in the system for the given contractId and
+	 * Find the account data stores in the system for the given contractNr and
 	 * searchDate
 	 * 
 	 * @param searchDate
-	 * @param contractId
-	 * @return type data in the system for the given contractId and searchDate
+	 * @param contractNr
+	 * @return type data in the system for the given contractNr and searchDate
 	 * @throws CoMaSwDataAccessException
 	 */
-	public ItAccount findDataBySearchDateAndContractId(LocalDateTime searchDate, Integer contractId)
+	public ItAccount findDataBySearchDateAndContractNr(LocalDateTime searchDate, String contractNr)
 			throws CoMaSwDataAccessException;
-	
-
-	
 
 	/**
 	 * Find the account data stores in the system for the given customerId and
@@ -100,30 +92,53 @@ public interface AccountEJBLocal {
 	 */
 	public ItAccount findDataBySearchDateAndCustomerId(LocalDateTime searchDate, Integer customerId)
 			throws CoMaSwDataAccessException;
-	
 
-	
 	/**
 	 * Return all data of the account instance in the system for a giving search
-     * criteria. The parameters are optional, but there must be at least one parameter specified.
-	 * @param searchDate date criteria to search
-	 * @param accountId account id criteria to search
-	 * @param accountTypeId account type id criteria to search
-	 * @param contractId contract id criteria to search
-	 * @param customerId customer id criteria to search 
+	 * criteria. The parameters are optional, but there must be at least one
+	 * parameter specified.
+	 * 
+	 * @param searchDate      date criteria to search
+	 * @param accountId       account id criteria to search
+	 * @param accountTypeId   account type id criteria to search
+	 * @param contractNr      contract number criteria to search
+	 * @param customerId      customer id criteria to search
 	 * @param accountStatusId status id criteria to search
-	 * @param accountIdCard account identity card criteria to search
-	 * @param customerIdCard customer identity card criteria to search
+	 * @param accountIdCard   account identity card criteria to search
+	 * @param customerIdCard  customer identity card criteria to search
 	 * @return account list for the criteria
 	 * @throws CoMaSwDataAccessException
 	 */
-	public List<ItAccount> findInstanceWithParameters(Optional<LocalDateTime> searchDate,
-			Optional<Integer> accountId, Optional<Integer> accountTypeId, Optional<Integer> contractId,
-			Optional<Integer> customerId, Optional<Integer> accountStatusId, 
-			Optional<String> accountIdCard,
+	public List<ItAccount> findInstanceWithParameters(Optional<LocalDateTime> searchDate, Optional<Integer> accountId,
+			Optional<Integer> accountTypeId, Optional<String> contractNr,
+			Optional<Integer> customerId, Optional<Integer> accountStatusId, Optional<String> accountIdCard,
 			Optional<String> customerIdCard) throws CoMaSwDataAccessException;
+
 	
-		
+	/**
+	 * Return all data of the account instance view in the system for a giving search
+	 * criteria. The parameters are optional, but there must be at least one
+	 * parameter specified.
+	 * 
+	 * @param searchDate      date criteria to search
+	 * @param contractNr      contract number criteria to search
+	 * @param accountId       account id criteria to search
+	 * @param accountTypeId   account type id criteria to search
+	 * @param accountIdCard   account identity card criteria to search
+	 * @param customerId      customer id criteria to search
+	 * @param customerTypeId  customer type id criteria to search
+	 * @param customerIdCard  customer identity card criteria to search
+	 * @return account list for the criteria
+	 * @throws CoMaSwDataAccessException
+	 */
+	public List<VwAccountInstance> findInstanceViewWithParameters(Optional<LocalDateTime> searchDate, 
+			Optional<String> contractNr,
+			Optional<Integer> accountId,
+			Optional<Integer> accountTypeId, 
+			Optional<String> accountIdCard,
+			Optional<Integer> customerId, 
+			Optional<Integer> customerTypeId,
+			Optional<String> customerIdCard) throws CoMaSwDataAccessException;
 	
 	/**
 	 * Gets a new Id from the sequence associates to the entity
@@ -135,13 +150,14 @@ public interface AccountEJBLocal {
 	public Integer getNewId() throws CoMaSwDataAccessException;
 
 	/**
-	 * Inserts into the system (database) the given new account. It creates a new
-	 * Id and inserts into the id table.
+	 * Inserts into the system (database) the given new account. It creates a new Id
+	 * and inserts into the id table.
 	 * 
 	 * @param dataObject account object to insert
+	 * @return integer with the id of the account object
 	 * @throws CoMaSwDataAccessException
 	 */
-	public void insertData(ItAccount dataObject) throws CoMaSwDataAccessException;
+	public Integer insertData(ItAccount dataObject) throws CoMaSwDataAccessException;
 
 	/**
 	 * Inserts into the system (database) a new account record.

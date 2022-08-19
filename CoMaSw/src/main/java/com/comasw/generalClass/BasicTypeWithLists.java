@@ -9,18 +9,15 @@ import javax.faces.model.SelectItem;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 
-import com.comasw.ejb.catalog.type.CustomerTypeEJBLocal;
+
 import com.comasw.ejb.parameterization.ApplicationLevelEJBLocal;
 import com.comasw.ejb.parameterization.ConsumptionClassEJBLocal;
 import com.comasw.ejb.parameterization.DiscountTypeEJBLocal;
-import com.comasw.ejb.parameterization.IdentityCardTypeEJBLocal;
 import com.comasw.ejb.parameterization.PaymentMethodEJBLocal;
 import com.comasw.ejb.parameterization.StatusEJBLocal;
-import com.comasw.model.tables.pojos.CtCustomerType;
 import com.comasw.model.tables.pojos.PtApplicationLevel;
 import com.comasw.model.tables.pojos.PtConsumptionClass;
 import com.comasw.model.tables.pojos.PtDiscountType;
-import com.comasw.model.tables.pojos.PtIdentityCardType;
 import com.comasw.model.tables.pojos.PtPaymentMethod;
 import com.comasw.model.tables.pojos.PtStatus;
 
@@ -43,12 +40,7 @@ public class BasicTypeWithLists<T> extends BasicType<T> {
 
 	@EJB
 	private PaymentMethodEJBLocal paymentMethodEJB;
-	
-	@EJB
-	private IdentityCardTypeEJBLocal identityCardTypeEJB;
-	
-	@EJB
-	private CustomerTypeEJBLocal customerTypeEJB;
+
 
 	/*
 	 * Return a boolean list
@@ -234,57 +226,4 @@ public class BasicTypeWithLists<T> extends BasicType<T> {
 	}
 
 	
-	/*
-	 * Return the list of select items with the identity card type data
-	 */
-	public List<SelectItem> identityCardTypeSelectItems() {
-		List<SelectItem> selectItem = new ArrayList<>();
-		List<PtIdentityCardType> list = identityCardTypeEJB.findAllData();
-
-		SelectItem nullItem = new SelectItem();
-		nullItem.setLabel("Select One... ");
-		nullItem.setValue(null);
-		selectItem.add(nullItem);
-
-		if (list.isEmpty()) {
-			logger.error("ERROR - Not find identity card type list");
-		} else {
-			for (PtIdentityCardType p : list) {
-				SelectItem item = new SelectItem();
-				item.setLabel(p.getCode());
-				item.setValue(p.getIdentityCardTypeId());
-				item.setDescription(p.getDescription());
-				selectItem.add(item);
-			}
-		}
-		return selectItem;
-	}
-	
-
-	/*
-	 * Return the list of select items with the identity card type data
-	 */
-	public List<SelectItem> customerTypeSelectItems() {
-		List<SelectItem> selectItem = new ArrayList<>();
-		List<CtCustomerType> list = customerTypeEJB.findAllData();
-
-		SelectItem nullItem = new SelectItem();
-		nullItem.setLabel("Select One... ");
-		nullItem.setValue(null);
-		selectItem.add(nullItem);
-
-		if (list.isEmpty()) {
-			logger.error("ERROR - Not find customer type list");
-		} else {
-			for (CtCustomerType p : list) {
-				SelectItem item = new SelectItem();
-				item.setLabel(p.getCode());
-				item.setValue(p.getCustomerTypeId());
-				item.setDescription(p.getDescription());
-				selectItem.add(item);
-			}
-		}
-		return selectItem;
-	}
-
 }

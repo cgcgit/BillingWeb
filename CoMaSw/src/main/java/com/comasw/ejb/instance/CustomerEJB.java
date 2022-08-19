@@ -2,6 +2,7 @@ package com.comasw.ejb.instance;
 
 import static com.comasw.model.Sequences.SEQ_CUSTOMER_ID;
 import static com.comasw.model.Tables.IT_CUSTOMER;
+import static com.comasw.model.Tables.VW_CUSTOMER_INSTANCE;
 
 import static org.jooq.impl.DSL.val;
 import static org.jooq.impl.DSL.upper;
@@ -31,6 +32,7 @@ import com.comasw.exception.CoMaSwDataAccessException;
 import com.comasw.model.tables.daos.ItCustomerDao;
 import com.comasw.model.tables.daos.IdtCustomerDao;
 import com.comasw.model.tables.pojos.ItCustomer;
+import com.comasw.model.tables.pojos.VwCustomerInstance;
 import com.comasw.model.tables.pojos.IdtCustomer;
 import com.comasw.model.tables.records.ItCustomerRecord;
 
@@ -215,9 +217,81 @@ public class CustomerEJB implements CustomerEJBLocal {
             	query.close();
             }
         }
-
   
 	}
+	
+	@Override
+	public List<VwCustomerInstance> findInstanceViewWithParameters(Optional<LocalDateTime> searchDate, Optional<Integer> customerId, Optional<Integer> customerTypeId, Optional<Integer> statusId, 
+			Optional<String> identityCard, Optional<String> contactPhone, Optional<String> givenName, Optional<String> firstSurname, Optional<String> secondSurname) throws CoMaSwDataAccessException{
+		
+		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
+        SelectQuery<Record> query = create.selectQuery();
+        List<VwCustomerInstance> result = null;
+        String error = "";
+
+        if ((!searchDate.isPresent()) && (!customerId.isPresent()) && (!customerTypeId.isPresent()) && (statusId == null)
+        		&& (!identityCard.isPresent()) && (!contactPhone.isPresent())&& (!givenName.isPresent())
+                && (!firstSurname.isPresent()) && (!secondSurname.isPresent())) {
+            logger.error("ERROR - none of the criteria search was defined");
+            throw new CoMaSwDataAccessException("ERROR - none of the chriteria search was defined");
+        } else {
+
+            try {
+                query.addFrom(VW_CUSTOMER_INSTANCE);
+                if (searchDate.isPresent()) {
+                    query.addConditions(val(searchDate.get()).between(VW_CUSTOMER_INSTANCE.CUSTOMER_START_DATE).and(VW_CUSTOMER_INSTANCE.CUSTOMER_END_DATE));
+                }
+                if (customerId.isPresent()) {
+                    query.addConditions(VW_CUSTOMER_INSTANCE.CUSTOMER_ID.eq(val(customerId.get())));
+                }
+                if (customerTypeId.isPresent()) {
+                    query.addConditions(VW_CUSTOMER_INSTANCE.CUSTOMER_TYPE_ID.eq(val(customerTypeId.get())));
+                }
+                if (statusId.isPresent()) {
+                    query.addConditions(VW_CUSTOMER_INSTANCE.CUSTOMER_STATUS_ID.eq(val(statusId.get())));
+                }
+                if (identityCard.isPresent()) {
+                    if (identityCard.get().length() > 0) {
+                        query.addConditions(upper(VW_CUSTOMER_INSTANCE.CUSTOMER_IDENTITY_CARD).eq(upper(val(identityCard.get().trim()))));
+                    }
+                }
+                if (givenName.isPresent()) {
+                    if (givenName.get().length() > 0) {
+                        query.addConditions(upper(VW_CUSTOMER_INSTANCE.CUSTOMER_GIVEN_NAME).like(upper(val('%' + givenName.get().trim() + '%'))));
+                    }
+                }
+                if (firstSurname.isPresent()) {
+                    if (firstSurname.get().length() > 0) {
+                        query.addConditions(upper(VW_CUSTOMER_INSTANCE.CUSTOMER_FIRST_SURNAME).like(upper(val('%' + firstSurname.get().trim() + '%'))));
+                    }
+                }
+                if (secondSurname.isPresent()) {
+                    if (secondSurname.get().length() > 0) {
+                        query.addConditions(upper(VW_CUSTOMER_INSTANCE.CUSTOMER_SECOND_SURNAME).like(upper(val('%' + secondSurname.get().trim() + '%'))));
+                    }
+                }
+                if (contactPhone.isPresent()) {
+                    query.addConditions(VW_CUSTOMER_INSTANCE.CUSTOMER_CONTACT_PHONE.eq(val(contactPhone.get().trim())));
+                }
+
+                query.addOrderBy(VW_CUSTOMER_INSTANCE.CUSTOMER_GIVEN_NAME, VW_CUSTOMER_INSTANCE.CUSTOMER_FIRST_SURNAME,
+                		VW_CUSTOMER_INSTANCE.CUSTOMER_SECOND_SURNAME, VW_CUSTOMER_INSTANCE.CUSTOMER_ID, VW_CUSTOMER_INSTANCE.CUSTOMER_START_DATE);
+
+                result = query.fetchInto(VwCustomerInstance.class);
+                
+                logger.info("List of customers returns sucessfully ");
+                return result;
+
+            } catch (DataAccessException e) {
+                logger.error("ERROR - " + e.getMessage());
+                throw new CoMaSwDataAccessException(error + e.getCause().toString(), e);
+            } finally {
+            	query.close();
+            }
+        }
+		
+	}
+	
 	
 	@Override
 	public Integer getNewId() throws CoMaSwDataAccessException {
@@ -236,7 +310,7 @@ public class CustomerEJB implements CustomerEJBLocal {
 	}
 
 	@Override
-	public void insertData(ItCustomer dataObject) throws CoMaSwDataAccessException {
+	public Integer insertData(ItCustomer dataObject) throws CoMaSwDataAccessException {
 		String errorMessage;
 		Integer id = 0;
 
@@ -257,6 +331,8 @@ public class CustomerEJB implements CustomerEJBLocal {
 				ItCustomerDao daoObject = new ItCustomerDao(configuration);
 				daoObject.insert(dataObject);
 			}
+			return id;
+			
 		} catch (Exception e) {
 			errorMessage = "Error inserting the customer object (value: " + dataObject.toString() + ") - "
 					+ e.getMessage();

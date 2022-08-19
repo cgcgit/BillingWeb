@@ -20,7 +20,7 @@ import org.omnifaces.util.Ajax;
 import org.omnifaces.util.Components;
 import org.primefaces.component.api.UIData;
 import org.primefaces.component.datatable.DataTable;
-import com.comasw.model.tables.pojos.CtFeeType;
+import com.comasw.model.tables.pojos.*;
 import com.comasw.utilities.Formatter;
 
 /**
@@ -94,6 +94,103 @@ public class StartDateValidator implements Validator<Object> {
 				}
 				break;
 
+			case "CtPromotionType":
+				currentEndDate = ((CtPromotionType) dataTable.getRowData()).getEndDate();
+				if (currentPos != 0) {
+					// It os not the first row --> the change could be affected other rows
+					if (currentPos != lastPos) {
+						// Not the unique data --> the previous end date must be modified
+						prevPos = currentPos - 1;
+						dataTable.setRowIndex(prevPos);
+						previousStartDate = ((CtPromotionType) dataTable.getRowData()).getStartDate();
+						previousEndDate = ((CtPromotionType) dataTable.getRowData()).getEndDate();
+					}
+				}
+				break;
+
+			case "ItCustomer":
+				currentEndDate = ((ItCustomer) dataTable.getRowData()).getEndDate();
+				if (currentPos != 0) {
+					// It os not the first row --> the change could be affected other rows
+					if (currentPos != lastPos) {
+						// Not the unique data --> the previous end date must be modified
+						prevPos = currentPos - 1;
+						dataTable.setRowIndex(prevPos);
+						previousStartDate = ((ItCustomer) dataTable.getRowData()).getStartDate();
+						previousEndDate = ((ItCustomer) dataTable.getRowData()).getEndDate();
+					}
+				}
+				break;
+
+			case "ItAccount":
+				currentEndDate = ((ItAccount) dataTable.getRowData()).getEndDate();
+				if (currentPos != 0) {
+					// It os not the first row --> the change could be affected other rows
+					if (currentPos != lastPos) {
+						// Not the unique data --> the previous end date must be modified
+						prevPos = currentPos - 1;
+						dataTable.setRowIndex(prevPos);
+						previousStartDate = ((ItAccount) dataTable.getRowData()).getStartDate();
+						previousEndDate = ((ItAccount) dataTable.getRowData()).getEndDate();
+					}
+				}
+				break;
+
+			case "ItProduct":
+				currentEndDate = ((ItProduct) dataTable.getRowData()).getEndDate();
+				if (currentPos != 0) {
+					// It os not the first row --> the change could be affected other rows
+					if (currentPos != lastPos) {
+						// Not the unique data --> the previous end date must be modified
+						prevPos = currentPos - 1;
+						dataTable.setRowIndex(prevPos);
+						previousStartDate = ((ItProduct) dataTable.getRowData()).getStartDate();
+						previousEndDate = ((ItProduct) dataTable.getRowData()).getEndDate();
+					}
+				}
+				break;
+
+			case "ItService":
+				currentEndDate = ((ItService) dataTable.getRowData()).getEndDate();
+				if (currentPos != 0) {
+					// It os not the first row --> the change could be affected other rows
+					if (currentPos != lastPos) {
+						// Not the unique data --> the previous end date must be modified
+						prevPos = currentPos - 1;
+						dataTable.setRowIndex(prevPos);
+						previousStartDate = ((ItService) dataTable.getRowData()).getStartDate();
+						previousEndDate = ((ItService) dataTable.getRowData()).getEndDate();
+					}
+				}
+				break;
+
+			case "ItFee":
+				currentEndDate = ((ItFee) dataTable.getRowData()).getEndDate();
+				if (currentPos != 0) {
+					// It os not the first row --> the change could be affected other rows
+					if (currentPos != lastPos) {
+						// Not the unique data --> the previous end date must be modified
+						prevPos = currentPos - 1;
+						dataTable.setRowIndex(prevPos);
+						previousStartDate = ((ItFee) dataTable.getRowData()).getStartDate();
+						previousEndDate = ((ItFee) dataTable.getRowData()).getEndDate();
+					}
+				}
+				break;
+
+			case "ItPromotion":
+				currentEndDate = ((ItPromotion) dataTable.getRowData()).getEndDate();
+				if (currentPos != 0) {
+					// It os not the first row --> the change could be affected other rows
+					if (currentPos != lastPos) {
+						// Not the unique data --> the previous end date must be modified
+						prevPos = currentPos - 1;
+						dataTable.setRowIndex(prevPos);
+						previousStartDate = ((ItPromotion) dataTable.getRowData()).getStartDate();
+						previousEndDate = ((ItPromotion) dataTable.getRowData()).getEndDate();
+					}
+				}
+				break;
 			default:
 				errorMessageDetail = "ERROR - The class object " + className + "is not expect";
 				facesMessage.setSeverity(FacesMessage.SEVERITY_ERROR);

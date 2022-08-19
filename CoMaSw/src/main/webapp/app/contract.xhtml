@@ -41,10 +41,15 @@
 		<!--  DATA TABLE -->
 
 		<p:remoteCommand id="remoteCommandUpdateDataTable"
-			name="updateDataTable" process="@this" update="form:dataTable" />
+			name="updateDataTable" process="@this"
+			update="form:dataTable" />
+
+		
+
+		<p:remoteCommand id="remoteCommandUpdateCreateConfirmMessage"
+			name="updateCreateConfirmMessage" process="@this"
+			update="form:confirmCreateMessageDialog" />
 			
-       		<p:remoteCommand id="remoteCommandUpdateCreateConfirmMessage"
-			name="updateCreateConfirmMessage" process="@this" update="form:confirmCreateMessageDialog" />			
 
 		<p:dataTable id="dataTable" widgetVar="dataTableWidget"
 			var="dataTable" value="#{contractController.dataList}"
@@ -66,8 +71,8 @@
 							rendered="#{contractController.canUserModify()}"
 							disabled="#{contractController.editingMode}"
 							update=":form:createNewDialog :form:createNewDialogPanelData"
-							oncomplete="{updateDataTable()}"
-							styleClass="ui-button-info" style="margin-right: .5rem">
+							oncomplete="{updateDataTable()}" styleClass="ui-button-info"
+							style="margin-right: .5rem">
 							<p:resetInput target=":form:createNewDialogPanelData" />
 						</p:commandButton>
 					</p:toolbarGroup>
@@ -257,16 +262,18 @@
 		</p:dataTable>
 
 		<!--  CREATE NEW DIALOG -->
-		<p:dialog id="createNewDialog" header="Create new Contract - Null values result on default values"
+		<p:dialog id="createNewDialog"
+			header="Create new Contract - Null values result on default values"
 			showEffect="fade" responsive="true" widgetVar="createNewDialogWidget">
 
 			<h:panelGrid id="createNewDialogPanelData" columns="2"
 				cellpadding="5">
-				
+
 				<p:outputLabel id="newContractNumber" value="Contract Nr " />
-				<p:inputText id="newContractNrInput" label="ContractNumber"					
+				<p:inputText id="newContractNrInput" label="ContractNumber"
 					value="#{contractController.selectedData.contractNumber}">
-				</p:inputText>				
+					<p:ajax event="change" update="newContractNrInput" />
+				</p:inputText>
 
 				<p:outputLabel id="newSendDateLabel" value="SendDate " />
 				<p:inputMask id="newSendDateInput"
@@ -308,13 +315,7 @@
 					value="#{uiValue.cancelLabel}" icon="#{uiValue.cancelCircleIcon}"
 					update="form:growlMessage"
 					onclick="PF('createNewDialogWidget').hide()"
-					class="ui-button-secondary" />
-				<p:commandButton id="createNewDialogClean"
-					value="#{uiValue.cleanLabel}" icon="#{uiValue.cleanCircleIcon}"
-					update="createNewDialogPanelData form:growlMessage" process="@this"
-					class="ui-button-secondary">
-					<p:resetInput target="createNewDialogPanelData" />
-				</p:commandButton>
+					class="ui-button-secondary" />				
 			</h:panelGrid>
 		</p:dialog>
 
@@ -325,7 +326,7 @@
 			<p:commandButton id="deleteDialogConfirm" value="#{uiValue.okLabel}"
 				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
 				actionListener="#{contractController.pushConfirmButtonDeleteDialog()}"
-				oncomplete="updateDataTable(); PF('deleteRowDialogWidget').hide()"
+				oncomplete="{updateDataTable(); PF('deleteRowDialogWidget').hide()"
 				process="@this" icon="#{uiValue.okCircleIcon}" />
 			<p:commandButton id="deleteDialogCancel"
 				value="#{uiValue.cancelLabel}" styleClass="ui-confirmdialog-no"
@@ -337,9 +338,9 @@
 
 		<!--  CONFIRM CREATE MESSAGE -->
 		<p:confirmDialog id="confirmCreateMessageDialog" global="true"
-			styleClass="change-position" showEffect="fade" responsive="true" 
+			styleClass="change-position" showEffect="fade" responsive="true"
 			widgetVar="confirmCreateMessageDialogWidget"
-			header="CREATED CONTRACT " 
+			header="CREATED CONTRACT "
 			message="#{contractController.confirmCreateMessage}">
 			<p:commandButton id="confirmCreateMessageButton"
 				value="#{uiValue.okLabel}" styleClass="ui-confirmdialog-yes"

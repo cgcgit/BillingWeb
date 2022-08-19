@@ -21,7 +21,7 @@ import org.omnifaces.util.Components;
 import org.primefaces.component.api.UIData;
 import org.primefaces.component.datatable.DataTable;
 
-import com.comasw.model.tables.pojos.CtFeeType;
+import com.comasw.model.tables.pojos.*;
 import com.comasw.utilities.Formatter;
 
 /**
@@ -91,6 +91,104 @@ public class EndDateValidator implements Validator<Object> {
 						dataTable.setRowIndex(subsequentPos);
 						subsequentStartDate = ((CtFeeType) dataTable.getRowData()).getStartDate();
 						subsequentEndDate = ((CtFeeType) dataTable.getRowData()).getEndDate();
+					}
+				}
+				break;
+
+			case "CtPromotionType":
+				currentStartDate = ((CtPromotionType) dataTable.getRowData()).getStartDate();
+				if (lastPos != 0) {
+					// Not the unique data --> the change could be affected other rows
+					if (currentPos != lastPos) {
+						// Not the last position --> the subsequent end date must be modified
+						subsequentPos = currentPos + 1;
+						dataTable.setRowIndex(subsequentPos);
+						subsequentStartDate = ((CtPromotionType) dataTable.getRowData()).getStartDate();
+						subsequentEndDate = ((CtPromotionType) dataTable.getRowData()).getEndDate();
+					}
+				}
+				break;
+
+			case "ItCustomer":
+				currentStartDate = ((ItCustomer) dataTable.getRowData()).getStartDate();
+				if (lastPos != 0) {
+					// Not the unique data --> the change could be affected other rows
+					if (currentPos != lastPos) {
+						// Not the last position --> the subsequent end date must be modified
+						subsequentPos = currentPos + 1;
+						dataTable.setRowIndex(subsequentPos);
+						subsequentStartDate = ((ItCustomer) dataTable.getRowData()).getStartDate();
+						subsequentEndDate = ((ItCustomer) dataTable.getRowData()).getEndDate();
+					}
+				}
+				break;
+
+			case "ItAccount":
+				currentStartDate = ((ItAccount) dataTable.getRowData()).getStartDate();
+				if (lastPos != 0) {
+					// Not the unique data --> the change could be affected other rows
+					if (currentPos != lastPos) {
+						// Not the last position --> the subsequent end date must be modified
+						subsequentPos = currentPos + 1;
+						dataTable.setRowIndex(subsequentPos);
+						subsequentStartDate = ((ItAccount) dataTable.getRowData()).getStartDate();
+						subsequentEndDate = ((ItAccount) dataTable.getRowData()).getEndDate();
+					}
+				}
+				break;
+
+			case "ItProduct":
+				currentStartDate = ((ItProduct) dataTable.getRowData()).getStartDate();
+				if (lastPos != 0) {
+					// Not the unique data --> the change could be affected other rows
+					if (currentPos != lastPos) {
+						// Not the last position --> the subsequent end date must be modified
+						subsequentPos = currentPos + 1;
+						dataTable.setRowIndex(subsequentPos);
+						subsequentStartDate = ((ItProduct) dataTable.getRowData()).getStartDate();
+						subsequentEndDate = ((ItProduct) dataTable.getRowData()).getEndDate();
+					}
+				}
+				break;
+
+			case "ItService":
+				currentStartDate = ((ItService) dataTable.getRowData()).getStartDate();
+				if (lastPos != 0) {
+					// Not the unique data --> the change could be affected other rows
+					if (currentPos != lastPos) {
+						// Not the last position --> the subsequent end date must be modified
+						subsequentPos = currentPos + 1;
+						dataTable.setRowIndex(subsequentPos);
+						subsequentStartDate = ((ItService) dataTable.getRowData()).getStartDate();
+						subsequentEndDate = ((ItService) dataTable.getRowData()).getEndDate();
+					}
+				}
+				break;
+
+			case "ItFee":
+				currentStartDate = ((ItFee) dataTable.getRowData()).getStartDate();
+				if (lastPos != 0) {
+					// Not the unique data --> the change could be affected other rows
+					if (currentPos != lastPos) {
+						// Not the last position --> the subsequent end date must be modified
+						subsequentPos = currentPos + 1;
+						dataTable.setRowIndex(subsequentPos);
+						subsequentStartDate = ((ItFee) dataTable.getRowData()).getStartDate();
+						subsequentEndDate = ((ItFee) dataTable.getRowData()).getEndDate();
+					}
+				}
+				break;
+
+			case "ItPromotion":
+				currentStartDate = ((ItPromotion) dataTable.getRowData()).getStartDate();
+				if (lastPos != 0) {
+					// Not the unique data --> the change could be affected other rows
+					if (currentPos != lastPos) {
+						// Not the last position --> the subsequent end date must be modified
+						subsequentPos = currentPos + 1;
+						dataTable.setRowIndex(subsequentPos);
+						subsequentStartDate = ((ItPromotion) dataTable.getRowData()).getStartDate();
+						subsequentEndDate = ((ItPromotion) dataTable.getRowData()).getEndDate();
 					}
 				}
 				break;

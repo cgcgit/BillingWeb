@@ -8,6 +8,7 @@ import javax.ejb.Local;
 
 import com.comasw.exception.CoMaSwDataAccessException;
 import com.comasw.model.tables.pojos.ItCustomer;
+import com.comasw.model.tables.pojos.VwCustomerInstance;
 
 @Local
 public interface CustomerEJBLocal {
@@ -76,6 +77,26 @@ public interface CustomerEJBLocal {
 		
 	
 	/**
+	 * Return all data of the customer instance view in the system for a giving search
+     * criteria. The parameters are optional, but there must be at least one parameter specified.
+	 * @param searchDate date criteria to search
+	 * @param customerId customer id criteria to search
+	 * @param customerTypeId customer type id criteria to search
+	 * @param statusId status id criteria to search
+	 * @param identityCard identity card criteria to search
+	 * @param contactPhone contact phone criteria to search
+	 * @param givenName given name criteria to search
+	 * @param firstSurname first surname to search
+	 * @param secondSurname second surname to search
+	 * @return customer list for the criteria
+	 * @throws CoMaSwDataAccessException
+	 */
+	public List<VwCustomerInstance> findInstanceViewWithParameters(Optional<LocalDateTime> searchDate, Optional<Integer> customerId, Optional<Integer> customerTypeId, Optional<Integer> statusId, 
+			Optional<String> identityCard, Optional<String> contactPhone, Optional<String> givenName, Optional<String> firstSurname, Optional<String> secondSurname) throws CoMaSwDataAccessException;
+	
+			
+	
+	/**
 	 * Gets a new Id from the sequence associates to the entity
 	 * 
 	 * @return Id
@@ -87,11 +108,11 @@ public interface CustomerEJBLocal {
 	/**
 	 * Inserts into the system (database) the given new customer. It creates a new
 	 * Id and inserts into the id table.
-	 * 
 	 * @param dataObject customer object to insert
+	 * @return integer with the id of the account object
 	 * @throws CoMaSwDataAccessException
 	 */
-	public void insertData(ItCustomer dataObject) throws CoMaSwDataAccessException;
+	public Integer insertData(ItCustomer dataObject) throws CoMaSwDataAccessException;
 
 	/**
 	 * Inserts into the system (database) a new customer record.

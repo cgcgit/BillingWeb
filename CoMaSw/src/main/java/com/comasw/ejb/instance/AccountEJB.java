@@ -3,6 +3,7 @@ package com.comasw.ejb.instance;
 import static com.comasw.model.Sequences.SEQ_ACCOUNT_ID;
 import static com.comasw.model.Tables.IT_ACCOUNT;
 import static com.comasw.model.Tables.IT_CUSTOMER;
+import static com.comasw.model.Tables.VW_ACCOUNT_INSTANCE;
 import static org.jooq.impl.DSL.upper;
 import static org.jooq.impl.DSL.val;
 import static org.jooq.impl.DSL.exists;
@@ -32,6 +33,7 @@ import com.comasw.model.tables.daos.IdtAccountDao;
 import com.comasw.model.tables.daos.ItAccountDao;
 import com.comasw.model.tables.pojos.IdtAccount;
 import com.comasw.model.tables.pojos.ItAccount;
+import com.comasw.model.tables.pojos.VwAccountInstance;
 import com.comasw.model.tables.records.ItAccountRecord;
 import com.comasw.utilities.Formatter;
 
@@ -46,13 +48,13 @@ public class AccountEJB implements AccountEJBLocal {
 
 	@Resource(lookup = "java:jboss/datasources/db_comasw")
 	private DataSource ds;
-	
-    /**
-     * Default constructor. 
-     */
-    public AccountEJB() {
-        // TODO Auto-generated constructor stub
-    }
+
+	/**
+	 * Default constructor.
+	 */
+	public AccountEJB() {
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public List<ItAccount> findAllData() throws CoMaSwDataAccessException {
@@ -61,8 +63,9 @@ public class AccountEJB implements AccountEJBLocal {
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(IT_ACCOUNT)
-					.orderBy(IT_ACCOUNT.GIVEN_NAME, IT_ACCOUNT.FIRST_SURNAME, IT_ACCOUNT.SECOND_SURNAME, IT_ACCOUNT.CUSTOMER_ID, IT_ACCOUNT.START_DATE)
+			result = create
+					.selectFrom(IT_ACCOUNT).orderBy(IT_ACCOUNT.GIVEN_NAME, IT_ACCOUNT.FIRST_SURNAME,
+							IT_ACCOUNT.SECOND_SURNAME, IT_ACCOUNT.CUSTOMER_ID, IT_ACCOUNT.START_DATE)
 					.fetch().into(ItAccount.class);
 
 		} catch (DataAccessException e) {
@@ -82,7 +85,8 @@ public class AccountEJB implements AccountEJBLocal {
 
 		try {
 			result = create.selectFrom(IT_ACCOUNT).where(IT_ACCOUNT.ACCOUNT_ID.eq(val(accountId)))
-					.orderBy(IT_ACCOUNT.GIVEN_NAME, IT_ACCOUNT.FIRST_SURNAME, IT_ACCOUNT.SECOND_SURNAME, IT_ACCOUNT.CUSTOMER_ID, IT_ACCOUNT.START_DATE)
+					.orderBy(IT_ACCOUNT.GIVEN_NAME, IT_ACCOUNT.FIRST_SURNAME, IT_ACCOUNT.SECOND_SURNAME,
+							IT_ACCOUNT.CUSTOMER_ID, IT_ACCOUNT.START_DATE)
 					.fetch().into(ItAccount.class);
 
 		} catch (DataAccessException e) {
@@ -102,7 +106,8 @@ public class AccountEJB implements AccountEJBLocal {
 
 		try {
 			result = create.selectFrom(IT_ACCOUNT).where(IT_ACCOUNT.CUSTOMER_ID.eq(val(customerId)))
-					.orderBy(IT_ACCOUNT.GIVEN_NAME, IT_ACCOUNT.FIRST_SURNAME, IT_ACCOUNT.SECOND_SURNAME, IT_ACCOUNT.CUSTOMER_ID, IT_ACCOUNT.START_DATE)
+					.orderBy(IT_ACCOUNT.GIVEN_NAME, IT_ACCOUNT.FIRST_SURNAME, IT_ACCOUNT.SECOND_SURNAME,
+							IT_ACCOUNT.CUSTOMER_ID, IT_ACCOUNT.START_DATE)
 					.fetch().into(ItAccount.class);
 
 			return result;
@@ -116,20 +121,21 @@ public class AccountEJB implements AccountEJBLocal {
 	}
 
 	@Override
-	public List<ItAccount> findDataByContactId(Integer contractId) throws CoMaSwDataAccessException {
+	public List<ItAccount> findDataByContractNr(String contractNr) throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<ItAccount> result = null;
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(IT_ACCOUNT).where(IT_ACCOUNT.CONTRACT_ID.eq(val(contractId)))
-					.orderBy(IT_ACCOUNT.GIVEN_NAME, IT_ACCOUNT.FIRST_SURNAME, IT_ACCOUNT.SECOND_SURNAME, IT_ACCOUNT.CUSTOMER_ID, IT_ACCOUNT.START_DATE)
+			result = create.selectFrom(IT_ACCOUNT).where(IT_ACCOUNT.CONTRACT_NUMBER.eq(upper(val(contractNr))))
+					.orderBy(IT_ACCOUNT.GIVEN_NAME, IT_ACCOUNT.FIRST_SURNAME, IT_ACCOUNT.SECOND_SURNAME,
+							IT_ACCOUNT.CUSTOMER_ID, IT_ACCOUNT.START_DATE)
 					.fetch().into(ItAccount.class);
 
 			return result;
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the account for contract id: " + contractId + " - "
+			errorMessage = "Error while try to find the account for contract id: " + contractNr + " - "
 					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
@@ -145,11 +151,13 @@ public class AccountEJB implements AccountEJBLocal {
 		try {
 			result = create.selectFrom(IT_ACCOUNT)
 					.where(val(searchDate).between(IT_ACCOUNT.START_DATE, IT_ACCOUNT.END_DATE))
-					.orderBy(IT_ACCOUNT.GIVEN_NAME, IT_ACCOUNT.FIRST_SURNAME, IT_ACCOUNT.SECOND_SURNAME, IT_ACCOUNT.CUSTOMER_ID, IT_ACCOUNT.START_DATE)
+					.orderBy(IT_ACCOUNT.GIVEN_NAME, IT_ACCOUNT.FIRST_SURNAME, IT_ACCOUNT.SECOND_SURNAME,
+							IT_ACCOUNT.CUSTOMER_ID, IT_ACCOUNT.START_DATE)
 					.fetch().into(ItAccount.class);
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find all the accounts for the date " + Formatter.localDateTimeToString(searchDate) +" - " + e.getMessage();
+			errorMessage = "Error while try to find all the accounts for the date "
+					+ Formatter.localDateTimeToString(searchDate) + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
@@ -167,7 +175,8 @@ public class AccountEJB implements AccountEJBLocal {
 		try {
 			result = create.selectFrom(IT_ACCOUNT).where(IT_ACCOUNT.ACCOUNT_ID.eq(val(accountId)))
 					.and(val(searchDate).between(IT_ACCOUNT.START_DATE, IT_ACCOUNT.END_DATE))
-					.orderBy(IT_ACCOUNT.GIVEN_NAME, IT_ACCOUNT.FIRST_SURNAME, IT_ACCOUNT.SECOND_SURNAME, IT_ACCOUNT.CUSTOMER_ID, IT_ACCOUNT.START_DATE)
+					.orderBy(IT_ACCOUNT.GIVEN_NAME, IT_ACCOUNT.FIRST_SURNAME, IT_ACCOUNT.SECOND_SURNAME,
+							IT_ACCOUNT.CUSTOMER_ID, IT_ACCOUNT.START_DATE)
 					.fetch().into(ItAccount.class);
 
 			if (result.size() > 1) {
@@ -189,21 +198,22 @@ public class AccountEJB implements AccountEJBLocal {
 	}
 
 	@Override
-	public ItAccount findDataBySearchDateAndContractId(LocalDateTime searchDate, Integer contractId)
+	public ItAccount findDataBySearchDateAndContractNr(LocalDateTime searchDate, String contractNr)
 			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<ItAccount> result = null;
 		String errorMessage;
 
 		try {
-			result = create.selectFrom(IT_ACCOUNT).where(IT_ACCOUNT.CONTRACT_ID.eq(val(contractId)))
+			result = create.selectFrom(IT_ACCOUNT).where(IT_ACCOUNT.CONTRACT_NUMBER.eq(upper(val(contractNr))))
 					.and(val(searchDate).between(IT_ACCOUNT.START_DATE, IT_ACCOUNT.END_DATE))
-					.orderBy(IT_ACCOUNT.GIVEN_NAME, IT_ACCOUNT.FIRST_SURNAME, IT_ACCOUNT.SECOND_SURNAME, IT_ACCOUNT.CUSTOMER_ID, IT_ACCOUNT.START_DATE)
+					.orderBy(IT_ACCOUNT.GIVEN_NAME, IT_ACCOUNT.FIRST_SURNAME, IT_ACCOUNT.SECOND_SURNAME,
+							IT_ACCOUNT.CUSTOMER_ID, IT_ACCOUNT.START_DATE)
 					.fetch().into(ItAccount.class);
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the account for search date: " + searchDate.toString()
-						+ " and contract id : " + contractId + " - The query returns more rows(" + result.size()
+						+ " and contract id : " + contractNr + " - The query returns more rows(" + result.size()
 						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
@@ -213,7 +223,7 @@ public class AccountEJB implements AccountEJBLocal {
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the fee type for  for search date: " + searchDate.toString()
-					+ " and contract id: " + contractId + " - " + e.getMessage();
+					+ " and contract id: " + contractNr + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
@@ -229,7 +239,8 @@ public class AccountEJB implements AccountEJBLocal {
 		try {
 			result = create.selectFrom(IT_ACCOUNT).where(IT_ACCOUNT.CUSTOMER_ID.eq(val(customerId)))
 					.and(val(searchDate).between(IT_ACCOUNT.START_DATE, IT_ACCOUNT.END_DATE))
-					.orderBy(IT_ACCOUNT.GIVEN_NAME, IT_ACCOUNT.FIRST_SURNAME, IT_ACCOUNT.SECOND_SURNAME, IT_ACCOUNT.CUSTOMER_ID, IT_ACCOUNT.START_DATE)
+					.orderBy(IT_ACCOUNT.GIVEN_NAME, IT_ACCOUNT.FIRST_SURNAME, IT_ACCOUNT.SECOND_SURNAME,
+							IT_ACCOUNT.CUSTOMER_ID, IT_ACCOUNT.START_DATE)
 					.fetch().into(ItAccount.class);
 
 			if (result.size() > 1) {
@@ -252,67 +263,154 @@ public class AccountEJB implements AccountEJBLocal {
 
 	@Override
 	public List<ItAccount> findInstanceWithParameters(Optional<LocalDateTime> searchDate, Optional<Integer> accountId,
-			Optional<Integer> accountTypeId, Optional<Integer> contractId, Optional<Integer> customerId,
+			Optional<Integer> accountTypeId, Optional<String> contractNr, Optional<Integer> customerId,
 			Optional<Integer> accountStatusId, Optional<String> accountIdCard, Optional<String> customerIdCard)
 			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
-        SelectQuery<Record> query = create.selectQuery();
-        List<ItAccount> result = null;
-        String error = "";
+		SelectQuery<Record> query = create.selectQuery();
+		List<ItAccount> result = null;
+		String error = "";
 
-        if ((!searchDate.isPresent()) && (!accountId.isPresent()) && (!accountTypeId.isPresent()) && (!contractId.isPresent())
-        		&& (!customerId.isPresent()) && (accountStatusId == null)
-        		&& (!accountIdCard.isPresent()) && (!customerIdCard.isPresent())) {
-            logger.error("ERROR - none of the criteria search was defined");
-            throw new CoMaSwDataAccessException("ERROR - none of the chriteria search was defined");
-        } else {
+		if ((!searchDate.isPresent()) && (!accountId.isPresent()) && (!accountTypeId.isPresent())
+				&& (!contractNr.isPresent()) && (!customerId.isPresent()) && (accountStatusId == null)
+				&& (!accountIdCard.isPresent()) && (!customerIdCard.isPresent())) {
+			logger.error("ERROR - none of the criteria search was defined");
+			throw new CoMaSwDataAccessException("ERROR - none of the chriteria search was defined");
+		} else {
 
-            try {
-                query.addFrom(IT_ACCOUNT);
-                if (searchDate.isPresent()) {
-                    query.addConditions(val(searchDate.get()).between(IT_ACCOUNT.START_DATE).and(IT_ACCOUNT.END_DATE));
-                }
-                if (accountId.isPresent()) {
-                    query.addConditions(IT_ACCOUNT.ACCOUNT_ID.eq(val(accountId.get())));
-                }
-                if (accountTypeId.isPresent()) {
-                    query.addConditions(IT_ACCOUNT.ACCOUNT_TYPE_ID.eq(val(accountTypeId.get())));
-                }
-                if (contractId.isPresent()) {
-                    query.addConditions(IT_ACCOUNT.CONTRACT_ID.eq(val(contractId.get())));
-                }
-                if (customerId.isPresent()) {
-                    query.addConditions(IT_ACCOUNT.CUSTOMER_ID.eq(val(customerId.get())));
-                }
-                if (accountStatusId.isPresent()) {
-                    query.addConditions(IT_ACCOUNT.STATUS_ID.eq(val(accountStatusId.get())));
-                }
-                if (accountIdCard.isPresent()) {
-                    if (accountIdCard.get().length() > 0) {
-                        query.addConditions(upper(IT_ACCOUNT.IDENTITY_CARD).eq(upper(val(accountIdCard.get().trim()))));
-                    }
-                }                                
-                if (customerIdCard.isPresent()) {
-                    if (customerIdCard.get().length() > 0) {
-                        query.addConditions(exists(create.selectOne().from(IT_CUSTOMER).where((IT_CUSTOMER.CUSTOMER_ID).eq(IT_ACCOUNT.CUSTOMER_ID)
-                        		.and(upper(IT_CUSTOMER.IDENTITY_CARD).eq(upper(val(customerIdCard.get().trim())))))));
-                    }
-                }
+			try {
+				query.addFrom(IT_ACCOUNT);
+				if (searchDate.isPresent()) {
+					query.addConditions(val(searchDate.get()).between(IT_ACCOUNT.START_DATE).and(IT_ACCOUNT.END_DATE));
+				}
 
-                query.addOrderBy(IT_ACCOUNT.GIVEN_NAME, IT_ACCOUNT.FIRST_SURNAME, IT_ACCOUNT.SECOND_SURNAME, IT_ACCOUNT.CUSTOMER_ID, IT_ACCOUNT.START_DATE);
+				if (accountId.isPresent()) {
+					query.addConditions(IT_ACCOUNT.ACCOUNT_ID.eq(val(accountId.get())));
+				}
 
-                result = query.fetchInto(ItAccount.class);
-                
-                logger.info("List of accounts returns sucessfully ");
-                return result;
+				if (accountTypeId.isPresent()) {
+					query.addConditions(IT_ACCOUNT.ACCOUNT_TYPE_ID.eq(val(accountTypeId.get())));
+				}
 
-            } catch (DataAccessException e) {
-                logger.error("ERROR - " + e.getMessage());
-                throw new CoMaSwDataAccessException(error + e.getCause().toString(), e);
-            } finally {
-            	query.close();
-            }
-        }
+				if (contractNr.isPresent()) {
+					query.addConditions(IT_ACCOUNT.CONTRACT_NUMBER.eq(upper(val(contractNr.get()))));
+				}
+
+				if (customerId.isPresent()) {
+					query.addConditions(IT_ACCOUNT.CUSTOMER_ID.eq(val(customerId.get())));
+				}
+
+				if (accountStatusId.isPresent()) {
+					query.addConditions(IT_ACCOUNT.STATUS_ID.eq(val(accountStatusId.get())));
+				}
+
+				if (accountIdCard.isPresent()) {
+					if (accountIdCard.get().length() > 0) {
+						query.addConditions(upper(IT_ACCOUNT.IDENTITY_CARD).eq(upper(val(accountIdCard.get().trim()))));
+					}
+				}
+
+				if (customerIdCard.isPresent()) {
+					if (customerIdCard.get().length() > 0) {
+						query.addConditions(exists(create.selectOne().from(IT_CUSTOMER).where((IT_CUSTOMER.CUSTOMER_ID)
+								.eq(IT_ACCOUNT.CUSTOMER_ID)
+								.and(upper(IT_CUSTOMER.IDENTITY_CARD).eq(upper(val(customerIdCard.get().trim())))))));
+					}
+				}
+
+				query.addOrderBy(IT_ACCOUNT.GIVEN_NAME, IT_ACCOUNT.FIRST_SURNAME, IT_ACCOUNT.SECOND_SURNAME,
+						IT_ACCOUNT.CUSTOMER_ID, IT_ACCOUNT.START_DATE);
+
+				result = query.fetchInto(ItAccount.class);
+
+				logger.info("List of accounts returns sucessfully ");
+				return result;
+
+			} catch (DataAccessException e) {
+				logger.error("ERROR - " + e.getMessage());
+				throw new CoMaSwDataAccessException(error + e.getCause().toString(), e);
+			} finally {
+				query.close();
+			}
+		}
+	}
+
+	@Override
+	public List<VwAccountInstance> findInstanceViewWithParameters(Optional<LocalDateTime> searchDate,
+			Optional<String> contractNr, Optional<Integer> accountId, Optional<Integer> accountTypeId,
+			Optional<String> accountIdCard, Optional<Integer> customerId, Optional<Integer> customerTypeId,
+			Optional<String> customerIdCard) throws CoMaSwDataAccessException {
+		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
+		SelectQuery<Record> query = create.selectQuery();
+		List<VwAccountInstance> result = null;
+		String error = "";
+
+		if ((!searchDate.isPresent()) && (!contractNr.isPresent() || contractNr.get().isEmpty())
+				&& (!accountId.isPresent()) && (!accountTypeId.isPresent())
+				&& (!accountIdCard.isPresent() || accountIdCard.get().isEmpty()) && (!customerId.isPresent())
+				&& (!customerTypeId.isPresent()) && (!customerIdCard.isPresent() || customerIdCard.get().isEmpty())) {
+			logger.error("ERROR - none of the criteria search was defined");
+			throw new CoMaSwDataAccessException("ERROR - none of the chriteria search was defined");
+		} else {
+
+			try {
+				query.addFrom(VW_ACCOUNT_INSTANCE);
+				if (searchDate.isPresent()) {
+					query.addConditions(val(searchDate.get()).between(VW_ACCOUNT_INSTANCE.ACCOUNT_START_DATE)
+							.and(VW_ACCOUNT_INSTANCE.ACCOUNT_END_DATE)
+							.and(val(searchDate.get()).between(VW_ACCOUNT_INSTANCE.CUSTOMER_START_DATE)
+									.and(VW_ACCOUNT_INSTANCE.CUSTOMER_END_DATE)));
+				}
+
+				if (contractNr.isPresent() && !contractNr.get().isEmpty()) {
+					query.addConditions(VW_ACCOUNT_INSTANCE.CONTRACT_NUMBER.eq(upper(val(contractNr.get().trim()))));
+				}
+
+				if (accountId.isPresent()) {
+					query.addConditions(VW_ACCOUNT_INSTANCE.ACCOUNT_ID.eq(val(accountId.get())));
+				}
+
+				if (accountTypeId.isPresent()) {
+					query.addConditions(VW_ACCOUNT_INSTANCE.ACCOUNT_TYPE_ID.eq(val(accountTypeId.get())));
+				}
+
+				if (accountIdCard.isPresent() && !accountIdCard.get().isEmpty()) {
+					query.addConditions(upper(VW_ACCOUNT_INSTANCE.ACCOUNT_IDENTITY_CARD)
+							.eq(upper(val(accountIdCard.get().trim()))));
+
+				}
+
+				if (customerId.isPresent()) {
+					query.addConditions(VW_ACCOUNT_INSTANCE.CUSTOMER_ID.eq(val(customerId.get())));
+				}
+
+				if (customerTypeId.isPresent()) {
+					query.addConditions(VW_ACCOUNT_INSTANCE.CUSTOMER_TYPE_ID.eq(val(customerTypeId.get())));
+				}
+
+				if (customerIdCard.isPresent() && !customerIdCard.get().isEmpty()) {
+					query.addConditions(upper(VW_ACCOUNT_INSTANCE.CUSTOMER_IDENTITY_CARD)
+							.eq(upper(val(customerIdCard.get().trim()))));
+
+				}
+
+				query.addOrderBy(VW_ACCOUNT_INSTANCE.ACCOUNT_GIVEN_NAME, VW_ACCOUNT_INSTANCE.ACCOUNT_FIRST_SURNAME,
+						VW_ACCOUNT_INSTANCE.ACCOUNT_SECOND_SURNAME, VW_ACCOUNT_INSTANCE.CUSTOMER_ID,
+						VW_ACCOUNT_INSTANCE.ACCOUNT_START_DATE);
+
+				result = query.fetchInto(VwAccountInstance.class);
+
+				logger.info("List of accounts returns sucessfully ");
+				return result;
+
+			} catch (DataAccessException e) {
+				logger.error("ERROR - " + e.getMessage());
+				throw new CoMaSwDataAccessException(error + e.getCause().toString(), e);
+			} finally {
+				query.close();
+			}
+		}
+
 	}
 
 	@Override
@@ -332,7 +430,7 @@ public class AccountEJB implements AccountEJBLocal {
 	}
 
 	@Override
-	public void insertData(ItAccount dataObject) throws CoMaSwDataAccessException {
+	public Integer insertData(ItAccount dataObject) throws CoMaSwDataAccessException {
 		String errorMessage;
 		Integer id = 0;
 
@@ -349,18 +447,21 @@ public class AccountEJB implements AccountEJBLocal {
 				daoObjectId.insert(objectId);
 
 				// insert the dataObject into the type datatable
-				dataObject.setCustomerId(id);
+				dataObject.setAccountId(id);
 				ItAccountDao daoObject = new ItAccountDao(configuration);
 				daoObject.insert(dataObject);
+
 			}
+
+			return id;
+
 		} catch (Exception e) {
 			errorMessage = "Error inserting the account object (value: " + dataObject.toString() + ") - "
 					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
-		
+
 	}
 
 	@Override
@@ -379,7 +480,6 @@ public class AccountEJB implements AccountEJBLocal {
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 
-		
 	}
 
 	@Override
@@ -397,7 +497,7 @@ public class AccountEJB implements AccountEJBLocal {
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
@@ -413,7 +513,7 @@ public class AccountEJB implements AccountEJBLocal {
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
-		
+
 	}
 
 	@Override
@@ -430,9 +530,6 @@ public class AccountEJB implements AccountEJBLocal {
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 
-		
 	}
-    
-    
 
 }

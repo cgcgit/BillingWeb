@@ -11,7 +11,7 @@ import java.util.List;
  * @param <T>
  *
  */
-public class SimpleHistoricRelationWithList<T, S, U> extends RelationBasicTypeWithList<T, S, U> {
+public class SimpleHistoricRelation<T, S, U> extends BasicRelationType<T, S, U> {
 
 	protected String HISTORIC_CANDIDATE_DATA_TABLE_ID = "form:accordionPanel"
 			+ uiValues.getString("historicCandidateDataTableID");

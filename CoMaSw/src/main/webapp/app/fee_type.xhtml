@@ -62,7 +62,8 @@
 					style="text-align: center; align-items: center;">
 					<p:panel header="Search Fee Type Criteria">
 						<p:outputPanel id="dataCriteriaPanel">
-							<p:selectOneRadio id="searchCriteriaRowButton" layout="custom" immediate="true" 
+							<p:selectOneRadio id="searchCriteriaRowButton" layout="custom"
+								immediate="true"
 								value="#{feeTypeController.historicSearchDataCriteria}">
 								<f:selectItem id="historicCriteria"
 									itemLabel="Show Historic Data" itemValue="true" />
@@ -81,7 +82,7 @@
 										value="Show Historic Data"
 										style="font-family:Arial Black; text-align: left; font-size: 11px; margin-left: .5rem" />
 								</p:panel>
-								
+
 								<p:panel>
 									<p:radioButton id="dateRowButton" for="searchCriteriaRowButton"
 										itemIndex="1" />
@@ -90,20 +91,20 @@
 
 									<p:inputMask id="searchDate" required="false" immediate="true"
 										value="#{feeTypeController.searchDate}" mask="99/99/9999"
-										style="width:7rem; height:2rem" styleClass="p-mx-3"
-										valueChangeListener="#{feeTypeController.changeSearchDate}"
+										style="width:7rem; height:2rem" styleClass="p-mx-3"										
 										requiredMessage="The date value to search is null. Please fill the search date field">
 										<f:converter
 											converterId="com.comasw.converter.localDateTimeConverter" />
+										<p:ajax event="valueChange" immediate="true" process="@this" />
 									</p:inputMask>
 								</p:panel>
-								
+
 								<p:commandButton id="searchDataButton" value="Search"
-									icon="#{uiValue.searchIcon}" ajax="true" 
+									icon="#{uiValue.searchIcon}" ajax="true"
 									actionListener="#{feeTypeController.pushSearchButton()}"
-									update=":form:growlMessage"
-									style="width:7rem" oncomplete="#{updateDataTable}"
-									styleClass="p-mx-3" class="ui-button-success rounded-button">
+									update=":form:growlMessage" style="width:7rem"
+									oncomplete="#{updateDataTable}" styleClass="p-mx-3"
+									class="ui-button-success rounded-button">
 								</p:commandButton>
 							</p:panelGrid>
 						</p:outputPanel>
@@ -111,8 +112,8 @@
 
 					<p:panel header="Create New Fee Type"
 						rendered="#{feeTypeController.canUserModify()}">
-						<p:commandButton id="createNewButton" value="New data" partialSubmit="true"
-							icon="#{uiValue.addIcon}" immediate="true" ajax="true"
+						<p:commandButton id="createNewButton" value="New data"
+							partialSubmit="true" icon="#{uiValue.addIcon}" ajax="true"
 							actionListener="#{feeTypeController.pushCreateNewButton()}"
 							rendered="#{feeTypeController.canUserModify()}"
 							update=":form:createNewDialog :form:createNewDialogPanelData"
@@ -122,12 +123,14 @@
 					</p:panel>
 				</p:panelGrid>
 
-				<p:overlayPanel id="searchList" for="searchDataButton" 
-					my="center top" at="center bottom" showCloseIcon="true"
-					dismissable="false" widgetVar="searchListWidget">
+				<p:overlayPanel id="searchList" for="searchDataButton"
+					showEvent="oncomplete" my="center top" at="center bottom"
+					showCloseIcon="true" dismissable="false"
+					widgetVar="searchListWidget">
 					<!--  DATA SEARCH TABLE -->
-					<p:dataTable id="dataTable" widgetVar="dataTableWidget" partialUpdate="disabled"
-						var="dataTable" value="#{feeTypeController.dataList}"
+					<p:dataTable id="dataTable" widgetVar="dataTableWidget"
+						partialUpdate="disabled" var="dataTable"
+						value="#{feeTypeController.dataList}"
 						filteredValue="#{feeTypeController.filteredDataList}"
 						showGridlines="true" stripedRows="true" scrollable="true"
 						reflow="true" editable="true" rowIndexVar="rowIndexSearchTable"
@@ -343,10 +346,10 @@
 					visible="#{feeTypeController.showSelectedData}">
 
 					<p:dataTable id="selectedTable" widgetVar="selectedTableWidget"
-						var="selectedDataTable" value="#{feeTypeController.selectedDataList}"
-						rendered="true" size="small" scrollable="true"
-						emptyMessage="No data to show" showGridlines="true"
-						paginatorPosition="bottom">
+						var="selectedDataTable"
+						value="#{feeTypeController.selectedDataList}" rendered="true"
+						size="small" scrollable="true" emptyMessage="No data to show"
+						showGridlines="true" paginatorPosition="bottom">
 
 						<p:column id="code"
 							style="font-family:Arial Black;
@@ -460,7 +463,8 @@
 								disabled="true" immediate="true"
 								value="#{selectedDataTable.statusId}">
 								<f:selectItems id="selectItemsStatusOutput" itemDisabled="true"
-									var="Status" value="#{feeTypeController.statusCatalogSelectItems()}"
+									var="Status"
+									value="#{feeTypeController.statusCatalogSelectItems()}"
 									itemValue="#{selectedDataTable.statusId}" />
 							</p:selectOneMenu>
 						</p:column>
@@ -499,7 +503,7 @@
 								<p:commandButton id="refreshHistoricTable"
 									style="margin-left: 1rem; margin-right: .5rem"
 									icon="#{uiValue.refreshIcon}" ajax="true"
-									actionListener="#{feeTypeController.refreshHistoricDataTable}"									
+									actionListener="#{feeTypeController.refreshHistoricDataTable}"
 									styleClass="ui-button-warning rounded-button">
 								</p:commandButton>
 								<p:tooltip for="refreshHistoricTable"
@@ -866,8 +870,8 @@
 
 				<p:outputLabel id="newStartDateLabel" value="StartDate " />
 				<p:inputMask id="newStartDateInput"
-					value="#{feeTypeController.newData.startDate}"
-					mask="99/99/9999" style="width:96%">
+					value="#{feeTypeController.newData.startDate}" mask="99/99/9999"
+					style="width:96%">
 					<f:converter
 						converterId="com.comasw.converter.localDateTimeConverter" />
 					<p:ajax event="change" update="newStartDateInput" />
@@ -875,8 +879,8 @@
 
 				<p:outputLabel id="newEndDateLabel" value="StartDate " />
 				<p:inputMask id="newEndDateInput"
-					value="#{feeTypeController.newData.endDate}"
-					mask="99/99/9999" style="width:96%">
+					value="#{feeTypeController.newData.endDate}" mask="99/99/9999"
+					style="width:96%">
 					<f:converter
 						converterId="com.comasw.converter.localDateTimeConverter" />
 					<p:ajax event="change" update="newEndDateInput" />
@@ -927,9 +931,9 @@
 
 				<p:outputLabel id="newStatusLabel" value="Status: " />
 				<p:selectOneMenu id="statusInput"
-					value="#{feeTypeController.newData.statusId}"
-					immediate="true">
-					<f:selectItems value="#{feeTypeController.statusCatalogSelectItems()}"
+					value="#{feeTypeController.newData.statusId}" immediate="true">
+					<f:selectItems
+						value="#{feeTypeController.statusCatalogSelectItems()}"
 						id="selectItemsStatusInput" var="Status"
 						itemValue="#{feeTypeController.newData.statusId}">
 					</f:selectItems>

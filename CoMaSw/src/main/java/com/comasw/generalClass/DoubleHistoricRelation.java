@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
  * @author catuxa
  *
  */
-public class DoubleHistoricRelationWithList<T, S, U> extends SimpleHistoricRelationWithList<T, S, U> {
+public class DoubleHistoricRelation<T, S, U> extends SimpleHistoricRelation<T, S, U> {
 
 	/**
 	 * Second search date

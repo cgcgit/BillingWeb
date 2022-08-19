@@ -17,13 +17,13 @@ import com.comasw.utilities.Formatter;
  * @author catuxa
  *
  */
-public class BasicHistoricWithLists<T> extends BasicTypeWithLists<T> {
+public class BasicHistoricType<T> extends BasicTypeWithLists<T> {
 
 	protected static String DATA_TABLE_ID = "form:accordionPanel:" + uiValues.getString("dataTableID");
 	protected static String SELECTED_DATA_TABLE_ID = "form:accordionPanel:" + uiValues.getString("selectedDataTableID");
 	protected static String NEW_PANEL_DATA_ID = "form:accordionPanel:" + uiValues.getString("newPanelDataID");
 
-	protected String HISTORIC_DATA_TABLE_ID = "form:accordionPanel:" + uiValues.getString("historicDataTableID");
+	protected static String HISTORIC_DATA_TABLE_ID = "form:accordionPanel:" + uiValues.getString("historicDataTableID");
 
 	
 	/**

@@ -21,6 +21,7 @@ import com.comasw.model.tables.CtServFeeType;
 import com.comasw.model.tables.CtServiceType;
 import com.comasw.model.tables.IdtAccount;
 import com.comasw.model.tables.IdtCustomer;
+import com.comasw.model.tables.IdtFee;
 import com.comasw.model.tables.IdtFeeType;
 import com.comasw.model.tables.IdtProduct;
 import com.comasw.model.tables.IdtProductFee;
@@ -34,7 +35,11 @@ import com.comasw.model.tables.IdtServicePromotion;
 import com.comasw.model.tables.ItAccount;
 import com.comasw.model.tables.ItContract;
 import com.comasw.model.tables.ItCustomer;
+import com.comasw.model.tables.ItFee;
+import com.comasw.model.tables.ItProduct;
 import com.comasw.model.tables.ItProfiles;
+import com.comasw.model.tables.ItPromotion;
+import com.comasw.model.tables.ItService;
 import com.comasw.model.tables.ItUsers;
 import com.comasw.model.tables.MtApplicationMenu;
 import com.comasw.model.tables.PtApplicationLevel;
@@ -46,7 +51,10 @@ import com.comasw.model.tables.PtIdentityCardType;
 import com.comasw.model.tables.PtPaymentMethod;
 import com.comasw.model.tables.PtStatus;
 import com.comasw.model.tables.PtTaxType;
+import com.comasw.model.tables.VwAccountInstance;
+import com.comasw.model.tables.VwCustomerInstance;
 import com.comasw.model.tables.VwProductFeeType;
+import com.comasw.model.tables.VwProductInstance;
 import com.comasw.model.tables.VwProductServiceType;
 import com.comasw.model.tables.VwPromoConsumTypeDiscount;
 import com.comasw.model.tables.VwPromotionFeeTypeDiscount;
@@ -148,6 +156,11 @@ public class Tables {
     public static final IdtCustomer IDT_CUSTOMER = IdtCustomer.IDT_CUSTOMER;
 
     /**
+     * Table that stores the fee instance ids
+     */
+    public static final IdtFee IDT_FEE = IdtFee.IDT_FEE;
+
+    /**
      * Table that stores the fee_type_id for the fee types of the catalog for the application
      */
     public static final IdtFeeType IDT_FEE_TYPE = IdtFeeType.IDT_FEE_TYPE;
@@ -213,9 +226,29 @@ public class Tables {
     public static final ItCustomer IT_CUSTOMER = ItCustomer.IT_CUSTOMER;
 
     /**
+     * Table that stores the fee instance data
+     */
+    public static final ItFee IT_FEE = ItFee.IT_FEE;
+
+    /**
+     * Table that stores the product instance data
+     */
+    public static final ItProduct IT_PRODUCT = ItProduct.IT_PRODUCT;
+
+    /**
      * Table that stores application profiles
      */
     public static final ItProfiles IT_PROFILES = ItProfiles.IT_PROFILES;
+
+    /**
+     * Table that stores the promotion instance data
+     */
+    public static final ItPromotion IT_PROMOTION = ItPromotion.IT_PROMOTION;
+
+    /**
+     * Table that stores the service instance data
+     */
+    public static final ItService IT_SERVICE = ItService.IT_SERVICE;
 
     /**
      * Table that stores application users
@@ -273,9 +306,24 @@ public class Tables {
     public static final PtTaxType PT_TAX_TYPE = PtTaxType.PT_TAX_TYPE;
 
     /**
+     * The table <code>public.vw_account_instance</code>.
+     */
+    public static final VwAccountInstance VW_ACCOUNT_INSTANCE = VwAccountInstance.VW_ACCOUNT_INSTANCE;
+
+    /**
+     * The table <code>public.vw_customer_instance</code>.
+     */
+    public static final VwCustomerInstance VW_CUSTOMER_INSTANCE = VwCustomerInstance.VW_CUSTOMER_INSTANCE;
+
+    /**
      * The table <code>public.vw_product_fee_type</code>.
      */
     public static final VwProductFeeType VW_PRODUCT_FEE_TYPE = VwProductFeeType.VW_PRODUCT_FEE_TYPE;
+
+    /**
+     * The table <code>public.vw_product_instance</code>.
+     */
+    public static final VwProductInstance VW_PRODUCT_INSTANCE = VwProductInstance.VW_PRODUCT_INSTANCE;
 
     /**
      * View showing the relationship between product types and the service types associated with them - related to ct_prod_serv_type

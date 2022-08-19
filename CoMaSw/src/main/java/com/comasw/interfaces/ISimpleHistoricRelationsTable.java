@@ -1,6 +1,5 @@
 package com.comasw.interfaces;
 
-import javax.faces.event.ValueChangeEvent;
 
 public interface ISimpleHistoricRelationsTable extends IRelationsTable {
 
@@ -19,12 +18,6 @@ public interface ISimpleHistoricRelationsTable extends IRelationsTable {
 	 */
 	public void resetFilterHistoricCandidateDataTable();
 
-	/**
-	 * Action to do when changes the search date
-	 * 
-	 * @param e - change event
-	 */
-	public void changeSearchDate(ValueChangeEvent e);
 	
 	/**
 	 * Defines the proper message for the result data search data table

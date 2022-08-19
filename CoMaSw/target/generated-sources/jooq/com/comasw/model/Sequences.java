@@ -81,6 +81,11 @@ public class Sequences {
     public static final Sequence<Long> SEQ_ENTITY_TYPE_ID = Internal.createSequence("seq_entity_type_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
 
     /**
+     * The sequence <code>public.seq_fee_id</code>
+     */
+    public static final Sequence<Long> SEQ_FEE_ID = Internal.createSequence("seq_fee_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);
+
+    /**
      * The sequence <code>public.seq_fee_type_id</code>
      */
     public static final Sequence<Long> SEQ_FEE_TYPE_ID = Internal.createSequence("seq_fee_type_id", Public.PUBLIC, SQLDataType.BIGINT.nullable(false), 1000, null, 1000, null, false, null);

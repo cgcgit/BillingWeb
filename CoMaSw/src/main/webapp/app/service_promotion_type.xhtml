@@ -70,19 +70,20 @@
 				<p:commandButton id="searchDataButton" value="Search"
 					icon="#{uiValue.searchIcon}"
 					actionListener="#{servicePromotionTypeController.pushSearchButton()}"
-					ajax="true" immediate="true" update=":form:growlMessage"
-					style="width:7rem" oncomplete="#{updateSearchTable}"
-					styleClass="p-mx-3" class="ui-button-success rounded-button">
+					ajax="true" update=":form:growlMessage" style="width:7rem"
+					oncomplete="#{updateSearchTable}" styleClass="p-mx-3"
+					class="ui-button-success rounded-button">
 				</p:commandButton>
 
 				<p:overlayPanel id="searchList" for="searchDataButton"
-					style="width:95%;" showCloseIcon="true" dismissable="true"
-					widgetVar="searchListWidget">
+					showEvent="oncomplete" style="width:95%;" showCloseIcon="true"
+					dismissable="true" widgetVar="searchListWidget">
 					<p />
 
 					<p />
-					<p:dataTable id="dataTable" widgetVar="dataTableWidget" partialUpdate="disabled"
-						var="dataTable" value="#{servicePromotionTypeController.dataList}"
+					<p:dataTable id="dataTable" widgetVar="dataTableWidget"
+						partialUpdate="disabled" var="dataTable"
+						value="#{servicePromotionTypeController.dataList}"
 						rowIndexVar="rowIndexMainTable"
 						rowKey="#{dataTable.serviceTypeId}" selectionMode="single"
 						selection="#{servicePromotionTypeController.injectSelectedData}"
@@ -314,10 +315,10 @@
 												value="#{servicePromotionTypeController.searchDate}"
 												mask="99/99/9999" style="width:7rem; height:2rem"
 												styleClass="p-mx-3"
-												valueChangeListener="#{servicePromotionTypeController.changeSearchDate}"
 												requiredMessage="The date value to search is null. Please fill the search date field">
 												<f:converter
 													converterId="com.comasw.converter.localDateTimeConverter" />
+												<p:ajax event="valueChange" immediate="true" process="@this" />
 											</p:inputMask>
 										</p:panel>
 										<p:commandButton id="refreshRelatedTable"
@@ -603,7 +604,7 @@
                                    width: 40px;    
                                    overflow: hidden"
 								class="ui-button-warning rounded-button"
-								icon="#{uiValue.viewIcon}" immediate="true" ajax="true"
+								icon="#{uiValue.viewIcon}" ajax="true"
 								actionListener="#{servicePromotionTypeController.pushShowHistoricCandidateRowButton()}"
 								oncomplete="{updateHistoricCandidateTable()}  PF('historicCandidateListWidget').show('#{component.clientId}')">
 								<f:setPropertyActionListener value="#{candidateDataTable}"
@@ -648,7 +649,7 @@
 						</p:column>
 					</p:dataTable>
 
-					<p:overlayPanel id="historicCandidateList"
+					<p:overlayPanel id="historicCandidateList" showEvent="oncomplete"
 						style="width:95%;background: WhiteSmoke; color: black"
 						showCloseIcon="true" dismissable="false" dynamic="false"
 						my="center top" at="center bottom"

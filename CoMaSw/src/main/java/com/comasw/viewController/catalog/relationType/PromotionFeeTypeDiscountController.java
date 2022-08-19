@@ -14,7 +14,6 @@ import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.event.ValueChangeEvent;
 import javax.faces.validator.ValidatorException;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -38,7 +37,7 @@ import com.comasw.ejb.catalog.type.FeeTypeEJBLocal;
 import com.comasw.ejb.catalog.type.PromotionTypeEJBLocal;
 import com.comasw.ejb.parameterization.StatusEJBLocal;
 import com.comasw.exception.CoMaSwDataAccessException;
-import com.comasw.generalClass.DoubleHistoricRelationWithList;
+import com.comasw.generalClass.DoubleHistoricRelation;
 import com.comasw.interfaces.IDoubleHistoricRelationsTable;
 
 @Named
@@ -48,7 +47,7 @@ import com.comasw.interfaces.IDoubleHistoricRelationsTable;
  *
  */
 public class PromotionFeeTypeDiscountController
-		extends DoubleHistoricRelationWithList<CtPromotionType, VwPromotionFeeTypeDiscount, CtFeeType>
+		extends DoubleHistoricRelation<CtPromotionType, VwPromotionFeeTypeDiscount, CtFeeType>
 		implements Serializable, IDoubleHistoricRelationsTable {
 
 	/**
@@ -254,23 +253,6 @@ public class PromotionFeeTypeDiscountController
 	public void resetFilterHistoricCandidateDataTable() {
 		PrimeFaces current = PrimeFaces.current();
 		current.executeScript("PF('historicCandidateTableWidget').clearFilters()");
-
-	}
-
-	@Override
-	public void changeSearchDate(ValueChangeEvent e) {
-		LocalDateTime newSearchDate = (LocalDateTime) e.getNewValue();
-		String message, messageDetail;
-
-		message = "CHANGE SEARCH DATE";
-
-		if (newSearchDate != null) {
-			this.setSearchDate(newSearchDate);
-		} else {
-			messageDetail = "ERROR - The search date can not be null";
-			logger.fatal(messageDetail);
-			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-		}
 
 	}
 
@@ -722,22 +704,6 @@ public class PromotionFeeTypeDiscountController
 
 	}
 
-	@Override
-	public void changeSecondSearchDate(ValueChangeEvent e) {
-		LocalDateTime newSearchDate = (LocalDateTime) e.getNewValue();
-		String message, messageDetail;
-
-		message = "CHANGE SEARCH DATE";
-
-		if (newSearchDate != null) {
-			this.setSecondSearchDate(newSearchDate);
-		} else {
-			messageDetail = "ERROR - The second search date can not be null";
-			logger.fatal(messageDetail);
-			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
-		}
-
-	}
 
 	@Override
 	public void changeSearchDataTableTitle() {

@@ -94,10 +94,10 @@
 									<p:inputMask id="searchDate" required="false" immediate="true"
 										value="#{promotionConsumptionTypeDiscController.searchDate}" mask="99/99/9999"
 										style="width:7rem; height:2rem" styleClass="p-mx-3"
-										valueChangeListener="#{promotionConsumptionTypeDiscController.changeSearchDate}"
 										requiredMessage="The date value to search is null. Please fill the search date field">
 										<f:converter
 											converterId="com.comasw.converter.localDateTimeConverter" />
+											<p:ajax event="valueChange" immediate="true" process="@this" />
 									</p:inputMask>
 								</p:panel>
 								
@@ -112,7 +112,7 @@
 						</p:outputPanel>
 					</p:panel>
 
-				<p:overlayPanel id="searchList" style="width:95%;"
+				<p:overlayPanel id="searchList" style="width:95%;" showEvent="oncomplete"
 					showCloseIcon="true" dismissable="true" my="center top"
 					at="center bottom" widgetVar="searchListWidget">
 					<p />

@@ -66,12 +66,12 @@
 				<p:commandButton id="searchDataButton" value="Search"
 					icon="#{uiValue.searchIcon}"
 					actionListener="#{productServiceTypeController.pushSearchButton()}"
-					ajax="true" immediate="true" update=":form:growlMessage"
+					ajax="true"  update=":form:growlMessage"
 					style="width:7rem" oncomplete="#{updateSearchTable}"
 					styleClass="p-mx-3" class="ui-button-success rounded-button">
 				</p:commandButton>
 
-				<p:overlayPanel id="searchList" for="searchDataButton"
+				<p:overlayPanel id="searchList" for="searchDataButton" showEvent="oncomplete"
 					style="width:95%;" showCloseIcon="true" dismissable="true"
 					widgetVar="searchListWidget">
 					<p />
