@@ -53,14 +53,17 @@ import com.comasw.model.tables.PtStatus;
 import com.comasw.model.tables.PtTaxType;
 import com.comasw.model.tables.VwAccountInstance;
 import com.comasw.model.tables.VwCustomerInstance;
+import com.comasw.model.tables.VwFeeInstance;
 import com.comasw.model.tables.VwProductFeeType;
 import com.comasw.model.tables.VwProductInstance;
 import com.comasw.model.tables.VwProductServiceType;
 import com.comasw.model.tables.VwPromoConsumTypeDiscount;
 import com.comasw.model.tables.VwPromotionFeeTypeDiscount;
+import com.comasw.model.tables.VwPromotionInstance;
 import com.comasw.model.tables.VwPromotionProductType;
 import com.comasw.model.tables.VwPromotionServiceType;
 import com.comasw.model.tables.VwServiceFeeType;
+import com.comasw.model.tables.VwServiceInstance;
 import com.comasw.model.tables.VwUsers;
 
 
@@ -316,6 +319,11 @@ public class Tables {
     public static final VwCustomerInstance VW_CUSTOMER_INSTANCE = VwCustomerInstance.VW_CUSTOMER_INSTANCE;
 
     /**
+     * The table <code>public.vw_fee_instance</code>.
+     */
+    public static final VwFeeInstance VW_FEE_INSTANCE = VwFeeInstance.VW_FEE_INSTANCE;
+
+    /**
      * The table <code>public.vw_product_fee_type</code>.
      */
     public static final VwProductFeeType VW_PRODUCT_FEE_TYPE = VwProductFeeType.VW_PRODUCT_FEE_TYPE;
@@ -341,6 +349,11 @@ public class Tables {
     public static final VwPromotionFeeTypeDiscount VW_PROMOTION_FEE_TYPE_DISCOUNT = VwPromotionFeeTypeDiscount.VW_PROMOTION_FEE_TYPE_DISCOUNT;
 
     /**
+     * The table <code>public.vw_promotion_instance</code>.
+     */
+    public static final VwPromotionInstance VW_PROMOTION_INSTANCE = VwPromotionInstance.VW_PROMOTION_INSTANCE;
+
+    /**
      * The table <code>public.vw_promotion_product_type</code>.
      */
     public static final VwPromotionProductType VW_PROMOTION_PRODUCT_TYPE = VwPromotionProductType.VW_PROMOTION_PRODUCT_TYPE;
@@ -354,6 +367,11 @@ public class Tables {
      * The table <code>public.vw_service_fee_type</code>.
      */
     public static final VwServiceFeeType VW_SERVICE_FEE_TYPE = VwServiceFeeType.VW_SERVICE_FEE_TYPE;
+
+    /**
+     * The table <code>public.vw_service_instance</code>.
+     */
+    public static final VwServiceInstance VW_SERVICE_INSTANCE = VwServiceInstance.VW_SERVICE_INSTANCE;
 
     /**
      * The table <code>public.vw_users</code>.

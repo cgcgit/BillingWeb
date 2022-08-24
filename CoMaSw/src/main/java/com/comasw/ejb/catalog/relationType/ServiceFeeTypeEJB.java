@@ -58,7 +58,7 @@ public class ServiceFeeTypeEJB implements ServiceFeeTypeEJBLocal {
 	}
 
 	@Override
-	public List<CtFeeType> findEntityTypeCandidates(Integer parentId) throws CoMaSwDataAccessException {
+	public List<CtFeeType> findEntityTypeCandidates(Integer parentTypeId) throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtFeeType> result = null;
 		Map<CtFeeType, List<PtApplicationLevel>> record;
@@ -74,7 +74,7 @@ public class ServiceFeeTypeEJB implements ServiceFeeTypeEJBLocal {
 					.on(ft.APPLICATION_LEVEL_ID.eq(al.APPLICATION_LEVEL_ID)
 							.and(al.CODE.eq(val(APPLICATION_LEVEL_CODE_SERV))))
 					.whereNotExists(create.selectOne().from(sft)
-							.where(ft.FEE_TYPE_ID.eq(sft.FEE_TYPE_ID).and(sft.SERVICE_TYPE_ID.eq(parentId))))
+							.where(ft.FEE_TYPE_ID.eq(sft.FEE_TYPE_ID).and(sft.SERVICE_TYPE_ID.eq(parentTypeId))))
 					.and(ft.START_DATE
 							.eq(create.select(min(ft2.START_DATE)).from(ft2).where(ft.FEE_TYPE_ID.eq(ft2.FEE_TYPE_ID))))
 					.orderBy(ft.CODE)
@@ -84,8 +84,47 @@ public class ServiceFeeTypeEJB implements ServiceFeeTypeEJBLocal {
 			result.addAll(record.keySet());
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the fee type candidates for the service_type_id : " + parentId
+			errorMessage = "Error while try to find the fee type candidates for the service_type_id : " + parentTypeId
 					+ " - " + e.getMessage();
+			logger.error(errorMessage);
+			throw new CoMaSwDataAccessException(errorMessage, e);
+		}
+
+		return result;
+	}
+	
+	@Override
+	public List<CtFeeType> findEntityTypeRelated(Integer parentTypeId, String statusCode)
+			throws CoMaSwDataAccessException {
+		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
+		List<CtFeeType> result = null;
+		Map<CtFeeType, List<PtApplicationLevel>> record;
+		String errorMessage;
+		// aliases of tables
+		com.comasw.model.tables.PtStatus st = PT_STATUS.as("st");
+		com.comasw.model.tables.CtFeeType ft = CT_FEE_TYPE.as("ft");
+		com.comasw.model.tables.CtFeeType ft2 = CT_FEE_TYPE.as("ft2");
+		com.comasw.model.tables.CtServFeeType sft = CT_SERV_FEE_TYPE.as("sft");
+		com.comasw.model.tables.PtApplicationLevel al = PT_APPLICATION_LEVEL.as("al");
+
+		try {
+			record = create.select().from(al).join(ft)
+					.on(ft.APPLICATION_LEVEL_ID.eq(al.APPLICATION_LEVEL_ID)
+							.and(al.CODE.eq(val(APPLICATION_LEVEL_CODE_SERV))))
+					.whereExists(create.selectOne()
+							.from(sft.join(st).on(sft.STATUS_ID.eq(st.STATUS_ID).and(st.CODE.eq(val(statusCode)))))
+							.where(ft.FEE_TYPE_ID.eq(sft.FEE_TYPE_ID).and(sft.SERVICE_TYPE_ID.eq(parentTypeId))))
+					.and(ft.START_DATE
+							.eq(create.select(min(ft2.START_DATE)).from(ft2).where(ft.FEE_TYPE_ID.eq(ft2.FEE_TYPE_ID))))
+					.orderBy(ft.CODE)
+					.fetchGroups(r -> r.into(ft).into(CtFeeType.class), r -> r.into(al).into(PtApplicationLevel.class));
+
+			result = new ArrayList<CtFeeType>();
+			result.addAll(record.keySet());
+
+		} catch (DataAccessException e) {
+			errorMessage = "Error while try to find the fee type candidates for the service_type_id: " + parentTypeId
+					+ " and status code: " + statusCode + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
@@ -94,7 +133,7 @@ public class ServiceFeeTypeEJB implements ServiceFeeTypeEJBLocal {
 	}
 
 	@Override
-	public List<CtFeeType> findEntityTypeCandidates(Integer parentId, String statusCode)
+	public List<CtFeeType> findEntityTypeCandidates(Integer parentTypeId, String statusCode)
 			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtFeeType> result = null;
@@ -113,7 +152,7 @@ public class ServiceFeeTypeEJB implements ServiceFeeTypeEJBLocal {
 							.and(al.CODE.eq(val(APPLICATION_LEVEL_CODE_SERV))))
 					.whereNotExists(create.selectOne()
 							.from(sft.join(st).on(sft.STATUS_ID.eq(st.STATUS_ID).and(st.CODE.eq(val(statusCode)))))
-							.where(ft.FEE_TYPE_ID.eq(sft.FEE_TYPE_ID).and(sft.SERVICE_TYPE_ID.eq(parentId))))
+							.where(ft.FEE_TYPE_ID.eq(sft.FEE_TYPE_ID).and(sft.SERVICE_TYPE_ID.eq(parentTypeId))))
 					.and(ft.START_DATE
 							.eq(create.select(min(ft2.START_DATE)).from(ft2).where(ft.FEE_TYPE_ID.eq(ft2.FEE_TYPE_ID))))
 					.orderBy(ft.CODE)
@@ -123,7 +162,7 @@ public class ServiceFeeTypeEJB implements ServiceFeeTypeEJBLocal {
 			result.addAll(record.keySet());
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the fee type candidates for the service_type_id: " + parentId
+			errorMessage = "Error while try to find the fee type candidates for the service_type_id: " + parentTypeId
 					+ " and status code: " + statusCode + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
@@ -133,19 +172,19 @@ public class ServiceFeeTypeEJB implements ServiceFeeTypeEJBLocal {
 	}
 
 	@Override
-	public List<VwServiceFeeType> findHistoricRelatedEntityTypesView(Integer parentId)
+	public List<VwServiceFeeType> findHistoricRelatedEntityTypesView(Integer parentTypeId)
 			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<VwServiceFeeType> result = null;
 		String errorMessage;
 		try {
 			result = create.select().from(VW_SERVICE_FEE_TYPE)
-					.where(VW_SERVICE_FEE_TYPE.SERVICE_TYPE_ID.eq(val(parentId)))
+					.where(VW_SERVICE_FEE_TYPE.SERVICE_TYPE_ID.eq(val(parentTypeId)))
 					.orderBy(VW_SERVICE_FEE_TYPE.FEE_TYPE_CODE, VW_SERVICE_FEE_TYPE.FEE_TYPE_START_DATE).fetch()
 					.into(VwServiceFeeType.class);
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the view of fee types for the service_type_id : " + parentId + " - "
+			errorMessage = "Error while try to find the view of fee types for the service_type_id : " + parentTypeId + " - "
 					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
@@ -155,21 +194,21 @@ public class ServiceFeeTypeEJB implements ServiceFeeTypeEJBLocal {
 	}
 
 	@Override
-	public List<VwServiceFeeType> findRelatedEntityTypesByDateView(Integer parentId, LocalDateTime searchDate)
+	public List<VwServiceFeeType> findRelatedEntityTypesByDateView(Integer parentTypeId, LocalDateTime searchDate)
 			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<VwServiceFeeType> result = null;
 		String errorMessage;
 		try {
 			result = create.select().from(VW_SERVICE_FEE_TYPE)
-					.where(VW_SERVICE_FEE_TYPE.SERVICE_TYPE_ID.eq(val(parentId))
+					.where(VW_SERVICE_FEE_TYPE.SERVICE_TYPE_ID.eq(val(parentTypeId))
 							.and(val(searchDate).between(VW_SERVICE_FEE_TYPE.FEE_TYPE_START_DATE,
 									VW_SERVICE_FEE_TYPE.FEE_TYPE_END_DATE)))
 					.orderBy(VW_SERVICE_FEE_TYPE.FEE_TYPE_CODE, VW_SERVICE_FEE_TYPE.FEE_TYPE_START_DATE).fetch()
 					.into(VwServiceFeeType.class);
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the view of fee types for the service_type_id : " + parentId + " - "
+			errorMessage = "Error while try to find the view of fee types for the service_type_id : " + parentTypeId + " - "
 					+ e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
@@ -192,12 +231,16 @@ public class ServiceFeeTypeEJB implements ServiceFeeTypeEJBLocal {
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the service fee type for the service_fee_type_id : "
-						+ entityRelationTypeId + " - The query returns more rows(" + result.size()
+						+ entityRelationTypeId + " - The query returns a distinct number of rows (" + result.size()
 						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {
@@ -209,36 +252,39 @@ public class ServiceFeeTypeEJB implements ServiceFeeTypeEJBLocal {
 	}
 
 	@Override
-	public CtServFeeType findEntityRelationType(Integer parentId, Integer childId) throws CoMaSwDataAccessException {
+	public CtServFeeType findEntityRelationType(Integer parentTypeId, Integer childTypeId) throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtServFeeType> result = null;
 		String errorMessage;
 		// aliases of tables
 
 		try {
-			result = create.selectFrom(CT_SERV_FEE_TYPE).where(CT_SERV_FEE_TYPE.SERVICE_TYPE_ID.eq(val(parentId)))
-					.and(CT_SERV_FEE_TYPE.FEE_TYPE_ID.eq(val(childId))).fetch().into(CtServFeeType.class);
+			result = create.selectFrom(CT_SERV_FEE_TYPE).where(CT_SERV_FEE_TYPE.SERVICE_TYPE_ID.eq(val(parentTypeId)))
+					.and(CT_SERV_FEE_TYPE.FEE_TYPE_ID.eq(val(childTypeId))).fetch().into(CtServFeeType.class);
 
 			if (result.size() > 1) {
-				errorMessage = "Error while try to find the service fee type for the service_type_id : " + parentId
-						+ " and fee_type_id: " + childId + " - The query returns more rows(" + result.size()
+				errorMessage = "Error while try to find the service fee type for the service_type_id : " + parentTypeId
+						+ " and fee_type_id: " + childTypeId + " - The query returns a distinct number of rows (" + result.size()
 						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
-
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the fee types for the service_type_id : " + parentId
-					+ " and fee_type_id: " + childId + " - " + e.getMessage();
+			errorMessage = "Error while try to find the fee types for the service_type_id : " + parentTypeId
+					+ " and fee_type_id: " + childTypeId + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 	}
 
 	@Override
-	public VwServiceFeeType findEntityRelationTypeView(Integer parentId, Integer childId)
+	public VwServiceFeeType findEntityRelationTypeView(Integer parentTypeId, Integer childTypeId)
 			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<VwServiceFeeType> result = null;
@@ -246,24 +292,28 @@ public class ServiceFeeTypeEJB implements ServiceFeeTypeEJBLocal {
 		// aliases of tables
 
 		try {
-			result = create.selectFrom(VW_SERVICE_FEE_TYPE).where(VW_SERVICE_FEE_TYPE.SERVICE_TYPE_ID.eq(val(parentId)))
-					.and(VW_SERVICE_FEE_TYPE.FEE_TYPE_ID.eq(val(childId)))
+			result = create.selectFrom(VW_SERVICE_FEE_TYPE).where(VW_SERVICE_FEE_TYPE.SERVICE_TYPE_ID.eq(val(parentTypeId)))
+					.and(VW_SERVICE_FEE_TYPE.FEE_TYPE_ID.eq(val(childTypeId)))
 					.orderBy(VW_SERVICE_FEE_TYPE.FEE_TYPE_CODE, VW_SERVICE_FEE_TYPE.FEE_TYPE_START_DATE).fetch()
 					.into(VwServiceFeeType.class);
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the view of service fee type for the service_type_id : "
-						+ parentId + " and fee_type_id: " + childId + " - The query returns more rows(" + result.size()
+						+ parentTypeId + " and fee_type_id: " + childTypeId + " - The query returns a distinct number of rows (" + result.size()
 						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the fee types for the service_type_id : " + parentId
-					+ " and fee_type_id: " + childId + " - " + e.getMessage();
+			errorMessage = "Error while try to find the fee types for the service_type_id : " + parentTypeId
+					+ " and fee_type_id: " + childTypeId + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}

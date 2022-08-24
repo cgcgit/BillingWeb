@@ -122,12 +122,16 @@ public class FeeTypeEJB implements FeeTypeEJBLocal {
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the fee type for search date: " + searchDate.toString()
-						+ " and fee_type_id : " + feeTypeId + " - The query returns more rows(" + result.size()
+						+ " and fee_type_id : " + feeTypeId + " - The query returns a distinct number of rows (" + result.size()
 						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {
@@ -172,12 +176,16 @@ public class FeeTypeEJB implements FeeTypeEJBLocal {
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the fee type for search date: " + searchDate.toString()
-						+ " and code : " + code + " - The query returns more rows(" + result.size()
+						+ " and code : " + code + " - The query returns a distinct number of rows (" + result.size()
 						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {

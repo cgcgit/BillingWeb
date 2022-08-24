@@ -15,33 +15,46 @@ public interface ProductServiceTypeEJBLocal {
 	/**
 	 * Find the service type candidates to the given product type id
 	 * 
-	 * @param parentId parent type id of the relation to evaluated (product type id)
+	 * @param parentTypeId parent type id of the relation to evaluated (product type id)
 	 * @return list of the service type candidates
 	 * @throws CoMaSwDataAccessException
 	 */
-	public List<CtServiceType> findEntityTypeCandidates(Integer parentId) throws CoMaSwDataAccessException;
+	public List<CtServiceType> findEntityTypeCandidates(Integer parentTypeId) throws CoMaSwDataAccessException;
 
+	/**
+	 * Find the service type related for given product type id and status code
+	 * 
+	 * @param parentTypeId   parent type id of the relation to evaluated (product type
+	 *                   id)
+	 * @param statusCode status code of the entity's relation to evaluated (status
+	 *                   code of the product type id)
+	 * @return list of the service type related
+	 * @throws CoMaSwDataAccessException
+	 */
+	public List<CtServiceType> findEntityTypeRelated(Integer parentTypeId, String statusCode)
+			throws CoMaSwDataAccessException;
+	
 	/**
 	 * Find the service type candidates for given product type id and status code
 	 * 
-	 * @param parentId   parent type id of the relation to evaluated (product type
+	 * @param parentTypeId   parent type id of the relation to evaluated (product type
 	 *                   id)
 	 * @param statusCode status code of the entity's relation to evaluated (status
 	 *                   code of the product type id)
 	 * @return list of the service type candidates
 	 * @throws CoMaSwDataAccessException
 	 */
-	public List<CtServiceType> findEntityTypeCandidates(Integer parentId, String statusCode)
+	public List<CtServiceType> findEntityTypeCandidates(Integer parentTypeId, String statusCode)
 			throws CoMaSwDataAccessException;
 
 	/**
 	 * Find the view of service types related with the given product type id
 	 * 
-	 * @param parentId parent type id of the relation to evaluated (product type id)
+	 * @param parentTypeId parent type id of the relation to evaluated (product type id)
 	 * @return list of the service types related with the given parent type id
 	 * @throws CoMaSwDataAccessException
 	 */
-	public List<VwProductServiceType> findRelatedEntityTypesView(Integer parentId) throws CoMaSwDataAccessException;
+	public List<VwProductServiceType> findRelatedEntityTypesView(Integer parentTypeId) throws CoMaSwDataAccessException;
 
 	/**
 	 * Find the product-service type for the given product_service_type id
@@ -56,23 +69,23 @@ public interface ProductServiceTypeEJBLocal {
 	 * Find the product-service type for the given product type id and service type
 	 * id
 	 * 
-	 * @param parentId parent type id of the relation (product type id)
-	 * @param childId  child type id of the relation (service type id)
+	 * @param parentTypeId parent type id of the relation (product type id)
+	 * @param childTypeId  child type id of the relation (service type id)
 	 * @return product_service_type for the product-service type relation
 	 * @throws CoMaSwDataAccessException
 	 */
-	public CtProdServType findEntityRelationType(Integer parentId, Integer childId) throws CoMaSwDataAccessException;
+	public CtProdServType findEntityRelationType(Integer parentTypeId, Integer childTypeId) throws CoMaSwDataAccessException;
 
 	/**
 	 * Find the view of product-service type for the given product type id and
 	 * service type id
 	 * 
-	 * @param parentId parent type id of the relation (product type id)
-	 * @param childId  child type id of the relation (service type id)
+	 * @param parentTypeId parent type id of the relation (product type id)
+	 * @param childTypeId  child type id of the relation (service type id)
 	 * @return product_service_type for the product-service type relation
 	 * @throws CoMaSwDataAccessException
 	 */
-	public VwProductServiceType findEntityRelationTypeView(Integer parentId, Integer childId)
+	public VwProductServiceType findEntityRelationTypeView(Integer parentTypeId, Integer childTypeId)
 			throws CoMaSwDataAccessException;
 
 	/**

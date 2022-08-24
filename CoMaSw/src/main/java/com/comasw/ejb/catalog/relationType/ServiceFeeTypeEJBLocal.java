@@ -17,45 +17,60 @@ public interface ServiceFeeTypeEJBLocal {
 	 * Find the fee type candidates for given service type id. We select the
 	 * candidate with the minimum start date.
 	 * 
-	 * @param parentId parent type id of the relation to evaluated (service type id)
+	 * @param parentTypeId parent type id of the relation to evaluated (service type id)
 	 * @return list of the fee type candidates
 	 * @throws CoMaSwDataAccessException
 	 */
-	public List<CtFeeType> findEntityTypeCandidates(Integer parentId) throws CoMaSwDataAccessException;
+	public List<CtFeeType> findEntityTypeCandidates(Integer parentTypeId) throws CoMaSwDataAccessException;
+	
+	/**
+	 * Find the fee type related for given service type id and status code. We
+	 * select the candidate with the minimum start date.
+	 * 
+	 * @param parentTypeId   parent type id of the relation to evaluated (service type
+	 *                   id)
+	 * @param statusCode status code of the entity's relation to evaluated (status
+	 *                   code of the service type id)
+	 * @return list of the fee type related
+	 * @throws CoMaSwDataAccessException
+	 */
+	public List<CtFeeType> findEntityTypeRelated(Integer parentTypeId, String statusCode)
+			throws CoMaSwDataAccessException;
+
 
 	/**
 	 * Find the fee type candidates for given service type id and status code. We
 	 * select the candidate with the minimum start date.
 	 * 
-	 * @param parentId   parent type id of the relation to evaluated (service type
+	 * @param parentTypeId   parent type id of the relation to evaluated (service type
 	 *                   id)
 	 * @param statusCode status code of the entity's relation to evaluated (status
 	 *                   code of the service type id)
 	 * @return list of the fee type candidates
 	 * @throws CoMaSwDataAccessException
 	 */
-	public List<CtFeeType> findEntityTypeCandidates(Integer parentId, String statusCode)
+	public List<CtFeeType> findEntityTypeCandidates(Integer parentTypeId, String statusCode)
 			throws CoMaSwDataAccessException;
 
 	/**
 	 * Find the view of all (historic data) fee types related with the given service
 	 * type id
 	 * 
-	 * @param parentId parent type id of the relation to evaluated (service type id)
+	 * @param parentTypeId parent type id of the relation to evaluated (service type id)
 	 * @return list of the fee types related with the given parent type id
 	 * @throws CoMaSwDataAccessException
 	 */
-	public List<VwServiceFeeType> findHistoricRelatedEntityTypesView(Integer parentId) throws CoMaSwDataAccessException;
+	public List<VwServiceFeeType> findHistoricRelatedEntityTypesView(Integer parentTypeId) throws CoMaSwDataAccessException;
 
 	/**
 	 * Find the view of fee types related with the given service type id for the
 	 * given date
 	 * 
-	 * @param parentId parent type id of the relation to evaluated (service type id)
+	 * @param parentTypeId parent type id of the relation to evaluated (service type id)
 	 * @return list of the fee types related with the given parent type id
 	 * @throws CoMaSwDataAccessException
 	 */
-	public List<VwServiceFeeType> findRelatedEntityTypesByDateView(Integer parentId, LocalDateTime searchDate)
+	public List<VwServiceFeeType> findRelatedEntityTypesByDateView(Integer parentTypeId, LocalDateTime searchDate)
 			throws CoMaSwDataAccessException;
 
 	/**
@@ -70,23 +85,23 @@ public interface ServiceFeeTypeEJBLocal {
 	/**
 	 * Find the service-fee type for the given service type id and fee type id
 	 * 
-	 * @param parentId parent type id of the relation (service type id)
-	 * @param childId  child type id of the relation (fee type id)
+	 * @param parentTypeId parent type id of the relation (service type id)
+	 * @param childTypeId  child type id of the relation (fee type id)
 	 * @return service_fee_type for the service-fee type relation
 	 * @throws CoMaSwDataAccessException
 	 */
-	public CtServFeeType findEntityRelationType(Integer parentId, Integer childId) throws CoMaSwDataAccessException;
+	public CtServFeeType findEntityRelationType(Integer parentTypeId, Integer childTypeId) throws CoMaSwDataAccessException;
 
 	/**
 	 * Find the view of service-fee type for the given service type id and fee type
 	 * id
 	 * 
-	 * @param parentId parent type id of the relation (service type id)
-	 * @param childId  child type id of the relation (fee type id)
+	 * @param parentTypeId parent type id of the relation (service type id)
+	 * @param childTypeId  child type id of the relation (fee type id)
 	 * @return service_fee_type for the service-fee type relation
 	 * @throws CoMaSwDataAccessException
 	 */
-	public VwServiceFeeType findEntityRelationTypeView(Integer parentId, Integer childId)
+	public VwServiceFeeType findEntityRelationTypeView(Integer parentTypeId, Integer childTypeId)
 			throws CoMaSwDataAccessException;
 
 	/**

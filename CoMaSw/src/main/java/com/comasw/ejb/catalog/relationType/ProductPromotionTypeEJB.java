@@ -59,7 +59,7 @@ public class ProductPromotionTypeEJB implements ProductPromotionTypeEJBLocal {
 	}
 
 	@Override
-	public List<CtPromotionType> findEntityTypeCandidates(Integer parentId) throws CoMaSwDataAccessException {
+	public List<CtPromotionType> findEntityTypeCandidates(Integer parentTypeId) throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtPromotionType> result = null;
 		Map<CtPromotionType, List<PtApplicationLevel>> record;
@@ -75,7 +75,7 @@ public class ProductPromotionTypeEJB implements ProductPromotionTypeEJBLocal {
 					.on(pt.APPLICATION_LEVEL_ID.eq(al.APPLICATION_LEVEL_ID)
 							.and(al.CODE.eq(val(APPLICATION_LEVEL_CODE_PROD))))
 					.whereNotExists(create.selectOne().from(ppt).where(
-							pt.PROMOTION_TYPE_ID.eq(ppt.PROMOTION_TYPE_ID).and(ppt.PRODUCT_TYPE_ID.eq(parentId))))
+							pt.PROMOTION_TYPE_ID.eq(ppt.PROMOTION_TYPE_ID).and(ppt.PRODUCT_TYPE_ID.eq(parentTypeId))))
 					.and(pt.START_DATE.eq(create.select(max(pt2.START_DATE)).from(pt2)
 							.where(pt.PROMOTION_TYPE_ID.eq(pt2.PROMOTION_TYPE_ID))))
 					.orderBy(pt.CODE).fetchGroups(r -> r.into(pt).into(CtPromotionType.class),
@@ -85,7 +85,7 @@ public class ProductPromotionTypeEJB implements ProductPromotionTypeEJBLocal {
 			result.addAll(record.keySet());
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the promotion type candidates for the product_type_id : " + parentId
+			errorMessage = "Error while try to find the promotion type candidates for the product_type_id : " + parentTypeId
 					+ " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
@@ -93,9 +93,52 @@ public class ProductPromotionTypeEJB implements ProductPromotionTypeEJBLocal {
 
 		return result;
 	}
+	
+	
+	@Override
+	public List<CtPromotionType> findEntityTypeRelated(Integer parentTypeId, String statusCode)
+			throws CoMaSwDataAccessException {
+		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
+		List<CtPromotionType> result = null;
+		Map<CtPromotionType, List<PtApplicationLevel>> record;
+		String errorMessage;
+		// aliases of tables
+		com.comasw.model.tables.PtStatus st = PT_STATUS.as("st");
+		com.comasw.model.tables.CtPromotionType pt = CT_PROMOTION_TYPE.as("pt");
+		com.comasw.model.tables.CtPromotionType pt2 = CT_PROMOTION_TYPE.as("pt2");
+		com.comasw.model.tables.CtPromoProdType ppt = CT_PROMO_PROD_TYPE.as("ppt");
+		com.comasw.model.tables.PtApplicationLevel al = PT_APPLICATION_LEVEL.as("al");
+
+		try {
+			record = create.select().from(al).join(pt)
+					.on(pt.APPLICATION_LEVEL_ID.eq(al.APPLICATION_LEVEL_ID)
+							.and(al.CODE.eq(val(APPLICATION_LEVEL_CODE_PROD))))
+					.whereExists(create.selectOne()
+							.from(ppt.join(st).on(ppt.STATUS_ID.eq(st.STATUS_ID).and(st.CODE.eq(val(statusCode)))))
+							.where(pt.PROMOTION_TYPE_ID.eq(ppt.PROMOTION_TYPE_ID)
+									.and(ppt.PRODUCT_TYPE_ID.eq(parentTypeId))))
+					.and(pt.START_DATE.eq(create.select(max(pt2.START_DATE)).from(pt2)
+							.where(pt.PROMOTION_TYPE_ID.eq(pt2.PROMOTION_TYPE_ID))))
+					.orderBy(pt.CODE).fetchGroups(r -> r.into(pt).into(CtPromotionType.class),
+							r -> r.into(al).into(PtApplicationLevel.class));
+
+			result = new ArrayList<CtPromotionType>();
+			result.addAll(record.keySet());
+
+		} catch (DataAccessException e) {
+			errorMessage = "Error while try to find the promotion type candidates for the product_type_id: " + parentTypeId
+					+ " and status code: " + statusCode + " - " + e.getMessage();
+			logger.error(errorMessage);
+			throw new CoMaSwDataAccessException(errorMessage, e);
+		}
+
+		return result;
+	}
+
+	
 
 	@Override
-	public List<CtPromotionType> findEntityTypeCandidates(Integer parentId, String statusCode)
+	public List<CtPromotionType> findEntityTypeCandidates(Integer parentTypeId, String statusCode)
 			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtPromotionType> result = null;
@@ -115,7 +158,7 @@ public class ProductPromotionTypeEJB implements ProductPromotionTypeEJBLocal {
 					.whereNotExists(create.selectOne()
 							.from(ppt.join(st).on(ppt.STATUS_ID.eq(st.STATUS_ID).and(st.CODE.eq(val(statusCode)))))
 							.where(pt.PROMOTION_TYPE_ID.eq(ppt.PROMOTION_TYPE_ID)
-									.and(ppt.PRODUCT_TYPE_ID.eq(parentId))))
+									.and(ppt.PRODUCT_TYPE_ID.eq(parentTypeId))))
 					.and(pt.START_DATE.eq(create.select(max(pt2.START_DATE)).from(pt2)
 							.where(pt.PROMOTION_TYPE_ID.eq(pt2.PROMOTION_TYPE_ID))))
 					.orderBy(pt.CODE).fetchGroups(r -> r.into(pt).into(CtPromotionType.class),
@@ -125,7 +168,7 @@ public class ProductPromotionTypeEJB implements ProductPromotionTypeEJBLocal {
 			result.addAll(record.keySet());
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the promotion type candidates for the product_type_id: " + parentId
+			errorMessage = "Error while try to find the promotion type candidates for the product_type_id: " + parentTypeId
 					+ " and status code: " + statusCode + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
@@ -135,20 +178,20 @@ public class ProductPromotionTypeEJB implements ProductPromotionTypeEJBLocal {
 	}
 
 	@Override
-	public List<VwPromotionProductType> findHistoricRelatedEntityTypesView(Integer parentId)
+	public List<VwPromotionProductType> findHistoricRelatedEntityTypesView(Integer parentTypeId)
 			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<VwPromotionProductType> result = null;
 		String errorMessage;
 		try {
 			result = create.select().from(VW_PROMOTION_PRODUCT_TYPE)
-					.where(VW_PROMOTION_PRODUCT_TYPE.PRODUCT_TYPE_ID.eq(val(parentId)))
+					.where(VW_PROMOTION_PRODUCT_TYPE.PRODUCT_TYPE_ID.eq(val(parentTypeId)))
 					.orderBy(VW_PROMOTION_PRODUCT_TYPE.PROMOTION_TYPE_CODE,
 							VW_PROMOTION_PRODUCT_TYPE.PROMOTION_TYPE_START_DATE)
 					.fetch().into(VwPromotionProductType.class);
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the view of promotion types for the product_type_id : " + parentId
+			errorMessage = "Error while try to find the view of promotion types for the product_type_id : " + parentTypeId
 					+ " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
@@ -158,14 +201,14 @@ public class ProductPromotionTypeEJB implements ProductPromotionTypeEJBLocal {
 	}
 
 	@Override
-	public List<VwPromotionProductType> findRelatedEntityTypesByDateView(Integer parentId, LocalDateTime searchDate)
+	public List<VwPromotionProductType> findRelatedEntityTypesByDateView(Integer parentTypeId, LocalDateTime searchDate)
 			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<VwPromotionProductType> result = null;
 		String errorMessage;
 		try {
 			result = create.select().from(VW_PROMOTION_PRODUCT_TYPE)
-					.where(VW_PROMOTION_PRODUCT_TYPE.PRODUCT_TYPE_ID.eq(val(parentId))
+					.where(VW_PROMOTION_PRODUCT_TYPE.PRODUCT_TYPE_ID.eq(val(parentTypeId))
 							.and(val(searchDate).between(VW_PROMOTION_PRODUCT_TYPE.PROMOTION_TYPE_START_DATE,
 									VW_PROMOTION_PRODUCT_TYPE.PROMOTION_TYPE_END_DATE)))
 					.orderBy(VW_PROMOTION_PRODUCT_TYPE.PROMOTION_TYPE_CODE,
@@ -173,7 +216,7 @@ public class ProductPromotionTypeEJB implements ProductPromotionTypeEJBLocal {
 					.fetch().into(VwPromotionProductType.class);
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the view of promotion types for the product_type_id : " + parentId
+			errorMessage = "Error while try to find the view of promotion types for the product_type_id : " + parentTypeId
 					+ " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
@@ -196,12 +239,16 @@ public class ProductPromotionTypeEJB implements ProductPromotionTypeEJBLocal {
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the product promotion type for the product_promotion_type_id : "
-						+ entityRelationTypeId + " - The query returns more rows(" + result.size()
+						+ entityRelationTypeId + " - The query returns a distinct number of rows (" + result.size()
 						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {
@@ -213,36 +260,40 @@ public class ProductPromotionTypeEJB implements ProductPromotionTypeEJBLocal {
 	}
 
 	@Override
-	public CtPromoProdType findEntityRelationType(Integer parentId, Integer childId) throws CoMaSwDataAccessException {
+	public CtPromoProdType findEntityRelationType(Integer parentTypeId, Integer childTypeId) throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtPromoProdType> result = null;
 		String errorMessage;
 		// aliases of tables
 
 		try {
-			result = create.selectFrom(CT_PROMO_PROD_TYPE).where(CT_PROMO_PROD_TYPE.PRODUCT_TYPE_ID.eq(val(parentId)))
-					.and(CT_PROMO_PROD_TYPE.PROMOTION_TYPE_ID.eq(val(childId))).fetch().into(CtPromoProdType.class);
+			result = create.selectFrom(CT_PROMO_PROD_TYPE).where(CT_PROMO_PROD_TYPE.PRODUCT_TYPE_ID.eq(val(parentTypeId)))
+					.and(CT_PROMO_PROD_TYPE.PROMOTION_TYPE_ID.eq(val(childTypeId))).fetch().into(CtPromoProdType.class);
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the product promotion type for the product_type_id : "
-						+ parentId + " and promotion_type_id: " + childId + " - The query returns more rows("
-						+ result.size() + ") than expected (1) ";
+						+ parentTypeId + " and promotion_type_id: " + childTypeId + " - The query returns a distinct number of rows (" + result.size()
+						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
-
+			
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the promotion types for the product_type_id : " + parentId
-					+ " and promotion_type_id: " + childId + " - " + e.getMessage();
+			errorMessage = "Error while try to find the promotion types for the product_type_id : " + parentTypeId
+					+ " and promotion_type_id: " + childTypeId + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 	}
 
 	@Override
-	public VwPromotionProductType findEntityRelationTypeView(Integer parentId, Integer childId)
+	public VwPromotionProductType findEntityRelationTypeView(Integer parentTypeId, Integer childTypeId)
 			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<VwPromotionProductType> result = null;
@@ -251,25 +302,29 @@ public class ProductPromotionTypeEJB implements ProductPromotionTypeEJBLocal {
 
 		try {
 			result = create.selectFrom(VW_PROMOTION_PRODUCT_TYPE)
-					.where(VW_PROMOTION_PRODUCT_TYPE.PRODUCT_TYPE_ID.eq(val(parentId)))
-					.and(VW_PROMOTION_PRODUCT_TYPE.PROMOTION_TYPE_ID.eq(val(childId)))
+					.where(VW_PROMOTION_PRODUCT_TYPE.PRODUCT_TYPE_ID.eq(val(parentTypeId)))
+					.and(VW_PROMOTION_PRODUCT_TYPE.PROMOTION_TYPE_ID.eq(val(childTypeId)))
 					.orderBy(VW_PROMOTION_PRODUCT_TYPE.PROMOTION_TYPE_CODE,
 							VW_PROMOTION_PRODUCT_TYPE.PROMOTION_TYPE_START_DATE)
 					.fetch().into(VwPromotionProductType.class);
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the view of product promotion type for the product_type_id : "
-						+ parentId + " and promotion_type_id: " + childId + " - The query returns more rows("
-						+ result.size() + ") than expected (1) ";
+						+ parentTypeId + " and promotion_type_id: " + childTypeId + " - The query returns a distinct number of rows (" + result.size()
+						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
-
+			
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the promotion types for the product_type_id : " + parentId
-					+ " and promotion_type_id: " + childId + " - " + e.getMessage();
+			errorMessage = "Error while try to find the promotion types for the product_type_id : " + parentTypeId
+					+ " and promotion_type_id: " + childTypeId + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}

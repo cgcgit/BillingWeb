@@ -17,45 +17,60 @@ public interface ProductFeeTypeEJBLocal {
 	 * Find the fee type candidates for given product type id. We select the
 	 * candidate with the minimum start date.
 	 * 
-	 * @param parentId parent type id of the relation to evaluated (product type id)
+	 * @param parentTypeId parent type id of the relation to evaluated (product type id)
 	 * @return list of the fee type candidates
 	 * @throws CoMaSwDataAccessException
 	 */
-	public List<CtFeeType> findEntityTypeCandidates(Integer parentId) throws CoMaSwDataAccessException;
+	public List<CtFeeType> findEntityTypeCandidates(Integer parentTypeId) throws CoMaSwDataAccessException;
+	
+	
+	/**
+	 * Find the fee type related for given parent type id and status code. We
+	 * select the candidate with the minimum start date.
+	 * 
+	 * @param parentTypeId   parent type id of the relation to evaluated (product type
+	 *                   id)
+	 * @param statusCode status code of the entity's relation to evaluated (status
+	 *                   code of the product type id)
+	 * @return list of the fee type related
+	 * @throws CoMaSwDataAccessException
+	 */
+	public List<CtFeeType> findEntityTypeRelated(Integer parentTypeId, String statusCode)
+			throws CoMaSwDataAccessException;
 
 	/**
 	 * Find the fee type candidates for given product type id and status code. We
 	 * select the candidate with the minimum start date.
 	 * 
-	 * @param parentId   parent type id of the relation to evaluated (product type
+	 * @param parentTypeId   parent type id of the relation to evaluated (product type
 	 *                   id)
 	 * @param statusCode status code of the entity's relation to evaluated (status
 	 *                   code of the product type id)
 	 * @return list of the fee type candidates
 	 * @throws CoMaSwDataAccessException
 	 */
-	public List<CtFeeType> findEntityTypeCandidates(Integer parentId, String statusCode)
+	public List<CtFeeType> findEntityTypeCandidates(Integer parentTypeId, String statusCode)
 			throws CoMaSwDataAccessException;
 
 	/**
 	 * Find the view of all (historic data) fee types related with the given product
 	 * type id
 	 * 
-	 * @param parentId parent type id of the relation to evaluated (product type id)
+	 * @param parentTypeId parent type id of the relation to evaluated (product type id)
 	 * @return list of the fee types related with the given parent type id
 	 * @throws CoMaSwDataAccessException
 	 */
-	public List<VwProductFeeType> findHistoricRelatedEntityTypesView(Integer parentId) throws CoMaSwDataAccessException;
+	public List<VwProductFeeType> findHistoricRelatedEntityTypesView(Integer parentTypeId) throws CoMaSwDataAccessException;
 
 	/**
 	 * Find the view of fee types related with the given product type id for the
 	 * given date
 	 * 
-	 * @param parentId parent type id of the relation to evaluated (product type id)
+	 * @param parentTypeId parent type id of the relation to evaluated (product type id)
 	 * @return list of the fee types related with the given parent type id
 	 * @throws CoMaSwDataAccessException
 	 */
-	public List<VwProductFeeType> findRelatedEntityTypesByDateView(Integer parentId, LocalDateTime searchDate)
+	public List<VwProductFeeType> findRelatedEntityTypesByDateView(Integer parentTypeId, LocalDateTime searchDate)
 			throws CoMaSwDataAccessException;
 
 	/**
@@ -70,23 +85,23 @@ public interface ProductFeeTypeEJBLocal {
 	/**
 	 * Find the product-fee type for the given product type id and fee type id
 	 * 
-	 * @param parentId parent type id of the relation (product type id)
-	 * @param childId  child type id of the relation (fee type id)
+	 * @param parentTypeId parent type id of the relation (product type id)
+	 * @param childTypeId  child type id of the relation (fee type id)
 	 * @return product_fee_type for the product-fee type relation
 	 * @throws CoMaSwDataAccessException
 	 */
-	public CtProdFeeType findEntityRelationType(Integer parentId, Integer childId) throws CoMaSwDataAccessException;
+	public CtProdFeeType findEntityRelationType(Integer parentTypeId, Integer childTypeId) throws CoMaSwDataAccessException;
 
 	/**
 	 * Find the view of product-fee type for the given product type id and fee type
 	 * id
 	 * 
-	 * @param parentId parent type id of the relation (product type id)
-	 * @param childId  child type id of the relation (fee type id)
+	 * @param parentTypeId parent type id of the relation (product type id)
+	 * @param childTypeId  child type id of the relation (fee type id)
 	 * @return product_fee_type for the product-fee type relation
 	 * @throws CoMaSwDataAccessException
 	 */
-	public VwProductFeeType findEntityRelationTypeView(Integer parentId, Integer childId)
+	public VwProductFeeType findEntityRelationTypeView(Integer parentTypeId, Integer childTypeId)
 			throws CoMaSwDataAccessException;
 
 	/**

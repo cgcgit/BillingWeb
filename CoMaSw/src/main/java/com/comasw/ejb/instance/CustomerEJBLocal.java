@@ -54,6 +54,19 @@ public interface CustomerEJBLocal {
 	public ItCustomer findDataBySearchDateAndCustomerId(LocalDateTime searchDate, Integer customerId)
 			throws CoMaSwDataAccessException;
 	
+	
+
+	/**
+	 * Find the not canceled customer data stores in the system for the given customerId and
+	 * searchDate
+	 * 
+	 * @param searchDate
+	 * @param customerId
+	 * @return type data in the system for the given customerId and searchDate
+	 * @throws CoMaSwDataAccessException
+	 */
+	public ItCustomer findActiveDataBySearchDateAndCustomerId(LocalDateTime searchDate, Integer customerId)
+			throws CoMaSwDataAccessException;	
 
 	
 	/**

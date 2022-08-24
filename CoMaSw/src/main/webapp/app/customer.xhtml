@@ -47,6 +47,14 @@
 			update="form:accordionPanel:historicTable" />
 
 
+		<p:remoteCommand id="remoteCommandUpdatePanelData"
+			name="updatePanelData" process="@this"
+			update="form:accordionPanel:selectedTablePanel
+			form:accordionPanel:historicTablePanel
+			form:accordionPanel:emptyHistoricTablePanel" />
+
+
+
 		<p:accordionPanel id="accordionPanel" multiple="true"
 			widgetVar="multipleAccordionPanelWidget">
 
@@ -322,9 +330,9 @@
 
 					<p:dataTable id="selectedTable" widgetVar="selectedTableWidget"
 						var="selectedDataTable" value="#{customerController.selectedData}"
-						rendered="true" size="small" scrollable="true" resizableColumns="true"
-						emptyMessage="No data to show" showGridlines="true"
-						paginatorPosition="bottom">
+						rendered="true" size="small" scrollable="true"
+						resizableColumns="true" emptyMessage="No data to show"
+						showGridlines="true" paginatorPosition="bottom">
 
 						<p:column id="customerId"
 							style="font-family:Arial Black;
@@ -1383,9 +1391,8 @@
 			responsive="true" widgetVar="createNewDialogWidget">
 
 			<h:panelGrid id="createNewDialogPanelData">
-				<p:wizard id="createNewWizard"
-					flowListener="#{customerController.onFlowProcess}"
-					widgetVar="createNewWizarWidget">
+				<p:tabView id="createNewTab" widgetVar="createNewTabWidget">
+
 
 					<p:tab id="instanceDataTab" title="Instance">
 						<p:panel id="instanceDetails" header="Instance Details">
@@ -1549,198 +1556,27 @@
 						</p:panel>
 					</p:tab>
 
-					<p:tab id="confirmTab" title="Confirmation">
-						<p:panel id="confirmationPanel" header="Confirmation">
-							<h:panelGrid id="confirmation" columns="3"
-								columnClasses="grid,grid,grid">
-								<h:panelGrid columns="3">
-
-									<p:fieldset legend="Instance Data">
-										<h:panelGrid columns="2" columnClasses="label, value">
-											<h:outputText id="confirmStartDateLabel" value="StartDate " />
-											<h:outputText id="confirmStartDateInput"
-												value="#{customerController.newData.startDate}"
-												style="width:96%" styleClass="outputLabel" />
-
-											<h:outputText id="confirmEndDateLabel" value="StartDate " />
-											<h:outputText id="confirmEndDateInput"
-												value="#{customerController.newData.endDate}"
-												style="width:96%" styleClass="outputLabel" />
-
-											<h:outputText id="confirmCustomerTypeOutput"
-												value="Customer Type:" />
-											<p:selectOneMenu id="confirmCustomerTypeInput"
-												value="#{customerController.newData.customerTypeId}"
-												disabled="true" immediate="true">
-												<f:selectItems
-													value="#{customerController.customerTypeSelectItems()}"
-													id="selectItemsCustomerTypeInputConfirm" var="CustomerType"
-													itemValue="#{customerController.newData.customerTypeId}">
-												</f:selectItems>
-											</p:selectOneMenu>
-
-											<p:outputLabel id="confirmStatusLabel" value="Status:" />
-											<p:selectOneMenu id="confirmStatusInput" disabled="true"
-												immediate="true"
-												value="#{customerController.newData.statusId}">
-												<f:selectItems id="selectItemsStatusOutputConfirm"
-													itemDisabled="true" var="Status"
-													value="#{customerController.statusInstanceSelectItems()}"
-													itemValue="#{customerController.newData.statusId}" />
-											</p:selectOneMenu>
-										</h:panelGrid>
-									</p:fieldset>
-
-									<p:fieldset legend="Personal Data">
-										<h:panelGrid columns="2" columnClasses="label, value">
-											<h:outputText id="confirmNameOutput" value="Name:" />
-											<h:outputText id="confirmNameInput"
-												value="#{customerController.newData.givenName}"
-												style="width:96%" styleClass="outputLabel" />
-
-											<h:outputText id="confirm1stSurnameOutput"
-												value="1st Surname:" />
-											<h:outputText id="confirm1stSurnameInput"
-												value="#{customerController.newData.firstSurname}"
-												style="width:96%" styleClass="outputLabel" />
-
-											<h:outputText id="confirm2ndSurnameOutput"
-												value="2nd Surname:" />
-											<h:outputText id="confirm2ndSurnameInput"
-												value="#{customerController.newData.secondSurname}"
-												style="width:96%" styleClass="outputLabel" />
-
-											<h:outputText id="confirmIdCardTypeOutput"
-												value="ID. Card Type:" />
-											<p:selectOneMenu id="confirmIdCardTypeInput"
-												value="#{customerController.newData.identityCardTypeId}"
-												disabled="true" immediate="true">
-												<f:selectItems
-													value="#{customerController.identityCardTypeSelectItems()}"
-													id="selectItemsIdCardTypeInputConfirm" var="IdCardType"
-													itemValue="#{customerController.newData.identityCardTypeId}">
-												</f:selectItems>
-											</p:selectOneMenu>
-
-											<h:outputText id="confirmIdCardOutput" value="ID. Card:" />
-											<h:outputText id="confirmIdCardInput"
-												value="#{customerController.newData.identityCard}"
-												style="width:96%" styleClass="outputLabel" />
-										</h:panelGrid>
-									</p:fieldset>
-
-									<p:fieldset legend="Adress Data">
-										<h:panelGrid columns="2" columnClasses="label, value">
-
-											<h:outputText id="confirmAddressOutput" value="Address:" />
-											<h:outputText id="confirmAddressInput"
-												value="#{customerController.newData.address}"
-												style="width:96%" styleClass="outputLabel" />
-
-											<h:outputText id="confirmPostCodeOutput" value="Postal Code:" />
-											<h:outputText id="confirmPostCodeInput"
-												value="#{customerController.newData.postCode}"
-												style="width:96%" styleClass="outputLabel" />
-
-											<h:outputText id="confirmCityOutput" value="City:" />
-											<h:outputText id="confirmCityIput"
-												value="#{customerController.newData.city}" style="width:96%"
-												styleClass="outputLabel" />
-
-											<h:outputText id="confirmStateOutput" value="State:" />
-											<h:outputText id="confirmStateIput"
-												value="#{customerController.newData.state}"
-												style="width:96%" styleClass="outputLabel" />
-
-											<h:outputText id="confirmCountryOutput" value="Country:" />
-											<h:outputText id="confirmCountryIput"
-												value="#{customerController.newData.city}" style="width:96%"
-												styleClass="outputLabel" />
-
-										</h:panelGrid>
-									</p:fieldset>
-
-									<p:fieldset legend="Contact Data">
-										<h:panelGrid columns="2" columnClasses="label, value">
-
-											<h:outputText id="confirmContactPhoneOutput" value="Phone:" />
-											<h:outputText id="confirmContactPhoneInput"
-												value="#{customerController.newData.contactPhone}"
-												style="width:96%" styleClass="outputLabel" />
-
-											<h:outputText id="confirmEMailOutput" value="Email:" />
-											<h:outputText id="confirmEMailInput"
-												value="#{customerController.newData.EMail}" label="Email"
-												style="width:96%" styleClass="outputLabel" />
-
-										</h:panelGrid>
-									</p:fieldset>
+				</p:tabView>
+				<p:fieldset legend="SAVE DATA">
+					<h:panelGrid id="createNewDialogPanelButtons" columns="2"
+						style="align-items: center" cellpadding="5">
+						<p:commandButton id="createNewDialogConfirm"
+							value="#{uiValue.okLabel}" update="form:growlMessage"
+							actionListener="#{customerController.pushConfirmButtonCreateNewDialog()}"
+							styleClass="ui-confirmdialog-yes" icon="#{uiValue.okCircleIcon}"
+							oncomplete="if (!args.validationFailed) {updatePanelData(); updateSelectedTable(); updateHistoricTable()}">
+						</p:commandButton>
+						<p:commandButton id="createNewDialogCancel"
+							value="#{uiValue.cancelLabel}" icon="#{uiValue.cancelCircleIcon}"
+							actionListener="#{customerController.pushCancelButtonCreateNewDialog()}"
+							update="form:growlMessage"
+							onclick="PF('createNewDialogWidget').hide()"
+							class="ui-button-secondary" />
+					</h:panelGrid>
+				</p:fieldset>
 
 
-									<p:fieldset legend="Bank Data">
-										<h:panelGrid columns="2" columnClasses="label, value">
 
-											<h:outputText id="confirmIbanOutput" value="IBAN:" />
-											<h:outputText id="confirmIbanInput"
-												value="#{customerController.newData.iban}" style="width:96%"
-												styleClass="outputLabel" />
-
-											<h:outputText id="confirmBankEntityOutput" value="Entity:" />
-											<h:outputText id="confirmBankEntityInput"
-												value="#{customerController.newData.bankEntity}"
-												style="width:96%" styleClass="outputLabel" />
-
-											<h:outputText id="confirmBankBranchOutput" value="Branch:" />
-											<h:outputText id="confirmBankBranchInput"
-												value="#{customerController.newData.bankBranch}"
-												style="width:96%" styleClass="outputLabel" />
-
-
-											<h:outputText id="confirmBankControlDigitOutput"
-												value="Control Digit:" />
-											<h:outputText id="confirmBankControlDigitInput"
-												value="#{customerController.newData.bankControlDigit}"
-												style="width:96%" styleClass="outputLabel" />
-
-
-											<h:outputText id="confirmBankAccountNumberOutput"
-												value="Account Nr:" />
-											<h:outputText id="confirmBankAccountNumberInput"
-												value="#{customerController.newData.bankAccountNumber}"
-												style="width:96%" styleClass="outputLabel" />
-										</h:panelGrid>
-									</p:fieldset>
-								</h:panelGrid>
-							</h:panelGrid>
-							<p:fieldset legend="SAVE DATA">
-								<h:panelGrid id="createNewDialogPanelButtons" columns="3"
-									style="align-items: center" cellpadding="5">
-									<p:commandButton id="createNewDialogConfirm"
-										value="#{uiValue.okLabel}" update="form:growlMessage"
-										actionListener="#{customerController.pushConfirmButtonCreateNewDialog()}"
-										styleClass="ui-confirmdialog-yes"
-										icon="#{uiValue.okCircleIcon}"
-										oncomplete="if (!args.validationFailed) {updateSelectedTable(); updateHistoricTable()}">
-									</p:commandButton>
-									<p:commandButton id="createNewDialogCancel"
-										value="#{uiValue.cancelLabel}"
-										icon="#{uiValue.cancelCircleIcon}"
-										actionListener="#{customerController.pushCancelButtonCreateNewDialog()}"
-										update="form:growlMessage"
-										onclick="PF('createNewDialogWidget').hide()"
-										class="ui-button-secondary" />
-									<p:commandButton id="createNewDialogClean"
-										value="#{uiValue.cleanLabel}"
-										icon="#{uiValue.cleanCircleIcon}"
-										update="createNewDialogPanelData form:growlMessage"
-										process="@this" class="ui-button-secondary">
-										<p:resetInput target="createNewDialogPanelData" />
-									</p:commandButton>
-								</h:panelGrid>
-							</p:fieldset>
-						</p:panel>
-					</p:tab>
-				</p:wizard>
 			</h:panelGrid>
 		</p:dialog>
 
@@ -1754,7 +1590,7 @@
 				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
 				actionListener="#{customerController.pushConfirmButtonDeleteDialog()}"
 				immediate="true"
-				oncomplete="{updateSelectedTable(); updateHistoricTable()}; PF('deleteRowDialogWidget').hide()"
+				oncomplete="{updatePanelData(); updateSelectedTable(); updateHistoricTable()}; PF('deleteRowDialogWidget').hide()"
 				process="@this" icon="#{uiValue.okCircleIcon}" />
 			<p:commandButton id="deleteDialogCancel"
 				value="#{uiValue.cancelLabel}" styleClass="ui-confirmdialog-no"

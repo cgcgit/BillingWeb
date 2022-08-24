@@ -72,11 +72,16 @@ public class DiscountTypeEJB implements DiscountTypeEJBLocal {
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the discount type for discount_type_id : " + discountTypeId
-						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
+						+ " - The query returns a distinct number of rows (" + result.size()
+						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {
@@ -100,11 +105,16 @@ public class DiscountTypeEJB implements DiscountTypeEJBLocal {
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the discount type for code : " + code
-						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
+						+ " - The query returns a distinct number of rows (" + result.size()
+						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {

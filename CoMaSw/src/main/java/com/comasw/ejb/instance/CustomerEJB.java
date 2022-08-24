@@ -2,10 +2,12 @@ package com.comasw.ejb.instance;
 
 import static com.comasw.model.Sequences.SEQ_CUSTOMER_ID;
 import static com.comasw.model.Tables.IT_CUSTOMER;
+import static com.comasw.model.Tables.PT_STATUS;
 import static com.comasw.model.Tables.VW_CUSTOMER_INSTANCE;
 
 import static org.jooq.impl.DSL.val;
 import static org.jooq.impl.DSL.upper;
+import static org.jooq.impl.DSL.*;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -132,12 +134,16 @@ public class CustomerEJB implements CustomerEJBLocal {
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the customer for search date: " + searchDate.toString()
-						+ " and customer id : " + customerId + " - The query returns more rows(" + result.size()
+						+ " and customer id : " + customerId + " - The query returns a distinct number of rows (" + result.size()
 						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {
@@ -148,6 +154,46 @@ public class CustomerEJB implements CustomerEJBLocal {
 		}
 	}
 
+	
+	@Override	
+	public ItCustomer findActiveDataBySearchDateAndCustomerId(LocalDateTime searchDate, Integer customerId)
+			throws CoMaSwDataAccessException{
+		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
+		List<ItCustomer> result = null;
+		String errorMessage;
+		
+		try {			
+			result = create.selectFrom(IT_CUSTOMER)
+					.where(IT_CUSTOMER.CUSTOMER_ID.eq(val(customerId))
+							.and(val(searchDate).between(IT_CUSTOMER.START_DATE, IT_CUSTOMER.END_DATE)))
+					.and(notExists(create.selectOne().from(PT_STATUS)
+					.where(PT_STATUS.CODE.eq(val("CANC")).and(PT_STATUS.STATUS_ID.eq(IT_CUSTOMER.STATUS_ID)))))
+					.orderBy(IT_CUSTOMER.GIVEN_NAME, IT_CUSTOMER.FIRST_SURNAME, IT_CUSTOMER.SECOND_SURNAME, IT_CUSTOMER.CUSTOMER_ID, IT_CUSTOMER.START_DATE)
+					.fetch().into(ItCustomer.class);
+			
+			if (result.size() > 1) {
+				errorMessage = "Error while try to find the customer for search date: " + searchDate.toString()
+						+ " and customer id : " + customerId + " - The query returns a distinct number of rows (" + result.size()
+						+ ") than expected (1) ";
+				logger.error(errorMessage);
+				throw new CoMaSwDataAccessException(errorMessage);
+			} else {
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
+			}
+
+		} catch (DataAccessException e) {
+			errorMessage = "Error while try to find the fee type for  for search date: " + searchDate.toString()
+					+ " and customer id: " + customerId + " - " + e.getMessage();
+			logger.error(errorMessage);
+			throw new CoMaSwDataAccessException(errorMessage, e);
+		}
+		
+	}
+	
 	@Override
 	public List<ItCustomer> findInstanceWithParameters(Optional<LocalDateTime> searchDate, Optional<Integer> customerId, Optional<Integer> customerTypeId, Optional<Integer> statusId, 
 			Optional<String> identityCard, Optional<String> contactPhone, Optional<String> givenName, Optional<String> firstSurname, Optional<String> secondSurname) throws CoMaSwDataAccessException {

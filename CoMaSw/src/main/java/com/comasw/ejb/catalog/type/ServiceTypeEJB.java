@@ -70,11 +70,16 @@ public class ServiceTypeEJB implements ServiceTypeEJBLocal {
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the service type for service_type_id : " + serviceTypeId
-						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
+						+ " - The query returns a distinct number of rows (" + result.size()
+						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {
@@ -98,13 +103,17 @@ public class ServiceTypeEJB implements ServiceTypeEJBLocal {
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the service type for code : " + code
-						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
+						+ " - The query returns a distinct number of rows (" + result.size()
+						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
-
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the service type for code " + code + " - " + e.getMessage();
 			logger.error(errorMessage);

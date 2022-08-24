@@ -2,14 +2,11 @@ package com.comasw.ejb.instance;
 
 
 import static com.comasw.model.Sequences.SEQ_PRODUCT_ID;
-import static com.comasw.model.Tables.IT_CUSTOMER;
 import static com.comasw.model.Tables.IT_PRODUCT;
-import static com.comasw.model.Tables.IT_ACCOUNT;
 import static com.comasw.model.Tables.PT_STATUS;
 import static com.comasw.model.Tables.VW_PRODUCT_INSTANCE;
 
 import static org.jooq.impl.DSL.val;
-import static org.jooq.impl.DSL.upper;
 import static org.jooq.impl.DSL.*;
 
 import java.time.LocalDateTime;
@@ -166,14 +163,17 @@ public class ProductEJB implements ProductEJBLocal {
 			
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the account for search date: " + searchDate.toString()
-						+ " and account id : " + productId + " - The query returns more rows(" + result.size()
+						+ " and product_id : " + productId + " - The query returns a distinct number of rows (" + result.size()
 						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
-
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find all the product - " + e.getMessage();
 			logger.error(errorMessage);
@@ -184,7 +184,7 @@ public class ProductEJB implements ProductEJBLocal {
 
 	@Override
 	public List<ItProduct> findInstanceWithParameters(Optional<LocalDateTime> searchDate,
-			boolean includeCancelledData, Optional<Integer> productId, Optional<Integer> statusId,
+			boolean includeCancelledData, Optional<Integer> productId, Optional<Integer> productTypeId, Optional<Integer> statusId,
 			Optional<String> contractNr, Optional<Integer> accountId, Optional<String> accountIdentityCard,
 			Optional<String> accountContactPhone, Optional<Integer> customerId, Optional<String> customerIdentityCard,
 			Optional<String> customerContactPhone) throws CoMaSwDataAccessException {
@@ -203,7 +203,7 @@ public class ProductEJB implements ProductEJBLocal {
 		String customerIdentityCardAux = null;
 		String customerContactPhoneAux = null;
 
-		if ((!searchDate.isPresent()) && (!productId.isPresent()) && (!statusId.isPresent())
+		if ((!searchDate.isPresent()) && (!productId.isPresent())  && (!productTypeId.isPresent()) && (!statusId.isPresent())
 				&& ((!contractNr.isPresent()) || contractNr.get().isEmpty()) && (!accountId.isPresent())
 				&& ((!accountIdentityCard.isPresent()) || accountIdentityCard.get().isEmpty())
 				&& ((!accountContactPhone.isPresent()) || accountContactPhone.get().isEmpty())
@@ -228,6 +228,10 @@ public class ProductEJB implements ProductEJBLocal {
 
 				if (productId.isPresent()) {
 					query.addConditions(p.PRODUCT_ID.eq(val(productId.get())));
+				}
+				
+				if (productTypeId.isPresent()) {
+					query.addConditions(p.PRODUCT_TYPE_ID.eq(val(productTypeId.get())));
 				}
 
 				if (statusId.isPresent()) {
@@ -267,27 +271,22 @@ public class ProductEJB implements ProductEJBLocal {
 					if (customerContactPhone.isPresent() && !customerContactPhone.get().isEmpty()) {
 						customerContactPhoneAux = customerContactPhone.get().trim().toUpperCase();
 					}
-
-					query.addConditions(
-							p.ACCOUNT_ID.in(create.select(IT_ACCOUNT.ACCOUNT_ID).from(IT_ACCOUNT).innerJoin(IT_CUSTOMER)
-									.on((IT_ACCOUNT.CUSTOMER_ID.eq(IT_CUSTOMER.CUSTOMER_ID))
-											.and(IT_ACCOUNT.START_DATE.lessOrEqual(IT_CUSTOMER.END_DATE))
-											.and(IT_ACCOUNT.END_DATE.lessOrEqual(IT_CUSTOMER.START_DATE)))
-									.where(p.START_DATE.lessOrEqual(IT_ACCOUNT.END_DATE))
-									.and(p.END_DATE.lessOrEqual(IT_ACCOUNT.START_DATE))
-									.and(IT_ACCOUNT.CUSTOMER_ID
-											.eq(coalesce(val(customerIdAux), IT_ACCOUNT.CUSTOMER_ID)))
-									.and(upper(IT_ACCOUNT.IDENTITY_CARD)
-											.eq(coalesce(val(accountIdentityCardAux), IT_ACCOUNT.IDENTITY_CARD)))
-									.and(upper(IT_ACCOUNT.CONTACT_PHONE)
-											.eq(coalesce(val(accountContactPhoneAux), IT_ACCOUNT.CONTACT_PHONE)))
-									.and(upper(IT_ACCOUNT.CONTRACT_NUMBER)
-											.eq(coalesce(val(contractNrAux), IT_ACCOUNT.CONTRACT_NUMBER)))
-									.and(upper(IT_CUSTOMER.IDENTITY_CARD)
-											.eq(coalesce(val(customerIdentityCardAux), IT_CUSTOMER.IDENTITY_CARD)))
-									.and(upper(IT_CUSTOMER.CONTACT_PHONE)
-											.eq(coalesce(val(customerContactPhoneAux), IT_CUSTOMER.CONTACT_PHONE)))));
-
+					
+					query.addConditions(exists(create.selectOne().from(VW_PRODUCT_INSTANCE).where(
+							VW_PRODUCT_INSTANCE.PRODUCT_ID.eq(p.PRODUCT_ID)
+							.and(VW_PRODUCT_INSTANCE.ACCOUNT_ID.eq(p.ACCOUNT_ID))
+							.and(p.START_DATE.lessOrEqual(VW_PRODUCT_INSTANCE.PRODUCT_END_DATE))							
+							.and(p.END_DATE.lessOrEqual(VW_PRODUCT_INSTANCE.PRODUCT_START_DATE))
+							.and(p.START_DATE.lessOrEqual(VW_PRODUCT_INSTANCE.ACCOUNT_END_DATE))							
+							.and(p.END_DATE.lessOrEqual(VW_PRODUCT_INSTANCE.ACCOUNT_START_DATE))
+							.and(p.START_DATE.lessOrEqual(VW_PRODUCT_INSTANCE.CUSTOMER_END_DATE))							
+							.and(p.END_DATE.lessOrEqual(VW_PRODUCT_INSTANCE.CUSTOMER_START_DATE))
+							.and(VW_PRODUCT_INSTANCE.CONTRACT_NUMBER.eq(coalesce(val(contractNrAux), VW_PRODUCT_INSTANCE.CONTRACT_NUMBER)))
+							.and(VW_PRODUCT_INSTANCE.ACCOUNT_IDENTITY_CARD.eq(coalesce(val(accountIdentityCardAux), VW_PRODUCT_INSTANCE.ACCOUNT_IDENTITY_CARD)))
+							.and(VW_PRODUCT_INSTANCE.ACCOUNT_CONTACT_PHONE.eq(coalesce(val(accountContactPhoneAux), VW_PRODUCT_INSTANCE.ACCOUNT_CONTACT_PHONE)))
+							.and(VW_PRODUCT_INSTANCE.CUSTOMER_ID.eq(coalesce(val(customerIdAux), VW_PRODUCT_INSTANCE.CUSTOMER_ID)))
+							.and(VW_PRODUCT_INSTANCE.CUSTOMER_IDENTITY_CARD.eq(coalesce(val(customerIdentityCardAux), VW_PRODUCT_INSTANCE.CUSTOMER_IDENTITY_CARD)))
+							.and(VW_PRODUCT_INSTANCE.CUSTOMER_CONTACT_PHONE.eq(coalesce(val(customerContactPhoneAux), VW_PRODUCT_INSTANCE.CUSTOMER_CONTACT_PHONE))))));
 				}
 
 				query.addOrderBy(p.ACCOUNT_ID, p.CODE, p.PRODUCT_ID, p.START_DATE, p.END_DATE);
@@ -306,7 +305,7 @@ public class ProductEJB implements ProductEJBLocal {
 	
 	@Override
 	public List<VwProductInstance> findInstanceViewWithParameters(Optional<LocalDateTime> searchDate, 
-			boolean includeCancelledData, Optional<Integer> productId,
+			boolean includeCancelledData, Optional<Integer> productId,  Optional<Integer> productTypeId,
 			Optional<Integer> statusId, Optional<String> contractNr,
 			Optional<Integer> accountId, 
 			Optional<String> accountIdentityCard, Optional<String> accountContactPhone, 
@@ -320,7 +319,7 @@ public class ProductEJB implements ProductEJBLocal {
 		SelectQuery<Record> query = create.selectQuery();
 		String errorMessage;
 
-		if ((!searchDate.isPresent()) && (!productId.isPresent()) && (!statusId.isPresent())
+		if ((!searchDate.isPresent()) && (!productId.isPresent()) && (!productTypeId.isPresent())  && (!statusId.isPresent())
 				&& ((!contractNr.isPresent()) || contractNr.get().isEmpty()) && (!accountId.isPresent())
 				&& ((!accountIdentityCard.isPresent()) || accountIdentityCard.get().isEmpty())
 				&& ((!accountContactPhone.isPresent()) || accountContactPhone.get().isEmpty())
@@ -347,6 +346,10 @@ public class ProductEJB implements ProductEJBLocal {
 
 				if (productId.isPresent()) {
 					query.addConditions(p.PRODUCT_ID.eq(val(productId.get())));
+				}
+				
+				if (productTypeId.isPresent()) {
+					query.addConditions(p.PRODUCT_TYPE_ID.eq(val(productTypeId.get())));
 				}
 
 				if (statusId.isPresent()) {

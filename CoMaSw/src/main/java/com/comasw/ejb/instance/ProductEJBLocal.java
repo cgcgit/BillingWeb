@@ -57,9 +57,10 @@ public interface ProductEJBLocal {
      * criteria. The parameters are optional, but there must be at least one parameter specified.
 	 * @param searchDate date criteria to search
 	 * @param includeCancelledData true -> included cancelled data
-	 * @productId product id criteria to search
-	 * @param statusId status id criteria to search
-	 * @contractNr contract number criteria to search
+	 * @param productId criteria to search
+	 * @param productTypeId criteria to search
+	 * @param statusId criteria to search
+	 * @param contractNr criteria to search
 	 * @param accountId account id criteria to search
 	 * @param accountIdentityCard account identity card criteria to search
 	 * @param accountContactPhone account contact phone criteria to search
@@ -70,7 +71,7 @@ public interface ProductEJBLocal {
 	 * @throws CoMaSwDataAccessException
 	 */
 	public List<ItProduct> findInstanceWithParameters(Optional<LocalDateTime> searchDate, 
-			boolean includeCancelledData, Optional<Integer> productId,
+			boolean includeCancelledData, Optional<Integer> productId, Optional<Integer> productTypeId,
 			Optional<Integer> statusId, Optional<String> contractNr,
 			Optional<Integer> accountId, 
 			Optional<String> accountIdentityCard, Optional<String> accountContactPhone, 
@@ -84,9 +85,10 @@ public interface ProductEJBLocal {
      * criteria. The parameters are optional, but there must be at least one parameter specified.
 	 * @param searchDate date criteria to search
 	 * @param includeCancelledData true -> included cancelled data
-	 * @productId product id criteria to search
-	 * @param statusId status id criteria to search
-	 * @contractNr contract number criteria to search
+	 * @param productId criteria to search
+	 * @param productTypeId criteria to search
+	 * @param statusId criteria to search
+	 * @param contractNr  criteria to search
 	 * @param accountId account id criteria to search
 	 * @param accountIdentityCard account identity card criteria to search
 	 * @param accountContactPhone account contact phone criteria to search
@@ -97,7 +99,7 @@ public interface ProductEJBLocal {
 	 * @throws CoMaSwDataAccessException
 	 */
 	public List<VwProductInstance> findInstanceViewWithParameters(Optional<LocalDateTime> searchDate, 
-			boolean includeCancelledData, Optional<Integer> productId,
+			boolean includeCancelledData, Optional<Integer> productId, Optional<Integer> productTypeId,
 			Optional<Integer> statusId, Optional<String> contractNr,
 			Optional<Integer> accountId, 
 			Optional<String> accountIdentityCard, Optional<String> accountContactPhone, 

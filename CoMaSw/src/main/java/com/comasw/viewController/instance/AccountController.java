@@ -89,7 +89,7 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 
 	private static Integer DEBIT_ACCOUNT_TYPE_ID = Integer.valueOf(dbDefinitions.getString("DEBIT_ACCOUNT_TYPE"));
 
-	private static String CUSTOMER_DATA_TABLE_ID = "form:customerSearchDataTable";
+	private static String CUSTOMER_DATA_TABLE_ID = "form:createNewTab:customerSearchDataTable";
 
 	@Inject
 	private ExternalContext externalContext;
@@ -125,24 +125,11 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 
 	private String searchCustomerIdentityCardForNew;
 
-	/** lists for the search customer form **/
-
-	// private List<ItCustomer> customerDataList;
-
-	// private List<ItCustomer> filteredCustomerDataList;
-
-	// private ItCustomer selectedCustomerData;
-
 	/**
 	 * For new data - if is true --> copy the personal, address and bank data from
 	 * parente customer
 	 */
 	private boolean copyDataFromCustomerFlag;
-
-	/**
-	 * For new data - if is true --> creates a new contract Nr
-	 */
-	// private boolean createNewContractFlag;
 
 	// --------------------
 	// GETTERS AND SETTERS
@@ -516,7 +503,6 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 						}
 					}
 
-
 					logger.info("Updated the status to cancel for the subsequent rows");
 
 				}
@@ -541,7 +527,7 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 			} else {
 				messageDetail = "ERROR - Data values are incorrect";
 				logger.info(messageDetail);
-				createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
+				createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				FacesContext.getCurrentInstance().validationFailed();
 
 			}
@@ -679,9 +665,11 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 				} else {
 					// create a new object
 					id = accountEJB.insertData(this.getNewData());
-					VwAccountInstance object = accountEJB.findInstanceViewWithParameters(
-							Optional.ofNullable(this.getSearchDate()), Optional.empty(), Optional.ofNullable(id),
-							Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty()).get(0);
+					VwAccountInstance object = accountEJB
+							.findInstanceViewWithParameters(Optional.ofNullable(this.getSearchDate()), Optional.empty(),
+									Optional.ofNullable(id), Optional.empty(), Optional.empty(), Optional.empty(),
+									Optional.empty(), Optional.empty())
+							.get(0);
 
 					messageDetail = "Data saves succesfully";
 					logger.info("Create account: " + this.getNewData().toString() + " - " + messageDetail);
@@ -1001,6 +989,8 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 		this.setSearchDate(LocalDate.now().atStartOfDay());
 		this.setFromAddingRow(false);
 		this.setToCancel(false);
+		this.setActiveDateChanged(false);
+		this.setCancelledDateChanged(false);
 		this.setPrevStatusId(-1);
 		this.setShowSelectedData(false);
 		// this.setCreateNewContractFlag(true);
@@ -1284,7 +1274,7 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 		String messageDetail = "";
 		int i, currentPos, lastPos;
 		boolean error = false;
-		
+
 		LocalDateTime cancelledDate;
 
 		try {
@@ -1314,7 +1304,7 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
 							messageDetail);
 				}
-				
+
 				// set the cancelled date for all the records
 				if (this.getSelectedHistoricData().getCancelledDate() == null) {
 					cancelledDate = LocalDateTime.now();
@@ -1720,7 +1710,7 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 		boolean validation = true;
 
 		ItAccount objectToValidate = (ItAccount) object;
-		
+
 		if (objectToValidate.getContractNumber() == null || objectToValidate.getContractNumber().isEmpty()) {
 			messageDetail = "ERROR - The contract number for the account can not be null";
 			logger.error(messageDetail);
@@ -1736,6 +1726,16 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
+			}
+
+			List<ItAccount> accountList = accountEJB.findDataByContractNr(objectToValidate.getContractNumber());
+
+			if (!accountList.isEmpty() && accountList.get(0).getAccountId() != objectToValidate.getAccountId()) {
+				messageDetail = "ERROR - The selected contract number was asigned to another account. Please select another contract number";
+				logger.error(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
+				validation = false;
+
 			}
 
 		}
@@ -1770,11 +1770,12 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 	public boolean validateNewInstance(Object object) {
 		String message = "INSTANCE DATA VALIDATION";
 		String messageDetail;
+		ItCustomer parent;
 		boolean validation = true;
 
 		LocalDateTime minDate = Formatter.stringToLocalDateTime("01/01/1900");
 		LocalDateTime maxDate = Formatter.stringToLocalDateTime("31/12/9999");
-		
+
 		ItAccount objectToValidate = (ItAccount) object;
 
 		if (this.isFromAddingRow()) {
@@ -1852,6 +1853,15 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 			validation = false;
 		}
 
+		parent = customerEJB.findActiveDataBySearchDateAndCustomerId(objectToValidate.getStartDate(),
+				objectToValidate.getCustomerId());
+		if (parent == null) {
+			messageDetail = "Error - Not exist an active record for the selected customer in these dates.";
+			logger.error(messageDetail);
+			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
+			validation = false;
+		}
+
 		return validation;
 
 	}
@@ -1865,7 +1875,7 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 		boolean validation = true;
 
 		ItAccount objectToValidate = (ItAccount) object;
-		
+
 		if (this.isFromAddingRow()) {
 			message = "NEW CUSTOMER ROW " + message;
 		} else {
@@ -1983,7 +1993,7 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 		String message = "ADDRESS DATA VALIDATION";
 		String messageDetail;
 		boolean validation = true;
-		
+
 		ItAccount objectToValidate = (ItAccount) object;
 
 		if (this.isFromAddingRow()) {
@@ -2052,8 +2062,7 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 			logger.error(messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			validation = false;
-		} else if (((Integer) objectToValidate.getState().length())
-				.compareTo(AccountController.STATE_LENGTH_MAX) > 0) {
+		} else if (((Integer) objectToValidate.getState().length()).compareTo(AccountController.STATE_LENGTH_MAX) > 0) {
 			// length characters exceeds the maximum length
 			messageDetail = "Error - The state of the account (" + objectToValidate.getState().length()
 					+ " characters) exceeds the limit of " + AccountController.STATE_LENGTH_MAX.toString()
@@ -2106,7 +2115,7 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 		String message = "CONTACT DATA VALIDATION";
 		String messageDetail;
 		boolean validation = true;
-		
+
 		ItAccount objectToValidate = (ItAccount) object;
 
 		if (this.isFromAddingRow()) {
@@ -2179,8 +2188,8 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 		String messageDetail;
 		boolean validation = true;
 		boolean filledBankData = true;
-		
-		ItAccount objectToValidate = (ItAccount)object;
+
+		ItAccount objectToValidate = (ItAccount) object;
 
 		if (this.isFromAddingRow()) {
 			message = "NEW ACCOUNT ROW " + message;
@@ -2198,8 +2207,7 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 
 		if ((objectToValidate.getIban() == null || objectToValidate.getIban().isEmpty())
 				&& (objectToValidate.getBankEntity() == null || objectToValidate.getBankEntity().isEmpty())
-				&& (objectToValidate.getBankControlDigit() == null
-						|| objectToValidate.getBankControlDigit().isEmpty())
+				&& (objectToValidate.getBankControlDigit() == null || objectToValidate.getBankControlDigit().isEmpty())
 				&& (objectToValidate.getBankAccountNumber() == null
 						|| objectToValidate.getBankAccountNumber().isEmpty())) {
 			// no one of data bank field was filled
@@ -2357,40 +2365,41 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 
 		message = "COPY DATA FROM CUSTOMER";
 
-		if (this.getNewData().getCustomerId() != null) {
-			ItCustomer customer = customerEJB.findDataBySearchDateAndCustomerId(this.getSearchDate(),
-					this.getNewData().getCustomerId());
+		if (this.isCopyDataFromCustomerFlag()) {
+			if (this.getNewData().getCustomerId() != null) {
+				ItCustomer customer = customerEJB.findDataBySearchDateAndCustomerId(this.getSearchDate(),
+						this.getNewData().getCustomerId());
 
-			if (customer != null && customer.getCustomerId() != null && customer.getCustomerId() != 0) {
+				if (customer != null && customer.getCustomerId() != null && customer.getCustomerId() != 0) {
 
-				// Copy the data from parent customer
+					// Copy the data from parent customer
 
-				// Personal Info
-				this.getNewData().setGivenName(customer.getGivenName());
-				this.getNewData().setFirstSurname(customer.getFirstSurname());
-				this.getNewData().setSecondSurname(customer.getSecondSurname());
-				this.getNewData().setIdentityCard(customer.getIdentityCard());
-				this.getNewData().setIdentityCardTypeId(customer.getIdentityCardTypeId());
+					// Personal Info
+					this.getNewData().setGivenName(customer.getGivenName());
+					this.getNewData().setFirstSurname(customer.getFirstSurname());
+					this.getNewData().setSecondSurname(customer.getSecondSurname());
+					this.getNewData().setIdentityCard(customer.getIdentityCard());
+					this.getNewData().setIdentityCardTypeId(customer.getIdentityCardTypeId());
 
-				// Address info
-				this.getNewData().setAddress(customer.getAddress());
-				this.getNewData().setCity(customer.getCity());
-				this.getNewData().setState(customer.getState());
-				this.getNewData().setCountry(customer.getCountry());
-				this.getNewData().setPostCode(customer.getPostCode());
+					// Address info
+					this.getNewData().setAddress(customer.getAddress());
+					this.getNewData().setCity(customer.getCity());
+					this.getNewData().setState(customer.getState());
+					this.getNewData().setCountry(customer.getCountry());
+					this.getNewData().setPostCode(customer.getPostCode());
 
-				// Contact info
-				this.getNewData().setContactPhone(customer.getContactPhone());
-				this.getNewData().setEMail(customer.getEMail());
+					// Contact info
+					this.getNewData().setContactPhone(customer.getContactPhone());
+					this.getNewData().setEMail(customer.getEMail());
 
-				// Bank Info
-				this.getNewData().setIban(customer.getIban());
-				this.getNewData().setBankEntity(customer.getBankEntity());
-				this.getNewData().setBankBranch(customer.getBankBranch());
-				this.getNewData().setBankControlDigit(customer.getBankControlDigit());
-				this.getNewData().setBankAccountNumber(customer.getBankAccountNumber());
+					// Bank Info
+					this.getNewData().setIban(customer.getIban());
+					this.getNewData().setBankEntity(customer.getBankEntity());
+					this.getNewData().setBankBranch(customer.getBankBranch());
+					this.getNewData().setBankControlDigit(customer.getBankControlDigit());
+					this.getNewData().setBankAccountNumber(customer.getBankAccountNumber());
+				}
 			}
-
 		} else {
 			messageDetail = "ERROR - Not exists a customer with the customer id: " + this.getNewData().getCustomerId()
 					+ ". Please type an existing customer id";
@@ -2409,6 +2418,7 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 	public void changeCopyFromCustomer(ValueChangeEvent e) {
 		boolean newcopyFromCustomerFlagValue = (boolean) e.getNewValue();
 		this.setCopyDataFromCustomerFlag(newcopyFromCustomerFlagValue);
+		this.copyDataFromCustomer();
 	}
 
 	/**
@@ -2547,6 +2557,8 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 
 		this.setSearchCustomerIdForNew(this.getSelectedParentSearchData().getCustomerId());
 		this.setSearchCustomerIdentityCardForNew(this.getSelectedParentSearchData().getCustomerIdentityCard());
+
+		this.copyDataFromCustomer();
 
 		PrimeFaces.current().executeScript("PF('searchCustomerListWidget').hide();");
 		PrimeFaces.current().executeScript("PF('newCustomerPanelWidget').refresh();");

@@ -78,12 +78,16 @@ public class ApplicationLevelEJB implements ApplicationLevelEJBLocal {
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the application level for application_level_id : "
-						+ applicationLevelId + " - The query returns more rows(" + result.size()
+						+ applicationLevelId + " - The query returns a distinct number of rows (" + result.size()
 						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {
@@ -106,11 +110,16 @@ public class ApplicationLevelEJB implements ApplicationLevelEJBLocal {
 					.orderBy(PT_APPLICATION_LEVEL.CODE).fetch().into(PtApplicationLevel.class);
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the application level for code : " + code
-						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
+						+ " - The query returns a distinct number of rows (" + result.size()
+						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {

@@ -50,7 +50,7 @@ public class ProductServiceTypeEJB implements ProductServiceTypeEJBLocal {
 	}
 
 	@Override
-	public List<CtServiceType> findEntityTypeCandidates(Integer parentId) throws CoMaSwDataAccessException {
+	public List<CtServiceType> findEntityTypeCandidates(Integer parentTypeId) throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtServiceType> result = null;
 		String errorMessage;
@@ -61,11 +61,11 @@ public class ProductServiceTypeEJB implements ProductServiceTypeEJBLocal {
 		try {
 			result = create.select().from(svt)
 					.whereNotExists(create.selectOne().from(pst)
-							.where(svt.SERVICE_TYPE_ID.eq(pst.SERVICE_TYPE_ID).and(pst.PRODUCT_TYPE_ID.eq(parentId))))
+							.where(svt.SERVICE_TYPE_ID.eq(pst.SERVICE_TYPE_ID).and(pst.PRODUCT_TYPE_ID.eq(parentTypeId))))
 					.orderBy(svt.CODE).fetch().into(CtServiceType.class);
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the service type candidates for the product_type_id : " + parentId
+			errorMessage = "Error while try to find the service type candidates for the product_type_id : " + parentTypeId
 					+ " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
@@ -74,8 +74,38 @@ public class ProductServiceTypeEJB implements ProductServiceTypeEJBLocal {
 		return result;
 	}
 
+	
 	@Override
-	public List<CtServiceType> findEntityTypeCandidates(Integer parentId, String statusCode)
+	public List<CtServiceType> findEntityTypeRelated(Integer parentTypeId, String statusCode)
+			throws CoMaSwDataAccessException {
+		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
+		List<CtServiceType> result = null;
+		String errorMessage;
+		// aliases of tables
+		com.comasw.model.tables.PtStatus st = PT_STATUS.as("st");
+		com.comasw.model.tables.CtServiceType svt = CT_SERVICE_TYPE.as("svt");
+		com.comasw.model.tables.CtProdServType pst = CT_PROD_SERV_TYPE.as("pst");
+
+		try {
+			result = create.select().from(svt)
+					.whereExists(create.selectOne()
+							.from(pst.join(st).on(pst.STATUS_ID.eq(st.STATUS_ID).and(st.CODE.eq(val(statusCode)))))
+							.where(svt.SERVICE_TYPE_ID.eq(pst.SERVICE_TYPE_ID).and(pst.PRODUCT_TYPE_ID.eq(parentTypeId))))
+					.orderBy(svt.CODE).fetch().into(CtServiceType.class);
+
+		} catch (DataAccessException e) {
+			errorMessage = "Error while try to find the fee type candidates for the product_type_id: " + parentTypeId
+					+ " and status code: " + statusCode + " - " + e.getMessage();
+			logger.error(errorMessage);
+			throw new CoMaSwDataAccessException(errorMessage, e);
+		}
+
+		return result;
+	}
+
+	
+	@Override
+	public List<CtServiceType> findEntityTypeCandidates(Integer parentTypeId, String statusCode)
 			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtServiceType> result = null;
@@ -89,11 +119,11 @@ public class ProductServiceTypeEJB implements ProductServiceTypeEJBLocal {
 			result = create.select().from(svt)
 					.whereNotExists(create.selectOne()
 							.from(pst.join(st).on(pst.STATUS_ID.eq(st.STATUS_ID).and(st.CODE.eq(val(statusCode)))))
-							.where(svt.SERVICE_TYPE_ID.eq(pst.SERVICE_TYPE_ID).and(pst.PRODUCT_TYPE_ID.eq(parentId))))
+							.where(svt.SERVICE_TYPE_ID.eq(pst.SERVICE_TYPE_ID).and(pst.PRODUCT_TYPE_ID.eq(parentTypeId))))
 					.orderBy(svt.CODE).fetch().into(CtServiceType.class);
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the fee type candidates for the product_type_id: " + parentId
+			errorMessage = "Error while try to find the fee type candidates for the product_type_id: " + parentTypeId
 					+ " and status code: " + statusCode + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
@@ -103,17 +133,17 @@ public class ProductServiceTypeEJB implements ProductServiceTypeEJBLocal {
 	}
 
 	@Override
-	public List<VwProductServiceType> findRelatedEntityTypesView(Integer parentId) throws CoMaSwDataAccessException {
+	public List<VwProductServiceType> findRelatedEntityTypesView(Integer parentTypeId) throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<VwProductServiceType> result = null;
 		String errorMessage;
 		try {
 			result = create.select().from(VW_PRODUCT_SERVICE_TYPE)
-					.where(VW_PRODUCT_SERVICE_TYPE.PRODUCT_TYPE_ID.eq(val(parentId)))
+					.where(VW_PRODUCT_SERVICE_TYPE.PRODUCT_TYPE_ID.eq(val(parentTypeId)))
 					.orderBy(VW_PRODUCT_SERVICE_TYPE.SERVICE_TYPE_CODE).fetch().into(VwProductServiceType.class);
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the view of service types for the product_type_id : " + parentId
+			errorMessage = "Error while try to find the view of service types for the product_type_id : " + parentTypeId
 					+ " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
@@ -136,12 +166,16 @@ public class ProductServiceTypeEJB implements ProductServiceTypeEJBLocal {
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the product service type for the product_service_type_id : "
-						+ entityRelationTypeId + " - The query returns more rows(" + result.size()
+						+ entityRelationTypeId + " - The query returns a distinct number of rows (" + result.size()
 						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {
@@ -153,29 +187,33 @@ public class ProductServiceTypeEJB implements ProductServiceTypeEJBLocal {
 	}
 
 	@Override
-	public CtProdServType findEntityRelationType(Integer parentId, Integer childId) throws CoMaSwDataAccessException {
+	public CtProdServType findEntityRelationType(Integer parentTypeId, Integer childTypeId) throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtProdServType> result = null;
 		String errorMessage;
 		// aliases of tables
 
 		try {
-			result = create.selectFrom(CT_PROD_SERV_TYPE).where(CT_PROD_SERV_TYPE.PRODUCT_TYPE_ID.eq(val(parentId)))
-					.and(CT_PROD_SERV_TYPE.SERVICE_TYPE_ID.eq(val(childId))).fetch().into(CtProdServType.class);
+			result = create.selectFrom(CT_PROD_SERV_TYPE).where(CT_PROD_SERV_TYPE.PRODUCT_TYPE_ID.eq(val(parentTypeId)))
+					.and(CT_PROD_SERV_TYPE.SERVICE_TYPE_ID.eq(val(childTypeId))).fetch().into(CtProdServType.class);
 
 			if (result.size() > 1) {
-				errorMessage = "Error while try to find the product service type for the product_type_id : " + parentId
-						+ " and service_type_id: " + childId + " - The query returns more rows(" + result.size()
+				errorMessage = "Error while try to find the product service type for the product_type_id : " + parentTypeId
+						+ " and service_type_id: " + childTypeId + " - The query returns a distinct number of rows (" + result.size()
 						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the service types for the product_type_id : " + parentId
-					+ " and fee_type_id: " + childId + " - " + e.getMessage();
+			errorMessage = "Error while try to find the service types for the product_type_id : " + parentTypeId
+					+ " and fee_type_id: " + childTypeId + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
@@ -183,7 +221,7 @@ public class ProductServiceTypeEJB implements ProductServiceTypeEJBLocal {
 	}
 
 	@Override
-	public VwProductServiceType findEntityRelationTypeView(Integer parentId, Integer childId)
+	public VwProductServiceType findEntityRelationTypeView(Integer parentTypeId, Integer childTypeId)
 			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<VwProductServiceType> result = null;
@@ -192,23 +230,26 @@ public class ProductServiceTypeEJB implements ProductServiceTypeEJBLocal {
 
 		try {
 			result = create.selectFrom(VW_PRODUCT_SERVICE_TYPE)
-					.where(VW_PRODUCT_SERVICE_TYPE.PRODUCT_TYPE_ID.eq(val(parentId)))
-					.and(VW_PRODUCT_SERVICE_TYPE.SERVICE_TYPE_ID.eq(val(childId)))
+					.where(VW_PRODUCT_SERVICE_TYPE.PRODUCT_TYPE_ID.eq(val(parentTypeId)))
+					.and(VW_PRODUCT_SERVICE_TYPE.SERVICE_TYPE_ID.eq(val(childTypeId)))
 					.orderBy(VW_PRODUCT_SERVICE_TYPE.PROD_SERV_TYPE_ID).fetch().into(VwProductServiceType.class);
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the view of product fee type for the product_type_id : "
-						+ parentId + " and service_type_id: " + childId + " - The query returns more rows("
-						+ result.size() + ") than expected (1) ";
+						+ parentTypeId + " and service_type_id: " + childTypeId + " - The query returns a distinct number of rows (" + result.size()
+						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
-
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the service types for thhe product_type_id : " + parentId
-					+ " and service_type_id: " + childId + " - " + e.getMessage();
+			errorMessage = "Error while try to find the service types for thhe product_type_id : " + parentTypeId
+					+ " and service_type_id: " + childTypeId + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}

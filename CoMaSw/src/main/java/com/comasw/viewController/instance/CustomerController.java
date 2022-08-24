@@ -947,6 +947,8 @@ public class CustomerController extends BasicInstance<VwCustomerInstance, ItCust
 		this.setSearchDate(LocalDate.now().atStartOfDay());
 		this.setFromAddingRow(false);
 		this.setToCancel(false);
+		this.setActiveDateChanged(false);
+		this.setCancelledDateChanged(false);
 		this.setPrevStatusId(-1);
 		this.setShowSelectedData(false);
 

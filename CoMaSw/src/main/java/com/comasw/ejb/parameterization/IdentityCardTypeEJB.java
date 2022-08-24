@@ -75,12 +75,16 @@ public class IdentityCardTypeEJB implements IdentityCardTypeEJBLocal {
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the identity card type for id_card_type_id : "
-						+ identitCardTypeId + " - The query returns more rows(" + result.size()
+						+ identitCardTypeId + " - The query returns a distinct number of rows (" + result.size()
 						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {
@@ -102,11 +106,16 @@ public class IdentityCardTypeEJB implements IdentityCardTypeEJBLocal {
 					.orderBy(PT_IDENTITY_CARD_TYPE.CODE).fetch().into(PtIdentityCardType.class);
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the identity card type for code : " + code
-						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
+						+ " - The query returns a distinct number of rows (" + result.size()
+						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {

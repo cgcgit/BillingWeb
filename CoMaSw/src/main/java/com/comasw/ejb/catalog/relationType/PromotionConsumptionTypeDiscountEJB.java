@@ -50,7 +50,7 @@ public class PromotionConsumptionTypeDiscountEJB implements PromotionConsumption
 	}
 
 	@Override
-	public List<CtConsumptionType> findEntityTypeCandidates(Integer parentId) throws CoMaSwDataAccessException {
+	public List<CtConsumptionType> findEntityTypeCandidates(Integer parentTypeId) throws CoMaSwDataAccessException {
 
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtConsumptionType> result = null;
@@ -62,12 +62,42 @@ public class PromotionConsumptionTypeDiscountEJB implements PromotionConsumption
 		try {
 			result = create.select().from(ct)
 					.whereNotExists(create.selectOne().from(pct).where(
-							ct.CONSUMPTION_TYPE_ID.eq(pct.CONSUMPTION_TYPE_ID).and(pct.PROMOTION_TYPE_ID.eq(parentId))))
+							ct.CONSUMPTION_TYPE_ID.eq(pct.CONSUMPTION_TYPE_ID).and(pct.PROMOTION_TYPE_ID.eq(parentTypeId))))
 					.orderBy(ct.CODE).fetch().into(CtConsumptionType.class);
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the consumption type candidates to discount for the promotion_type_id : "
-					+ parentId + " - " + e.getMessage();
+					+ parentTypeId + " - " + e.getMessage();
+			logger.error(errorMessage);
+			throw new CoMaSwDataAccessException(errorMessage, e);
+		}
+
+		return result;
+	}
+	
+	@Override
+	public List<CtConsumptionType> findEntityTypeRelated(Integer parentTypeId, String statusCode)
+			throws CoMaSwDataAccessException {
+
+		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
+		List<CtConsumptionType> result = null;
+		String errorMessage;
+		// aliases of tables
+		com.comasw.model.tables.PtStatus st = PT_STATUS.as("st");
+		com.comasw.model.tables.CtConsumptionType ct = CT_CONSUMPTION_TYPE.as("ct");
+		com.comasw.model.tables.CtPromoConsumTypeDiscount pct = CT_PROMO_CONSUM_TYPE_DISCOUNT.as("pct");
+
+		try {
+			result = create.select().from(ct)
+					.whereExists(create.selectOne()
+							.from(pct.join(st).on(pct.STATUS_ID.eq(st.STATUS_ID).and(st.CODE.eq(val(statusCode)))))
+							.where(ct.CONSUMPTION_TYPE_ID.eq(pct.CONSUMPTION_TYPE_ID)
+									.and(pct.PROMOTION_TYPE_ID.eq(parentTypeId))))
+					.orderBy(ct.CODE).fetch().into(CtConsumptionType.class);
+
+		} catch (DataAccessException e) {
+			errorMessage = "Error while try to find the consumption type candidates for the product_type_id: "
+					+ parentTypeId + " and status code: " + statusCode + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
@@ -76,7 +106,7 @@ public class PromotionConsumptionTypeDiscountEJB implements PromotionConsumption
 	}
 
 	@Override
-	public List<CtConsumptionType> findEntityTypeCandidates(Integer parentId, String statusCode)
+	public List<CtConsumptionType> findEntityTypeCandidates(Integer parentTypeId, String statusCode)
 			throws CoMaSwDataAccessException {
 
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
@@ -92,12 +122,12 @@ public class PromotionConsumptionTypeDiscountEJB implements PromotionConsumption
 					.whereNotExists(create.selectOne()
 							.from(pct.join(st).on(pct.STATUS_ID.eq(st.STATUS_ID).and(st.CODE.eq(val(statusCode)))))
 							.where(ct.CONSUMPTION_TYPE_ID.eq(pct.CONSUMPTION_TYPE_ID)
-									.and(pct.PROMOTION_TYPE_ID.eq(parentId))))
+									.and(pct.PROMOTION_TYPE_ID.eq(parentTypeId))))
 					.orderBy(ct.CODE).fetch().into(CtConsumptionType.class);
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the consumption type candidates for the product_type_id: "
-					+ parentId + " and status code: " + statusCode + " - " + e.getMessage();
+					+ parentTypeId + " and status code: " + statusCode + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
@@ -106,7 +136,7 @@ public class PromotionConsumptionTypeDiscountEJB implements PromotionConsumption
 	}
 
 	@Override
-	public List<VwPromoConsumTypeDiscount> findRelatedEntityTypesView(Integer parentId)
+	public List<VwPromoConsumTypeDiscount> findRelatedEntityTypesView(Integer parentTypeId)
 			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<VwPromoConsumTypeDiscount> result = null;
@@ -115,13 +145,13 @@ public class PromotionConsumptionTypeDiscountEJB implements PromotionConsumption
 
 		try {
 			result = create.select().from(VW_PROMO_CONSUM_TYPE_DISCOUNT)
-					.where(VW_PROMO_CONSUM_TYPE_DISCOUNT.PROMOTION_TYPE_ID.eq(val(parentId)))
+					.where(VW_PROMO_CONSUM_TYPE_DISCOUNT.PROMOTION_TYPE_ID.eq(val(parentTypeId)))
 					.orderBy(VW_PROMO_CONSUM_TYPE_DISCOUNT.CONSUMPTION_TYPE_CODE).fetch()
 					.into(VwPromoConsumTypeDiscount.class);
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the view of consumption type candidates for the promotion_type_id : "
-					+ parentId + " - " + e.getMessage();
+					+ parentTypeId + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
@@ -144,14 +174,17 @@ public class PromotionConsumptionTypeDiscountEJB implements PromotionConsumption
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the promotion consumption type for the promotion_consumption_type_id : "
-						+ entityRelationTypeId + " - The query returns more rows(" + result.size()
+						+ entityRelationTypeId + " - The query returns a distinct number of rows (" + result.size()
 						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
-
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the promotion consumption type for the promotion_consumption_type_id : "
 					+ entityRelationTypeId + " - " + e.getMessage();
@@ -161,7 +194,7 @@ public class PromotionConsumptionTypeDiscountEJB implements PromotionConsumption
 	}
 
 	@Override
-	public CtPromoConsumTypeDiscount findEntityRelationType(Integer parentId, Integer childId)
+	public CtPromoConsumTypeDiscount findEntityRelationType(Integer parentTypeId, Integer childTypeId)
 			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtPromoConsumTypeDiscount> result = null;
@@ -170,30 +203,33 @@ public class PromotionConsumptionTypeDiscountEJB implements PromotionConsumption
 
 		try {
 			result = create.selectFrom(CT_PROMO_CONSUM_TYPE_DISCOUNT)
-					.where(CT_PROMO_CONSUM_TYPE_DISCOUNT.PROMOTION_TYPE_ID.eq(val(parentId)))
-					.and(CT_PROMO_CONSUM_TYPE_DISCOUNT.CONSUMPTION_TYPE_ID.eq(val(childId))).fetch()
+					.where(CT_PROMO_CONSUM_TYPE_DISCOUNT.PROMOTION_TYPE_ID.eq(val(parentTypeId)))
+					.and(CT_PROMO_CONSUM_TYPE_DISCOUNT.CONSUMPTION_TYPE_ID.eq(val(childTypeId))).fetch()
 					.into(CtPromoConsumTypeDiscount.class);
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the promotion consumption type for the promotion_type_id : "
-						+ parentId + " and consumption_type_id: " + childId + " - The query returns more rows("
-						+ result.size() + ") than expected (1) ";
+						+ parentTypeId + " and consumption_type_id: " + childTypeId + " - The query returns a distinct number of rows (" + result.size()
+						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
-
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the consumption types for the promotion_type_id : " + parentId
-					+ " and consumption_type_id: " + childId + " - " + e.getMessage();
+			errorMessage = "Error while try to find the consumption types for the promotion_type_id : " + parentTypeId
+					+ " and consumption_type_id: " + childTypeId + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 	}
 
 	@Override
-	public VwPromoConsumTypeDiscount findEntityRelationTypeView(Integer parentId, Integer childId)
+	public VwPromoConsumTypeDiscount findEntityRelationTypeView(Integer parentTypeId, Integer childTypeId)
 			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<VwPromoConsumTypeDiscount> result = null;
@@ -202,24 +238,28 @@ public class PromotionConsumptionTypeDiscountEJB implements PromotionConsumption
 
 		try {
 			result = create.selectFrom(VW_PROMO_CONSUM_TYPE_DISCOUNT)
-					.where(VW_PROMO_CONSUM_TYPE_DISCOUNT.PROMOTION_TYPE_ID.eq(val(parentId)))
-					.and(VW_PROMO_CONSUM_TYPE_DISCOUNT.CONSUMPTION_TYPE_ID.eq(val(childId)))
+					.where(VW_PROMO_CONSUM_TYPE_DISCOUNT.PROMOTION_TYPE_ID.eq(val(parentTypeId)))
+					.and(VW_PROMO_CONSUM_TYPE_DISCOUNT.CONSUMPTION_TYPE_ID.eq(val(childTypeId)))
 					.orderBy(VW_PROMO_CONSUM_TYPE_DISCOUNT.PROMO_CONSUM_TYPE_DISCOUNT_ID).fetch()
 					.into(VwPromoConsumTypeDiscount.class);
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the view of promotion consumption type for the promotion_type_id : "
-						+ parentId + " and consumption_type_id: " + childId + " - The query returns more rows("
-						+ result.size() + ") than expected (1) ";
+						+ parentTypeId + " and consumption_type_id: " + childTypeId + " - The query returns a distinct number of rows (" + result.size()
+						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the consumption types for the promotion_type_id : " + parentId
-					+ " and fee_type_id: " + childId + " - " + e.getMessage();
+			errorMessage = "Error while try to find the consumption types for the promotion_type_id : " + parentTypeId
+					+ " and fee_type_id: " + childTypeId + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}

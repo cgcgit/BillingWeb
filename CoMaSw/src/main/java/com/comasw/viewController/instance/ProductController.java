@@ -50,8 +50,6 @@ public class ProductController extends BasicInstance<VwProductInstance, ItProduc
 
 	Logger logger = (Logger) LogManager.getLogger(ProductController.class);
 
-	private static String PARENT_DATA_TABLE_ID = "form:parentSearchDataTable";
-
 	@Inject
 	private ExternalContext externalContext;
 	@Inject
@@ -67,6 +65,8 @@ public class ProductController extends BasicInstance<VwProductInstance, ItProduc
 
 	private Integer searchProductId;
 
+	private Integer searchProductTypeId;
+
 	private Integer searchAccountId;
 
 	private String searchAccountIdentityCard;
@@ -77,11 +77,8 @@ public class ProductController extends BasicInstance<VwProductInstance, ItProduc
 
 	private String searchCustomerIdentityCard;
 
-	private boolean includeCanceledDataFlag;
 
 	/** lists for the parent search data for create new form **/
-
-
 
 	/**
 	 * Search criteria for the new form
@@ -113,6 +110,20 @@ public class ProductController extends BasicInstance<VwProductInstance, ItProduc
 	 */
 	public void setSearchProductId(Integer searchProductId) {
 		this.searchProductId = searchProductId;
+	}
+
+	/**
+	 * @return the searchProductTypeId
+	 */
+	public Integer getSearchProductTypeId() {
+		return searchProductTypeId;
+	}
+
+	/**
+	 * @param searchProductTypeId the searchProductTypeId to set
+	 */
+	public void setSearchProductTypeId(Integer searchProductTypeId) {
+		this.searchProductTypeId = searchProductTypeId;
 	}
 
 	/**
@@ -183,20 +194,6 @@ public class ProductController extends BasicInstance<VwProductInstance, ItProduc
 	 */
 	public void setSearchCustomerIdentityCard(String searchCustomerIdentityCard) {
 		this.searchCustomerIdentityCard = searchCustomerIdentityCard;
-	}
-
-	/**
-	 * @return the includeCanceledDataFlag
-	 */
-	public boolean getIncludeCanceledDataFlag() {
-		return includeCanceledDataFlag;
-	}
-
-	/**
-	 * @param includeCanceledDataFlag the includeCanceledDataFlag to set
-	 */
-	public void setIncludeCanceledDataFlag(boolean includeCanceledDataFlag) {
-		this.includeCanceledDataFlag = includeCanceledDataFlag;
 	}
 
 
@@ -677,10 +674,10 @@ public class ProductController extends BasicInstance<VwProductInstance, ItProduc
 					VwProductInstance object = productEJB.findInstanceViewWithParameters(
 							Optional.ofNullable(this.getSearchDate()), true, Optional.ofNullable(id), Optional.empty(),
 							Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(), Optional.empty(),
-							Optional.empty(), Optional.empty()).get(0);
+							Optional.empty(), Optional.empty(), Optional.empty()).get(0);
 
 					messageDetail = "Data saves succesfully";
-					logger.info("Create account: " + this.getNewData().toString() + " - " + messageDetail);
+					logger.info("Create product: " + this.getNewData().toString() + " - " + messageDetail);
 					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
 							messageDetail);
 
@@ -898,12 +895,12 @@ public class ProductController extends BasicInstance<VwProductInstance, ItProduc
 		LocalDateTime maxDate = Formatter.stringToLocalDateTime("31/12/9999");
 
 		if (this.isFromAddingRow()) {
-			message = "ADD NEW ACCOUNT ROW VALIDATION";
+			message = "ADD NEW PRODUCT ROW VALIDATION";
 		} else {
 			if (this.isEditingMode()) {
-				message = "MODIFY ACCOUNT VALIDATION";
+				message = "MODIFY PRODUCT VALIDATION";
 			} else {
-				message = "NEW ACCOUNT VALIDATION";
+				message = "NEW PRODUCT VALIDATION";
 			}
 		}
 
@@ -929,18 +926,18 @@ public class ProductController extends BasicInstance<VwProductInstance, ItProduc
 			}
 
 			if (objectToValidate.getStartDate() == null) {
-				messageDetail = "ERROR - The start date of the account can not be null";
+				messageDetail = "ERROR - The start date of the product can not be null";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			} else if (objectToValidate.getStartDate().compareTo(minDate) < 0) {
-				messageDetail = "ERROR - The start date of the account can not be less than "
+				messageDetail = "ERROR - The start date of the product can not be less than "
 						+ Formatter.localDateTimeToString(minDate);
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			} else if (objectToValidate.getStartDate().compareTo(maxDate) > 0) {
-				messageDetail = "ERROR - The start date of the account can not be greater than "
+				messageDetail = "ERROR - The start date of the product can not be greater than "
 						+ Formatter.localDateTimeToString(maxDate);
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
@@ -948,18 +945,18 @@ public class ProductController extends BasicInstance<VwProductInstance, ItProduc
 			}
 
 			if (objectToValidate.getEndDate() == null) {
-				messageDetail = "ERROR - The end date of the account can not be null";
+				messageDetail = "ERROR - The end date of the product can not be null";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			} else if (objectToValidate.getEndDate().compareTo(minDate) < 0) {
-				messageDetail = "ERROR - The end date of the account can not be less than "
+				messageDetail = "ERROR - The end date of the product can not be less than "
 						+ Formatter.localDateTimeToString(minDate);
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				validation = false;
 			} else if (objectToValidate.getEndDate().compareTo(maxDate) > 0) {
-				messageDetail = "ERROR - The end date of the account can not be greater than "
+				messageDetail = "ERROR - The end date of the product can not be greater than "
 						+ Formatter.localDateTimeToString(maxDate);
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
@@ -1011,7 +1008,8 @@ public class ProductController extends BasicInstance<VwProductInstance, ItProduc
 			throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_FATAL, message, messageDetail));
 		} else {
 			this.setDataList(productEJB.findInstanceViewWithParameters(Optional.ofNullable(this.getSearchDate()),
-					this.getIncludeCanceledDataFlag(), Optional.ofNullable(this.getSearchProductId()), Optional.empty(),
+					this.getIncludeCanceledDataFlag(), Optional.ofNullable(this.getSearchProductId()),
+					Optional.ofNullable(this.getSearchProductTypeId()), Optional.empty(),
 					Optional.ofNullable(this.getSearchContractNr()), Optional.ofNullable(this.getSearchAccountId()),
 					Optional.ofNullable(this.getSearchAccountIdentityCard()), Optional.empty(),
 					Optional.ofNullable(this.getSearchCustomerId()),
@@ -1049,6 +1047,7 @@ public class ProductController extends BasicInstance<VwProductInstance, ItProduc
 		this.setFromAddingRow(false);
 		this.setToCancel(false);
 		this.setActiveDateChanged(false);
+		this.setCancelledDateChanged(false);
 		this.setPrevStatusId(-1);
 		this.setShowSelectedData(false);
 		// this.setCreateNewContractFlag(true);
@@ -1066,9 +1065,9 @@ public class ProductController extends BasicInstance<VwProductInstance, ItProduc
 	public void loadHistoricalDataList() {
 		Integer id;
 		if (this.getSelectedData() == null) {
-			logger.error("The account select is null");
+			logger.error("The product select is null");
 			createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, "LOAD HISTORIC DATA",
-					"The account select is null");
+					"The product select is null");
 		} else {
 			id = this.getSelectedData().getProductId();
 			this.setHistoricDataList(productEJB.findDataByProductId(id));
@@ -1574,7 +1573,7 @@ public class ProductController extends BasicInstance<VwProductInstance, ItProduc
 									} else {
 										// no consecutive records ==> error
 										messageDetail = "Error in dates - The new and current dates are not consecutives.";
-										logger.info("Create custom: " + newObject.toString() + " - " + messageDetail);
+										logger.info("Create product: " + newObject.toString() + " - " + messageDetail);
 										this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO,
 												message, messageDetail);
 										error = true;
@@ -1887,7 +1886,7 @@ public class ProductController extends BasicInstance<VwProductInstance, ItProduc
 
 		}
 	}
-	
+
 	@Override
 	public void changeCancelledDate(ValueChangeEvent e) {
 		// Integer oldStatusId = (Integer) e.getOldValue();

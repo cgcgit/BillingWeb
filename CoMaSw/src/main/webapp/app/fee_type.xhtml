@@ -91,7 +91,7 @@
 
 									<p:inputMask id="searchDate" required="false" immediate="true"
 										value="#{feeTypeController.searchDate}" mask="99/99/9999"
-										style="width:7rem; height:2rem" styleClass="p-mx-3"										
+										style="width:7rem; height:2rem" styleClass="p-mx-3"
 										requiredMessage="The date value to search is null. Please fill the search date field">
 										<f:converter
 											converterId="com.comasw.converter.localDateTimeConverter" />
@@ -797,6 +797,7 @@
 							</p:cellEditor>
 
 						</p:column>
+
 						<p:column id="priceHist"
 							style="font-family:Arial Black;
                                   text-align: left;
@@ -806,8 +807,20 @@
 							headerText="PRICE" rendered="true"
 							sortBy="#{historicDataTable.price}"
 							filterBy="#{historicDataTable.price}" filterMatchMode="contains">
-							<h:outputText id="filterPriceHist"
-								value="#{historicDataTable.price}" />
+
+							<p:cellEditor id="cellEditorPriceHist">
+								<f:facet id="facetPriceHistOutput" name="output">
+									<h:outputText id="priceHistOutput"
+										value="#{historicDataTable.price}" />
+								</f:facet>
+								<f:facet id="facetPriceHistInput" name="input">
+									<p:inputNumber id="newPriceInput" label="Price"
+										decimalPlaces="4" value="#{historicDataTable.price}"
+										style="width:96%">
+										<p:ajax event="change" update="priceHistOutput" />
+									</p:inputNumber>
+								</f:facet>
+							</p:cellEditor>
 						</p:column>
 
 						<p:column id="statusHist"

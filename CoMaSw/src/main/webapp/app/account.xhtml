@@ -55,9 +55,11 @@
 
 		<p:remoteCommand id="remoteCommandUpdateCustomerTable"
 			name="updateCustomerTable" process="@this"
-			update="form:customerSearchDataTable" />
+			update="form:createNewTab:customerSearchDataTable" />
 
-
+		<p:remoteCommand id="remoteCommandUpdatePersonalDataForNew"
+			name="updatePersonalData" process="@this"
+			update="form:createNewTab:personalDetails form:createNewTab:addressDetails  form:createNewTab:contactDetails" />
 
 		<p:accordionPanel id="accordionPanel" multiple="true"
 			widgetVar="multipleAccordionPanelWidget">
@@ -147,7 +149,7 @@
 								icon="#{uiValue.addIcon}" ajax="true"
 								actionListener="#{accountController.pushCreateNewButton()}"
 								rendered="#{accountController.canUserModify()}"
-								update=":form:createNewDialog :form:createNewDialogPanelData"
+								update=":form:createNewDialog :form:createNewTab"
 								class="ui-button-primary" style="margin-right:.5rem">
 								<p:resetInput target=":form:createNewDialogPanelData" />
 							</p:commandButton>
@@ -239,7 +241,7 @@
 							sortBy="#{dataTable.accountStartDate}"
 							filterBy="#{dataTable.accountStartDate}" filterMatchMode="exact">
 							<f:facet id="searchStartDateFilter" name="filter">
-								<p:datePicker id="searchStartDateFilterPicker"
+								<p:datePicker id="accountSearchStartDateFilterPicker"
 									onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
 									monthNavigator="true" yearNavigator="true" mask="true"
 									pattern="dd/MM/yyyy">
@@ -247,7 +249,7 @@
 										converterId="com.comasw.converter.localDateTimeConverter" />
 								</p:datePicker>
 							</f:facet>
-							<h:outputText id="searchStartDateText"
+							<h:outputText id="accountSearchStartDateText"
 								value="#{dataTable.accountStartDate}">
 								<f:converter
 									converterId="com.comasw.converter.localDateTimeConverter" />
@@ -264,7 +266,7 @@
 							sortBy="#{dataTable.accountEndDate}"
 							filterBy="#{dataTable.accountEndDate}" filterMatchMode="exact">
 							<f:facet id="searchEndDateFilter" name="filter">
-								<p:datePicker id="searchEndDateFilterPicker"
+								<p:datePicker id="accountSearchEndDateFilterPicker"
 									onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
 									monthNavigator="true" yearNavigator="true" mask="true"
 									pattern="dd/MM/yyyy">
@@ -272,7 +274,7 @@
 										converterId="com.comasw.converter.localDateTimeConverter" />
 								</p:datePicker>
 							</f:facet>
-							<h:outputText id="searchEndDateText"
+							<h:outputText id="accountSearchEndDateText"
 								value="#{dataTable.accountEndDate}">
 								<f:converter
 									converterId="com.comasw.converter.localDateTimeConverter" />
@@ -397,7 +399,7 @@
 							sortBy="#{dataTable.customerStartDate}"
 							filterBy="#{dataTable.customerStartDate}" filterMatchMode="exact">
 							<f:facet id="searchStartDateFilter" name="filter">
-								<p:datePicker id="searchStartDateFilterPicker"
+								<p:datePicker id="customerSearchStartDateFilterPicker"
 									onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
 									monthNavigator="true" yearNavigator="true" mask="true"
 									pattern="dd/MM/yyyy">
@@ -405,7 +407,7 @@
 										converterId="com.comasw.converter.localDateTimeConverter" />
 								</p:datePicker>
 							</f:facet>
-							<h:outputText id="searchStartDateText"
+							<h:outputText id="customerSearchStartDateText"
 								value="#{dataTable.customerStartDate}">
 								<f:converter
 									converterId="com.comasw.converter.localDateTimeConverter" />
@@ -422,7 +424,7 @@
 							sortBy="#{dataTable.customerEndDate}"
 							filterBy="#{dataTable.customerEndDate}" filterMatchMode="exact">
 							<f:facet id="searchEndDateFilter" name="filter">
-								<p:datePicker id="searchEndDateFilterPicker"
+								<p:datePicker id="customerSearchEndDateFilterPicker"
 									onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
 									monthNavigator="true" yearNavigator="true" mask="true"
 									pattern="dd/MM/yyyy">
@@ -430,7 +432,7 @@
 										converterId="com.comasw.converter.localDateTimeConverter" />
 								</p:datePicker>
 							</f:facet>
-							<h:outputText id="searchEndDateText"
+							<h:outputText id="customerSearchEndDateText"
 								value="#{dataTable.customerEndDate}">
 								<f:converter
 									converterId="com.comasw.converter.localDateTimeConverter" />
@@ -560,17 +562,6 @@
 							</p:selectOneMenu>
 						</p:column>
 
-						<p:column id="accountTypeDescription"
-							style="font-family:Arial Black;
-                                  text-align: left;
-                                  font-size: 11px;
-                                  width: 100px;    
-                                  overflow: hidden"
-							headerText="ACC. TYPE DESCR." rendered="true">
-							<h:outputText id="accountTypeDescriptionText"
-								value="#{selectedDataTable.accountTypeDescription}" />
-						</p:column>
-						</p:column>
 
 						<p:column id="contractNr"
 							style="font-family:Arial Black;
@@ -603,11 +594,11 @@
 							headerText="STATUS" rendered="true">
 							<p:selectOneMenu id="StatusOutput" editable="false"
 								disabled="true" immediate="true"
-								value="#{selectedDataTable.statusId}">
+								value="#{selectedDataTable.accountStatusId}">
 								<f:selectItems id="selectItemsStatusOutput" itemDisabled="true"
 									var="Status"
 									value="#{accountController.statusInstanceSelectItems()}"
-									itemValue="#{selectedDataTable.statusId}" />
+									itemValue="#{selectedDataTable.accountStatusId}" />
 							</p:selectOneMenu>
 						</p:column>
 
@@ -697,7 +688,7 @@
                                   width: 100px;    
                                   overflow: hidden"
 							headerText="ACC. ID. CARD" rendered="true">
-							<h:outputText id="idCardText"
+							<h:outputText id="accountIdCardText"
 								value="#{selectedDataTable.accountIdentityCard}" />
 						</p:column>
 
@@ -786,7 +777,7 @@
                                   width: 100px;    
                                   overflow: hidden"
 							headerText="ACC. PAYMENT" rendered="true">
-							<h:outputText id="accountPaymentCode"
+							<h:outputText id="accountPaymentCodeText"
 								value="#{selectedDataTable.paymentCode}" />
 						</p:column>
 
@@ -797,7 +788,7 @@
                                   width: 100px;    
                                   overflow: hidden"
 							headerText="ACC. PAYMENT DESCR." rendered="true">
-							<h:outputText id="accountPaymentDescription"
+							<h:outputText id="accountPaymentDescriptionText"
 								value="#{selectedDataTable.paymentDescription}" />
 						</p:column>
 
@@ -856,7 +847,7 @@
 								value="#{selectedDataTable.accountBankAccountNumber}" />
 						</p:column>
 
-						<p:column id="customerid"
+						<p:column id="customerId"
 							style="font-family:Arial Black;
                                   text-align: left;
                                   font-size: 11px;
@@ -925,8 +916,8 @@
                                   width: 100px;    
                                   overflow: hidden"
 							headerText="CUST. ID. CARD" rendered="true">
-							<h:outputText id="idCardText"
-								value="#{selectedDataTable.identityCard}" />
+							<h:outputText id="customerIdCardText"
+								value="#{selectedDataTable.customerIdentityCard}" />
 						</p:column>
 
 					</p:dataTable>
@@ -960,7 +951,7 @@
 						rows="4" paginatorPosition="bottom" editable="true">
 						<f:facet name="header">
 							<f:facet name="header">
-							HISTORIC ACCOUNT DATA for CUSTOMER ID #{accountController.selectedData.customerId}	and ACCOUNT CODE #{accountController.selectedData.code} 						
+							HISTORIC ACCOUNT DATA for CUSTOMER ID #{accountController.selectedData.customerId}	and ACCOUNT CODE #{accountController.selectedData.accountCode} 						
 								<p:commandButton id="refreshHistoricTable"
 									style="margin-left: 1rem; margin-right: .5rem"
 									icon="#{uiValue.refreshIcon}" ajax="true"
@@ -1662,7 +1653,7 @@
 									<f:converter
 										converterId="com.comasw.converter.localDateTimeConverter" />
 								</p:datePicker>
-							</f:facet>							
+							</f:facet>
 							<p:cellEditor id="cellEditorActiveDateHist">
 								<f:facet id="facetActiveDateOutputHist" name="output">
 									<h:outputText id="activeDateOutputHist"
@@ -1678,8 +1669,8 @@
 										style="width:96%">
 										<f:converter
 											converterId="com.comasw.converter.localDateTimeConverter" />
-										<f:param id="currentRowActiveDateHist" name="currentHistoricalRow"
-											value="#{rowIndexHistoricTable}" />
+										<f:param id="currentRowActiveDateHist"
+											name="currentHistoricalRow" value="#{rowIndexHistoricTable}" />
 										<p:ajax event="change" immediate="true"
 											update="activeDateOutputHist" />
 									</p:inputMask>
@@ -1720,8 +1711,8 @@
 										style="width:96%">
 										<f:converter
 											converterId="com.comasw.converter.localDateTimeConverter" />
-											<f:param id="currentRowCancelledDateHist" name="currentHistoricalRow"
-											value="#{rowIndexHistoricTable}" />										
+										<f:param id="currentRowCancelledDateHist"
+											name="currentHistoricalRow" value="#{rowIndexHistoricTable}" />
 										<p:ajax event="change" update="" />
 									</p:inputMask>
 								</f:facet>
@@ -1737,15 +1728,14 @@
 		<p:dialog id="createNewDialog"
 			header="#{accountController.dialogHeaderText}" showEffect="fade"
 			responsive="true" widgetVar="createNewDialogWidget">
-
 			<h:panelGrid id="createNewDialogPanelData">
-				<p:wizard id="createNewWizard"
-					flowListener="#{accountController.onFlowProcess}"
-					widgetVar="createNewWizarWidget">
-					<p:tab id="relatedDataTab" title="Contract and Customer Data">
+				<p:tabView id="createNewTab" widgetVar="createNewTabWidget">
+
+					<!--  RELATED DATA -->
+					<p:tab id="relatedDataPanel" title="Contract and Customer Data">
 						<p:panel id="newContractPanel" header="Contract Data"
 							widgetVar="newContractPanelWidget">
-							<p:messages />
+						
 							<p:outputPanel id="newContractCriteriaPanel">
 
 								<p:panelGrid id="createNewContractNrPanel" columns="2"
@@ -1808,7 +1798,7 @@
 										icon="#{uiValue.searchIcon}"
 										actionListener="#{accountController.pushSearchParentButton()}"
 										ajax="true"
-										update=":form:growlMessage :form:customerSearchList"
+										update=":form:growlMessage :form:createNewTab:customerSearchList"
 										style="width:7rem" styleClass="p-mx-3"
 										class="ui-button-success rounded-button"
 										oncomplete="if (!args.validationFailed) {#{updateCustomerTable} PF('searchCustomerListWidget').show('#{component.clientId}')}">
@@ -1862,7 +1852,8 @@
 											styleClass="ui-button-warning rounded-button"
 											icon="#{uiValue.addIcon}" ajax="true"
 											actionListener="#{accountController.addParentToInstanceRowButton()}"
-											update="form:newCustomerPanel form:searchCustomerDataArea">
+											oncomplete="{updatePersonalData()}"
+											update="form:createNewTab:newCustomerPanel form:createNewTab:searchCustomerDataArea">
 										</p:commandButton>
 									</p:column>
 
@@ -2010,11 +2001,11 @@
                                   width: 100px;    
                                   overflow: hidden"
 										headerText="ID. CARD" rendered="true"
-										sortBy="#{customerSearchDataTable.identityCard}"
-										filterBy="#{customerSearchDataTable.identityCard}"
+										sortBy="#{customerSearchDataTable.customerIdentityCard}"
+										filterBy="#{customerSearchDataTable.customerIdentityCard}"
 										filterMatchMode="contains">
 										<h:outputText id="searchCustomerIdCardText"
-											value="#{customerSearchDataTable.identityCard}" />
+											value="#{customerSearchDataTable.customerIdentityCard}" />
 									</p:column>
 
 									<p:column id="searchCustomerContactPhone"
@@ -2047,15 +2038,18 @@
 								</p:dataTable>
 							</p:overlayPanel>
 						</p:panel>
-
 					</p:tab>
 
-					<p:tab id="instanceDataTab" title="Instance">
-						<p:panel id="instanceDetails" header="Instance Details">
-							<p:messages />
-							<h:panelGrid columns="2" columnClasses="label, value">
+					<!--  INSTACE DATA -->
+					<p:tab id="instanceDetails" title="Instance Details">
+						<p:panelGrid columns="2" columnClasses="ui-grid-col-4"
+							layout="flex" contentStyleClass="align-items-baseline ui-fluid"
+							style="border:0px none; background-color:transparent; align:left">
 
-								<h:outputText id="newStartDateLabel" value="StartDate " />
+							<p:panelGrid columns="2"
+								contentStyleClass="align-items-baseline ui-fluid">
+								<p:outputLabel id="newStartDateLabel" value="Start Date: "
+									for="newStartDateInput" />
 								<p:inputMask id="newStartDateInput"
 									value="#{accountController.newData.startDate}"
 									mask="99/99/9999" style="width:96%">
@@ -2063,8 +2057,11 @@
 										converterId="com.comasw.converter.localDateTimeConverter" />
 									<p:ajax event="change" update="newStartDateInput" />
 								</p:inputMask>
-
-								<h:outputText id="newEndDateLabel" value="StartDate " />
+							</p:panelGrid>
+							<p:panelGrid columns="2"
+								contentStyleClass="align-items-baseline ui-fluid">
+								<p:outputLabel id="newEndDateLabel" value="End Date: "
+									for="newEndDateInput" />
 								<p:inputMask id="newEndDateInput"
 									value="#{accountController.newData.endDate}" mask="99/99/9999"
 									style="width:96%">
@@ -2072,8 +2069,11 @@
 										converterId="com.comasw.converter.localDateTimeConverter" />
 									<p:ajax event="change" update="newEndDateInput" />
 								</p:inputMask>
-
-								<h:outputText id="newAccountTypeOutput" value="Account Type:" />
+							</p:panelGrid>
+							<p:panelGrid columns="2"
+								contentStyleClass="align-items-baseline ui-fluid">
+								<p:outputLabel id="newAccountTypeOutput" value="Account Type:"
+									for="newAccountTypeInput" />
 								<p:selectOneMenu id="newAccountTypeInput"
 									disabled="#{accountController.fromAddingRow}"
 									value="#{accountController.newData.accountTypeId}"
@@ -2084,10 +2084,18 @@
 										itemValue="#{accountController.newData.accountTypeId}">
 									</f:selectItems>
 								</p:selectOneMenu>
-								<h:outputText id="newCodeOutput" value="Code:" />
+							</p:panelGrid>
+							<p:panelGrid columns="2"
+								contentStyleClass="align-items-baseline ui-fluid">
+								<p:outputLabel id="newCodeOutput" value="Code:"
+									for="newCodeInput" />
 								<p:inputText id="newCodeInput"
 									value="#{accountController.newData.code}" label="Code" />
-								<p:outputLabel id="newStatusLabel" value="Status:" />
+							</p:panelGrid>
+							<p:panelGrid columns="2"
+								contentStyleClass="align-items-baseline ui-fluid">
+								<p:outputLabel id="newStatusLabel" value="Status:"
+									for="newStatusInput" />
 								<p:selectOneMenu id="newStatusInput" editable="false"
 									disabled="true" immediate="true"
 									value="#{accountController.newData.statusId}">
@@ -2096,11 +2104,10 @@
 										value="#{accountController.statusInstanceSelectItems()}"
 										itemValue="#{accountController.newData.statusId}" />
 								</p:selectOneMenu>
-							</h:panelGrid>
-						</p:panel>
+							</p:panelGrid>
+						</p:panelGrid>
 					</p:tab>
-
-					<p:tab id="personalDataTab" title="Personal">
+					<p:tab id="personalDataTab" title="Name">
 						<p:panel id="personalDetails" header="Personal Details">
 							<p:messages />
 							<h:panelGrid id="newPersonalDataPanel" columns="2"
@@ -2166,8 +2173,8 @@
 						</p:panel>
 					</p:tab>
 
-					<p:tab id="contactTab" title="Contact">
-						<p:panel id="contactInformation" header="Contact Information">
+					<p:tab id="contactTab" title="Contact" style="border:black">
+						<p:panel id="contactDetails" header="Contact Information">
 							<p:messages />
 							<h:panelGrid columns="2" columnClasses="label, value">
 								<h:outputText id="newContactPhoneOutput" value="Phone:" />
@@ -2181,6 +2188,8 @@
 							</h:panelGrid>
 						</p:panel>
 					</p:tab>
+
+
 
 					<p:tab id="bankAccountTab" title="Bank Account">
 						<p:panel id="bankAccountInformation"
@@ -2214,213 +2223,30 @@
 						</p:panel>
 					</p:tab>
 
-					<p:tab id="confirmTab" title="Confirmation">
-						<p:panel id="confirmationPanel" header="Confirmation">
-							<h:panelGrid id="confirmation" columns="3"
-								columnClasses="grid,grid,grid">
-								<h:panelGrid columns="3">
 
-									<p:fieldset legend="Related Data">
-										<h:panelGrid columns="2" columnClasses="label, value">
-											<h:outputText id="confirmCustomerId" value="Customer Id: " />
-											<h:outputText id="confirmCustomerIdInput"
-												value="#{accountController.newData.customerId}"
-												style="width:96%" styleClass="outputLabel" />
-
-											<h:outputText id="confirmContractNr" value="Contract Nr: " />
-											<h:outputText id="confirmContractNrInput"
-												value="#{accountController.newData.contractNumber}"
-												style="width:96%" styleClass="outputLabel" />
-										</h:panelGrid>
-									</p:fieldset>
-
-									<p:fieldset legend="Instance Data">
-										<h:panelGrid columns="2" columnClasses="label, value">
-											<h:outputText id="confirmStartDateLabel" value="StartDate " />
-											<h:outputText id="confirmStartDateInput"
-												value="#{accountController.newData.startDate}"
-												style="width:96%" styleClass="outputLabel" />
-
-											<h:outputText id="confirmEndDateLabel" value="StartDate " />
-											<h:outputText id="confirmEndDateInput"
-												value="#{accountController.newData.endDate}"
-												style="width:96%" styleClass="outputLabel" />
-
-											<h:outputText id="confirmAccountTypeOutput"
-												value="Account Type:" />
-											<p:selectOneMenu id="confirmAccountTypeInput"
-												value="#{accountController.newData.accountTypeId}"
-												disabled="true" immediate="true">
-												<f:selectItems
-													value="#{accountController.accountTypeSelectItems()}"
-													id="selectItemsAccountTypeInputConfirm" var="AccountType"
-													itemValue="#{accountController.newData.accountTypeId}">
-												</f:selectItems>
-											</p:selectOneMenu>
-
-											<h:outputText id="confirmCodeOutput" value="Code" />
-											<h:outputText id="confirmCodeInput"
-												value="#{accountController.newData.code}" style="width:96%"
-												styleClass="outputLabel" />
-
-											<p:outputLabel id="confirmStatusLabel" value="Status:" />
-											<p:selectOneMenu id="confirmStatusInput" disabled="true"
-												immediate="true"
-												value="#{accountController.newData.statusId}">
-												<f:selectItems id="selectItemsStatusOutputConfirm"
-													itemDisabled="true" var="Status"
-													value="#{accountController.statusInstanceSelectItems()}"
-													itemValue="#{accountController.newData.statusId}" />
-											</p:selectOneMenu>
-										</h:panelGrid>
-									</p:fieldset>
-
-									<p:fieldset legend="Personal Data">
-										<h:panelGrid columns="2" columnClasses="label, value">
-											<h:outputText id="confirmNameOutput" value="Name:" />
-											<h:outputText id="confirmNameInput"
-												value="#{accountController.newData.givenName}"
-												style="width:96%" styleClass="outputLabel" />
-
-											<h:outputText id="confirm1stSurnameOutput"
-												value="1st Surname:" />
-											<h:outputText id="confirm1stSurnameInput"
-												value="#{accountController.newData.firstSurname}"
-												style="width:96%" styleClass="outputLabel" />
-
-											<h:outputText id="confirm2ndSurnameOutput"
-												value="2nd Surname:" />
-											<h:outputText id="confirm2ndSurnameInput"
-												value="#{accountController.newData.secondSurname}"
-												style="width:96%" styleClass="outputLabel" />
-
-											<h:outputText id="confirmIdCardTypeOutput"
-												value="ID. Card Type:" />
-											<p:selectOneMenu id="confirmIdCardTypeInput"
-												value="#{accountController.newData.identityCardTypeId}"
-												disabled="true" immediate="true">
-												<f:selectItems
-													value="#{accountController.identityCardTypeSelectItems()}"
-													id="selectItemsIdCardTypeInputConfirm" var="IdCardType"
-													itemValue="#{accountController.newData.identityCardTypeId}">
-												</f:selectItems>
-											</p:selectOneMenu>
-
-											<h:outputText id="confirmIdCardOutput" value="ID. Card:" />
-											<h:outputText id="confirmIdCardInput"
-												value="#{accountController.newData.identityCard}"
-												style="width:96%" styleClass="outputLabel" />
-										</h:panelGrid>
-									</p:fieldset>
-
-									<p:fieldset legend="Adress Data">
-										<h:panelGrid columns="2" columnClasses="label, value">
-
-											<h:outputText id="confirmAddressOutput" value="Address:" />
-											<h:outputText id="confirmAddressInput"
-												value="#{accountController.newData.address}"
-												style="width:96%" styleClass="outputLabel" />
-
-											<h:outputText id="confirmPostCodeOutput" value="Postal Code:" />
-											<h:outputText id="confirmPostCodeInput"
-												value="#{accountController.newData.postCode}"
-												style="width:96%" styleClass="outputLabel" />
-
-											<h:outputText id="confirmCityOutput" value="City:" />
-											<h:outputText id="confirmCityIput"
-												value="#{accountController.newData.city}" style="width:96%"
-												styleClass="outputLabel" />
-
-											<h:outputText id="confirmStateOutput" value="State:" />
-											<h:outputText id="confirmStateIput"
-												value="#{accountController.newData.state}" style="width:96%"
-												styleClass="outputLabel" />
-
-											<h:outputText id="confirmCountryOutput" value="Country:" />
-											<h:outputText id="confirmCountryIput"
-												value="#{accountController.newData.city}" style="width:96%"
-												styleClass="outputLabel" />
-
-										</h:panelGrid>
-									</p:fieldset>
-
-									<p:fieldset legend="Contact Data">
-										<h:panelGrid columns="2" columnClasses="label, value">
-
-											<h:outputText id="confirmContactPhoneOutput" value="Phone:" />
-											<h:outputText id="confirmContactPhoneInput"
-												value="#{accountController.newData.contactPhone}"
-												style="width:96%" styleClass="outputLabel" />
-
-
-											<h:outputText id="confirmEMailOutput" value="Email: " />
-											<h:outputText id="confirmEMailInput"
-												value="#{accountController.newData.EMail}" label="Email"
-												style="width:96%" styleClass="outputLabel" />
-
-										</h:panelGrid>
-									</p:fieldset>
-
-
-									<p:fieldset legend="Bank Data">
-										<h:panelGrid columns="2" columnClasses="label, value">
-
-											<h:outputText id="confirmIbanOutput" value="IBAN:" />
-											<h:outputText id="confirmIbanInput"
-												value="#{accountController.newData.iban}" style="width:96%"
-												styleClass="outputLabel" />
-
-											<h:outputText id="confirmBankEntityOutput" value="Entity:" />
-											<h:outputText id="confirmBankEntityInput"
-												value="#{accountController.newData.bankEntity}"
-												style="width:96%" styleClass="outputLabel" />
-
-											<h:outputText id="confirmBankBranchOutput" value="Branch:" />
-											<h:outputText id="confirmBankBranchInput"
-												value="#{accountController.newData.bankBranch}"
-												style="width:96%" styleClass="outputLabel" />
-
-
-											<h:outputText id="confirmBankControlDigitOutput"
-												value="Control Digit:" />
-											<h:outputText id="confirmBankControlDigitInput"
-												value="#{accountController.newData.bankControlDigit}"
-												style="width:96%" styleClass="outputLabel" />
-
-
-											<h:outputText id="confirmBankAccountNumberOutput"
-												value="Account Nr:" />
-											<h:outputText id="confirmBankAccountNumberInput"
-												value="#{accountController.newData.bankAccountNumber}"
-												style="width:96%" styleClass="outputLabel" />
-										</h:panelGrid>
-									</p:fieldset>
-								</h:panelGrid>
-							</h:panelGrid>
-							<p:fieldset legend="SAVE DATA">
-								<h:panelGrid id="createNewDialogPanelButtons" columns="3"
-									style="align-items: center" cellpadding="5">
-									<p:commandButton id="createNewDialogConfirm"
-										value="#{uiValue.okLabel}" update="form:growlMessage"
-										actionListener="#{accountController.pushConfirmButtonCreateNewDialog()}"
-										styleClass="ui-confirmdialog-yes"
-										icon="#{uiValue.okCircleIcon}"
-										oncomplete="if (!args.validationFailed) {updatePanelData(); updateSelectedTable(); updateHistoricTable()}">
-									</p:commandButton>
-									<p:commandButton id="createNewDialogCancel"
-										value="#{uiValue.cancelLabel}"
-										icon="#{uiValue.cancelCircleIcon}"
-										actionListener="#{accountController.pushCancelButtonCreateNewDialog()}"
-										update="form:growlMessage"
-										onclick="PF('createNewDialogWidget').hide()"
-										class="ui-button-secondary" />
-
-								</h:panelGrid>
-							</p:fieldset>
-						</p:panel>
-					</p:tab>
-				</p:wizard>
+				</p:tabView>
 			</h:panelGrid>
+
+			<p:fieldset legend="SAVE DATA">
+				<h:panelGrid id="createNewDialogPanelButtons" columns="2"
+					style="align-items: center" cellpadding="5">
+					<p:commandButton id="createNewDialogConfirm"
+						value="#{uiValue.okLabel}" update="form:growlMessage"
+						actionListener="#{accountController.pushConfirmButtonCreateNewDialog()}"
+						styleClass="ui-confirmdialog-yes" icon="#{uiValue.okCircleIcon}"
+						oncomplete="if (!args.validationFailed) {updatePanelData(); updateSelectedTable(); updateHistoricTable()}">
+					</p:commandButton>
+					<p:commandButton id="createNewDialogCancel"
+						value="#{uiValue.cancelLabel}" icon="#{uiValue.cancelCircleIcon}"
+						actionListener="#{accountController.pushCancelButtonCreateNewDialog()}"
+						update="form:growlMessage"
+						onclick="PF('createNewDialogWidget').hide()"
+						class="ui-button-secondary" />
+
+				</h:panelGrid>
+			</p:fieldset>
+
+
 		</p:dialog>
 
 

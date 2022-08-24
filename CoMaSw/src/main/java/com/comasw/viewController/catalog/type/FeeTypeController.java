@@ -937,7 +937,7 @@ public class FeeTypeController extends BasicHistoricType<CtFeeType>
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 			}
 
-			if (objectToValidate.getPrice().compareTo(BigDecimal.valueOf(0)) < 0) {
+			if (objectToValidate.getPrice() == null || objectToValidate.getPrice().compareTo(BigDecimal.valueOf(0)) < 0) {
 				messageDetail = "ERROR - The price must be a positive number";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
@@ -1546,4 +1546,7 @@ public class FeeTypeController extends BasicHistoricType<CtFeeType>
 		}
 
 	}
+	
+	
+	
 }

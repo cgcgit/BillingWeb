@@ -8,14 +8,15 @@
 
 <f:metadata>
 	<f:viewAction id="defaultControlVariables"
-		action="#{productController.setInitVariablesToDefault()}"
+		action="#{serviceController.setInitVariablesToDefault()}"
 		phase="INVOKE_APPLICATION">
 	</f:viewAction>
 
 </f:metadata>
 
 
-<title>#{pageTitle.productPage}</title>
+<title>#{pageTitle.servicePage}</title>
+
 
 <body>
 	<h:outputStylesheet library="webjars"
@@ -25,7 +26,7 @@
 	<header>
 		<ui:include id="mainTemplate"
 			src="/WEB-INF/templates/mainTemplate.xhtml">
-			<ui:param name="title" value="PRODUCT " />
+			<ui:param name="title" value="SERVICE " />
 		</ui:include>
 	</header>
 	<h:form id="form">
@@ -57,13 +58,13 @@
 
 			<!--  SEARCH DATA AREA  -->
 			<p:tab id="searchPanel"
-				titleStyle="background: WhiteSmoke; color: black" title="PRODUCT">
-				<p:panelGrid columns="2" columnClasses="ui-grid-col-8,ui-grid-col-4"
-					layout="grid"
+				titleStyle="background: WhiteSmoke; color: black" title="SERVICE">
+				<p:panelGrid columns="2"
+					columnClasses="ui-grid-col-10,ui-grid-col-2" layout="grid"
 					style="border:0px none; background-color:transparent;">
 
-					<p:panel header="Search Product">
-						<p:panelGrid columns="4" columnClasses="ui-grid-col-3"
+					<p:panel header="Search Service">
+						<p:panelGrid columns="6" columnClasses="ui-grid-col-3"
 							layout="flex" contentStyleClass="align-items-baseline ui-fluid"
 							style="border:0px none; background-color:transparent; align:left">
 
@@ -71,14 +72,14 @@
 								<p:outputLabel id="contractNrLabel" for="contractNrCriteria"
 									value="Contract Nr:" />
 								<p:inputText id="contractNrCriteria" inmediate="true"
-									value="#{productController.searchContractNr}">
+									value="#{serviceController.searchContractNr}">
 									<p:ajax event="valueChange" immediate="true" process="@this" />
 								</p:inputText>
 
 								<p:outputLabel id="accountIdLabel" for="accountIdCriteria"
 									value="Account Id:" />
 								<p:inputNumber id="accountIdCriteria" maxlength="10"
-									inmediate="true" value="#{productController.searchAccountId}"
+									inmediate="true" value="#{serviceController.searchAccountId}"
 									decimalPlaces="0">
 									<p:ajax event="valueChange" immediate="true" process="@this" />
 								</p:inputNumber>
@@ -86,7 +87,7 @@
 								<p:outputLabel id="accountIdCardLabel"
 									for="accountIdCardCriteria" value="Account Identity Card:" />
 								<p:inputText id="accountIdCardCriteria" inmediate="true"
-									value="#{productController.searchAccountIdentityCard}">
+									value="#{serviceController.searchAccountIdentityCard}">
 									<p:ajax event="valueChange" immediate="true" process="@this" />
 								</p:inputText>
 							</p:panel>
@@ -94,7 +95,7 @@
 								<p:outputLabel id="customerIdLabel" for="customerIdCriteria"
 									value="customer Id:" />
 								<p:inputNumber id="customerIdCriteria" maxlength="10"
-									inmediate="true" value="#{productController.searchCustomerId}"
+									inmediate="true" value="#{serviceController.searchCustomerId}"
 									decimalPlaces="0">
 									<p:ajax event="valueChange" immediate="true" process="@this" />
 								</p:inputNumber>
@@ -102,7 +103,7 @@
 								<p:outputLabel id="customerIdCardLabel"
 									for="customerIdCardCriteria" value="Customer Identity Card:" />
 								<p:inputText id="customerIdCardCriteria" inmediate="true"
-									value="#{productController.searchCustomerIdentityCard}">
+									value="#{serviceController.searchCustomerIdentityCard}">
 									<p:ajax event="valueChange" immediate="true" process="@this" />
 								</p:inputText>
 							</p:panel>
@@ -111,28 +112,46 @@
 								<p:outputLabel id="productIdLabel" for="productIdCriteria"
 									value="Product Id:" />
 								<p:inputNumber id="productIdCriteria" maxlength="10"
-									inmediate="true" value="#{productController.searchProductId}"
+									inmediate="true" value="#{serviceController.searchProductId}"
 									decimalPlaces="0">
 									<p:ajax event="valueChange" immediate="true" process="@this" />
 								</p:inputNumber>
-
 								<p:outputLabel id="productTypeLabel" for="productTypeIdCriteria"
 									value="Product Type:" />
 								<p:selectOneMenu id="productTypeIdCriteria" editable="false"
 									immediate="true"
-									value="#{productController.searchProductTypeId}">
+									value="#{serviceController.searchProductTypeId}">
 									<f:selectItems id="selectItemsSearchProductTypeOutputCriteria"
 										itemDisabled="true" var="Type"
-										value="#{productController.productTypeSelectItems()}"
-										itemValue="#{productController.searchProductTypeId}" />
+										value="#{serviceController.productTypeSelectItems()}"
+										itemValue="#{serviceController.searchProductTypeId}" />
 									<p:ajax event="valueChange" immediate="true" process="@this" />
 								</p:selectOneMenu>
+							</p:panel>
 
-								<p:selectBooleanCheckbox id="includeCancelledData"
-									value="#{productController.includeCanceledDataFlag}"
-									itemLabel="Include Canceled Data?">
+							<p:panel header="Service Data">
+								<p:outputLabel id="serviceNrLabel" for="serviceNrCriteria"
+									value="Service Nr:" />
+								<p:inputText id="serviceNrCriteria" inmediate="true"
+									value="#{serviceController.searchServiceNr}">
 									<p:ajax event="valueChange" immediate="true" process="@this" />
-								</p:selectBooleanCheckbox>
+									</p:inputText>
+									<p:outputLabel id="serviceTypeLabel" for="serviceTypeCriteria"
+										value="Service Type:" />
+									<p:selectOneMenu id="serviceTypeCriteria" editable="false"
+										immediate="true"
+										value="#{serviceController.searchServiceTypeId}">
+										<f:selectItems id="selectItemsSearchServiceTypeOutputCriteria"
+											itemDisabled="true" var="Type"
+											value="#{serviceController.serviceTypeSelectItems()}"
+											itemValue="#{serviceController.searchServiceTypeId}" />
+										<p:ajax event="valueChange" immediate="true" process="@this" />
+									</p:selectOneMenu>
+									<p:selectBooleanCheckbox id="includeCancelledData"
+										value="#{serviceController.includeCanceledDataFlag}"
+										itemLabel="Include Canceled Data?">
+										<p:ajax event="valueChange" immediate="true" process="@this" />
+									</p:selectBooleanCheckbox>
 							</p:panel>
 
 							<p:panel>
@@ -140,7 +159,7 @@
 									<p:outputLabel id="dateSearchLabel" for="searchDate"
 										value="Search Date:" />
 									<p:inputMask id="searchDate" required="true" immediate="true"
-										value="#{productController.searchDate}" mask="99/99/9999"
+										value="#{serviceController.searchDate}" mask="99/99/9999"
 										requiredMessage="The date value to search is null. Please fill the search date field">
 										<f:converter
 											converterId="com.comasw.converter.localDateTimeConverter" />
@@ -149,7 +168,7 @@
 								</p:panel>
 								<p:commandButton id="searchDataButton" value="Search"
 									icon="#{uiValue.searchIcon}"
-									actionListener="#{productController.pushSearchButton()}"
+									actionListener="#{serviceController.pushSearchButton()}"
 									ajax="true" update=":form:growlMessage" style="width:7rem"
 									oncomplete="#{updateDataTable}" styleClass="p-mx-3"
 									class="ui-button-success rounded-button">
@@ -158,13 +177,13 @@
 						</p:panelGrid>
 					</p:panel>
 
-					<p:panel header="Create New Product" style="align-items: center"
-						rendered="#{productController.canUserModify()}">
+					<p:panel header="Create New Service" style="align-items: center"
+						rendered="#{serviceController.canUserModify()}">
 						<div align="center">
 							<p:commandButton id="createNewButton" value="New data"
 								icon="#{uiValue.addIcon}" ajax="true"
-								actionListener="#{productController.pushCreateNewButton()}"
-								rendered="#{productController.canUserModify()}"
+								actionListener="#{serviceController.pushCreateNewButton()}"
+								rendered="#{serviceController.canUserModify()}"
 								update=":form:createNewDialog :form:createNewDialogPanelData"
 								class="ui-button-primary" style="margin-right:.5rem">
 								<p:resetInput target=":form:createNewDialogPanelData" />
@@ -174,27 +193,28 @@
 				</p:panelGrid>
 
 				<p:overlayPanel id="searchList" for="searchDataButton"
-					showEvent="oncomplete" my="left top" at="left bottom"
+					showEvent="oncomplete" my="right top" at="right bottom"
 					showCloseIcon="true" dismissable="false"
 					widgetVar="searchListWidget">
 					<!--  DATA SEARCH TABLE -->
 					<p:dataTable id="dataTable" widgetVar="dataTableWidget"
 						partialUpdate="disabled" var="dataTable"
-						value="#{productController.dataList}"
-						filteredValue="#{productController.filteredDataList}"
+						value="#{serviceController.dataList}"
+						filteredValue="#{serviceController.filteredDataList}"
 						showGridlines="true" stripedRows="true" scrollable="true"
 						reflow="true" editable="true" rowIndexVar="rowIndexSearchTable"
-						rowKey="(#{dataTable.productId} #{dataTable.productStartDate} #{dataTable.productEndDate}
+						rowKey="(#{dataTable.serviceId} #{dataTable.serviceStartDate} #{dataTable.serviceEndDate}
+						#{dataTable.productId} #{dataTable.productStartDate} #{dataTable.productEndDate}
 						#{dataTable.accountId} #{dataTable.accountStartDate} #{dataTable.accountEndDate}
 						#{dataTable.customerId} #{dataTable.customerStartDate} #{dataTable.customerEndDate})"
-						selection="#{productController.selectedData}"
+						selection="#{serviceController.selectedData}"
 						selectionMode="single" paginator="true" rows="5" size="small"
 						paginatorPosition="bottom">
 
 						<!--  DATA TABLE - HEADER -->
 						<f:facet name="header">
 							<p:outputLabel id="title"
-								value="#{productController.searchDataTableTitle}" />
+								value="#{serviceController.searchDataTableTitle}" />
 						</f:facet>
 
 						<!--  DATA TABLE - FOOTER -->
@@ -212,7 +232,7 @@
 							<p:commandButton id="historicButton"
 								styleClass="ui-button-warning rounded-button"
 								icon="#{uiValue.viewIcon}" immediate="true" ajax="true"
-								actionListener="#{productController.pushShowDetailRowButton()}"
+								actionListener="#{serviceController.pushShowDetailRowButton()}"
 								update="form:accordionPanel:selectedTablePanel
 								form:accordionPanel:emptyHistoricTablePanel
 								form:accordionPanel:historicTablePanel"
@@ -229,23 +249,36 @@
                                   width: 100px;    
                                   overflow: hidden"
 							headerText="CODE" rendered="true"
-							sortBy="#{dataTable.productCode}"
-							filterBy="#{dataTable.productCode}" filterMatchMode="contains">
-							<h:outputText id="searchCodeText"
-								value="#{dataTable.productCode}" />
+							sortBy="#{dataTable.serviceCode}"
+							filterBy="#{dataTable.serviceCode}" filterMatchMode="contains">
+							<h:outputText id="searchServiceCodeText"
+								value="#{dataTable.serviceCode}" />
 						</p:column>
 
-						<p:column id="searchProductStartDate"
+						<p:column id="searchServiceNr"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="SERVICE NR" rendered="true"
+							sortBy="#{dataTable.serviceNumber}"
+							filterBy="#{dataTable.serviceNumber}" filterMatchMode="contains">
+							<h:outputText id="searchServiceNumberText"
+								value="#{dataTable.serviceNumber}" />
+						</p:column>
+
+						<p:column id="searchServiceStartDate"
 							style="font-family:Arial Black;
                                   text-align: left;
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
 							headerText="START DATE" rendered="true"
-							sortBy="#{dataTable.productStartDate}"
-							filterBy="#{dataTable.productStartDate}" filterMatchMode="exact">
-							<f:facet id="searchProductStartDateFilter" name="filter">
-								<p:datePicker id="searchProductStartDateFilterPicker"
+							sortBy="#{dataTable.serviceStartDate}"
+							filterBy="#{dataTable.serviceStartDate}" filterMatchMode="exact">
+							<f:facet id="searchServiceStartDateFilter" name="filter">
+								<p:datePicker id="searchServiceStartDateFilterPicker"
 									onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
 									monthNavigator="true" yearNavigator="true" mask="true"
 									pattern="dd/MM/yyyy">
@@ -253,24 +286,24 @@
 										converterId="com.comasw.converter.localDateTimeConverter" />
 								</p:datePicker>
 							</f:facet>
-							<h:outputText id="searchProductStartDateText"
-								value="#{dataTable.productStartDate}">
+							<h:outputText id="searchServiceStartDateText"
+								value="#{dataTable.serviceStartDate}">
 								<f:converter
 									converterId="com.comasw.converter.localDateTimeConverter" />
 							</h:outputText>
 						</p:column>
 
-						<p:column id="searchProductEndDate"
+						<p:column id="searchServiceEndDate"
 							style="font-family:Arial Black;
                                   text-align: left;
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
 							headerText="END DATE" rendered="true"
-							sortBy="#{dataTable.productEndDate}"
-							filterBy="#{dataTable.productEndDate}" filterMatchMode="exact">
-							<f:facet id="searchProductEndDateFilter" name="filter">
-								<p:datePicker id="searchProductEndDateFilterPicker"
+							sortBy="#{dataTable.serviceEndDate}"
+							filterBy="#{dataTable.serviceEndDate}" filterMatchMode="exact">
+							<f:facet id="searchServiceEndDateFilter" name="filter">
+								<p:datePicker id="searchServiceEndDateFilterPicker"
 									onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
 									monthNavigator="true" yearNavigator="true" mask="true"
 									pattern="dd/MM/yyyy">
@@ -278,37 +311,50 @@
 										converterId="com.comasw.converter.localDateTimeConverter" />
 								</p:datePicker>
 							</f:facet>
-							<h:outputText id="searchProductEndDateText"
-								value="#{dataTable.productEndDate}">
+							<h:outputText id="searchServiceEndDateText"
+								value="#{dataTable.serviceEndDate}">
 								<f:converter
 									converterId="com.comasw.converter.localDateTimeConverter" />
 							</h:outputText>
 						</p:column>
 
-						<p:column id="searchProductStatus"
+						<p:column id="searchServiceStatus"
 							style="font-family:Arial Black;
                                   text-align: left;
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
-							headerText="PRODUCT STATUS" rendered="true"
-							filterBy="#{dataTable.productStatusId}" filterMatchMode="exact">
-							<f:facet id="searchProductStatusFilter" name="filter">
-								<p:selectOneMenu id="productStatusFilterMenu"
+							headerText="SERVICE STATUS" rendered="true"
+							filterBy="#{dataTable.serviceStatusId}" filterMatchMode="exact">
+							<f:facet id="searchServiceStatusFilter" name="filter">
+								<p:selectOneMenu id="serviceStatusFilterMenu"
 									onchange="PF('dataTableWidget').filter()">
-									<f:selectItems id="searchProductStatusFilterSelectItems"
-										value="#{productController.statusInstanceSelectItems()}" />
+									<f:selectItems id="searchServiceStatusFilterSelectItems"
+										value="#{serviceController.statusInstanceSelectItems()}" />
 								</p:selectOneMenu>
 							</f:facet>
 
-							<p:selectOneMenu id="searchProductStatusOutput" editable="false"
+							<p:selectOneMenu id="searchServiceStatusOutput" editable="false"
 								disabled="true" immediate="true"
-								value="#{dataTable.productStatusId}">
-								<f:selectItems id="selectItemsSearchProductStatusOutput"
+								value="#{dataTable.serviceStatusId}">
+								<f:selectItems id="selectItemsSearchServiceStatusOutput"
 									itemDisabled="true" var="Status"
-									value="#{productController.statusInstanceSelectItems()}"
-									itemValue="#{dataTable.productStatusId}" />
+									value="#{serviceController.statusInstanceSelectItems()}"
+									itemValue="#{dataTable.serviceStatusId}" />
 							</p:selectOneMenu>
+						</p:column>
+
+						<p:column id="searchProductCode"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="PRODUCT CODE" rendered="true"
+							sortBy="#{dataTable.productCode}"
+							filterBy="#{dataTable.productCode}" filterMatchMode="contains">
+							<h:outputText id="searchProductCodeText"
+								value="#{dataTable.productCode}" />
 						</p:column>
 
 						<p:column id="searchContractNr"
@@ -478,12 +524,12 @@
 				</p:overlayPanel>
 
 
-				<p:panel id="selectedTablePanel" header="Product Data"
-					visible="#{productController.showSelectedData}">
+				<p:panel id="selectedTablePanel" header="Service Data"
+					visible="#{serviceController.showSelectedData}">
 
 					<p:dataTable id="selectedTable" widgetVar="selectedTableWidget"
 						var="selectedDataTable"
-						value="#{productController.selectedDataList}" rendered="true"
+						value="#{serviceController.selectedDataList}" rendered="true"
 						size="small" scrollable="true" emptyMessage="No data to show"
 						rows="1" showGridlines="true">
 
@@ -495,18 +541,18 @@
                                   overflow: hidden"
 							headerText="CODE" rendered="true">
 							<h:outputText id="codeText"
-								value="#{selectedDataTable.productCode}" />
+								value="#{selectedDataTable.serviceCode}" />
 						</p:column>
 
-						<p:column id="productTypeName"
+						<p:column id="serviceTypeName"
 							style="font-family:Arial Black;
                                   text-align: left;
                                   font-size: 11px;
                                   width: 100px;    
                                   overflow: hidden"
 							headerText="TYPE NAME" rendered="true">
-							<h:outputText id="productTypeNameText"
-								value="#{selectedDataTable.productTypeName}" />
+							<h:outputText id="serviceTypeNameText"
+								value="#{selectedDataTable.serviceTypeName}" />
 						</p:column>
 
 						<p:column id="description"
@@ -516,9 +562,54 @@
                                   width: 100px;    
                                   overflow: hidden"
 							headerText="DESCRIPTION" rendered="true">
-							<h:outputText id="productDescriptionText"
-								value="#{selectedDataTable.productTypeDescription}" />
+							<h:outputText id="serviceDescriptionText"
+								value="#{selectedDataTable.serviceTypeDescription}" />
 						</p:column>
+
+						<p:column id="serviceNr"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="SERVICE NR" rendered="true">
+							<h:outputText id="ServiceNrText"
+								value="#{selectedDataTable.serviceNumber}" />
+						</p:column>
+
+						<p:column id="general1"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="GENERAL_1" rendered="true">
+							<h:outputText id="general1Text"
+								value="#{selectedDataTable.serviceGeneral_1}" />
+						</p:column>
+
+						<p:column id="general2"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="GENERAL_2" rendered="true">
+							<h:outputText id="general2Text"
+								value="#{selectedDataTable.serviceGeneral_2}" />
+						</p:column>
+
+						<p:column id="general3"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="GENERAL_3" rendered="true">
+							<h:outputText id="general3Text"
+								value="#{selectedDataTable.serviceGeneral_3}" />
+						</p:column>
+
 
 						<p:column id="activeDate"
 							style="font-family:Arial Black;
@@ -528,7 +619,7 @@
                                   overflow: hidden"
 							headerText="ACTIVE DATE" rendered="true">
 							<h:outputText id="activeDateText"
-								value="#{selectedDataTable.productActiveDate}">
+								value="#{selectedDataTable.serviceActiveDate}">
 								<f:converter
 									converterId="com.comasw.converter.localDateTimeConverter" />
 							</h:outputText>
@@ -542,10 +633,33 @@
                                   overflow: hidden"
 							headerText="CANCELLED DATE" rendered="true">
 							<h:outputText id="cancelledDateText"
-								value="#{selectedDataTable.productCancelledDate}">
+								value="#{selectedDataTable.serviceCancelledDate}">
 								<f:converter
 									converterId="com.comasw.converter.localDateTimeConverter" />
 							</h:outputText>
+						</p:column>
+
+
+						<p:column id="productCode"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="PROD. CODE" rendered="true">
+							<h:outputText id="productCodeText"
+								value="#{selectedDataTable.productCode}" />
+						</p:column>
+
+						<p:column id="productTypeName"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="PROD. TYPE NAME" rendered="true">
+							<h:outputText id="productTypeNameText"
+								value="#{selectedDataTable.productTypeName}" />
 						</p:column>
 
 						<p:column id="accountId"
@@ -559,8 +673,6 @@
 								value="#{selectedDataTable.accountId}" />
 						</p:column>
 
-
-
 						<p:column id="accountType"
 							style="font-family:Arial Black;
                                   text-align: left;
@@ -573,7 +685,7 @@
 								value="#{selectedDataTable.accountTypeId}">
 								<f:selectItems id="selectItemsAccountTypeOutput"
 									itemDisabled="true" var="AccountType"
-									value="#{productController.accountTypeSelectItems()}"
+									value="#{serviceController.accountTypeSelectItems()}"
 									itemValue="#{selectedDataTable.accountTypeId}" />
 							</p:selectOneMenu>
 						</p:column>
@@ -589,7 +701,6 @@
 								value="#{selectedDataTable.accountCode}" />
 						</p:column>
 
-
 						<p:column id="accountIdCardType"
 							style="font-family:Arial Black;
                                   text-align: left;
@@ -602,7 +713,7 @@
 								value="#{selectedDataTable.accountIdentityCardTypeId}">
 								<f:selectItems id="selectItemsAccountIdCardTypeOutput"
 									itemDisabled="true" var="AccountIdCardType"
-									value="#{productController.identityCardTypeSelectItems()}"
+									value="#{serviceController.identityCardTypeSelectItems()}"
 									itemValue="#{selectedDataTable.accountIdentityCardTypeId}" />
 							</p:selectOneMenu>
 						</p:column>
@@ -628,8 +739,6 @@
 							<h:outputText id="contractNrText"
 								value="#{selectedDataTable.contractNumber}" />
 						</p:column>
-
-
 
 						<p:column id="accountName"
 							style="font-family:Arial Black;
@@ -664,7 +773,6 @@
 								value="#{selectedDataTable.accountSecondSurname}" />
 						</p:column>
 
-
 						<p:column id="customerId"
 							style="font-family:Arial Black;
                                   text-align: left;
@@ -675,7 +783,6 @@
 							<h:outputText id="customerIdText"
 								value="#{selectedDataTable.customerId}" />
 						</p:column>
-
 
 						<p:column id="customerType"
 							style="font-family:Arial Black;
@@ -689,11 +796,10 @@
 								value="#{selectedDataTable.customerTypeId}">
 								<f:selectItems id="selectItemsCustomerTypeOutput"
 									itemDisabled="true" var="CustomerType"
-									value="#{productController.customerTypeSelectItems()}"
+									value="#{serviceController.customerTypeSelectItems()}"
 									itemValue="#{selectedDataTable.customerTypeId}" />
 							</p:selectOneMenu>
 						</p:column>
-
 
 						<p:column id="customerIdCardType"
 							style="font-family:Arial Black;
@@ -707,7 +813,7 @@
 								value="#{selectedDataTable.customerIdentityCardTypeId}">
 								<f:selectItems id="selectItemsCustomerIdCardTypeOutput"
 									itemDisabled="true" var="CustomerIdCardType"
-									value="#{productController.identityCardTypeSelectItems()}"
+									value="#{serviceController.identityCardTypeSelectItems()}"
 									itemValue="#{selectedDataTable.customerIdentityCardTypeId}" />
 							</p:selectOneMenu>
 						</p:column>
@@ -722,7 +828,6 @@
 							<h:outputText id="customerIdCardText"
 								value="#{selectedDataTable.customerIdentityCard}" />
 						</p:column>
-
 
 						<p:column id="customerName"
 							style="font-family:Arial Black;
@@ -756,7 +861,6 @@
 							<h:outputText id="customer2ndSurnameText"
 								value="#{selectedDataTable.customerSecondSurname}" />
 						</p:column>
-
 					</p:dataTable>
 				</p:panel>
 
@@ -765,34 +869,34 @@
 			<!--  HISTORIC DATA AREA   -->
 			<p:tab id="historicPanel"
 				titleStyle="background: WhiteSmoke; color: black"
-				title="PRODUCT INSTANCE HISTORIC RECORDS">
+				title="SERVICE INSTANCE HISTORIC RECORDS">
 
 				<p:panel id="emptyHistoricTablePanel"
-					visible="#{!productController.showSelectedData}">
-					No data to show. Please push the search button of the Search Product area and selecte one of the product instances.
+					visible="#{!serviceController.showSelectedData}">
+					No data to show. Please push the search button of the Search Service area and select one of the service instances.
 				</p:panel>
 
 				<p:panel id="historicTablePanel"
-					visible="#{productController.showSelectedData}">
+					visible="#{serviceController.showSelectedData}">
 
 
 					<p:dataTable id="historicTable" widgetVar="historicTableWidget"
 						styleClass="historicTable" var="historicDataTable"
-						value="#{productController.historicDataList}"
-						rowKey="(#{historicDataTable.productId} #{historicDataTable.startDate} #{historicDataTable.endDate})"
+						value="#{serviceController.historicDataList}"
+						rowKey="(#{historicDataTable.serviceId} #{historicDataTable.startDate} #{historicDataTable.endDate})"
 						rowIndexVar="rowIndexHistoricTable" selectionMode="single"
-						selection="#{productController.selectedHistoricData}"
-						filteredValue="#{productController.filteredHistoricDataList}"
+						selection="#{serviceController.selectedHistoricData}"
+						filteredValue="#{serviceController.filteredHistoricDataList}"
 						showGridlines="true" stripedRows="true" scrollable="true"
 						emptyMessage="No data to show" size="small" paginator="true"
 						rows="4" paginatorPosition="bottom" editable="true">
 						<f:facet name="header">
 							<f:facet name="header">
-							HISTORIC PRODUCT DATA for #{productController.selectedData.productCode}							
+							HISTORIC SERVICE DATA for #{serviceController.selectedData.serviceNumber}							
 								<p:commandButton id="refreshHistoricTable"
 									style="margin-left: 1rem; margin-right: .5rem"
 									icon="#{uiValue.refreshIcon}" ajax="true"
-									actionListener="#{productController.refreshHistoricDataTable()}"
+									actionListener="#{serviceController.refreshHistoricDataTable()}"
 									styleClass="ui-button-warning rounded-button">
 								</p:commandButton>
 								<p:tooltip for="refreshHistoricTable"
@@ -802,16 +906,16 @@
 
 						<!--  DATA TABLE - MANAGE EDIT EVENTS -->
 						<p:ajax id="ajaxRowEditInit" event="rowEditInit"
-							listener="#{productController.onRowInit}"
+							listener="#{serviceController.onRowInit}"
 							update="form:growlMessage">
 						</p:ajax>
 						<p:ajax id="ajaxRowEdit" event="rowEdit"
-							listener="#{productController.onRowEdit}"
+							listener="#{serviceController.onRowEdit}"
 							update="form:growlMessage"
 							oncomplete="if (!args.validationFailed) {updateHistoricTable()}">
 						</p:ajax>
 						<p:ajax id="ajaxRowEditCancel" event="rowEditCancel"
-							listener="#{productController.onRowCancel}"
+							listener="#{serviceController.onRowCancel}"
 							update="form:growlMessage" oncomplete="{updateHistoricTable()}">
 						</p:ajax>
 
@@ -825,18 +929,18 @@
                                    width: 60px;    
                                    overflow: hidden"
 							headerText="DEL ROW"
-							rendered="#{productController.canUserModify()}">
+							rendered="#{serviceController.canUserModify()}">
 							<p:commandButton id="deleteHistoricRowButton"
 								class="ui-button-warning rounded-button"
 								icon="#{uiValue.deleteIcon}" ajax="true"
-								actionListener="#{productController.pushDeleteRowButton()}"
-								rendered="#{productController.canUserModify()}"
+								actionListener="#{serviceController.pushDeleteRowButton()}"
+								rendered="#{serviceController.canUserModify()}"
 								update=":form:deleteConfirmDialog">
 								<f:setPropertyActionListener value="#{rowIndexHistoricTable}"
-									target="#{productController.rowHistoricSelected}" />
+									target="#{serviceController.rowHistoricSelected}" />
 
 								<f:setPropertyActionListener value="#{historicDataTable}"
-									target="#{productController.selectedHistoricData}" />
+									target="#{serviceController.selectedHistoricData}" />
 							</p:commandButton>
 						</p:column>
 
@@ -847,12 +951,12 @@
                                    width: 60px;    
                                    overflow: hidden"
 							headerText="ADD ROW"
-							rendered="#{productController.canUserModify()}">
+							rendered="#{serviceController.canUserModify()}">
 							<p:commandButton id="addHistoricRowButton"
 								class="ui-button-success rounded-button"
 								icon="#{uiValue.addIcon}" ajax="true"
-								actionListener="#{productController.pushAddNewRowButton()}"
-								rendered="#{productController.canUserModify()}"
+								actionListener="#{serviceController.pushAddNewRowButton()}"
+								rendered="#{serviceController.canUserModify()}"
 								update=":form:createNewDialog :form:createNewDialogPanelData">
 								<p:resetInput target=":form:createNewDialogPanelData" />
 								<f:param name="currentHistoricalRow"
@@ -867,7 +971,7 @@
                                   width: 60px;    
                                   overflow: hidden"
 							headerText="EDIT ROW"
-							rendered="#{productController.canUserModify()}">
+							rendered="#{serviceController.canUserModify()}">
 							<p:rowEditor id="editHistoricRowButton" editTitle="Edit Row"
 								cancelTitle="Cancel Edit" saveTitle="Save Row">
 							</p:rowEditor>
@@ -875,16 +979,7 @@
 
 
 						<!--  DATA TABLE - DATA COLUMNS -->
-						<p:column id="productIdHist"
-							style="font-family:Arial Black;
-                                  text-align: left;
-                                  font-size: 11px;
-                                  width: 40px;    
-                                  overflow: hidden;
-                                  visibility: hidden"
-							headerText="PRODUCT ID" rendered="false">
-							<h:outputText value="#{historicDataTable.productId}" />
-						</p:column>
+
 
 						<p:column id="codeHist"
 							style="font-family:Arial Black;
@@ -895,7 +990,6 @@
 							headerText="CODE" rendered="true"
 							sortBy="#{historicDataTable.code}"
 							filterBy="#{historicDataTable.code}" filterMatchMode="contains">
-
 							<p:cellEditor id="cellEditorCodeHist">
 								<f:facet id="facetCodeHistOutput" name="output">
 									<h:outputText id="codeHistOutput"
@@ -909,7 +1003,6 @@
 								</f:facet>
 							</p:cellEditor>
 						</p:column>
-
 
 						<p:column id="startDateHist"
 							style="font-family:Arial Black;
@@ -989,6 +1082,104 @@
 							</p:cellEditor>
 						</p:column>
 
+						<p:column id="serviceNrHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="SERV. NR" rendered="true"
+							sortBy="#{historicDataTable.serviceNumber}"
+							filterBy="#{historicDataTable.serviceNumber}"
+							filterMatchMode="contains">
+							<p:cellEditor id="cellEditorServiceNrHist">
+								<f:facet id="facetServiceNrHistOutput" name="output">
+									<h:outputText id="serviceNrHistOutput"
+										value="#{historicDataTable.serviceNumber}" />
+								</f:facet>
+								<f:facet id="facetServiceNrHistInput" name="input">
+									<p:inputText id="serviceNrHistInput" label="Code"
+										value="#{historicDataTable.serviceNumber}" style="width:96%">
+										<p:ajax event="change" update="serviceNrHistOutput" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="general1Hist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="SERV. GEN1" rendered="true"
+							sortBy="#{historicDataTable.general_1}"
+							filterBy="#{historicDataTable.general_1}"
+							filterMatchMode="contains">
+							<p:cellEditor id="cellEditorGeneral1Hist">
+								<f:facet id="facetGeneral1HistOutput" name="output">
+									<h:outputText id="general1HistOutput"
+										value="#{historicDataTable.general_1}" />
+								</f:facet>
+								<f:facet id="facetGeneral1HistInput" name="input">
+									<p:inputText id="general1HistInput" label="Code"
+										value="#{historicDataTable.general_1}" style="width:96%">
+										<p:ajax event="change" update="general1HistOutput" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="general2Hist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="SERV. GEN2" rendered="true"
+							sortBy="#{historicDataTable.general_2}"
+							filterBy="#{historicDataTable.general_2}"
+							filterMatchMode="contains">
+							<p:cellEditor id="cellEditorGeneral2Hist">
+								<f:facet id="facetGeneral2HistOutput" name="output">
+									<h:outputText id="general2HistOutput"
+										value="#{historicDataTable.general_2}" />
+								</f:facet>
+								<f:facet id="facetGeneral2HistInput" name="input">
+									<p:inputText id="general2HistInput" label="Code"
+										value="#{historicDataTable.general_2}" style="width:96%">
+										<p:ajax event="change" update="general2HistOutput" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+						<p:column id="general3Hist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="SERV. GEN3" rendered="true"
+							sortBy="#{historicDataTable.general_3}"
+							filterBy="#{historicDataTable.general_3}"
+							filterMatchMode="contains">
+							<p:cellEditor id="cellEditorGeneral3Hist">
+								<f:facet id="facetGeneral3HistOutput" name="output">
+									<h:outputText id="general3HistOutput"
+										value="#{historicDataTable.general_3}" />
+								</f:facet>
+								<f:facet id="facetGeneral3HistInput" name="input">
+									<p:inputText id="general3HistInput" label="Code"
+										value="#{historicDataTable.general_3}" style="width:96%">
+										<p:ajax event="change" update="general3HistOutput" />
+									</p:inputText>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
+
+
+
 						<p:column id="activeDateHist"
 							style="font-family:Arial Black;
                                   text-align: left;
@@ -1018,7 +1209,7 @@
 								</f:facet>
 								<f:facet id="facetActiveDateInputHist" name="input">
 									<p:inputMask id="activeDateInputHist"
-										valueChangeListener="#{productController.changeActiveDate}"
+										valueChangeListener="#{serviceController.changeActiveDate}"
 										value="#{historicDataTable.activeDate}" mask="99/99/9999"
 										style="width:96%">
 										<f:converter
@@ -1085,7 +1276,7 @@
 								<p:selectOneMenu id="statusFilterMenuHist"
 									onchange="PF('historicTableWidget').filter()">
 									<f:selectItems id="statusFilterSelectItemsHist"
-										value="#{productController.statusInstanceSelectItems()}" />
+										value="#{serviceController.statusInstanceSelectItems()}" />
 								</p:selectOneMenu>
 							</f:facet>
 							<p:cellEditor id="statusHistCellEditor">
@@ -1094,17 +1285,17 @@
 										disabled="true" immediate="true"
 										value="#{historicDataTable.statusId}">
 										<f:selectItems
-											value="#{productController.statusInstanceSelectItems()}"
+											value="#{serviceController.statusInstanceSelectItems()}"
 											id="selectItemsStatusHistOutput" itemDisabled="true"
 											var="Status" itemValue="#{historicDataTable.statusId}" />
 									</p:selectOneMenu>
 								</f:facet>
 								<f:facet id="statusHistInputFacet" name="input">
 									<p:selectOneMenu id="statusHistInput"
-										valueChangeListener="#{productController.changeStatus}"
+										valueChangeListener="#{serviceController.changeStatus}"
 										value="#{historicDataTable.statusId}" immediate="true">
 										<f:selectItems
-											value="#{productController.statusInstanceSelectItems()}"
+											value="#{serviceController.statusInstanceSelectItems()}"
 											id="selectItemsStatusHistInput" var="Status"
 											itemValue="#{historicDataTable.statusId}">
 										</f:selectItems>
@@ -1125,101 +1316,128 @@
 
 		<!--  CREATE NEW DIALOG -->
 		<p:dialog id="createNewDialog"
-			header="#{productController.dialogHeaderText}" showEffect="fade"
+			header="#{serviceController.dialogHeaderText}" showEffect="fade"
 			responsive="true" widgetVar="createNewDialogWidget">
 			<p:panel id="newParentPanel" header="Parent Data"
-				visible="#{!productController.fromAddingRow}"
+				visible="#{!serviceController.fromAddingRow}"
 				widgetVar="newParentPanelWidget">
 
-				<p:panelGrid columns="3" columnClasses="ui-grid-col-4" layout="flex"
+
+				<p:panelGrid columns="4" columnClasses="ui-grid-col-2" layout="flex"
 					contentStyleClass="align-items-baseline ui-fluid"
 					style="border:0px none; background-color:transparent; align:left">
-					<p:panelGrid columns="2" columnClasses="ui-grid-col-6"
-						layout="flex" contentStyleClass="align-items-baseline ui-fluid"
-						style="border:0px none; background-color:transparent; align:left">
-						<p:panel header="Account Criteria">
-							<h:outputText id="newAccountIdCardLabel"
-								rendered="#{!productController.fromAddingRow}"
-								value="Account Identity Card:" />
-							<p:inputText id="newAccountIdCardText"
-								rendered="#{!productController.fromAddingRow}"
-								value="#{productController.searchAccountIdentityCardForNew}"
-								label="AccountIdentityCard">
-								<p:ajax event="valueChange" immediate="true" process="@this" />
-							</p:inputText>
-							<h:outputText id="newAccountIdLabelSearch" value="Account Id:" />
-							<p:inputNumber id="newAccountIdTextSearch" decimalPlaces="0"
-								disabled="#{productController.fromAddingRow}"
-								value="#{productController.searchAccountIdForNew}"
-								label="AccountId">
-								<p:ajax event="valueChange" immediate="true" process="@this" />
-							</p:inputNumber>
-							<h:outputText id="newContractNrLabel"
-								rendered="#{!productController.fromAddingRow}"
-								value="Contract Nr:" />
-							<p:inputText id="newContractNrText"
-								rendered="#{!productController.fromAddingRow}"
-								value="#{productController.searchContractNrForNew}"
-								label="ContractNr">
-								<p:ajax event="valueChange" immediate="true" process="@this" />
-							</p:inputText>
-						</p:panel>
-						<p:panel header="Customer Criteria"
-							visible="#{!productController.fromAddingRow}">
-							<h:outputText id="newCustomerIdCardLabel"
-								rendered="#{!productController.fromAddingRow}"
-								value="Customer Identity Card:" />
-							<p:inputText id="newCustomerIdCardText"
-								rendered="#{!productController.fromAddingRow}"
-								value="#{productController.searchCustomerIdentityCardForNew}"
-								label="CustomerIdentityCard">
-								<p:ajax event="valueChange" immediate="true" process="@this" />
-							</p:inputText>
-							<h:outputText id="newCustomerIdLabel" value="Customer Id:" />
-							<p:inputNumber id="newCustomerIdText" decimalPlaces="0"
-								disabled="#{productController.fromAddingRow}"
-								value="#{productController.searchCustomerIdForNew}"
-								label="CustomerId">
-								<p:ajax event="valueChange" immediate="true" process="@this" />
-							</p:inputNumber>
-						</p:panel>
 
-					</p:panelGrid>
-					<p:panel id="searchParentArea"
-						visible="#{!productController.fromAddingRow}"
+					<p:panel header="Customer Criteria"
+						visible="#{!serviceController.fromAddingRow}">
+						<h:outputText id="newCustomerIdCardLabel"
+							rendered="#{!serviceController.fromAddingRow}"
+							value="Customer Identity Card:" />
+						<p:inputText id="newCustomerIdCardText"
+							rendered="#{!serviceController.fromAddingRow}"
+							value="#{serviceController.searchCustomerIdentityCardForNew}"
+							label="CustomerIdentityCard">
+							<p:ajax event="valueChange" immediate="true" process="@this" />
+						</p:inputText>
+						<h:outputText id="newCustomerIdLabel" value="Customer Id:" />
+						<p:inputNumber id="newCustomerIdText" decimalPlaces="0"
+							disabled="#{serviceController.fromAddingRow}"
+							value="#{serviceController.searchCustomerIdForNew}"
+							label="CustomerId">
+							<p:ajax event="valueChange" immediate="true" process="@this" />
+						</p:inputNumber>
+					</p:panel>
+
+					<p:panel header="Account Criteria">
+						<h:outputText id="newAccountIdCardLabel"
+							rendered="#{!serviceController.fromAddingRow}"
+							value="Account Identity Card:" />
+						<p:inputText id="newAccountIdCardText"
+							rendered="#{!serviceController.fromAddingRow}"
+							value="#{serviceController.searchAccountIdentityCardForNew}"
+							label="AccountIdentityCard">
+							<p:ajax event="valueChange" immediate="true" process="@this" />
+						</p:inputText>
+						<h:outputText id="newAccountIdLabelSearch" value="Account Id:" />
+						<p:inputNumber id="newAccountIdTextSearch" decimalPlaces="0"
+							disabled="#{serviceController.fromAddingRow}"
+							value="#{serviceController.searchAccountIdForNew}"
+							label="AccountId">
+							<p:ajax event="valueChange" immediate="true" process="@this" />
+						</p:inputNumber>
+						<h:outputText id="newContractNrLabel"
+							rendered="#{!serviceController.fromAddingRow}"
+							value="Contract Nr:" />
+						<p:inputText id="newContractNrText"
+							rendered="#{!serviceController.fromAddingRow}"
+							value="#{serviceController.searchContractNrForNew}"
+							label="ContractNr">
+							<p:ajax event="valueChange" immediate="true" process="@this" />
+						</p:inputText>
+					</p:panel>
+
+
+					<p:panel header="Product Criteria">
+						<p:outputLabel id="productIdLabel" for="productIdCriteria"
+							value="Product Id:" />
+						<p:inputNumber id="productIdCriteria" maxlength="10"
+							inmediate="true"
+							value="#{serviceController.searchProductIdForNew}"
+							decimalPlaces="0">
+							<p:ajax event="valueChange" immediate="true" process="@this" />
+						</p:inputNumber>
+
+						<p:outputLabel id="productTypeLabel" for="productTypeIdCriteria"
+							value="Product Type:" />
+						<p:selectOneMenu id="productTypeIdCriteria" editable="false"
+							immediate="true"
+							value="#{serviceController.searchProductTypeIdForNew}">
+							<f:selectItems id="selectItemsSearchProductTypeOutputCriteria"
+								itemDisabled="true" var="Type"
+								value="#{serviceController.productTypeSelectItems()}"
+								itemValue="#{serviceController.searchProductTypeIdForNew}">
+
+							</f:selectItems>
+						</p:selectOneMenu>
+					</p:panel>
+
+
+					<p:panel id="searchParentArea" header="Search"
+						visible="#{!serviceController.fromAddingRow}"
 						widgetVar="searchCustomerAreaWidget">
 						<p:commandButton id="searchParentDataButton" value="Search"
 							icon="#{uiValue.searchIcon}"
-							actionListener="#{productController.pushSearchParentButton()}"
+							actionListener="#{serviceController.pushSearchParentButton()}"
 							ajax="true" update=":form:growlMessage :form:parentSearchList"
 							style="width:7rem" styleClass="p-mx-3"
 							class="ui-button-success rounded-button"
-							oncomplete="if (!args.validationFailed) {#{updateCustomerTable} PF('searchParentListWidget').show('#{component.clientId}')}">
+							oncomplete="if (!args.validationFailed) { PF('searchParentListWidget').show('#{component.clientId}')}">
 						</p:commandButton>
 					</p:panel>
 				</p:panelGrid>
+
 				<p:overlayPanel id="parentSearchList" showEvent="oncomplete"
-					for="searchParentDataButton" my="rigth top" at="rigth bottom"
+					for="searchParentDataButton" my="right top" at="right bottom"
 					showCloseIcon="true" dismissable="false"
 					widgetVar="searchParentListWidget">
 					<!--  DATA SEARCH TABLE -->
 					<p:dataTable id="parentSearchDataTable" partialUpdate="disabled"
 						widgetVar="parentDataTableWidget" var="parentSearchDataTable"
-						value="#{productController.parentSearchDataList}"
-						filteredValue="#{productController.filteredParentSearchDataList}"
+						value="#{serviceController.parentSearchDataList}"
+						filteredValue="#{serviceController.filteredParentSearchDataList}"
 						showGridlines="true" stripedRows="true" scrollable="true"
 						reflow="true" editable="true"
 						rowIndexVar="rowIndexParentSearchTable"
-						rowKey="(#{parentSearchDataTable.accountId} #{parentSearchDataTable.accountStartDate} #{parentSearchDataTable.accountEndDate}
+						rowKey="(#{parentSearchDataTable.productId} #{parentSearchDataTable.productStartDate} #{parentSearchDataTable.productEndDate}
+						#{parentSearchDataTable.accountId} #{parentSearchDataTable.accountStartDate} #{parentSearchDataTable.accountEndDate}
 						#{parentSearchDataTable.customerId} #{parentSearchDataTable.customerStartDate} #{parentSearchDataTable.customerEndDate})"
-						selection="#{productController.selectedParentSearchData}"
+						selection="#{serviceController.selectedParentSearchData}"
 						selectionMode="single" paginator="true" rows="5" size="small"
 						paginatorPosition="bottom">
 
 						<!--  DATA TABLE - HEADER -->
 						<f:facet name="header">
 							<p:outputLabel id="title"
-								value="Account Data - Click on row button to selected as account parent of the product to create" />
+								value="Parent Data - Click on row button to selected as parent of the service to create" />
 						</f:facet>
 
 						<!--  DATA TABLE - FOOTER -->
@@ -1236,12 +1454,45 @@
 							<p:commandButton id="relatedParentButton"
 								styleClass="ui-button-warning rounded-button"
 								icon="#{uiValue.addIcon}" ajax="true"
-								actionListener="#{productController.addParentToInstanceRowButton()}"
+								actionListener="#{serviceController.addParentToInstanceRowButton()}"
 								update="form:newParentPanel">
 							</p:commandButton>
 						</p:column>
 
 						<!--  DATA TABLE - DATA COLUMNS -->
+						<p:column id="searchParentProductCode"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="PROD. CODE" rendered="true"
+							sortBy="#{parentSearchDataTable.productCode}"
+							filterBy="#{parentSearchDataTable.productCode}"
+							filterMatchMode="contains">
+							<h:outputText id="searchParentProductCodeText"
+								value="#{parentSearchDataTable.productCode}" />
+						</p:column>
+
+						<p:column id="searchParentProductType"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="PROD. TYPE" rendered="true"
+							sortBy="#{parentSearchDataTable.productTypeId}"
+							filterBy="#{parentSearchDataTable.productTypeId}"
+							filterMatchMode="contains">
+							<p:selectOneMenu id="parentProductTypeMenu" editable="false"
+								disabled="true" immediate="true"
+								value="#{parentSearchDataTable.productTypeId}">
+								<f:selectItems id="selectItemsSearchParentProductTypeOutput"
+									itemDisabled="true" var="Type"
+									value="#{serviceController.productTypeSelectItems()}" />
+							</p:selectOneMenu>
+						</p:column>
+
 						<p:column id="searchParentContractNr"
 							style="font-family:Arial Black;
                                   text-align: left;
@@ -1507,18 +1758,17 @@
 			<h:panelGrid id="createNewDialogPanelData" columns="2"
 				cellpadding="5">
 
-				<h:outputText id="newAccountIdLabel"
-					rendered="#{productController.fromAddingRow}" value="Account Id:" />
-				<p:inputText id="newAccountIdText"
-					disabled="#{productController.fromAddingRow}"
-					rendered="#{productController.fromAddingRow}"
-					value="#{productController.newData.accountId}"
-					label="AccountIdentityCard">
-				</p:inputText>
+				<h:outputText id="newProductIdLabel"
+					rendered="#{serviceController.fromAddingRow}" value="Product Id:" />
+				<p:inputNumber id="newProductIdText" decimalPlaces="0"
+					disabled="#{serviceController.fromAddingRow}"
+					rendered="#{serviceController.fromAddingRow}"
+					value="#{serviceController.newData.productId}"
+					label="ProductIdentityCard" />
 
 				<p:outputLabel id="newStartDateLabel" value="Start Date:" />
 				<p:inputMask id="newStartDateInput"
-					value="#{productController.newData.startDate}" mask="99/99/9999"
+					value="#{serviceController.newData.startDate}" mask="99/99/9999"
 					style="width:96%">
 					<f:converter
 						converterId="com.comasw.converter.localDateTimeConverter" />
@@ -1527,31 +1777,50 @@
 
 				<p:outputLabel id="newEndDateLabel" value="End Date:" />
 				<p:inputMask id="newEndDateInput"
-					value="#{productController.newData.endDate}" mask="99/99/9999"
+					value="#{serviceController.newData.endDate}" mask="99/99/9999"
 					style="width:96%">
 					<f:converter
 						converterId="com.comasw.converter.localDateTimeConverter" />
 					<p:ajax event="change" update="newEndDateInput" />
 				</p:inputMask>
 
-				<p:outputLabel id="newProductTypeLabel" value="Product Type: " />
-				<p:selectOneMenu id="productTypeInput"
-					value="#{productController.newData.productTypeId}"
-					disabled="#{productController.fromAddingRow}" immediate="true">
+				<p:outputLabel id="newServiceTypeLabel" value="Service Type: " />
+				<p:selectOneMenu id="serviceTypeInput"
+					value="#{serviceController.newData.serviceTypeId}"
+					disabled="#{serviceController.fromAddingRow}" immediate="true">
 					<f:selectItems
-						value="#{productController.productTypeSelectItems()}"
-						id="selectItemsProductTypeInput" var="ProductType"
-						itemValue="#{productController.newData.productTypeId}">
+						value="#{serviceController.serviceTypeSelectItems()}"
+						id="selectItemsServiceTypeInput" var="ServiceType"
+						itemValue="#{serviceController.newData.serviceTypeId}">
 					</f:selectItems>
 				</p:selectOneMenu>
 
+				<p:outputLabel id="newServiceNumberLabel" value="Service Number:" />
+				<p:inputText id="newServiceNumberText"
+					value="#{serviceController.newData.serviceNumber}"
+					label="ServiceNumber" />
+
+				<p:outputLabel id="newServiceGeneral1Label" value="General 1:" />
+				<p:inputText id="newServiceGeneral1Text"
+					value="#{serviceController.newData.general_1}"
+					label="ServiceGeneral1" />
+
+				<p:outputLabel id="newServiceGenera21Label" value="General 2:" />
+				<p:inputText id="newServiceGeneral2Text"
+					value="#{serviceController.newData.general_2}" />
+
+				<p:outputLabel id="newServiceGeneral3Label" value="General 3:" />
+				<p:inputText id="newServiceGeneral3Text"
+					value="#{serviceController.newData.general_3}"
+					label="ServiceGeneral3" />
+
 				<p:outputLabel id="newStatusLabel" value="Status: " />
 				<p:selectOneMenu id="statusInput"
-					value="#{productController.newData.statusId}" immediate="true">
+					value="#{serviceController.newData.statusId}" immediate="true">
 					<f:selectItems
-						value="#{productController.statusInstanceSelectItems()}"
+						value="#{serviceController.statusInstanceSelectItems()}"
 						id="selectItemsStatusInput" var="Status"
-						itemValue="#{productController.newData.statusId}">
+						itemValue="#{serviceController.newData.statusId}">
 					</f:selectItems>
 				</p:selectOneMenu>
 
@@ -1560,13 +1829,13 @@
 				cellpadding="5">
 				<p:commandButton id="createNewDialogConfirm"
 					value="#{uiValue.okLabel}" update="form:growlMessage"
-					actionListener="#{productController.pushConfirmButtonCreateNewDialog()}"
+					actionListener="#{serviceController.pushConfirmButtonCreateNewDialog()}"
 					styleClass="ui-confirmdialog-yes" icon="#{uiValue.okCircleIcon}"
 					oncomplete="if (!args.validationFailed) {updatePanelData();  updateSelectedTable(); updateHistoricTable()}">
 				</p:commandButton>
 				<p:commandButton id="createNewDialogCancel"
 					value="#{uiValue.cancelLabel}" icon="#{uiValue.cancelCircleIcon}"
-					actionListener="#{productController.pushCancelButtonCreateNewDialog()}"
+					actionListener="#{serviceController.pushCancelButtonCreateNewDialog()}"
 					update="form:growlMessage"
 					onclick="PF('createNewDialogWidget').hide()"
 					class="ui-button-secondary" />
@@ -1584,10 +1853,10 @@
 		<p:confirmDialog global="true" id="deleteConfirmDialog"
 			styleClass="change-position" showEffect="fade" responsive="true"
 			widgetVar="deleteRowDialogWidget" header="DELETE ROW"
-			message="#{productController.deleteMessageDialog}">
+			message="#{serviceController.deleteMessageDialog}">
 			<p:commandButton id="deleteDialogConfirm" value="#{uiValue.okLabel}"
 				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
-				actionListener="#{productController.pushConfirmButtonDeleteDialog()}"
+				actionListener="#{serviceController.pushConfirmButtonDeleteDialog()}"
 				immediate="true"
 				oncomplete="{updatePanelData(); updateSelectedTable(); updateHistoricTable()}; PF('deleteRowDialogWidget').hide()"
 				process="@this" icon="#{uiValue.okCircleIcon}" />
@@ -1604,11 +1873,11 @@
 		<p:confirmDialog global="true" id="cancelStatusDialog"
 			styleClass="change-position" widgetVar="cancelStatusDialogWidget"
 			header="CANCEL RECORDS"
-			message="#{productController.cancelMessageDialog}">
+			message="#{serviceController.cancelMessageDialog}">
 
 			<p:commandButton value="#{uiValue.okLabel}"
 				update="form:growlMessage"
-				actionListener="#{productController.pushConfirmButtonChangeStatus()}"
+				actionListener="#{serviceController.pushConfirmButtonChangeStatus()}"
 				styleClass="ui-confirmdialog-yes" icon="#{uiValue.okCircleIcon}"
 				process="@this" oncomplete="PF('cancelStatusDialogWidget').hide()" />
 			<p:commandButton value="#{uiValue.cancelLabel}"

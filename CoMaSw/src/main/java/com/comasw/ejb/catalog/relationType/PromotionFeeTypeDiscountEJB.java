@@ -56,7 +56,7 @@ public class PromotionFeeTypeDiscountEJB implements PromotionFeeTypeDiscountEJBL
 	}
 
 	@Override
-	public List<CtFeeType> findEntityTypeCandidates(Integer parentId) throws CoMaSwDataAccessException {
+	public List<CtFeeType> findEntityTypeCandidates(Integer parentTypeId) throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtFeeType> result = null;
 		Map<CtFeeType, List<CtPromotionType>> record;
@@ -72,10 +72,10 @@ public class PromotionFeeTypeDiscountEJB implements PromotionFeeTypeDiscountEJBL
 			record = create.select().from(pt)
 					.join(ft).on(pt.APPLICATION_LEVEL_ID.eq(ft.APPLICATION_LEVEL_ID)
 					    .and(ft.START_DATE.eq(create.select(min(ft2.START_DATE)).from(ft2).where(ft2.FEE_TYPE_ID.eq(ft.FEE_TYPE_ID)))))					    		
-					.where(pt.PROMOTION_TYPE_ID.eq(val(parentId)))
+					.where(pt.PROMOTION_TYPE_ID.eq(val(parentTypeId)))
 					.and(pt.START_DATE.eq(create.select(min(pt2.START_DATE)).from(pt2).where(pt2.PROMOTION_TYPE_ID.eq(pt.PROMOTION_TYPE_ID))))
 					.andNotExists(create.selectOne().from(pft)
-							.where(ft.FEE_TYPE_ID.eq(pft.FEE_TYPE_ID).and(pft.PROMOTION_TYPE_ID.eq(parentId))
+							.where(ft.FEE_TYPE_ID.eq(pft.FEE_TYPE_ID).and(pft.PROMOTION_TYPE_ID.eq(parentTypeId))
 									.and(ft.APPLICATION_LEVEL_ID.eq(pft.APPLICATION_LEVEL_ID))))
 					.orderBy(ft.CODE)
 					.fetchGroups(r -> r.into(ft).into(CtFeeType.class), r -> r.into(pt).into(CtPromotionType.class));
@@ -85,16 +85,16 @@ public class PromotionFeeTypeDiscountEJB implements PromotionFeeTypeDiscountEJBL
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the fee type candidates to discount for the promotion_type_id : "
-					+ parentId + " - " + e.getMessage();
+					+ parentTypeId + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 
 		return result;
 	}
-
+	
 	@Override
-	public List<CtFeeType> findEntityTypeCandidates(Integer parentId, String statusCode)
+	public List<CtFeeType> findEntityTypeRelated(Integer parentTypeId, String statusCode)
 			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtFeeType> result = null;
@@ -108,10 +108,10 @@ public class PromotionFeeTypeDiscountEJB implements PromotionFeeTypeDiscountEJBL
 
 		try {
 			record = create.select().from(pt).join(ft).on(pt.APPLICATION_LEVEL_ID.eq(ft.APPLICATION_LEVEL_ID))
-					.where(pt.PROMOTION_TYPE_ID.eq(val(parentId)))
-					.andNotExists(create.selectOne()
+					.where(pt.PROMOTION_TYPE_ID.eq(val(parentTypeId)))
+					.andExists(create.selectOne()
 							.from(pft.join(st).on(pft.STATUS_ID.eq(st.STATUS_ID).and(st.CODE.eq(val(statusCode)))))
-							.where(ft.FEE_TYPE_ID.eq(pft.FEE_TYPE_ID).and(pft.PROMOTION_TYPE_ID.eq(parentId))
+							.where(ft.FEE_TYPE_ID.eq(pft.FEE_TYPE_ID).and(pft.PROMOTION_TYPE_ID.eq(parentTypeId))
 									.and(ft.APPLICATION_LEVEL_ID.eq(pft.APPLICATION_LEVEL_ID))))
 					.orderBy(ft.CODE)
 					.fetchGroups(r -> r.into(ft).into(CtFeeType.class), r -> r.into(pt).into(CtPromotionType.class));
@@ -121,7 +121,7 @@ public class PromotionFeeTypeDiscountEJB implements PromotionFeeTypeDiscountEJBL
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the fee type candidates to discount for the promotion_type_id : "
-					+ parentId + " and status code: " + statusCode + " - " + e.getMessage();
+					+ parentTypeId + " and status code: " + statusCode + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
@@ -130,20 +130,56 @@ public class PromotionFeeTypeDiscountEJB implements PromotionFeeTypeDiscountEJBL
 	}
 
 	@Override
-	public List<VwPromotionFeeTypeDiscount> findHistoricRelatedEntityTypesView(Integer parentId)
+	public List<CtFeeType> findEntityTypeCandidates(Integer parentTypeId, String statusCode)
+			throws CoMaSwDataAccessException {
+		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
+		List<CtFeeType> result = null;
+		Map<CtFeeType, List<CtPromotionType>> record;
+		String errorMessage;
+		// aliases of tables
+		com.comasw.model.tables.PtStatus st = PT_STATUS.as("st");
+		com.comasw.model.tables.CtFeeType ft = CT_FEE_TYPE.as("ft");
+		com.comasw.model.tables.CtPromotionType pt = CT_PROMOTION_TYPE.as("pt");
+		com.comasw.model.tables.CtPromoFeeTypeDiscount pft = CT_PROMO_FEE_TYPE_DISCOUNT.as("pft");
+
+		try {
+			record = create.select().from(pt).join(ft).on(pt.APPLICATION_LEVEL_ID.eq(ft.APPLICATION_LEVEL_ID))
+					.where(pt.PROMOTION_TYPE_ID.eq(val(parentTypeId)))
+					.andNotExists(create.selectOne()
+							.from(pft.join(st).on(pft.STATUS_ID.eq(st.STATUS_ID).and(st.CODE.eq(val(statusCode)))))
+							.where(ft.FEE_TYPE_ID.eq(pft.FEE_TYPE_ID).and(pft.PROMOTION_TYPE_ID.eq(parentTypeId))
+									.and(ft.APPLICATION_LEVEL_ID.eq(pft.APPLICATION_LEVEL_ID))))
+					.orderBy(ft.CODE)
+					.fetchGroups(r -> r.into(ft).into(CtFeeType.class), r -> r.into(pt).into(CtPromotionType.class));
+
+			result = new ArrayList<CtFeeType>();
+			result.addAll(record.keySet());
+
+		} catch (DataAccessException e) {
+			errorMessage = "Error while try to find the fee type candidates to discount for the promotion_type_id : "
+					+ parentTypeId + " and status code: " + statusCode + " - " + e.getMessage();
+			logger.error(errorMessage);
+			throw new CoMaSwDataAccessException(errorMessage, e);
+		}
+
+		return result;
+	}
+
+	@Override
+	public List<VwPromotionFeeTypeDiscount> findHistoricRelatedEntityTypesView(Integer parentTypeId)
 			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<VwPromotionFeeTypeDiscount> result = null;
 		String errorMessage;
 		try {
 			result = create.select().from(VW_PROMOTION_FEE_TYPE_DISCOUNT)
-					.where(VW_PROMOTION_FEE_TYPE_DISCOUNT.PROMOTION_TYPE_ID.eq(val(parentId)))
+					.where(VW_PROMOTION_FEE_TYPE_DISCOUNT.PROMOTION_TYPE_ID.eq(val(parentTypeId)))
 					.orderBy(VW_PROMOTION_FEE_TYPE_DISCOUNT.FEE_TYPE_CODE,
 							VW_PROMOTION_FEE_TYPE_DISCOUNT.FEE_TYPE_START_DATE)
 					.fetch().into(VwPromotionFeeTypeDiscount.class);
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the view of fee types for the promotion_type_id : " + parentId
+			errorMessage = "Error while try to find the view of fee types for the promotion_type_id : " + parentTypeId
 					+ " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
@@ -153,7 +189,7 @@ public class PromotionFeeTypeDiscountEJB implements PromotionFeeTypeDiscountEJBL
 	}
 
 	@Override
-	public List<VwPromotionFeeTypeDiscount> findRelatedEntityTypesView(Integer parentId)
+	public List<VwPromotionFeeTypeDiscount> findRelatedEntityTypesView(Integer parentTypeId)
 			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<VwPromotionFeeTypeDiscount> result = null;
@@ -162,13 +198,13 @@ public class PromotionFeeTypeDiscountEJB implements PromotionFeeTypeDiscountEJBL
 
 		try {
 			result = create.select().from(VW_PROMOTION_FEE_TYPE_DISCOUNT)
-					.where(VW_PROMOTION_FEE_TYPE_DISCOUNT.PROMOTION_TYPE_ID.eq(val(parentId)))
+					.where(VW_PROMOTION_FEE_TYPE_DISCOUNT.PROMOTION_TYPE_ID.eq(val(parentTypeId)))
 					.orderBy(VW_PROMOTION_FEE_TYPE_DISCOUNT.FEE_TYPE_CODE).fetch()
 					.into(VwPromotionFeeTypeDiscount.class);
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the view of fee type candidates for the promotion_type_id : "
-					+ parentId + " - " + e.getMessage();
+					+ parentTypeId + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
@@ -177,7 +213,7 @@ public class PromotionFeeTypeDiscountEJB implements PromotionFeeTypeDiscountEJBL
 	}
 
 	@Override
-	public List<VwPromotionFeeTypeDiscount> findRelatedEntityTypesByDateView(Integer parentId, LocalDateTime searchDate)
+	public List<VwPromotionFeeTypeDiscount> findRelatedEntityTypesByDateView(Integer parentTypeId, LocalDateTime searchDate)
 			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<VwPromotionFeeTypeDiscount> result = null;
@@ -186,7 +222,7 @@ public class PromotionFeeTypeDiscountEJB implements PromotionFeeTypeDiscountEJBL
 
 		try {
 			result = create.select().from(VW_PROMOTION_FEE_TYPE_DISCOUNT)
-					.where(VW_PROMOTION_FEE_TYPE_DISCOUNT.PROMOTION_TYPE_ID.eq(val(parentId)))
+					.where(VW_PROMOTION_FEE_TYPE_DISCOUNT.PROMOTION_TYPE_ID.eq(val(parentTypeId)))
 					.and(val(searchDate).between(VW_PROMOTION_FEE_TYPE_DISCOUNT.PROMOTION_TYPE_START_DATE,
 							VW_PROMOTION_FEE_TYPE_DISCOUNT.PROMOTION_TYPE_END_DATE))
 					.orderBy(VW_PROMOTION_FEE_TYPE_DISCOUNT.FEE_TYPE_CODE,
@@ -198,7 +234,7 @@ public class PromotionFeeTypeDiscountEJB implements PromotionFeeTypeDiscountEJBL
 
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the view of fee type candidates for the promotion_type_id : "
-					+ parentId + " - " + e.getMessage();
+					+ parentTypeId + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
@@ -221,12 +257,16 @@ public class PromotionFeeTypeDiscountEJB implements PromotionFeeTypeDiscountEJBL
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the promotion fee type for the promotion_fee_type_id : "
-						+ entityRelationTypeId + " - The query returns more rows(" + result.size()
+						+ entityRelationTypeId + " - The query returns a distinct number of rows (" + result.size()
 						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {
@@ -238,7 +278,7 @@ public class PromotionFeeTypeDiscountEJB implements PromotionFeeTypeDiscountEJBL
 	}
 
 	@Override
-	public CtPromoFeeTypeDiscount findEntityRelationType(Integer parentId, Integer childId)
+	public CtPromoFeeTypeDiscount findEntityRelationType(Integer parentTypeId, Integer childTypeId)
 			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<CtPromoFeeTypeDiscount> result = null;
@@ -247,30 +287,34 @@ public class PromotionFeeTypeDiscountEJB implements PromotionFeeTypeDiscountEJBL
 
 		try {
 			result = create.selectFrom(CT_PROMO_FEE_TYPE_DISCOUNT)
-					.where(CT_PROMO_FEE_TYPE_DISCOUNT.PROMOTION_TYPE_ID.eq(val(parentId)))
-					.and(CT_PROMO_FEE_TYPE_DISCOUNT.FEE_TYPE_ID.eq(val(childId))).fetch()
+					.where(CT_PROMO_FEE_TYPE_DISCOUNT.PROMOTION_TYPE_ID.eq(val(parentTypeId)))
+					.and(CT_PROMO_FEE_TYPE_DISCOUNT.FEE_TYPE_ID.eq(val(childTypeId))).fetch()
 					.into(CtPromoFeeTypeDiscount.class);
 
 			if (result.size() > 1) {
-				errorMessage = "Error while try to find the promotion fee type for the promotion_type_id : " + parentId
-						+ " and fee_type_id: " + childId + " - The query returns more rows(" + result.size()
+				errorMessage = "Error while try to find the promotion fee type for the promotion_type_id : " + parentTypeId
+						+ " and fee_type_id: " + childTypeId + " - The query returns a distinct number of rows (" + result.size()
 						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the fee types for the promotion_type_id : " + parentId
-					+ " and fee_type_id: " + childId + " - " + e.getMessage();
+			errorMessage = "Error while try to find the fee types for the promotion_type_id : " + parentTypeId
+					+ " and fee_type_id: " + childTypeId + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}
 	}
 
 	@Override
-	public VwPromotionFeeTypeDiscount findEntityRelationTypeView(Integer parentId, Integer childId)
+	public VwPromotionFeeTypeDiscount findEntityRelationTypeView(Integer parentTypeId, Integer childTypeId)
 			throws CoMaSwDataAccessException {
 		DSLContext create = DSL.using(ds, SQLDialect.POSTGRES);
 		List<VwPromotionFeeTypeDiscount> result = null;
@@ -279,24 +323,28 @@ public class PromotionFeeTypeDiscountEJB implements PromotionFeeTypeDiscountEJBL
 
 		try {
 			result = create.selectFrom(VW_PROMOTION_FEE_TYPE_DISCOUNT)
-					.where(VW_PROMOTION_FEE_TYPE_DISCOUNT.PROMOTION_TYPE_ID.eq(val(parentId)))
-					.and(VW_PROMOTION_FEE_TYPE_DISCOUNT.FEE_TYPE_ID.eq(val(childId)))
+					.where(VW_PROMOTION_FEE_TYPE_DISCOUNT.PROMOTION_TYPE_ID.eq(val(parentTypeId)))
+					.and(VW_PROMOTION_FEE_TYPE_DISCOUNT.FEE_TYPE_ID.eq(val(childTypeId)))
 					.orderBy(VW_PROMOTION_FEE_TYPE_DISCOUNT.PROMO_FEE_TYPE_DISCOUNT_ID).fetch()
 					.into(VwPromotionFeeTypeDiscount.class);
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the view of promotion fee type for the promotion_type_id : "
-						+ parentId + " and fee_type_id: " + childId + " - The query returns more rows(" + result.size()
+						+ parentTypeId + " and fee_type_id: " + childTypeId + " - The query returns a distinct number of rows (" + result.size()
 						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {
-			errorMessage = "Error while try to find the fee types for the promotion_type_id : " + parentId
-					+ " and fee_type_id: " + childId + " - " + e.getMessage();
+			errorMessage = "Error while try to find the fee types for the promotion_type_id : " + parentTypeId
+					+ " and fee_type_id: " + childTypeId + " - " + e.getMessage();
 			logger.error(errorMessage);
 			throw new CoMaSwDataAccessException(errorMessage, e);
 		}

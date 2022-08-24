@@ -95,13 +95,16 @@ public class ConsumptionTypeEJB implements ConsumptionTypeEJBLocal {
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the consumption type for consumption_type_id : "
-						+ consumptionTypeId + " - The query returns more rows(" + result.size()
+						+ consumptionTypeId + " - The query returns a distinct number of rows (" + result.size()
 						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
-
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {
@@ -124,13 +127,17 @@ public class ConsumptionTypeEJB implements ConsumptionTypeEJBLocal {
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the consumption type for code : " + code
-						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
+						+ " - The query returns a distinct number of rows (" + result.size()
+						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
-
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the consumption type for code " + code + " - " + e.getMessage();
 			logger.error(errorMessage);

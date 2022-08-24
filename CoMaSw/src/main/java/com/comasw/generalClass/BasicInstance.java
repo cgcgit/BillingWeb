@@ -23,6 +23,9 @@ public class BasicInstance<T, U, S> extends BasicListsForInstance<T> {
 
 	protected static String HISTORIC_DATA_TABLE_ID = "form:accordionPanel:" + uiValues.getString("historicDataTableID");
 
+
+	protected static String PARENT_DATA_TABLE_ID = "form:parentSearchDataTable";
+	
 	protected static Integer STATUS_ID_PENDING_INSTANCE = Integer
 			.valueOf(dbDefinitions.getString("STATUS_ID_PENDING_INSTANCE"));
 	
@@ -66,7 +69,6 @@ public class BasicInstance<T, U, S> extends BasicListsForInstance<T> {
 	 */
 
 	private U selectedHistoricData;
-
 	
 	
 	private List<S> parentSearchDataList;
@@ -153,6 +155,11 @@ public class BasicInstance<T, U, S> extends BasicListsForInstance<T> {
 	 */
 	protected String searchDataTableTitle;
 
+	/**
+	 * Flag to search include cancelled data (true) or not (false)
+	 */
+	protected boolean includeCanceledDataFlag;
+	
 	// ---------------------\\
 	// GETTERS AND SETTERs \\
 	// ---------------------\\
@@ -509,6 +516,20 @@ public class BasicInstance<T, U, S> extends BasicListsForInstance<T> {
 	 */
 	public void setSearchDataTableTitle(String searchDataTableTitle) {
 		this.searchDataTableTitle = searchDataTableTitle;
+	}
+	
+	/**
+	 * @return the includeCanceledDataFlag
+	 */
+	public boolean getIncludeCanceledDataFlag() {
+		return includeCanceledDataFlag;
+	}
+
+	/**
+	 * @param includeCanceledDataFlag the includeCanceledDataFlag to set
+	 */
+	public void setIncludeCanceledDataFlag(boolean includeCanceledDataFlag) {
+		this.includeCanceledDataFlag = includeCanceledDataFlag;
 	}
 
 	// --------\\

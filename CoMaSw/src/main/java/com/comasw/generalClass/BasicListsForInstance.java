@@ -12,6 +12,10 @@ import javax.faces.model.SelectItem;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 
+import com.comasw.ejb.catalog.relationType.ProductFeeTypeEJBLocal;
+import com.comasw.ejb.catalog.relationType.ProductPromotionTypeEJBLocal;
+import com.comasw.ejb.catalog.relationType.ServiceFeeTypeEJBLocal;
+import com.comasw.ejb.catalog.relationType.ServicePromotionTypeEJBLocal;
 import com.comasw.ejb.catalog.type.AccountTypeEJBLocal;
 import com.comasw.ejb.catalog.type.CustomerTypeEJBLocal;
 import com.comasw.ejb.catalog.type.FeeTypeEJBLocal;
@@ -37,7 +41,6 @@ public class BasicListsForInstance<T> extends BasicTypeWithLists<T> {
 
 	Logger logger = (Logger) LogManager.getLogger(BasicListsForInstance.class);
 
-
 	@EJB
 	private StatusEJBLocal statusEJB;
 
@@ -50,20 +53,29 @@ public class BasicListsForInstance<T> extends BasicTypeWithLists<T> {
 	@EJB
 	private AccountTypeEJBLocal accountTypeEJB;
 
-	
 	@EJB
 	private ProductTypeEJBLocal productTypeEJB;
-	
+
 	@EJB
 	private ServiceTypeEJBLocal serviceTypeEJB;
-	
+
 	@EJB
 	private PromotionTypeEJBLocal promotionTypeEJB;
-	
-	@EJB 
-	private FeeTypeEJBLocal feeTypeEJB;
-	
 
+	@EJB
+	private FeeTypeEJBLocal feeTypeEJB;
+
+	@EJB
+	private ProductPromotionTypeEJBLocal productPromotionTypeEJB;
+
+	@EJB
+	private ServicePromotionTypeEJBLocal servicePromotionTypeEJB;
+
+	@EJB
+	private ProductFeeTypeEJBLocal productFeeTypeEJB;
+
+	@EJB
+	private ServiceFeeTypeEJBLocal serviceFeeTypeEJB;
 
 	/*
 	 * Return the list of select items with the status data
@@ -90,8 +102,6 @@ public class BasicListsForInstance<T> extends BasicTypeWithLists<T> {
 		}
 		return selectItem;
 	}
-	
-	
 
 	/*
 	 * Return the list of select items with the identity card type data
@@ -118,7 +128,6 @@ public class BasicListsForInstance<T> extends BasicTypeWithLists<T> {
 		}
 		return selectItem;
 	}
-	
 
 	/*
 	 * Return the list of select items with the customer type data
@@ -171,8 +180,7 @@ public class BasicListsForInstance<T> extends BasicTypeWithLists<T> {
 		}
 		return selectItem;
 	}
-	
-	
+
 	/*
 	 * Return the list of select items with the product type data
 	 */
@@ -198,7 +206,7 @@ public class BasicListsForInstance<T> extends BasicTypeWithLists<T> {
 		}
 		return selectItem;
 	}
-	
+
 	/*
 	 * Return the list of select items with the service type data
 	 */
@@ -224,7 +232,7 @@ public class BasicListsForInstance<T> extends BasicTypeWithLists<T> {
 		}
 		return selectItem;
 	}
-	
+
 	/*
 	 * Return the list of select items with the promotion type data
 	 */
@@ -250,7 +258,7 @@ public class BasicListsForInstance<T> extends BasicTypeWithLists<T> {
 		}
 		return selectItem;
 	}
-	
+
 	/*
 	 * Return the list of select items with the fee type data
 	 */
@@ -264,7 +272,7 @@ public class BasicListsForInstance<T> extends BasicTypeWithLists<T> {
 		selectItem.add(nullItem);
 
 		if (list.isEmpty()) {
-			logger.error("ERROR - Not find promotion type list");
+			logger.error("ERROR - Not find fee type list");
 		} else {
 			for (CtFeeType p : list) {
 				SelectItem item = new SelectItem();
@@ -276,6 +284,134 @@ public class BasicListsForInstance<T> extends BasicTypeWithLists<T> {
 		}
 		return selectItem;
 	}
-	
+
+	/*
+	 * Return the list of select items with the service fee type relation data
+	 */
+	public List<SelectItem> feeProductRelatedTypeSelectItems(Integer productTypeId) {
+		List<SelectItem> selectItem = new ArrayList<>();
+		List<CtFeeType> list;
+		SelectItem nullItem = new SelectItem();
+		nullItem.setLabel("Select One... ");
+		nullItem.setValue(null);
+		selectItem.add(nullItem);
+
+		if (productTypeId != null) {
+			list = productFeeTypeEJB.findEntityTypeRelated(productTypeId, BasicListsForInstance.ACTIVE_STATUS_CODE);
+			if (list.isEmpty()) {
+				logger.error("ERROR - Not find product fee type relation list");
+			} else {
+				for (CtFeeType p : list) {
+					SelectItem item = new SelectItem();
+					item.setLabel(p.getCode());
+					item.setValue(p.getFeeTypeId());
+					item.setDescription(p.getDescription());
+					selectItem.add(item);
+				}
+			}
+		} else {
+			logger.error("ERROR - The product type id is null");
+		}
+
+		return selectItem;
+	}
+
+	/*
+	 * Return the list of select items with the service fee type relation data
+	 */
+	public List<SelectItem> feeServiceRelatedTypeSelectItems(Integer serviceTypeId) {
+		List<SelectItem> selectItem = new ArrayList<>();
+		List<CtFeeType> list;
+
+		SelectItem nullItem = new SelectItem();
+		nullItem.setLabel("Select One... ");
+		nullItem.setValue(null);
+		selectItem.add(nullItem);
+
+		if (serviceTypeId != null) {
+			list = serviceFeeTypeEJB.findEntityTypeRelated(serviceTypeId, BasicListsForInstance.ACTIVE_STATUS_CODE);
+			if (list.isEmpty()) {
+				logger.error("ERROR - Not find service fee type relation list");
+			} else {
+				for (CtFeeType p : list) {
+					SelectItem item = new SelectItem();
+					item.setLabel(p.getCode());
+					item.setValue(p.getFeeTypeId());
+					item.setDescription(p.getDescription());
+					selectItem.add(item);
+				}
+			}
+		} else {
+			logger.error("ERROR - The service type id is null");
+		}
+
+		return selectItem;
+	}
+
+	/*
+	 * Return the list of select items with the product promotion type relation data
+	 */
+	public List<SelectItem> promotionProductRelatedTypeSelectItems(Integer productTypeId) {
+		List<SelectItem> selectItem = new ArrayList<>();
+		List<CtPromotionType> list;
+
+		SelectItem nullItem = new SelectItem();
+		nullItem.setLabel("Select One... ");
+		nullItem.setValue(null);
+		selectItem.add(nullItem);
+
+		if (productTypeId != null) {
+			list = productPromotionTypeEJB.findEntityTypeRelated(productTypeId,
+					BasicListsForInstance.ACTIVE_STATUS_CODE);
+			if (list.isEmpty()) {
+				logger.error("ERROR - Not find product promotion type relation list");
+			} else {
+				for (CtPromotionType p : list) {
+					SelectItem item = new SelectItem();
+					item.setLabel(p.getCode());
+					item.setValue(p.getPromotionTypeId());
+					item.setDescription(p.getDescription());
+					selectItem.add(item);
+				}
+			}
+		} else {
+			logger.error("ERROR - The product type id is null");
+		}
+
+		return selectItem;
+	}
+
+	/*
+	 * Return the list of select items with the service promotion type relation data
+	 */
+	public List<SelectItem> promotionServiceRelatedTypeSelectItems(Integer serviceTypeId) {
+		List<SelectItem> selectItem = new ArrayList<>();
+		List<CtPromotionType> list;
+
+		SelectItem nullItem = new SelectItem();
+		nullItem.setLabel("Select One... ");
+		nullItem.setValue(null);
+		selectItem.add(nullItem);
+
+		if (serviceTypeId != null) {
+			list = servicePromotionTypeEJB.findEntityTypeRelated(serviceTypeId,
+					BasicListsForInstance.ACTIVE_STATUS_CODE);
+			if (list.isEmpty()) {
+				logger.error("ERROR - Not find service promotion type relation list");
+			} else {
+				for (CtPromotionType p : list) {
+					SelectItem item = new SelectItem();
+					item.setLabel(p.getCode());
+					item.setValue(p.getPromotionTypeId());
+					item.setDescription(p.getDescription());
+					selectItem.add(item);
+				}
+			}
+		} else {
+			logger.error("ERROR - The service type id is null");
+		}
+
+		return selectItem;
+	}
 
 }

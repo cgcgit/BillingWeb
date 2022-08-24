@@ -68,14 +68,18 @@ public class EntityTypeEJB implements EntityTypeEJBLocal {
 			result = create.selectFrom(PT_ENTITY_TYPE).where(PT_ENTITY_TYPE.ENTITY_TYPE_ID.eq(val(entityTypeId)))
 					.orderBy(PT_ENTITY_TYPE.CODE).fetch().into(PtEntityType.class);
 			if (result.size() > 1) {
-				errorMessage = "Error while try to find the entity type for entity_type_id : " + entityTypeId
-						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
+				errorMessage = "Error while try to find the entity type for entity_type_id : " + entityTypeId 
+						+ " - The query returns a distinct number of rows (" + result.size()
+						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
-
 		} catch (DataAccessException e) {
 			errorMessage = "Error while try to find the entity type for entity_type_id: " + entityTypeId + " - "
 					+ e.getMessage();
@@ -96,11 +100,16 @@ public class EntityTypeEJB implements EntityTypeEJBLocal {
 					.orderBy(PT_ENTITY_TYPE.CODE).fetch().into(PtEntityType.class);
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the entity type for code : " + code
-						+ " - The query returns more rows(" + result.size() + ") than expected (1) ";
+						+ " - The query returns a distinct number of rows (" + result.size()
+						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {

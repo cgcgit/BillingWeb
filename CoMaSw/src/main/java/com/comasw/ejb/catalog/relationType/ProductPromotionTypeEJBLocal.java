@@ -17,46 +17,64 @@ public interface ProductPromotionTypeEJBLocal {
 	 * Find the promotion type candidates for given product type id. We select the
 	 * candidate with the minimum start date.
 	 * 
-	 * @param parentId parent type id of the relation to evaluated (product type id)
+	 * @param parentTypeId parent type id of the relation to evaluated (product type id)
 	 * @return list of the promotion type candidates
 	 * @throws CoMaSwDataAccessException
 	 */
-	public List<CtPromotionType> findEntityTypeCandidates(Integer parentId) throws CoMaSwDataAccessException;
+	public List<CtPromotionType> findEntityTypeCandidates(Integer parentTypeId) throws CoMaSwDataAccessException;
 
+	/**
+	 * Find the promotion type related for given product type id and status code.
+	 * We select the candidate with the minimum start date.
+	 * 
+	 * @param parentTypeId   parent type id of the relation to evaluated (product type
+	 *                   id)
+	 * @param statusCode status code of the entity's relation to evaluated (status
+	 *                   code of the product type id)
+	 * @return list of the promotion type related
+	 * @throws CoMaSwDataAccessException
+	 */
+	public List<CtPromotionType> findEntityTypeRelated(Integer parentTypeId, String statusCode)
+			throws CoMaSwDataAccessException;
+
+	
 	/**
 	 * Find the promotion type candidates for given product type id and status code.
 	 * We select the candidate with the minimum start date.
 	 * 
-	 * @param parentId   parent type id of the relation to evaluated (product type
+	 * @param parentTypeId   parent type id of the relation to evaluated (product type
 	 *                   id)
 	 * @param statusCode status code of the entity's relation to evaluated (status
 	 *                   code of the product type id)
 	 * @return list of the promotion type candidates
 	 * @throws CoMaSwDataAccessException
 	 */
-	public List<CtPromotionType> findEntityTypeCandidates(Integer parentId, String statusCode)
+	public List<CtPromotionType> findEntityTypeCandidates(Integer parentTypeId, String statusCode)
 			throws CoMaSwDataAccessException;
 
+
+	
+	
 	/**
 	 * Find the view of all (historic data) promotion types related with the given
 	 * product type id
 	 * 
-	 * @param parentId parent type id of the relation to evaluated (product type id)
+	 * @param parentTypeId parent type id of the relation to evaluated (product type id)
 	 * @return list of the promotion types related with the given parent type id
 	 * @throws CoMaSwDataAccessException
 	 */
-	public List<VwPromotionProductType> findHistoricRelatedEntityTypesView(Integer parentId)
+	public List<VwPromotionProductType> findHistoricRelatedEntityTypesView(Integer parentTypeId)
 			throws CoMaSwDataAccessException;
 
 	/**
 	 * Find the view of promotion types related with the given product type id for
 	 * the given date
 	 * 
-	 * @param parentId parent type id of the relation to evaluated (product type id)
+	 * @param parentTypeId parent type id of the relation to evaluated (product type id)
 	 * @return list of the promotion types related with the given parent type id
 	 * @throws CoMaSwDataAccessException
 	 */
-	public List<VwPromotionProductType> findRelatedEntityTypesByDateView(Integer parentId, LocalDateTime searchDate)
+	public List<VwPromotionProductType> findRelatedEntityTypesByDateView(Integer parentTypeId, LocalDateTime searchDate)
 			throws CoMaSwDataAccessException;
 
 	/**
@@ -72,23 +90,23 @@ public interface ProductPromotionTypeEJBLocal {
 	 * Find the product-promotion type for the given product type id and promotion
 	 * type id
 	 * 
-	 * @param parentId parent type id of the relation (product type id)
-	 * @param childId  child type id of the relation (promotion type id)
+	 * @param parentTypeId parent type id of the relation (product type id)
+	 * @param childTypeId  child type id of the relation (promotion type id)
 	 * @return product_promotion_type for the product-promotion type relation
 	 * @throws CoMaSwDataAccessException
 	 */
-	public CtPromoProdType findEntityRelationType(Integer parentId, Integer childId) throws CoMaSwDataAccessException;
+	public CtPromoProdType findEntityRelationType(Integer parentTypeId, Integer childTypeId) throws CoMaSwDataAccessException;
 
 	/**
 	 * Find the view of product-promotion type for the given product type id and
 	 * promotion type id
 	 * 
-	 * @param parentId parent type id of the relation (product type id)
-	 * @param childId  child type id of the relation (promotion type id)
+	 * @param parentTypeId parent type id of the relation (product type id)
+	 * @param childTypeId  child type id of the relation (promotion type id)
 	 * @return product_promotion_type for the product-promotion type relation
 	 * @throws CoMaSwDataAccessException
 	 */
-	public VwPromotionProductType findEntityRelationTypeView(Integer parentId, Integer childId)
+	public VwPromotionProductType findEntityRelationTypeView(Integer parentTypeId, Integer childTypeId)
 			throws CoMaSwDataAccessException;
 
 	/**

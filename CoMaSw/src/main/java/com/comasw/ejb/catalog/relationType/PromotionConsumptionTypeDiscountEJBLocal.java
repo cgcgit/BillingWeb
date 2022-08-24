@@ -15,36 +15,52 @@ public interface PromotionConsumptionTypeDiscountEJBLocal {
 	/**
 	 * Find the consumption type candidates to the given promotion type id
 	 * 
-	 * @param parentId parent type id of the relation to evaluated (promotion type
+	 * @param parentTypeId parent type id of the relation to evaluated (promotion type
 	 *                 id)
 	 * @return list of the consumption type candidates
 	 * @throws CoMaSwDataAccessException
 	 */
-	public List<CtConsumptionType> findEntityTypeCandidates(Integer parentId) throws CoMaSwDataAccessException;
+	public List<CtConsumptionType> findEntityTypeCandidates(Integer parentTypeId) throws CoMaSwDataAccessException;
 
+
+	/**
+	 * Find the consumption type related for given promotion type id and status
+	 * code
+	 * 
+	 * @param parentTypeId   parent type id of the relation to evaluated (promotion type
+	 *                   id)
+	 * @param statusCode status code of the entity's relation to evaluated (status
+	 *                   code of the promotion type id)
+	 * @return list of the consumption type related
+	 * @throws CoMaSwDataAccessException
+	 */
+	public List<CtConsumptionType> findEntityTypeRelated(Integer parentTypeId, String statusCode)
+			throws CoMaSwDataAccessException;
+
+	
 	/**
 	 * Find the consumption type candidates for given promotion type id and status
 	 * code
 	 * 
-	 * @param parentId   parent type id of the relation to evaluated (promotion type
+	 * @param parentTypeId   parent type id of the relation to evaluated (promotion type
 	 *                   id)
 	 * @param statusCode status code of the entity's relation to evaluated (status
 	 *                   code of the promotion type id)
 	 * @return list of the consumption type candidates
 	 * @throws CoMaSwDataAccessException
 	 */
-	public List<CtConsumptionType> findEntityTypeCandidates(Integer parentId, String statusCode)
+	public List<CtConsumptionType> findEntityTypeCandidates(Integer parentTypeId, String statusCode)
 			throws CoMaSwDataAccessException;
 
 	/**
 	 * Find the view of consumption types related with the given promotion type id
 	 * 
-	 * @param parentId parent type id of the relation to evaluated (promotion type
+	 * @param parentTypeId parent type id of the relation to evaluated (promotion type
 	 *                 id)
 	 * @return list of the consumption types related with the given parent type id
 	 * @throws CoMaSwDataAccessException
 	 */
-	public List<VwPromoConsumTypeDiscount> findRelatedEntityTypesView(Integer parentId)
+	public List<VwPromoConsumTypeDiscount> findRelatedEntityTypesView(Integer parentTypeId)
 			throws CoMaSwDataAccessException;
 
 	/**
@@ -61,24 +77,24 @@ public interface PromotionConsumptionTypeDiscountEJBLocal {
 	 * Find the promotion-consumption type for the given promotion type id and
 	 * consumption type id
 	 * 
-	 * @param parentId parent type id of the relation (promotion type id)
-	 * @param childId  child type id of the relation (consumption type id)
+	 * @param parentTypeId parent type id of the relation (promotion type id)
+	 * @param childTypeId  child type id of the relation (consumption type id)
 	 * @return product_service_type for the promotion-consumption type relation
 	 * @throws CoMaSwDataAccessException
 	 */
-	public CtPromoConsumTypeDiscount findEntityRelationType(Integer parentId, Integer childId)
+	public CtPromoConsumTypeDiscount findEntityRelationType(Integer parentTypeId, Integer childTypeId)
 			throws CoMaSwDataAccessException;
 
 	/**
 	 * Find the view of promotion-consumption type for the given promotion type id
 	 * and consumption type id
 	 * 
-	 * @param parentId parent type id of the relation (promotion type id)
-	 * @param childId  child type id of the relation (consumption type id)
+	 * @param parentTypeId parent type id of the relation (promotion type id)
+	 * @param childTypeId  child type id of the relation (consumption type id)
 	 * @return product_service_type for the promotion-consumption type relation
 	 * @throws CoMaSwDataAccessException
 	 */
-	public VwPromoConsumTypeDiscount findEntityRelationTypeView(Integer parentId, Integer childId)
+	public VwPromoConsumTypeDiscount findEntityRelationTypeView(Integer parentTypeId, Integer childTypeId)
 			throws CoMaSwDataAccessException;
 
 	/**

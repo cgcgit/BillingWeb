@@ -181,12 +181,16 @@ public class AccountEJB implements AccountEJBLocal {
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the account for search date: " + searchDate.toString()
-						+ " and account id : " + accountId + " - The query returns more rows(" + result.size()
+						+ " and account id : " + accountId + " - The query returns a distinct number of rows (" + result.size()
 						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {
@@ -213,12 +217,16 @@ public class AccountEJB implements AccountEJBLocal {
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the account for search date: " + searchDate.toString()
-						+ " and contract id : " + contractNr + " - The query returns more rows(" + result.size()
+						+ " and contract id : " + contractNr + " - The query returns a distinct number of rows (" + result.size()
 						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {
@@ -245,12 +253,16 @@ public class AccountEJB implements AccountEJBLocal {
 
 			if (result.size() > 1) {
 				errorMessage = "Error while try to find the account for search date: " + searchDate.toString()
-						+ " and customer id : " + customerId + " - The query returns more rows(" + result.size()
+						+ " and customer id : " + customerId + " - The query returns a distinct number of rows (" + result.size()
 						+ ") than expected (1) ";
 				logger.error(errorMessage);
 				throw new CoMaSwDataAccessException(errorMessage);
 			} else {
-				return result.get(0);
+				if (result.size() == 0) {
+					return null;
+				} else {
+					return result.get(0);
+				}
 			}
 
 		} catch (DataAccessException e) {

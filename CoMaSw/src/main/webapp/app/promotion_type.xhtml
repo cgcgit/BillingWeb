@@ -96,11 +96,11 @@
 
 									<p:inputMask id="searchDate" required="false" immediate="true"
 										value="#{promotionTypeController.searchDate}" mask="99/99/9999"
-										style="width:7rem; height:2rem" styleClass="p-mx-3"
-										valueChangeListener="#{promotionTypeController.changeSearchDate}"
+										style="width:7rem; height:2rem" styleClass="p-mx-3"										
 										requiredMessage="The date value to search is null. Please fill the search date field">
 										<f:converter
 											converterId="com.comasw.converter.localDateTimeConverter" />
+											<p:ajax event="valueChange" immediate="true" process="@this" />
 									</p:inputMask>
 								</p:panel>
 								
