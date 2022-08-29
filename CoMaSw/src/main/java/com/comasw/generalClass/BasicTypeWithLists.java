@@ -15,11 +15,13 @@ import com.comasw.ejb.parameterization.ConsumptionClassEJBLocal;
 import com.comasw.ejb.parameterization.DiscountTypeEJBLocal;
 import com.comasw.ejb.parameterization.PaymentMethodEJBLocal;
 import com.comasw.ejb.parameterization.StatusEJBLocal;
+import com.comasw.ejb.parameterization.TaxTypeEJBLocal;
 import com.comasw.model.tables.pojos.PtApplicationLevel;
 import com.comasw.model.tables.pojos.PtConsumptionClass;
 import com.comasw.model.tables.pojos.PtDiscountType;
 import com.comasw.model.tables.pojos.PtPaymentMethod;
 import com.comasw.model.tables.pojos.PtStatus;
+import com.comasw.model.tables.pojos.PtTaxType;
 
 
 public class BasicTypeWithLists<T> extends BasicType<T> {
@@ -40,6 +42,9 @@ public class BasicTypeWithLists<T> extends BasicType<T> {
 
 	@EJB
 	private PaymentMethodEJBLocal paymentMethodEJB;
+	
+	@EJB
+	private TaxTypeEJBLocal taxTypeEJB;
 
 
 	/*
@@ -200,7 +205,7 @@ public class BasicTypeWithLists<T> extends BasicType<T> {
 	}
 
 	/*
-	 * Return the list of select items with the consumption class data
+	 * Return the list of select items with the payment method  data
 	 */
 	public List<SelectItem> paymentMethodSelectItems() {
 		List<SelectItem> selectItem = new ArrayList<>();
@@ -218,6 +223,33 @@ public class BasicTypeWithLists<T> extends BasicType<T> {
 				SelectItem item = new SelectItem();
 				item.setLabel(p.getCode());
 				item.setValue(p.getPaymentMethodId());
+				item.setDescription(p.getDescription());
+				selectItem.add(item);
+			}
+		}
+		return selectItem;
+	}
+
+	
+	/*
+	 * Return the list of select items with the consumption class data
+	 */
+	public List<SelectItem> taxTypeSelectItems() {
+		List<SelectItem> selectItem = new ArrayList<>();
+		List<PtTaxType> list = taxTypeEJB.findAllData();
+
+		SelectItem nullItem = new SelectItem();
+		nullItem.setLabel("Select One... ");
+		nullItem.setValue(null);
+		selectItem.add(nullItem);
+
+		if (list.isEmpty()) {
+			logger.error("ERROR - Not find payment method list");
+		} else {
+			for (PtTaxType p : list) {
+				SelectItem item = new SelectItem();
+				item.setLabel(p.getCode());
+				item.setValue(p.getTaxTypeId());
 				item.setDescription(p.getDescription());
 				selectItem.add(item);
 			}

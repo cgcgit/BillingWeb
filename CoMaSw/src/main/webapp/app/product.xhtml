@@ -909,6 +909,49 @@
 								</f:facet>
 							</p:cellEditor>
 						</p:column>
+						
+						<p:column id="taxTypeHist"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="TAX TYPE" rendered="true"
+							filterBy="#{historicDataTable.taxTypeId}" filterMatchMode="exact">
+							<f:facet id="taxTypeFilter" name="filter">
+								<p:selectOneMenu id="taxTypeFilterMenuHist"
+									onchange="PF('historicTableWidget').filter()">
+									<f:selectItems id="taxTypeFilterSelectItemsHist"
+										value="#{productController.taxTypeSelectItems()}" />
+								</p:selectOneMenu>
+							</f:facet>
+							<p:cellEditor id="taxTypeHistCellEditor">
+								<f:facet id="taxTypeHistOutputFacet" name="output">
+									<p:selectOneMenu id="taxTypeHistOutput" editable="false"
+										disabled="true" immediate="true"
+										value="#{historicDataTable.taxTypeId}">
+										<f:selectItems
+											value="#{productController.taxTypeSelectItems()}"
+											id="selectItemsTaxTypeHistOutput" itemDisabled="true"
+											var="Status" itemValue="#{historicDataTable.taxTypeId}" />
+									</p:selectOneMenu>
+								</f:facet>
+								<f:facet id="taxTypeHistInputFacet" name="input">
+									<p:selectOneMenu id="taxTypeHistInput"										
+										value="#{historicDataTable.taxTypeId}" immediate="true">
+										<f:selectItems
+											value="#{productController.taxTypeSelectItems()}"
+											id="selectItemsTaxTypeHistInput" var="TaxType"
+											itemValue="#{historicDataTable.taxTypeId}">
+										</f:selectItems>
+										<p:ajax event="change" immediate="true"
+											update="taxTypeHistOutput" />
+										<f:param id="currentRowTaxTypeHist" name="currentHistoricalRow"
+											value="#{rowIndexHistoricTable}" />
+									</p:selectOneMenu>
+								</f:facet>
+							</p:cellEditor>
+						</p:column>
 
 
 						<p:column id="startDateHist"
@@ -1533,6 +1576,16 @@
 						converterId="com.comasw.converter.localDateTimeConverter" />
 					<p:ajax event="change" update="newEndDateInput" />
 				</p:inputMask>
+				
+				<p:outputLabel id="newTaxTypeLabel" value="Tax Type: " />
+				<p:selectOneMenu id="taxTypeInput"
+					value="#{productController.newData.taxTypeId}" immediate="true">
+					<f:selectItems
+						value="#{productController.taxTypeSelectItems()}"
+						id="selectItemsTaxTypeInput" var="TaxType"
+						itemValue="#{productController.newData.taxTypeId}">
+					</f:selectItems>
+				</p:selectOneMenu>
 
 				<p:outputLabel id="newProductTypeLabel" value="Product Type: " />
 				<p:selectOneMenu id="productTypeInput"
