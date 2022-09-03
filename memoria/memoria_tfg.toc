@@ -1,0 +1,92 @@
+\selectlanguage *{spanish}
+\bgroup 
+\selectlanguage *{english}
+\egroup 
+\selectlanguage *{spanish}
+\contentsline {chapter}{\numberline {1}Introdución}{1}{chapter.1}%
+\contentsline {section}{\numberline {1.1}Motivación}{1}{section.1.1}%
+\contentsline {section}{\numberline {1.2}Definición de objetivos}{2}{section.1.2}%
+\contentsline {chapter}{\numberline {2}Proceso de negocio. Fundamentos teóricos}{4}{chapter.2}%
+\contentsline {section}{\numberline {2.1}Proceso de negocio}{4}{section.2.1}%
+\contentsline {subsection}{\numberline {2.1.1}Gestión de proceso de negocio}{6}{subsection.2.1.1}%
+\contentsline {section}{\numberline {2.2}Sistemas de soporte operacional y Sistemas de soporte de negocio}{7}{section.2.2}%
+\contentsline {subsection}{\numberline {2.2.1}TMN de ITU-T}{8}{subsection.2.2.1}%
+\contentsline {subsection}{\numberline {2.2.2}TMF}{9}{subsection.2.2.2}%
+\contentsline {subsection}{\numberline {2.2.3}ITIL e ITSM}{11}{subsection.2.2.3}%
+\contentsline {section}{\numberline {2.3}Gestión de relaciones con los clientes}{13}{section.2.3}%
+\contentsline {subsection}{\numberline {2.3.1}Breve historia del CRM}{13}{subsection.2.3.1}%
+\contentsline {chapter}{\numberline {3}Fundamentos Técnicos}{16}{chapter.3}%
+\contentsline {section}{\numberline {3.1}Jakarta EE}{16}{section.3.1}%
+\contentsline {subsection}{\numberline {3.1.1}Historia}{16}{subsection.3.1.1}%
+\contentsline {subsection}{\numberline {3.1.2}Arquitectura Jakarta EE}{18}{subsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.1.3}Componentes Jakarta EE}{20}{subsection.3.1.3}%
+\contentsline {subsection}{\numberline {3.1.4}Contenedores}{21}{subsection.3.1.4}%
+\contentsline {subsubsection}{Servidores}{21}{subsubsection*.14}%
+\contentsline {section}{\numberline {3.2}Librerías y componentes Jakarta EE usados}{21}{section.3.2}%
+\contentsline {subsection}{\numberline {3.2.1}Jakarta Enterprise Bean}{21}{subsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.2.2}Java Server Faces}{22}{subsection.3.2.2}%
+\contentsline {subsubsection}{Ciclo de vida de una aplicación JSF}{22}{subsubsection*.15}%
+\contentsline {subsection}{\numberline {3.2.3}Primefaces}{23}{subsection.3.2.3}%
+\contentsline {subsection}{\numberline {3.2.4}Omnifaces}{23}{subsection.3.2.4}%
+\contentsline {subsection}{\numberline {3.2.5}Java Object Oriented Querying}{24}{subsection.3.2.5}%
+\contentsline {subsection}{\numberline {3.2.6}Log4j}{25}{subsection.3.2.6}%
+\contentsline {section}{\numberline {3.3}Formatos de almacenamiento. PostgreSQL}{25}{section.3.3}%
+\contentsline {subsection}{\numberline {3.3.1}Historia}{25}{subsection.3.3.1}%
+\contentsline {subsubsection}{Inicios. POSTGRES}{25}{subsubsection*.16}%
+\contentsline {subsubsection}{Postgres95}{26}{subsubsection*.17}%
+\contentsline {subsubsection}{PostgreSQL}{26}{subsubsection*.18}%
+\contentsline {subsection}{\numberline {3.3.2}Características}{26}{subsection.3.3.2}%
+\contentsline {chapter}{\numberline {4}Análisis y diseño}{28}{chapter.4}%
+\contentsline {section}{\numberline {4.1}Análisis de las necesidades}{28}{section.4.1}%
+\contentsline {subsection}{\numberline {4.1.1}Catálogo de servicios}{30}{subsection.4.1.1}%
+\contentsline {paragraph}{Tipo de producto}{30}{paragraph*.20}%
+\contentsline {paragraph}{Tipo de servicio}{30}{paragraph*.21}%
+\contentsline {paragraph}{Tipo de promoción}{30}{paragraph*.22}%
+\contentsline {paragraph}{Tipo de cuota}{30}{paragraph*.23}%
+\contentsline {paragraph}{Tipo de consumos}{30}{paragraph*.24}%
+\contentsline {paragraph}{Tipo de ciclo de facturación}{31}{paragraph*.26}%
+\contentsline {paragraph}{Tipo de cliente}{31}{paragraph*.27}%
+\contentsline {paragraph}{Tipo de cuenta}{31}{paragraph*.28}%
+\contentsline {subsection}{\numberline {4.1.2}Contratación}{32}{subsection.4.1.2}%
+\contentsline {subsubsection}{Elementos de parametrización}{32}{subsubsection*.30}%
+\contentsline {paragraph}{Entidades}{32}{paragraph*.31}%
+\contentsline {paragraph}{Clases de consumo}{32}{paragraph*.32}%
+\contentsline {paragraph}{Estado}{32}{paragraph*.33}%
+\contentsline {paragraph}{Nivel de aplicación}{32}{paragraph*.34}%
+\contentsline {paragraph}{Tipos de descuento}{32}{paragraph*.35}%
+\contentsline {paragraph}{Tipos de pago}{32}{paragraph*.36}%
+\contentsline {paragraph}{Período de facturación}{33}{paragraph*.37}%
+\contentsline {paragraph}{Tipo impositivo}{33}{paragraph*.38}%
+\contentsline {paragraph}{Tipo de documento de identificación}{33}{paragraph*.39}%
+\contentsline {section}{\numberline {4.2}Casos de uso}{33}{section.4.2}%
+\contentsline {subsection}{\numberline {4.2.1}Actores}{33}{subsection.4.2.1}%
+\contentsline {subsection}{\numberline {4.2.2}Casos de uso}{34}{subsection.4.2.2}%
+\contentsline {section}{\numberline {4.3}Diseño}{39}{section.4.3}%
+\contentsline {subsection}{\numberline {4.3.1}Arquitectura en tres niveles}{39}{subsection.4.3.1}%
+\contentsline {paragraph}{Nivel de presentación}{40}{paragraph*.48}%
+\contentsline {paragraph}{Nivel de aplicación}{40}{paragraph*.49}%
+\contentsline {paragraph}{Nivel de datos}{40}{paragraph*.50}%
+\contentsline {subsection}{\numberline {4.3.2}Patrones utilizados}{41}{subsection.4.3.2}%
+\contentsline {paragraph}{Patrón modelo vista controlador}{41}{paragraph*.52}%
+\contentsline {paragraph}{Composite View}{42}{paragraph*.54}%
+\contentsline {paragraph}{DAO - Data Access Object}{42}{paragraph*.55}%
+\contentsline {chapter}{\numberline {5}Implementación}{43}{chapter.5}%
+\contentsline {section}{\numberline {5.1}Hardware Utilizado}{43}{section.5.1}%
+\contentsline {section}{\numberline {5.2}Software Utilizado}{43}{section.5.2}%
+\contentsline {chapter}{\numberline {6}Implementación}{45}{chapter.6}%
+\contentsline {section}{\numberline {6.1}Fases del proyecto}{45}{section.6.1}%
+\contentsline {section}{\numberline {6.2}Costes estimados}{46}{section.6.2}%
+\contentsline {chapter}{\numberline {7}Conclusións}{47}{chapter.7}%
+\contentsline {chapter}{\numberline {A}Material adicional}{50}{appendix.A}%
+\contentsline {chapter}{\numberline {B}Referencia técnica}{52}{appendix.B}%
+\contentsline {section}{\numberline {B.1}Casos de uso}{52}{section.B.1}%
+\contentsline {subsection}{\numberline {B.1.1}Actores}{53}{subsection.B.1.1}%
+\contentsline {subsection}{\numberline {B.1.2}Casos de uso}{53}{subsection.B.1.2}%
+\contentsline {subsubsection}{Caso de uso de acceso al sistema}{53}{subsubsection*.61}%
+\contentsline {subsubsection}{Casos de uso genéricos (búsqueda, creación, edición, borrado, etc.}{56}{subsubsection*.64}%
+\contentsline {paragraph}{Casos de uso Gestionar ficha personal}{68}{paragraph*.81}%
+\contentsline {subsubsection}{Casos de uso Acceder a parametrización}{71}{subsubsection*.85}%
+\contentsline {subsubsection}{Casos de uso Acceder a catálogo}{72}{subsubsection*.87}%
+\contentsline {subsubsection}{Casos de uso Acceder a relaciones del catálogo}{74}{subsubsection*.90}%
+\contentsline {subsubsection}{Caso de uso Acceder a instancia}{76}{subsubsection*.93}%
+\contentsline {subsubsection}{Caso de uso Gestionar usuarios}{77}{subsubsection*.95}%
