@@ -49,8 +49,8 @@ Esta aplicación tendrá el objetivo de formar parte de un ecosistema mayor, int
 \acrshort{itil} define el catálogo de servicios como~\cite{catalogoITIL}:
 \textquote{una base de datos centralizada que contiene información precisa sobre las ofertas de servicios de TI activas y un subconjunto de la cartera de servicios del proveedor de servicios de TI}. De forma simple vendría siendo la \textit{mercancía} que ofrece una determinada empresa. Pero va un paso más allá del listado de elementos ofertados en este momento, si no que  lleva registro del ciclo de vida de todos los productos y servicios gestionados por la empresa, tanto los servicios y productos retirados como los que se ofrecen actualmente e incluso los que están en desarrollo.
 
-La idea es la siguiente: la empresa define su catálogo de servicios: tecnología a ofertar, elementos facturables que se pueden aplicar por la prestación de servicios y descuentos a aplicar sobre dichos elementos facturables. Se distinguen dos tipos de elementos facturables: cuotas (cargos periódicos asociados a la prestación de los distintos servicios) y consumos (cargos puntuales derivados del consumo de algún elemento definido como consumible)
-El catálogo de servicio de nuestra empresa estará formado por cinco entidades principales y las relaciones que guardan entre sí (figura \ref{fig:catalogo}, página \pageref{chap:catalogo}):
+La idea es la siguiente: la empresa define su catálogo de servicios(tecnología a ofertar), los elementos facturables a aplicar por la prestación de servicios y los descuentos existentes sobre dichos elementos facturables. Se distinguen dos tipos de elementos facturables: cuotas (cargos periódicos asociados a la prestación de los distintos servicios) y consumos (cargos puntuales derivados del consumo de algún elemento definido como consumible)
+El catálogo de servicio de nuestra empresa estará formado por cinco entidades principales y las relaciones que guardan entre sí (figura \ref{fig:catalogo}, página \pageref{fig:catalogo}):
 
 \paragraph{Tipo de producto} es el elemento raiz del catálogo del sistema sobre el que se irán definiendo el resto de elementos que se pueden ofrecer al cliente. Podemos verlo como el \textit{paquete} que contendrá todo lo que se le ofrece al cliente.
 \paragraph{Tipo de servicio} es el elemento que realmente aporta valor al cliente, ya que es el que define el elemento que va a aportar el valor de la contratación, por ejemplo la línea de telefono.
@@ -92,18 +92,18 @@ La contratación contendrá la implementación (instancia) real de los distintos
 \end{figure}
 
 
-\subsubsection{Elementos de parametrización}
+\subsection{Elementos de parametrización}
 \label{sub:parametrizacion}
 Los elementos de parametrización son elementos que nos permiten modelar entidades superiores para que se comporten de una forma determinada. No es lo mismo aplicar un descuento en forma de porcentaje sobre el total que en número de unidades contratadas. Para el desarrollo de la herramienta se han considerado los siguientes elementos de parametrización.
 
 \paragraph{Entidades} define los distintos tipos de entidades definidas en el sistema.
-\paragraph{Clases de consumo} define las distintas clases de consumo definidas en el sistema (llamadas a fijo, a móviles, sms,...).
+\paragraph{Clases de consumo} define las distintas clases de consumo definidas en el sistema (llamadas a fijo, a móviles, sms,\dots).
 \paragraph{Estado} para reflejar los distintos estados que tienen las entidades del sistema a lo largo de su ciclo de vida.
 \paragraph{Nivel de aplicación} para indicar sobre qué entidad aplican las distintas cuotas y promociones: si sobre un producto o sobre un servicio.
-\paragraph{Tipos de descuento} reflejan los distintos tipos de descuento que pueden tenerse en cuenta (porcentaje sobre el total, unidades de consumo, etc...).
-\paragraph{Tipos de pago} reflejan los distintos métodos de pago que contempla la empresa (domiciliación bancaria, transferencia,...).
+\paragraph{Tipos de descuento} reflejan los distintos tipos de descuento que pueden tenerse en cuenta (porcentaje sobre el total, unidades de consumo,\dots).
+\paragraph{Tipos de pago} reflejan los distintos métodos de pago que contempla la empresa (domiciliación bancaria, transferencia,\dots).
 \paragraph{Período de facturación} define el número de días que conforman los  períodos de facturación.
-\paragraph{Tipo impositivo} define los distintos tipos impositivos que contempla la aplicación (iva, igic,...) y sus valores porcentuales de aplicación.
+\paragraph{Tipo impositivo} define los distintos tipos impositivos que contempla la aplicación (iva, igic,\dots) y sus valores porcentuales de aplicación.
 \paragraph{Tipo de documento de identificación} define los distintos tipos de documento de identificación contemplados por el sistema.
 
 
@@ -121,7 +121,7 @@ Se definen tres tipos de usuarios de la aplicación en función de los funcional
 
 
 \subsection{Actores}
-\label{sub:actores}
+\label{sub:actores_analisis}
 
 
 \begin{figure}[hp!]
@@ -142,7 +142,7 @@ Los actores  READ y  WRITE representa a cualquier usuario con un perfil READ o W
 \label{sub:casos-uso}
 
 
-Todos los usuarios comparten los casos de uso de acceso y los relativos a la consulta de las entidades del sistema. El actor WRITE amplía esos casos de uso con funcionalidades de creación, modificación y borrado de entidades y por último el actor ADMIN amplía esos casos de uso con el caso de uso de administración de usuarios. Las siguientes figuras (figura \ref{tab:cu-acceso}, figura \ref{tab:cu-read-write}, figura \ref{tab:cu-admin} de las páginas \ref{tab:cu-acceso},\ref{tab:cu-read-write},\ref{tab:cu-admin}) muestran una visión de alto nivel de los distintos casos de uso definidos en el sistema. Dichos casos de uso se analizan con más detalle en los siguientes apartados.
+Todos los usuarios comparten los casos de uso de acceso y los relativos a la consulta de las entidades del sistema. El actor WRITE amplía esos casos de uso con funcionalidades de creación, modificación y borrado de entidades y por último el actor ADMIN amplía esos casos de uso con el caso de uso de administración de usuarios. Las siguientes figuras (figura \ref{fig:cu-acceso}, figura \ref{fig:cu-read-write}, figura \ref{fig:cu-admin} de las páginas \ref{fig:cu-acceso},\ref{fig:cu-read-write},\ref{fig:cu-admin}) muestran una visión de alto nivel de los distintos casos de uso definidos en el sistema. Dichos casos de uso se analizan con más detalle en los siguientes apartados.
 
 
 \begin{figure}[H]
@@ -172,7 +172,7 @@ Todos los usuarios comparten los casos de uso de acceso y los relativos a la con
 
 
 A continuación se muestra un caso de uso destacable que representa
-aspecto centrales de la aplicación.La definición completa de casos de uso se encuentra en el apéndice \ref{anexos/chap:ref-tecnica}. 
+aspecto centrales de la aplicación.La definición completa de casos de uso se encuentra en el apéndice \ref{chap:ref-tecnica}. 
 
 Se trata de los casos de uso CU-05 (tabla \ref{tab:cu-editar-historico}, página \pageref{tab:cu-editar-historico}), CU-06 (tabla \ref{tab:cu-cancelar-historico}, página \pageref{tab:cu-cancelar-historico}), CU-07 (tabla \ref{tab:cu-anhadir-historico-elemento}, página \pageref{tab:cu-anhadir-historico-elemento}) y CU-09 (tabla \ref{tab:cu-borrar-historico-elemento} página \pageref{tab:cu-borrar-historico-elemento}, que hacen referencia a la modificación de un registro de histórico de una entidad con histórico de registros (como pudiera ser un tipo de cuota). A estos casos de uso pueden acceder los actores WRITE y ADMIN a través del correspondiente caso de uso de listado de la entidad a tratar y seleccionando el correspondiente registro de histórico a modificar.
 
@@ -183,8 +183,8 @@ Para este tipo de entidades con registro de histórico es fundamental que exista
     \centering
     \rowcolors{2}{white}{white}
     \setlength{\leftmargini}{0.4cm}
-	\resizebox{15cm}{!} { % evita que la tabla sobresalga de la p\'agina, ajustando tama\'no de letra y grosor de l\'ineas
-    \begin{tabular}{| m{3cm} | m{12cm} |}   
+	\resizebox{14cm}{!} { % evita que la tabla sobresalga de la p\'agina, ajustando tama\'no de letra y grosor de l\'ineas
+    \begin{tabular}{| m{3cm} | m{11cm} |}   
     \hline
 	  \textbf{CU-05} & \textbf{Editar registro de histórico del elemento seleccionado} \\\hline
 	  \textbf{Descripción} & Editar registro de histórico del elemento seleccionado. \\\hline
@@ -216,8 +216,8 @@ Para este tipo de entidades con registro de histórico es fundamental que exista
     \centering
     \rowcolors{2}{white}{white}
     \setlength{\leftmargini}{0.4cm}
-	\resizebox{15cm}{!} { % evita que la tabla sobresalga de la p\'agina, ajustando tama\'no de letra y grosor de l\'ineas
-    \begin{tabular}{| m{3cm} | m{12cm} |}   
+	\resizebox{14cm}{!} { % evita que la tabla sobresalga de la p\'agina, ajustando tama\'no de letra y grosor de l\'ineas
+    \begin{tabular}{| m{3cm} | m{11cm} |}   
     \hline
 	  \textbf{CU-06} & \textbf{Cancelar el registro de histórico del elemento seleccionado} \\\hline
 	  \textbf{Descripción} & Cancelar el registro de histórico del elemento seleccionado. \\\hline
@@ -246,8 +246,8 @@ Para este tipo de entidades con registro de histórico es fundamental que exista
     \centering
     \rowcolors{2}{white}{white}    
     \setlength{\leftmargini}{0.4cm}
-	\resizebox{15cm}{!} { % evita que la tabla sobresalga de la p\'agina, ajustando tama\'no de letra y grosor de l\'ineas
-    \begin{tabular}{| m{3cm} | m{12cm} |}   
+	\resizebox{14cm}{!} { % evita que la tabla sobresalga de la p\'agina, ajustando tama\'no de letra y grosor de l\'ineas
+    \begin{tabular}{| m{3cm} | m{11cm} |}   
     \hline
 	  \textbf{CU-07} & \textbf{Añadir registro de histórico del elemento seleccionado} \\\hline
 	  \textbf{Descripción} & Añadir registro de histórico del elemento seleccionado. \\\hline
@@ -280,8 +280,8 @@ Para este tipo de entidades con registro de histórico es fundamental que exista
     \centering
     \rowcolors{2}{white}{white}
     \setlength{\leftmargini}{0.4cm}
-	\resizebox{15cm}{!} { % evita que la tabla sobresalga de la p\'agina, ajustando tama\'no de letra y grosor de l\'ineas
-    \begin{tabular}{| m{3cm} | m{12cm} |}   
+	\resizebox{14cm}{!} { % evita que la tabla sobresalga de la p\'agina, ajustando tama\'no de letra y grosor de l\'ineas
+    \begin{tabular}{| m{3cm} | m{11cm} |}   
     \hline
 	  \textbf{CU-09} & \textbf{Borrar histórico del elemento seleccionado} \\\hline
 	  \textbf{Descripción} & Borrar histórico elemento seleccionado. \\\hline
@@ -326,7 +326,7 @@ Para el desarrollo de este proyecto se ha optado por el patrón de arquitectura 
 
 \paragraph{Nivel de aplicación} también conocido como el nivel lógico o medio, es el núcleo de la aplicación. Se procesa la información recogida en el nivel de presantación. En ocasiones este procesado de información se realiza junto con otra información en el nivel de datos a través de lo que se conoce como  lógica empresarial: un conjunto específico de reglas empresariales. Este nivel también puede añadir, suprimir o modificar datos en el nivel de datos. Se comunica con el nivel de datos mediante llamadas a las distintas \acrshort{api}. 
 
-\paragraph{Nivel de datos} también denominado nivel de base de datos, de acceso a datos o backend, es donde se almacena y gestiona la información procesada por la aplicación. Puede ser un sistema de gestión de base de datos relacional (PostgreSQL, MySQL, Oracle,...) o en un servidor de bases de datos NoSQL (MongoDB, Cassandra,...). 
+\paragraph{Nivel de datos} también denominado nivel de base de datos, de acceso a datos o backend, es donde se almacena y gestiona la información procesada por la aplicación. Puede ser un sistema de gestión de base de datos relacional (PostgreSQL, MySQL, Oracle,\dots) o en un servidor de bases de datos NoSQL (MongoDB, Cassandra,\dots). 
 
 
 En una aplicación de tres niveles, toda la comunicación pasa por el nivel de aplicación. Los niveles de presentación y de datos no pueden comunicarse directamente entre sí.
@@ -385,6 +385,11 @@ El sistema de plantillas de JSF se basa en el patrón de diseño Composite View,
 lo que significa que las secciones de una página o incluso las propias páginas pueden ser reutilizadas por otras páginas.
 Se han utilizado plantillas en el diseño de la ventana principal de la aplicación, la barra de herramientas de la aplicación que contiene el acceso al menú y a la información del usuario, así como la información de la vista actual.
 
+
+\paragraph{DTO - Data Transfer Object}
+Se utiliza este patrón para reducir el número de llamadas a métodos mediante el uso de objetos que transportan datos entre procesos. También permite la encapsulación de la lógica de la serialización (el mecanismo que traduce la estructura del objeto y los datos a un formato específico que se puede almacenar y transferir) proporcionando un único punto de cambio en los matices de serialización.
+
+Los objetos de este patrón generalmente se crean como \acrlong{pojo}. Se trata de estructuras de datos planas que no contienen lógica de negocio, sólo  almacenamiento, accesorios y, finalmente, métodos relacionados con la serialización o el análisis.
 
 
 \paragraph{DAO - Data Access Object}
