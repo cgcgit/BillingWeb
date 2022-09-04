@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2022.8.25)  3 SEP 2022 23:44
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2022.8.25)  4 SEP 2022 22:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1741,6 +1741,9 @@ Package csquotes Info: ... configuration file loaded successfully.
 (/usr/share/texlive/texmf-dist/tex/latex/csquotes/csquotes.cfg
 File: csquotes.cfg 
 ))
+(/usr/share/texlive/texmf-dist/tex/latex/graphics/lscape.sty
+Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
+)
 (/usr/share/texlive/texmf-dist/tex/latex/float/float.sty
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
 \c@float@type=\count415
@@ -1768,15 +1771,8 @@ LaTeX Info: Redefining \ttfamily on input line 15.
 ) (./contido/introducion.aux)
 (./contido/teoria.aux) (./contido/apartado-tecnico.aux)
 (./contido/analisis-disenho.aux) (./contido/implementacion.aux)
-(./contido/planificacion.aux
-
-LaTeX Warning: Label `chap:implementacion' multiply defined.
-
-) (./contido/conclusions.aux) (./anexos/adicional.aux)
-(./anexos/ref_tecnica.aux
-
-LaTeX Warning: Label `sub:actores' multiply defined.
-
+(./contido/pruebas.aux) (./contido/planificacion.aux)
+(./contido/conclusions.aux) (./anexos/adicional.aux) (./anexos/ref_tecnica.aux
 
 LaTeX Warning: Label `sub:casos-uso' multiply defined.
 
@@ -1809,6 +1805,12 @@ LaTeX Warning: Label `sub:cu-catalogo' multiply defined.
 
 
 LaTeX Warning: Label `sub:cu-catalogo' multiply defined.
+
+
+LaTeX Warning: Label `tab:cu-gestión-usuarios' multiply defined.
+
+
+LaTeX Warning: Label `sub:recursos' multiply defined.
 
 ))
 \openout1 = `memoria_tfg.aux'.
@@ -2144,7 +2146,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 12--13
 
 ]) [2])
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/n' will be
-(Font)              scaled to size 24.88pt on input line 83.
+(Font)              scaled to size 24.88pt on input line 82.
 Requested font "[LinLibertine_RB.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
 mapping=tex-text;" at 24.88pt
  -> /usr/share/texlive/texmf-dist/fonts/opentype/public/libertine/LinLibertine_
@@ -2182,7 +2184,7 @@ Requested font "cmr10" at 10.95pt
 \openout7 = `memoria_tfg.toc'.
 
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/n' will be
-(Font)              scaled to size 10.0pt on input line 84.
+(Font)              scaled to size 10.0pt on input line 83.
 Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;m
 apping=tex-text;" at 10.0pt
  -> /usr/share/texlive/texmf-dist/fonts/opentype/public/libertine/LinLibertine_
@@ -2202,13 +2204,13 @@ LaTeX Info: Redefining \ttfamily on input line 5.
 Package natbib Warning: Citation `Itil-eTom' on page iii undefined on input lin
 e 14.
 
-)
+[3
+
+])
 \tf@lof=\write8
 \openout8 = `memoria_tfg.lof'.
 
- [3
-
-] (./memoria_tfg.lot
+ [4] (./memoria_tfg.lot
 LaTeX Info: Redefining \rmfamily on input line 1.
 LaTeX Info: Redefining \sffamily on input line 1.
 LaTeX Info: Redefining \ttfamily on input line 1.
@@ -2218,13 +2220,13 @@ LaTeX Info: Redefining \ttfamily on input line 3.
 LaTeX Info: Redefining \rmfamily on input line 5.
 LaTeX Info: Redefining \sffamily on input line 5.
 LaTeX Info: Redefining \ttfamily on input line 5.
- [4
+ [5
 
 ])
 \tf@lot=\write9
 \openout9 = `memoria_tfg.lot'.
 
- [5]
+ [6]
 \openout2 = `contido/introducion.aux'.
 
  (./contido/introducion.tex
@@ -2517,7 +2519,7 @@ ine 208.
 [24]
 
 Package natbib Warning: Citation `PostgreSQL' on page 25 undefined on input lin
-e 242.
+e 244.
 
 [25] [26]) [27]
 \openout2 = `contido/analisis-disenho.aux'.
@@ -2541,12 +2543,7 @@ File: imaxes/area-comercial.png Graphic file (type bmp)
 Package natbib Warning: Citation `catalogoITIL' on page 29 undefined on input l
 ine 49.
 
-[29]
-
-LaTeX Warning: Reference `chap:catalogo' on page 30 undefined on input line 53.
-
-
-[30]
+[29] [30]
 File: imaxes/catalogo.png Graphic file (type bmp)
 <imaxes/catalogo.png>
  [31]
@@ -2556,68 +2553,20 @@ File: imaxes/instancia.png Graphic file (type bmp)
 File: imaxes/actores.png Graphic file (type bmp)
 <imaxes/actores.png>
  [33]
-
-LaTeX Warning: Reference `tab:cu-acceso' on page 34 undefined on input line 145
-.
-
-
-LaTeX Warning: Reference `tab:cu-read-write' on page 34 undefined on input line
- 145.
-
-
-LaTeX Warning: Reference `tab:cu-admin' on page 34 undefined on input line 145.
-
-
-
-LaTeX Warning: Reference `tab:cu-acceso' on page 34 undefined on input line 145
-.
-
-
-LaTeX Warning: Reference `tab:cu-read-write' on page 34 undefined on input line
- 145.
-
-
-LaTeX Warning: Reference `tab:cu-admin' on page 34 undefined on input line 145.
-
-
 File: imaxes/cu_acceso.png Graphic file (type bmp)
 <imaxes/cu_acceso.png>
 File: imaxes/cu-read-write.png Graphic file (type bmp)
 <imaxes/cu-read-write.png>
 File: imaxes/cu-admin.png Graphic file (type bmp)
 <imaxes/cu-admin.png>
-[34]
-
-LaTeX Warning: Reference `anexos/chap:ref-tecnica' on page 35 undefined on inpu
-t line 175.
-
+ [34]
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/it' will be
 (Font)              scaled to size 10.95pt on input line 209.
 Requested font "[LinLibertine_RBI.otf]/OT:script=latn;language=dflt;+tnum;+lnum
 ;mapping=tex-text;" at 10.95pt
  -> /usr/share/texlive/texmf-dist/fonts/opentype/public/libertine/LinLibertine_
 RBI.otf
-
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 186--210
- [][] 
- []
-
-[35]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 219--240
- [][] 
- []
-
-[36]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 249--272
- [][] 
- []
-
-[37]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 283--307
- [][] 
- []
-
-[38]
+ [35] [36] [37] [38]
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/it' will be
 (Font)              scaled to size 9.0pt on input line 323.
 Requested font "[LinLibertine_RI.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
@@ -2643,10 +2592,10 @@ File: imaxes/arquitectura-3-niveles.png Graphic file (type bmp)
 Package natbib Warning: Citation `ibmMVC' on page 40 undefined on input line 34
 2.
 
-[40]
+[40] [41]
 File: imaxes/mvc-patron.png Graphic file (type bmp)
 <imaxes/mvc-patron.png>
- [41]) [42]
+) [42]
 \openout2 = `contido/implementacion.aux'.
 
  (./contido/implementacion.tex
@@ -2706,6 +2655,11 @@ Underfull \hbox (badness 10000) in paragraph at lines 55--58
  []
 
 
+Underfull \hbox (badness 10000) in paragraph at lines 59--62
+
+ []
+
+
 Underfull \hbox (badness 10000) in paragraph at lines 64--67
 
  []
@@ -2715,40 +2669,55 @@ Underfull \hbox (badness 10000) in paragraph at lines 68--71
 
  []
 
+
+Underfull \hbox (badness 10000) in paragraph at lines 72--75
+
+ []
+
 ) [44]
+\openout2 = `contido/pruebas.aux'.
+
+ (./contido/pruebas.tex
+Capítulo 6.
+) [45
+
+
+
+
+]
 \openout2 = `contido/planificacion.aux'.
 
  (./contido/planificacion.tex
-Capítulo 6.
+Capítulo 7.
 File: imaxes/planificacion.png Graphic file (type bmp)
 <imaxes/planificacion.png>
-[45
+[46
 
 
 
 
-]) [46]
+]) [47]
 \openout2 = `contido/conclusions.aux'.
 
  (./contido/conclusions.tex
-Capítulo 7.
+Capítulo 8.
 Package lettrine.sty Info: Targeted height = 21.55566pt
 (lettrine.sty)             (for loversize=0, accent excluded),
-(lettrine.sty)             Lettrine height = 21.35751pt (D);
+(lettrine.sty)             Lettrine height = 21.42354pt (E);
 (lettrine.sty)             reported on input line 4.
-) [47
+[48
 
 
 
 
-] [48]
+]) [49]
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/n' will be
 (Font)              scaled to size 24.88pt on input line 109.
 Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;m
 apping=tex-text;" at 24.88pt
  -> /usr/share/texlive/texmf-dist/fonts/opentype/public/libertine/LinLibertine_
 R.otf
- [49
+ [50
 
 
 
@@ -2761,10 +2730,10 @@ Package lettrine.sty Info: Targeted height = 21.55566pt
 (lettrine.sty)             (for loversize=0, accent excluded),
 (lettrine.sty)             Lettrine height = 21.42354pt (E);
 (lettrine.sty)             reported on input line 4.
-) [50
+) [51
 
 
-] [51]
+] [52]
 \openout2 = `anexos/ref_tecnica.aux'.
 
  (./anexos/ref_tecnica.tex
@@ -2775,185 +2744,197 @@ Package lettrine.sty Info: Targeted height = 21.55566pt
 (lettrine.sty)             reported on input line 4.
 File: imaxes/actores.png Graphic file (type bmp)
 <imaxes/actores.png>
-[52
+[53
 
 
 
 
 ]
-
-LaTeX Warning: Reference `tab:cu-acceso' on page 53 undefined on input line 48.
-
-
-
-LaTeX Warning: Reference `tab:cu-read-write' on page 53 undefined on input line
- 48.
-
-
-LaTeX Warning: Reference `tab:cu-admin' on page 53 undefined on input line 48.
-
-
-LaTeX Warning: Reference `tab:cu-acceso' on page 53 undefined on input line 48.
-
-
-
-LaTeX Warning: Reference `tab:cu-read-write' on page 53 undefined on input line
- 48.
-
-
-LaTeX Warning: Reference `tab:cu-admin' on page 53 undefined on input line 48.
-
 File: imaxes/cu_acceso.png Graphic file (type bmp)
 <imaxes/cu_acceso.png>
 File: imaxes/cu-read-write.png Graphic file (type bmp)
 <imaxes/cu-read-write.png>
 File: imaxes/cu-admin.png Graphic file (type bmp)
 <imaxes/cu-admin.png>
-
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 89--111
- [][] 
+ [54] [55] [56] [57] [58] [59] [60] [61] [62] [63] [64] [65] [66] [67]
+[68] [69] [70] [71] [72] [73] [74] [75] [76] [77] [78] [79] [80] [81]
+Overfull \hbox (14.82085pt too wide) in paragraph at lines 1070--1071
+[]\TU/LinLibertine(0)/m/n/10.95 it_<entidad> hace referencia a las entidades en
+globadas en el catálogo (instancias)(\TU/LinLibertine(0)/m/it/10.95 instances
  []
 
-[53] [54]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 122--140
- [][] 
- []
+[82]
+File: imaxes/er-catalogo-01.png Graphic file (type bmp)
+<imaxes/er-catalogo-01.png>
+File: imaxes/er-catalogo-02.png Graphic file (type bmp)
+<imaxes/er-catalogo-02.png>
+ [83
+
+]
+File: imaxes/er-instancia-01.png Graphic file (type bmp)
+<imaxes/er-instancia-01.png>
+File: imaxes/er-instancia-02.png Graphic file (type bmp)
+<imaxes/er-instancia-02.png>
+ [84
 
 
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 160--181
- [][] 
- []
-
-[55]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 193--217
- [][] 
- []
-
-[56]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 226--250
- [][] 
- []
-
-[57]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 258--279
- [][] 
- []
-
-[58]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 290--313
- [][] 
- []
-
-[59]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 327--348
- [][] 
- []
-
-[60]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 358--382
- [][] 
- []
-
-[61]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 395--422
- [][] 
- []
-
-[62]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 431--452
- [][] 
- []
-
-[63]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 461--488
- [][] 
- []
-
-[64]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 502--518
- [][] 
- []
-
-[65]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 527--543
- [][] 
+]
+Overfull \hbox (12.34155pt too wide) in paragraph at lines 1140--1140
+[]|\TU/LinLibertine(0)/b/n/10.95 CoMaSw/src/main/resources| 
  []
 
 
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 553--573
- [][] 
- []
-
-[66]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 582--598
- [][] 
+Overfull \hbox (3.483pt too wide) in paragraph at lines 1140--1140
+[]|\TU/LinLibertine(0)/b/n/10.95 CoMaSw/src/main/webapp| 
  []
 
 
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 611--627
- [][] 
- []
-
-[67]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 635--651
- [][] 
+Overfull \hbox (0.52652pt too wide) in paragraph at lines 1140--1140
+[]|\TU/LinLibertine(0)/b/n/10.95 CoMaSwtarget/generated-
  []
 
 
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 664--681
- [][] 
+Overfull \hbox (86.22635pt too wide) in alignment at lines 1155--1179
+ [] [] 
  []
 
-[68]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 691--716
- [][] 
- []
+[85
 
-[69]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 726--750
- [][] 
- []
-
-[70]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 765--790
- [][] 
- []
-
-[71]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 816--841
- [][] 
- []
-
-[72]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 851--876
- [][] 
- []
-
-[73] [74]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 902--930
- [][] 
+]
+Underfull \hbox (badness 1163) in paragraph at lines 1203--1266
+\TU/LinLibertine(0)/m/it/10.95 CtAccountType.java\TU/LinLibertine(0)/m/n/10.95 
+, \TU/LinLibertine(0)/m/it/10.95 CtBillCycleType.java\TU/LinLibertine(0)/m/n/10
+.95 , \TU/LinLibertine(0)/m/it/10.95 CtConsumptionType.java\TU/LinLibertine(0)/
+m/n/10.95 , \TU/LinLibertine(0)/m/it/10.95 CtCus-
  []
 
 
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 939--967
- [][] 
+Underfull \hbox (badness 8056) in paragraph at lines 1203--1266
+\TU/LinLibertine(0)/m/it/10.95 tomerType.java\TU/LinLibertine(0)/m/n/10.95 , \T
+U/LinLibertine(0)/m/it/10.95 CtFeeType.java\TU/LinLibertine(0)/m/n/10.95 , \TU/
+LinLibertine(0)/m/it/10.95 CtProdFeeType.java\TU/LinLibertine(0)/m/n/10.95 , \T
+U/LinLibertine(0)/m/it/10.95 CtProdServType.java\TU/LinLibertine(0)/m/n/10.95 ,
+
  []
 
-[75]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 984--1010
- [][] 
+
+Underfull \hbox (badness 10000) in paragraph at lines 1203--1266
+\TU/LinLibertine(0)/m/it/10.95 CtProductType.java\TU/LinLibertine(0)/m/n/10.95 
+, \TU/LinLibertine(0)/m/it/10.95 CtPromoConsumTypeDiscount.java\TU/LinLibertine
+(0)/m/n/10.95 , \TU/LinLibertine(0)/m/it/10.95 CtPromoFeeType-
  []
 
-[76]
-Overfull \hbox (14.22166pt too wide) in paragraph at lines 1028--1049
- [][] 
+
+Underfull \hbox (badness 10000) in paragraph at lines 1203--1266
+\TU/LinLibertine(0)/m/it/10.95 Discount.java\TU/LinLibertine(0)/m/n/10.95 , \TU
+/LinLibertine(0)/m/it/10.95 CtPromoProdType.java\TU/LinLibertine(0)/m/n/10.95 ,
+ \TU/LinLibertine(0)/m/it/10.95 CtPromoServType.java\TU/LinLibertine(0)/m/n/10.
+95 , \TU/LinLibertine(0)/m/it/10.95 CtPromo-
  []
 
-[77]) [78]
+
+Underfull \hbox (badness 10000) in paragraph at lines 1203--1266
+\TU/LinLibertine(0)/m/it/10.95 tionType.java\TU/LinLibertine(0)/m/n/10.95 , \TU
+/LinLibertine(0)/m/it/10.95 CtServFeeType.java\TU/LinLibertine(0)/m/n/10.95 , \
+TU/LinLibertine(0)/m/it/10.95 CtServiceType.java\TU/LinLibertine(0)/m/n/10.95 ,
+ \TU/LinLibertine(0)/m/it/10.95 IdtAccount.java\TU/LinLibertine(0)/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1203--1266
+\TU/LinLibertine(0)/m/it/10.95 IdtCustomer.java\TU/LinLibertine(0)/m/n/10.95 , 
+\TU/LinLibertine(0)/m/it/10.95 IdtFee.java\TU/LinLibertine(0)/m/n/10.95 , \TU/L
+inLibertine(0)/m/it/10.95 IdtFeeType.java\TU/LinLibertine(0)/m/n/10.95 , \TU/Li
+nLibertine(0)/m/it/10.95 IdtProductFee.java\TU/LinLibertine(0)/m/n/10.95 , \TU/
+LinLibertine(0)/m/it/10.95 IdtPro-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1203--1266
+\TU/LinLibertine(0)/m/it/10.95 IdtPromotionType.java\TU/LinLibertine(0)/m/n/10.
+95 , \TU/LinLibertine(0)/m/it/10.95 IdtServiceFee.java\TU/LinLibertine(0)/m/n/1
+0.95 , \TU/LinLibertine(0)/m/it/10.95 IdtService.java\TU/LinLibertine(0)/m/n/10
+.95 , \TU/LinLibertine(0)/m/it/10.95 IdtServicePro-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1203--1266
+\TU/LinLibertine(0)/m/it/10.95 motion.java\TU/LinLibertine(0)/m/n/10.95 , \TU/L
+inLibertine(0)/m/it/10.95 ItAccount.java\TU/LinLibertine(0)/m/n/10.95 , \TU/Lin
+Libertine(0)/m/it/10.95 ItContract.java\TU/LinLibertine(0)/m/n/10.95 , \TU/LinL
+ibertine(0)/m/it/10.95 ItCustomer.java\TU/LinLibertine(0)/m/n/10.95 , \TU/LinLi
+bertine(0)/m/it/10.95 ItFee.java\TU/LinLibertine(0)/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 4072) in paragraph at lines 1203--1266
+\TU/LinLibertine(0)/m/it/10.95 ItProduct.java\TU/LinLibertine(0)/m/n/10.95 , \T
+U/LinLibertine(0)/m/it/10.95 ItProfiles.java\TU/LinLibertine(0)/m/n/10.95 , \TU
+/LinLibertine(0)/m/it/10.95 ItPromotion.java\TU/LinLibertine(0)/m/n/10.95 , \TU
+/LinLibertine(0)/m/it/10.95 ItService.java\TU/LinLibertine(0)/m/n/10.95 , \TU/L
+inLibertine(0)/m/it/10.95 ItUsers.java\TU/LinLibertine(0)/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1203--1266
+\TU/LinLibertine(0)/m/it/10.95 MtApplicationMenu.java\TU/LinLibertine(0)/m/n/10
+.95 , \TU/LinLibertine(0)/m/it/10.95 PtApplicationLevel.java\TU/LinLibertine(0)
+/m/n/10.95 , \TU/LinLibertine(0)/m/it/10.95 PtBillingPeriod.java\TU/LinLibertin
+e(0)/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1203--1266
+\TU/LinLibertine(0)/m/it/10.95 PtConsumptionClass.java\TU/LinLibertine(0)/m/n/1
+0.95 , \TU/LinLibertine(0)/m/it/10.95 PtDiscountType.java\TU/LinLibertine(0)/m/
+n/10.95 , \TU/LinLibertine(0)/m/it/10.95 PtEntityType.java\TU/LinLibertine(0)/m
+/n/10.95 , \TU/LinLibertine(0)/m/it/10.95 PtIden-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1203--1266
+\TU/LinLibertine(0)/m/it/10.95 tityCardType.java\TU/LinLibertine(0)/m/n/10.95 ,
+ \TU/LinLibertine(0)/m/it/10.95 PtPaymentMethod.java\TU/LinLibertine(0)/m/n/10.
+95 , \TU/LinLibertine(0)/m/it/10.95 PtStatus.java\TU/LinLibertine(0)/m/n/10.95 
+, \TU/LinLibertine(0)/m/it/10.95 PtTaxType.java\TU/LinLibertine(0)/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 7151) in paragraph at lines 1203--1266
+\TU/LinLibertine(0)/m/it/10.95 ProductFeeType.java \TU/LinLibertine(0)/m/n/10.9
+5 , \TU/LinLibertine(0)/m/it/10.95 VwProductInstance.java\TU/LinLibertine(0)/m/
+n/10.95 , \TU/LinLibertine(0)/m/it/10.95 VwProductServiceType.java\TU/LinLibert
+ine(0)/m/n/10.95 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1203--1266
+\TU/LinLibertine(0)/m/it/10.95 VwPromoConsumTypeDiscount.java\TU/LinLibertine(0
+)/m/n/10.95 , \TU/LinLibertine(0)/m/it/10.95 VwPromotionFeeTypeDiscount.java\TU
+/LinLibertine(0)/m/n/10.95 ,
+ []
+
+
+Overfull \hbox (86.22635pt too wide) in alignment at lines 1189--1280
+ [] [] 
+ []
+
+[86]) [87]
 No file memoria_tfg.acr.
 No file memoria_tfg.gls.
+! Undefined control sequence.
+<argument> \bibconf 
+                    ,bibliografia/bibliografia
+l.119 ...raphy{\bibconf,bibliografia/bibliografia}
+                                                  
+The control sequence at the end of the top line
+of your error message was never \def'ed. If you have
+misspelled it (e.g., `\hobx'), type `I' and the correct
+spelling (e.g., `I\hbox'). Otherwise just continue,
+and I'll forget about whatever was undefined.
+
 No file memoria_tfg.bbl.
-[79
+[88
 
 
 ]
@@ -3042,25 +3023,22 @@ LaTeX Info: Redefining \ttfamily on input line 15.
 )
 (./contido/introducion.aux) (./contido/teoria.aux)
 (./contido/apartado-tecnico.aux) (./contido/analisis-disenho.aux)
-(./contido/implementacion.aux) (./contido/planificacion.aux)
-(./contido/conclusions.aux) (./anexos/adicional.aux) (./anexos/ref_tecnica.aux)
-)
-
-LaTeX Warning: There were undefined references.
-
+(./contido/implementacion.aux) (./contido/pruebas.aux)
+(./contido/planificacion.aux) (./contido/conclusions.aux)
+(./anexos/adicional.aux) (./anexos/ref_tecnica.aux))
 
 LaTeX Warning: There were multiply-defined labels.
 
 Package rerunfilecheck Info: File `memoria_tfg.out' has not changed.
-(rerunfilecheck)             Checksum: 93751EC37405D1773404DFFAAFE655A9;5237.
+(rerunfilecheck)             Checksum: E6186E7CCE838A40956C7076AA0FE8CE;6302.
  ) 
 Here is how much of TeX's memory you used:
- 39962 strings out of 476191
- 810762 string characters out of 5812072
- 1132279 words of memory out of 5000000
- 59983 multiletter control sequences out of 15000+600000
+ 40095 strings out of 476191
+ 814007 string characters out of 5812072
+ 1136157 words of memory out of 5000000
+ 60102 multiletter control sequences out of 15000+600000
  481726 words of font info for 124 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  106i,13n,145p,1494b,695s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on memoria_tfg.pdf (89 pages).
+Output written on memoria_tfg.pdf (99 pages).

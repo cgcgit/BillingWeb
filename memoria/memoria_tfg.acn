@@ -269,6 +269,7 @@
 \glossaryentry{JSF?\glossentry{jsf}|setentrycounter[]{page}"\glsnumberformat}{41}
 \glossaryentry{MVC?\glossentry{mvc}|setentrycounter[]{page}"\glsnumberformat}{41}
 \glossaryentry{MVC?\glossentry{mvc}|setentrycounter[]{page}"\glsnumberformat}{41}
+\glossaryentry{POJO?\glossentry{pojo}|setentrycounter[]{page}"\glsnumberformat}{42}
 \glossaryentry{Jakarta EE?\glossentry{jee}|setentrycounter[]{page}"\glsnumberformat}{43}
 \glossaryentry{IDE?\glossentry{ide}|setentrycounter[]{page}"\glsnumberformat}{43}
 \glossaryentry{IDE?\glossentry{ide}|setentrycounter[]{page}"\glsnumberformat}{43}
@@ -276,4 +277,10 @@
 \glossaryentry{UML?\glossentry{uml}|setentrycounter[]{page}"\glsnumberformat}{44}
 \glossaryentry{UML?\glossentry{uml}|setentrycounter[]{page}"\glsnumberformat}{44}
 \glossaryentry{UML?\glossentry{uml}|setentrycounter[]{page}"\glsnumberformat}{44}
-\glossaryentry{TFG?\glossentry{tfg}|setentrycounter[]{page}"\glsnumberformat}{52}
+\glossaryentry{TFG?\glossentry{tfg}|setentrycounter[]{page}"\glsnumberformat}{48}
+\glossaryentry{Jakarta EE?\glossentry{jee}|setentrycounter[]{page}"\glsnumberformat}{48}
+\glossaryentry{TFG?\glossentry{tfg}|setentrycounter[]{page}"\glsnumberformat}{53}
+\glossaryentry{XHTML?\glossentry{xhtml}|setentrycounter[]{page}"\glsnumberformat}{85}
+\glossaryentry{XHTML?\glossentry{xhtml}|setentrycounter[]{page}"\glsnumberformat}{86}
+\glossaryentry{XHTML?\glossentry{xhtml}|setentrycounter[]{page}"\glsnumberformat}{86}
+\glossaryentry{JOOQ?\glossentry{jooq}|setentrycounter[]{page}"\glsnumberformat}{86}

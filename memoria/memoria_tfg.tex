@@ -35,7 +35,7 @@
 % \usepackage{float}       % permite máis opcións para controlar obxectos flotantes (táboas, figuras)
 % \usepackage{hhline}      % permite personalizar as liñas horizontais en arrays e táboas
 \usepackage{longtable}   % permite construir táboas que ocupan máis dunha páxina
-% \usepackage{lscape}      % permite colocar partes do documento en orientación apaisada
+\usepackage{lscape}      % permite colocar partes do documento en orientación apaisada
 % \usepackage{moreverb}    % permite personalizar o entorno verbatim
 % \usepackage{multirow}    % permite crear celdas que ocupan varias filas da mesma táboa
 % \usepackage{pdfpages}    % permite insertar ficheiros en PDF no documento
@@ -69,7 +69,6 @@
  \begin{agradecementos}
  Mi gratitud incondicional a todas y cada una de las personas que han colaborado en la realización de este trabajo.\\ 
  A mi tutor de proyecto, Emilio José Padrón González por aceptar mi propuesta de TFG y conseguir que la llevara a cabo con su continua comprensión, apoyo y motivación para finalizar este trabajo.\\
- A mis compañeros de CAIT quienes con su apoyo y ayuda desinteresada facilitaron enormemente que esta ampliación de estudios pudiera materializarse.\\
  A mis amigos que siempre tuvieron palabras de ánimo en los momentos en los que compaginar trabajo y estudios se tornaba un imposible. \\
  A mi familia, por su apoyo y confianza incondicional en todo lo que emprendo. \\
  A todos, gracias.
@@ -97,6 +96,7 @@
  \include{contido/apartado-tecnico}
  \include{contido/analisis-disenho} 
  \include{contido/implementacion} 
+ \include{contido/pruebas} 
  \include{contido/planificacion}
 %\include{contido/...}
  \include{contido/conclusions}
@@ -116,6 +116,7 @@
 
  \bibliographystyle{IEEEtranN}
  \bibliography{\bibconfig,bibliografia/bibliografia}
+
  \clearpage
  
 \end{document}

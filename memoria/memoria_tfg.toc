@@ -32,7 +32,7 @@
 \contentsline {subsection}{\numberline {3.2.6}Log4j}{25}{subsection.3.2.6}%
 \contentsline {section}{\numberline {3.3}Formatos de almacenamiento. PostgreSQL}{25}{section.3.3}%
 \contentsline {subsection}{\numberline {3.3.1}Historia}{25}{subsection.3.3.1}%
-\contentsline {subsubsection}{Inicios. POSTGRES}{25}{subsubsection*.16}%
+\contentsline {subsubsection}{Inicios. POSTGRES}{26}{subsubsection*.16}%
 \contentsline {subsubsection}{Postgres95}{26}{subsubsection*.17}%
 \contentsline {subsubsection}{PostgreSQL}{26}{subsubsection*.18}%
 \contentsline {subsection}{\numberline {3.3.2}Características}{26}{subsection.3.3.2}%
@@ -48,45 +48,52 @@
 \contentsline {paragraph}{Tipo de cliente}{31}{paragraph*.27}%
 \contentsline {paragraph}{Tipo de cuenta}{31}{paragraph*.28}%
 \contentsline {subsection}{\numberline {4.1.2}Contratación}{32}{subsection.4.1.2}%
-\contentsline {subsubsection}{Elementos de parametrización}{32}{subsubsection*.30}%
-\contentsline {paragraph}{Entidades}{32}{paragraph*.31}%
-\contentsline {paragraph}{Clases de consumo}{32}{paragraph*.32}%
-\contentsline {paragraph}{Estado}{32}{paragraph*.33}%
-\contentsline {paragraph}{Nivel de aplicación}{32}{paragraph*.34}%
-\contentsline {paragraph}{Tipos de descuento}{32}{paragraph*.35}%
-\contentsline {paragraph}{Tipos de pago}{32}{paragraph*.36}%
-\contentsline {paragraph}{Período de facturación}{33}{paragraph*.37}%
-\contentsline {paragraph}{Tipo impositivo}{33}{paragraph*.38}%
-\contentsline {paragraph}{Tipo de documento de identificación}{33}{paragraph*.39}%
+\contentsline {subsection}{\numberline {4.1.3}Elementos de parametrización}{32}{subsection.4.1.3}%
+\contentsline {paragraph}{Entidades}{32}{paragraph*.30}%
+\contentsline {paragraph}{Clases de consumo}{32}{paragraph*.31}%
+\contentsline {paragraph}{Estado}{32}{paragraph*.32}%
+\contentsline {paragraph}{Nivel de aplicación}{32}{paragraph*.33}%
+\contentsline {paragraph}{Tipos de descuento}{32}{paragraph*.34}%
+\contentsline {paragraph}{Tipos de pago}{32}{paragraph*.35}%
+\contentsline {paragraph}{Período de facturación}{33}{paragraph*.36}%
+\contentsline {paragraph}{Tipo impositivo}{33}{paragraph*.37}%
+\contentsline {paragraph}{Tipo de documento de identificación}{33}{paragraph*.38}%
 \contentsline {section}{\numberline {4.2}Casos de uso}{33}{section.4.2}%
 \contentsline {subsection}{\numberline {4.2.1}Actores}{33}{subsection.4.2.1}%
 \contentsline {subsection}{\numberline {4.2.2}Casos de uso}{34}{subsection.4.2.2}%
 \contentsline {section}{\numberline {4.3}Diseño}{39}{section.4.3}%
 \contentsline {subsection}{\numberline {4.3.1}Arquitectura en tres niveles}{39}{subsection.4.3.1}%
-\contentsline {paragraph}{Nivel de presentación}{40}{paragraph*.48}%
-\contentsline {paragraph}{Nivel de aplicación}{40}{paragraph*.49}%
-\contentsline {paragraph}{Nivel de datos}{40}{paragraph*.50}%
+\contentsline {paragraph}{Nivel de presentación}{40}{paragraph*.47}%
+\contentsline {paragraph}{Nivel de aplicación}{40}{paragraph*.48}%
+\contentsline {paragraph}{Nivel de datos}{40}{paragraph*.49}%
 \contentsline {subsection}{\numberline {4.3.2}Patrones utilizados}{41}{subsection.4.3.2}%
-\contentsline {paragraph}{Patrón modelo vista controlador}{41}{paragraph*.52}%
-\contentsline {paragraph}{Composite View}{42}{paragraph*.54}%
+\contentsline {paragraph}{Patrón modelo vista controlador}{41}{paragraph*.51}%
+\contentsline {paragraph}{Composite View}{42}{paragraph*.53}%
+\contentsline {paragraph}{DTO - Data Transfer Object}{42}{paragraph*.54}%
 \contentsline {paragraph}{DAO - Data Access Object}{42}{paragraph*.55}%
 \contentsline {chapter}{\numberline {5}Implementación}{43}{chapter.5}%
 \contentsline {section}{\numberline {5.1}Hardware Utilizado}{43}{section.5.1}%
 \contentsline {section}{\numberline {5.2}Software Utilizado}{43}{section.5.2}%
-\contentsline {chapter}{\numberline {6}Implementación}{45}{chapter.6}%
-\contentsline {section}{\numberline {6.1}Fases del proyecto}{45}{section.6.1}%
-\contentsline {section}{\numberline {6.2}Costes estimados}{46}{section.6.2}%
-\contentsline {chapter}{\numberline {7}Conclusións}{47}{chapter.7}%
-\contentsline {chapter}{\numberline {A}Material adicional}{50}{appendix.A}%
-\contentsline {chapter}{\numberline {B}Referencia técnica}{52}{appendix.B}%
-\contentsline {section}{\numberline {B.1}Casos de uso}{52}{section.B.1}%
-\contentsline {subsection}{\numberline {B.1.1}Actores}{53}{subsection.B.1.1}%
-\contentsline {subsection}{\numberline {B.1.2}Casos de uso}{53}{subsection.B.1.2}%
-\contentsline {subsubsection}{Caso de uso de acceso al sistema}{53}{subsubsection*.61}%
-\contentsline {subsubsection}{Casos de uso genéricos (búsqueda, creación, edición, borrado, etc.}{56}{subsubsection*.64}%
-\contentsline {paragraph}{Casos de uso Gestionar ficha personal}{68}{paragraph*.81}%
-\contentsline {subsubsection}{Casos de uso Acceder a parametrización}{71}{subsubsection*.85}%
-\contentsline {subsubsection}{Casos de uso Acceder a catálogo}{72}{subsubsection*.87}%
-\contentsline {subsubsection}{Casos de uso Acceder a relaciones del catálogo}{74}{subsubsection*.90}%
-\contentsline {subsubsection}{Caso de uso Acceder a instancia}{76}{subsubsection*.93}%
-\contentsline {subsubsection}{Caso de uso Gestionar usuarios}{77}{subsubsection*.95}%
+\contentsline {chapter}{\numberline {6}Pruebas de software}{45}{chapter.6}%
+\contentsline {chapter}{\numberline {7}Planificación temporal y estimación de costes}{46}{chapter.7}%
+\contentsline {section}{\numberline {7.1}Fases del proyecto}{46}{section.7.1}%
+\contentsline {section}{\numberline {7.2}Costes estimados}{47}{section.7.2}%
+\contentsline {chapter}{\numberline {8}Conclusións}{48}{chapter.8}%
+\contentsline {section}{\numberline {8.1}Líneas futuras}{49}{section.8.1}%
+\contentsline {chapter}{\numberline {A}Material adicional}{51}{appendix.A}%
+\contentsline {chapter}{\numberline {B}Referencia técnica}{53}{appendix.B}%
+\contentsline {section}{\numberline {B.1}Casos de uso}{53}{section.B.1}%
+\contentsline {subsection}{\numberline {B.1.1}Actores}{54}{subsection.B.1.1}%
+\contentsline {subsection}{\numberline {B.1.2}Casos de uso}{54}{subsection.B.1.2}%
+\contentsline {subsubsection}{Caso de uso de acceso al sistema}{54}{subsubsection*.61}%
+\contentsline {subsubsection}{Casos de uso genéricos (búsqueda, creación, edición, borrado, etc.}{57}{subsubsection*.64}%
+\contentsline {paragraph}{Casos de uso Gestionar ficha personal}{71}{paragraph*.81}%
+\contentsline {subsubsection}{Casos de uso Acceder a parametrización}{73}{subsubsection*.85}%
+\contentsline {subsubsection}{Casos de uso Acceder a catálogo}{74}{subsubsection*.87}%
+\contentsline {subsubsection}{Casos de uso Acceder a relaciones del catálogo}{76}{subsubsection*.90}%
+\contentsline {subsubsection}{Caso de uso Acceder a instancia}{79}{subsubsection*.93}%
+\contentsline {subsubsection}{Caso de uso Gestionar usuarios}{81}{subsubsection*.95}%
+\contentsline {section}{\numberline {B.2}Diagrama E-R}{81}{section.B.2}%
+\contentsline {section}{\numberline {B.3}Estructura del código}{85}{section.B.3}%
+\contentsline {subsection}{\numberline {B.3.1}Directorio /src/main/resources - Recursos de la aplicacion}{85}{subsection.B.3.1}%
+\contentsline {subsection}{\numberline {B.3.2}Directorio /target/generated-sources/jooq - Clases generadas}{86}{subsection.B.3.2}%
