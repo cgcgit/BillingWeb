@@ -1,0 +1,2335 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+
+<f:metadata>
+	<f:viewAction id="defaultControlVariables"
+		action="#{feeController.setInitVariablesToDefault()}"
+		phase="INVOKE_APPLICATION">
+	</f:viewAction>
+
+</f:metadata>
+
+<title>#{pageTitle.hierarchyPage}</title>
+
+<body>
+	<h:outputStylesheet library="webjars"
+		name="primeflex/2.0.0/primeflex.min.css" />
+
+
+	<header>
+		<ui:include id="mainTemplate"
+			src="/WEB-INF/templates/mainTemplate.xhtml">
+			<ui:param name="title" value="HIERARCHY CONTRACT VIEW" />
+		</ui:include>
+	</header>
+	<h:form id="form">
+		<p:growl id="growlMessage" showDetail="true" keepAlive="true">
+			<p:autoUpdate />
+		</p:growl>
+
+		<p:remoteCommand id="remoteCommandUpdateDataTable"
+			name="updateDataTable" process="@this" update="form:tree" />
+
+		<p:remoteCommand id="remoteCommandUpdateHierachyInfoPanel"
+			name="updateHierarchyInfoPanel" process="@this"
+			update="form:hierarchyInfoPanel" />
+
+
+		<p:remoteCommand id="remoteCommandUpdateCustomerDataTable"
+			name="updateCustomerDataTable" process="@this"
+			update="form:customerTable" />
+
+		<p:remoteCommand id="remoteCommandUpdateHistoricCustomerDataTable"
+			name="updateHistoricCustomerDataTable" process="@this"
+			update="form:historicCustomerTable" />
+
+		<!--  SEARCH DATA AREA  -->
+		<p:accordionPanel id="accordionPanel" multiple="true"
+			widgetVar="multipleAccordionPanelWidget">
+
+			<p:tab id="searchPanel"
+				titleStyle="background: WhiteSmoke; color: black"
+				title="SEARCH CRITERIA">
+				<p:panelGrid columns="2"
+					columnClasses="ui-grid-col-10,ui-grid-col-2" layout="grid"
+					style="border:0px none; background-color:transparent;">
+					<p:panel>
+						<p:panelGrid columns="6" columnClasses="ui-grid-col-3"
+							layout="flex" contentStyleClass="align-items-baseline ui-fluid"
+							style="border:0px none; background-color:transparent; align:left">
+
+							<p:panel header="Account Data">
+								<p:outputLabel id="contractNrLabel" for="contractNrCriteria"
+									value="Contract Nr:" />
+								<p:inputText id="contractNrCriteria" inmediate="true"
+									value="#{hierarchyController.searchContractNr}">
+									<p:ajax event="valueChange" immediate="true" process="@this" />
+								</p:inputText>
+
+								<p:outputLabel id="accountIdLabel" for="accountIdCriteria"
+									value="Account Id:" />
+								<p:inputNumber id="accountIdCriteria" maxlength="10"
+									inmediate="true" value="#{hierarchyController.searchAccountId}"
+									decimalPlaces="0">
+									<p:ajax event="valueChange" immediate="true" process="@this" />
+								</p:inputNumber>
+
+								<p:outputLabel id="accountIdCardLabel"
+									for="accountIdCardCriteria" value="Account Identity Card:" />
+								<p:inputText id="accountIdCardCriteria" inmediate="true"
+									value="#{hierarchyController.searchAccountIdentityCard}">
+									<p:ajax event="valueChange" immediate="true" process="@this" />
+								</p:inputText>
+							</p:panel>
+							<p:panel header="Customer Data">
+								<p:outputLabel id="customerIdLabel" for="customerIdCriteria"
+									value="customer Id:" />
+								<p:inputNumber id="customerIdCriteria" maxlength="10"
+									inmediate="true"
+									value="#{hierarchyController.searchCustomerId}"
+									decimalPlaces="0">
+									<p:ajax event="valueChange" immediate="true" process="@this" />
+								</p:inputNumber>
+
+								<p:outputLabel id="customerIdCardLabel"
+									for="customerIdCardCriteria" value="Customer Identity Card:" />
+								<p:inputText id="customerIdCardCriteria" inmediate="true"
+									value="#{hierarchyController.searchCustomerIdentityCard}">
+									<p:ajax event="valueChange" immediate="true" process="@this" />
+								</p:inputText>
+							</p:panel>
+
+							<p:panel header="Product Data">
+								<p:outputLabel id="productIdLabel" for="productIdCriteria"
+									value="Product Id:" />
+								<p:inputNumber id="productIdCriteria" maxlength="10"
+									inmediate="true" value="#{hierarchyController.searchProductId}"
+									decimalPlaces="0">
+									<p:ajax event="valueChange" immediate="true" process="@this" />
+								</p:inputNumber>
+							</p:panel>
+
+							<p:panel header="Service Data">
+								<p:outputLabel id="serviceNrLabel" for="serviceNrCriteria"
+									value="Service Nr:" />
+								<p:inputText id="serviceNrCriteria" inmediate="true"
+									value="#{hierarchyController.searchServiceNr}">
+									<p:ajax event="valueChange" immediate="true" process="@this" />
+								</p:inputText>
+							</p:panel>
+
+							<p:panel>
+								<p:panel header="Search Date" styleClass="p-mx-3 p-my-2">
+									<p:outputLabel id="dateSearchLabel" for="searchDate"
+										value="Search Date:" />
+									<p:inputMask id="searchDate" required="true" immediate="true"
+										value="#{hierarchyController.searchDate}" mask="99/99/9999"
+										requiredMessage="The date value to search is null. Please fill the search date field">
+										<f:converter
+											converterId="com.comasw.converter.localDateTimeConverter" />
+										<p:ajax event="valueChange" immediate="true" process="@this" />
+									</p:inputMask>
+								</p:panel>
+								<p:commandButton id="searchDataButton" value="Search"
+									icon="#{uiValue.searchIcon}"
+									actionListener="#{hierarchyController.pushSearchButton()}"
+									ajax="true" update=":form:growlMessage" style="width:7rem"
+									oncomplete="{updateDataTable(); updateHierarchyInfoPanel()}" styleClass="p-mx-3"
+									class="ui-button-success rounded-button">
+								</p:commandButton>
+							</p:panel>
+						</p:panelGrid>
+					</p:panel>
+				</p:panelGrid>
+			</p:tab>
+		</p:accordionPanel>
+
+		<p:panelGrid id="hierarchy" columns="2"
+			columnClasses="ui-grid-col-2,ui-grid-col-10" layout="grid"
+			style="border:0px none; background-color:transparent;">
+
+			<p:tree id="tree" value="#{hierarchyController.tree}" var="tree"
+				selectionMode="single"
+				selection="#{hierarchyController.selectedNode}">
+				<p:ajax event="expand" update=":form:growlMessage"
+					listener="#{hierarchyController.onNodeExpand}" />
+				<p:ajax event="collapse" update=":form:growlMessage"
+					listener="#{hierarchyController.onNodeCollapse}" />
+				<p:ajax event="select" update=":form:growlMessage"
+					listener="#{hierarchyController.onNodeSelect}"
+					oncomplete="{updateHierarchyInfoPanel(); updateCustomerDataTable(); updateHistoricCustomerDataTable()}" />
+				<p:ajax event="unselect" update=":form:growlMessage"
+					listener="#{hierarchyController.onNodeUnselect}" />
+
+				<p:treeNode expandedIcon="pi pi-folder-open"
+					collapsedIcon="pi pi-folder">
+				</p:treeNode>
+				<p:treeNode type="customer" icon="pi pi-user">
+					<h:outputText value="#{tree.customerIdentityCard}" />
+				</p:treeNode>
+				<p:treeNode type="account" icon="pi pi-wallet">
+					<h:outputText value="#{tree.accountCode}" />
+				</p:treeNode>
+				<p:treeNode type="product" icon="pi pi-th-large">
+					<h:outputText value="#{tree.productCode}" />
+				</p:treeNode>
+				<p:treeNode type="service" icon="pi pi-phone">
+					<h:outputText value="#{tree.serviceNumber}" />
+				</p:treeNode>
+				<p:treeNode type="feeProduct" icon="pi pi-euro">
+					<h:outputText value="#{tree.feeCode}" />
+				</p:treeNode>
+				<p:treeNode type="promotionProduct" icon="pi pi-percentage">
+					<h:outputText value="#{tree.promotionCode}" />
+				</p:treeNode>
+				<p:treeNode type="feeService" icon="pi pi-euro">
+					<h:outputText value="#{tree.feeCode}" />
+				</p:treeNode>
+				<p:treeNode type="promotionService" icon="pi pi-percentage">
+					<h:outputText value="#{tree.promotionCode}" />
+				</p:treeNode>
+			</p:tree>
+
+
+
+			<p:panel id="hierarchyInfoPanel"
+				visible="#{hierarchyController.showCustomerInfo}"
+				header="HIERARCHY INFO">
+
+				<p:dataTable id="customerTable" widgetVar="customerTableWidget"
+					rendered="#{hierarchyController.showCustomerInfo}"
+					var="customerDataTable"
+					value="#{hierarchyController.customerDataList}" size="small"
+					scrollable="true" resizableColumns="true"
+					emptyMessage="No data to show" showGridlines="true"
+					paginatorPosition="bottom">
+
+					<f:facet name="header">				
+							CUSTOMER DATA	
+						</f:facet>
+
+					<p:column id="customerId"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ID" rendered="true">
+						<h:outputText id="customerIdText"
+							value="#{customerDataTable.customerId}" />
+					</p:column>
+
+
+					<p:column id="customerStartDateHist"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="START DATE" rendered="true">
+						<h:outputText id="customerStartDateOutputHist"
+							value="#{customerDataTable.customerStartDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="customerEndDateHist"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="END DATE" rendered="true">
+
+						<h:outputText id="customerEndDateOutputHist"
+							value="#{customerDataTable.customerEndDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="customerType"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="TYPE" rendered="true">
+						<p:selectOneMenu id="customerTypeOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{customerDataTable.customerTypeId}">
+							<f:selectItems id="selectItemsCustomerTypeOutput"
+								itemDisabled="true" var="IdentityCardType"
+								value="#{hierarchyController.customerTypeSelectItems()}"
+								itemValue="#{customerDataTable.customerTypeId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column id="customerTypeDescription"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="TYPE DESCR." rendered="true">
+						<h:outputText id="customerTypeDescriptionText"
+							value="#{customerDataTable.customerTypeDescription}" />
+					</p:column>
+
+					<p:column id="status"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="STATUS" rendered="true">
+						<p:selectOneMenu id="StatusOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{customerDataTable.customerStatusId}">
+							<f:selectItems id="selectItemsStatusOutput" itemDisabled="true"
+								var="Status"
+								value="#{hierarchyController.statusInstanceSelectItems()}"
+								itemValue="#{customerDataTable.customerStatusId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column id="activeDate"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ACTIVE DATE" rendered="true">
+						<h:outputText id="activeDateText"
+							value="#{customerDataTable.customerActiveDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="cancelledDate"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CANCELLED DATE" rendered="true">
+						<h:outputText id="cancelledDateText"
+							value="#{customerDataTable.customerCancelledDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="customerName"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="NAME" rendered="true">
+						<h:outputText id="customerNameText"
+							value="#{customerDataTable.customerGivenName}" />
+					</p:column>
+
+					<p:column id="customer1stSurname"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="1st SURNAME" rendered="true">
+						<h:outputText id="customer1stSurnameText"
+							value="#{customerDataTable.customerFirstSurname}" />
+					</p:column>
+
+					<p:column id="customer2ndSurname"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="2nd SURNAME" rendered="true">
+						<h:outputText id="customer2ndSurnameText"
+							value="#{customerDataTable.customerSecondSurname}" />
+					</p:column>
+
+
+					<p:column id="customerIdentityCardType"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;A
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ID. CARD TYPE" rendered="true">
+						<p:selectOneMenu id="customerIdCardTypeOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{customerDataTable.customerIdentityCardTypeId}">
+							<f:selectItems id="selectItemsCustomerIdCardOutput"
+								itemDisabled="true" var="IdentityCardType"
+								value="#{hierarchyController.identityCardTypeSelectItems()}"
+								itemValue="#{customerDataTable.customerIdentityCardTypeId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column id="customerIdentityCard"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ID. CARD" rendered="true">
+						<h:outputText id="idCardText"
+							value="#{customerDataTable.customerIdentityCard}" />
+					</p:column>
+
+					<p:column id="customerContactPhone"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="PHONE" rendered="true">
+						<h:outputText id="customerContactPhoneText"
+							value="#{customerDataTable.customerContactPhone}" />
+					</p:column>
+
+					<p:column id="customereMail"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="E-MAIL" rendered="true">
+						<h:outputText id="customerEMailText"
+							value="#{customerDataTable.customerEMail}" />
+					</p:column>
+
+					<p:column id="customerAddress"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ADDRESS" rendered="true">
+						<h:outputText id="customerAddressText"
+							value="#{customerDataTable.customerAddress}" />
+					</p:column>
+
+					<p:column id="city"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CITY" rendered="true">
+						<h:outputText id="customerCityText"
+							value="#{customerDataTable.customerCity}" />
+					</p:column>
+
+
+					<p:column id="customerState"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="STATE" rendered="true">
+						<h:outputText id="customerStateText"
+							value="#{customerDataTable.customerState}" />
+					</p:column>
+
+					<p:column id="customerCountry"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="COUNTRY" rendered="true">
+						<h:outputText id="customerCountryText"
+							value="#{customerDataTable.customerCountry}" />
+					</p:column>
+
+					<p:column id="customerPostCode"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="POST CODE" rendered="true">
+						<h:outputText id="customerPostCodeText"
+							value="#{customerDataTable.customerPostCode}" />
+					</p:column>
+
+					<p:column id="customerIban"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="IBAN" rendered="true">
+						<h:outputText id="customerIbanText"
+							value="#{customerDataTable.customerIban}" />
+					</p:column>
+
+					<p:column id="customerBankEntity"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="B. ENTITY" rendered="true">
+						<h:outputText id="customerBankEntityText"
+							value="#{customerDataTable.customerBankEntity}" />
+					</p:column>
+
+					<p:column id="customerBankBranch"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="B. BRANCH" rendered="true">
+						<h:outputText id="customerBankBranchText"
+							value="#{customerDataTable.customerBankBranch}" />
+					</p:column>
+
+					<p:column id="customerBankControlDigit"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="B. CONTROL. D." rendered="true">
+						<h:outputText id="customerBankControlDigitText"
+							value="#{customerDataTable.customerBankControlDigit}" />
+					</p:column>
+
+					<p:column id="customerBankAccountNr"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="B. CUST. NR." rendered="true">
+						<h:outputText id="customerBankAccountNrText"
+							value="#{customerDataTable.customerBankAccountNumber}" />
+					</p:column>
+				</p:dataTable>
+
+
+				<p:dataTable id="accountTable" widgetVar="accountTableWidget"
+					rendered="#{hierarchyController.showAccountInfo}"
+					var="accountDataTable"
+					value="#{hierarchyController.accountDataList}" size="small"
+					scrollable="true" resizableColumns="true"
+					emptyMessage="No data to show" showGridlines="true"
+					paginatorPosition="bottom">
+
+					<f:facet name="header">				
+							ACCOUNT DATA	
+						</f:facet>
+
+					<p:column id="accountCode"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CODE" rendered="true">
+						<h:outputText id="accountIdText"
+							value="#{accountDataTable.accountCode}" />
+					</p:column>
+
+					<p:column id="accountStartDateHist"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="START DATE" rendered="true">
+						<h:outputText id="accountStartDateOutputHist"
+							value="#{accountDataTable.accountStartDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="accountEndDateHist"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="END DATE" rendered="true">
+
+						<h:outputText id="accountEndDateOutputHist"
+							value="#{accountDataTable.accountEndDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+
+					<p:column id="accountType"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ACC. TYPE" rendered="true">
+						<p:selectOneMenu id="accountTypeOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{accountDataTable.accountTypeId}">
+							<f:selectItems id="selectItemsAccountTypeOutput"
+								itemDisabled="true" var="AccountType"
+								value="#{hierarchyController.accountTypeSelectItems()}"
+								itemValue="#{accountDataTable.accountTypeId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column id="accountTypeDescription"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ACC. TYPE DESCR." rendered="true">
+						<h:outputText id="accountTypeDescriptionText"
+							value="#{accountDataTable.accountTypeDescription}" />
+					</p:column>
+
+					<p:column id="accountStatus"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="STATUS" rendered="true">
+						<p:selectOneMenu id="StatusOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{accountDataTable.accountStatusId}">
+							<f:selectItems id="selectItemsStatusOutput" itemDisabled="true"
+								var="Status"
+								value="#{hierarchyController.statusInstanceSelectItems()}"
+								itemValue="#{accountDataTable.accountStatusId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column id="accountActiveDate"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ACTIVE DATE" rendered="true">
+						<h:outputText id="accountActiveDateText"
+							value="#{accountDataTable.accountActiveDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="accountCancelledDate"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CANCELLED DATE" rendered="true">
+						<h:outputText id="accountCancelledDateText"
+							value="#{accountDataTable.accountCancelledDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="ContractNr"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CONTRACT NR" rendered="true">
+						<h:outputText id="accountContractNr"
+							value="#{accountDataTable.contractNumber}" />
+					</p:column>
+
+					<p:column id="accountName"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="NAME" rendered="true">
+						<h:outputText id="accountNameText"
+							value="#{accountDataTable.accountGivenName}" />
+					</p:column>
+
+					<p:column id="account1stSurname"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="1st SURNAME" rendered="true">
+						<h:outputText id="account1stSurnameText"
+							value="#{accountDataTable.accountFirstSurname}" />
+					</p:column>
+
+					<p:column id="account2ndSurname"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="2nd SURNAME" rendered="true">
+						<h:outputText id="account2ndSurnameText"
+							value="#{accountDataTable.accountSecondSurname}" />
+					</p:column>
+
+
+					<p:column id="accountIdentityCardType"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;A
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ID. CARD TYPE" rendered="true">
+						<p:selectOneMenu id="accountIdCardTypeOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{accountDataTable.accountIdentityCardTypeId}">
+							<f:selectItems id="selectItemsAccountIdCardOutput"
+								itemDisabled="true" var="IdentityCardType"
+								value="#{hierarchyController.identityCardTypeSelectItems()}"
+								itemValue="#{accountDataTable.accountIdentityCardTypeId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column id="accountIdentityCard"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ID. CARD" rendered="true">
+						<h:outputText id="idCardText"
+							value="#{accountDataTable.accountIdentityCard}" />
+					</p:column>
+
+					<p:column id="accountContactPhone"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="PHONE" rendered="true">
+						<h:outputText id="accountContactPhoneText"
+							value="#{accountDataTable.accountContactPhone}" />
+					</p:column>
+
+					<p:column id="accounteMail"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="E-MAIL" rendered="true">
+						<h:outputText id="accountEMailText"
+							value="#{accountDataTable.accountEMail}" />
+					</p:column>
+
+					<p:column id="accountAddress"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ADDRESS" rendered="true">
+						<h:outputText id="accountAddressText"
+							value="#{accountDataTable.accountAddress}" />
+					</p:column>
+
+					<p:column id="city"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CITY" rendered="true">
+						<h:outputText id="accountCityText"
+							value="#{accountDataTable.accountCity}" />
+					</p:column>
+
+
+					<p:column id="accountState"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="STATE" rendered="true">
+						<h:outputText id="accountStateText"
+							value="#{accountDataTable.accountState}" />
+					</p:column>
+
+					<p:column id="accountCountry"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="COUNTRY" rendered="true">
+						<h:outputText id="accountCountryText"
+							value="#{accountDataTable.accountCountry}" />
+					</p:column>
+
+					<p:column id="accountPostCode"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="POST CODE" rendered="true">
+						<h:outputText id="accountPostCodeText"
+							value="#{accountDataTable.accountPostCode}" />
+					</p:column>
+
+					<p:column id="accountIban"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="IBAN" rendered="true">
+						<h:outputText id="accountIbanText"
+							value="#{accountDataTable.accountIban}" />
+					</p:column>
+
+					<p:column id="accountBankEntity"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="B. ENTITY" rendered="true">
+						<h:outputText id="accountBankEntityText"
+							value="#{accountDataTable.accountBankEntity}" />
+					</p:column>
+
+					<p:column id="accountBankBranch"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="B. BRANCH" rendered="true">
+						<h:outputText id="accountBankBranchText"
+							value="#{accountDataTable.accountBankBranch}" />
+					</p:column>
+
+					<p:column id="accountBankControlDigit"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="B. CONTROL. D" rendered="true">
+						<h:outputText id="accountBankControlDigitText"
+							value="#{accountDataTable.accountBankControlDigit}" />
+					</p:column>
+
+					<p:column id="accountBankAccountNr"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="B. CUST. NR." rendered="true">
+						<h:outputText id="accountBankAccountNrText"
+							value="#{accountDataTable.accountBankAccountNumber}" />
+					</p:column>
+				</p:dataTable>
+
+				<p:dataTable id="productTable" widgetVar="productTableWidget"
+					rendered="#{hierarchyController.showProductInfo}"
+					var="productDataTable"
+					value="#{hierarchyController.productDataList}" size="small"
+					scrollable="true" resizableColumns="true"
+					emptyMessage="No data to show" showGridlines="true"
+					paginatorPosition="bottom">
+
+					<f:facet name="header">				
+							PRODUCT DATA	
+						</f:facet>
+
+					<p:column id="productCode"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CODE" rendered="true">
+						<h:outputText id="productIdText"
+							value="#{productDataTable.productCode}" />
+					</p:column>
+
+					<p:column id="productStartDateHist"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="START DATE" rendered="true">
+						<h:outputText id="productStartDateOutputHist"
+							value="#{productDataTable.productStartDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="productEndDateHist"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="END DATE" rendered="true">
+
+						<h:outputText id="productEndDateOutputHist"
+							value="#{productDataTable.productEndDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+
+					<p:column id="productType"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="TYPE" rendered="true">
+						<p:selectOneMenu id="productTypeOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{productDataTable.productTypeId}">
+							<f:selectItems id="selectItemsProductTypeOutput"
+								itemDisabled="true" var="ProductType"
+								value="#{hierarchyController.productTypeSelectItems()}"
+								itemValue="#{productDataTable.productTypeId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column id="productTypeDescription"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="TYPE DESCR." rendered="true">
+						<h:outputText id="productTypeDescriptionText"
+							value="#{productDataTable.productTypeDescription}" />
+					</p:column>
+
+					<p:column id="productStatus"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="STATUS" rendered="true">
+						<p:selectOneMenu id="StatusOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{productDataTable.productStatusId}">
+							<f:selectItems id="selectItemsStatusOutput" itemDisabled="true"
+								var="Status"
+								value="#{hierarchyController.statusInstanceSelectItems()}"
+								itemValue="#{productDataTable.productStatusId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column id="productActiveDate"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ACTIVE DATE" rendered="true">
+						<h:outputText id="productActiveDateText"
+							value="#{productDataTable.productActiveDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="productCancelledDate"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CANCELLED DATE" rendered="true">
+						<h:outputText id="productCancelledDateText"
+							value="#{productDataTable.productCancelledDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+
+
+				<p:dataTable id="serviceTable" widgetVar="serviceTableWidget"
+					rendered="#{hierarchyController.showServiceInfo}"
+					var="serviceDataTable"
+					value="#{hierarchyController.serviceDataList}" size="small"
+					scrollable="true" resizableColumns="true"
+					emptyMessage="No data to show" showGridlines="true"
+					paginatorPosition="bottom">
+
+					<f:facet name="header">				
+							SERVICE DATA	
+						</f:facet>
+
+					<p:column id="serviceNR"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="NUMBER" rendered="true">
+						<h:outputText id="serviceIdText"
+							value="#{serviceDataTable.serviceNumber}" />
+					</p:column>
+
+					<p:column id="serviceStartDateHist"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="START DATE" rendered="true">
+						<h:outputText id="serviceStartDateOutputHist"
+							value="#{serviceDataTable.serviceStartDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="serviceEndDateHist"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="END DATE" rendered="true">
+
+						<h:outputText id="serviceEndDateOutputHist"
+							value="#{serviceDataTable.serviceEndDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+
+					<p:column id="serviceType"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="TYPE" rendered="true">
+						<p:selectOneMenu id="serviceTypeOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{serviceDataTable.serviceTypeId}">
+							<f:selectItems id="selectItemsServiceTypeOutput"
+								itemDisabled="true" var="ServiceType"
+								value="#{hierarchyController.serviceTypeSelectItems()}"
+								itemValue="#{serviceDataTable.serviceTypeId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column id="serviceTypeDescription"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="TYPE DESCR." rendered="true">
+						<h:outputText id="serviceTypeDescriptionText"
+							value="#{serviceDataTable.serviceTypeDescription}" />
+					</p:column>
+
+					<p:column id="serviceStatus"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="STATUS" rendered="true">
+						<p:selectOneMenu id="StatusOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{serviceDataTable.serviceStatusId}">
+							<f:selectItems id="selectItemsStatusOutput" itemDisabled="true"
+								var="Status"
+								value="#{hierarchyController.statusInstanceSelectItems()}"
+								itemValue="#{serviceDataTable.serviceStatusId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column id="serviceActiveDate"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ACTIVE DATE" rendered="true">
+						<h:outputText id="serviceActiveDateText"
+							value="#{serviceDataTable.serviceActiveDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="serviceCancelledDate"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CANCELLED DATE" rendered="true">
+						<h:outputText id="serviceCancelledDateText"
+							value="#{serviceDataTable.serviceCancelledDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+
+				<!--  HISTORIC DATA -->
+
+				<p:dataTable id="historicCustomerTable"
+					widgetVar="historicCustomerTableWidget"
+					rendered="#{hierarchyController.showCustomerHistoricInfo}"
+					var="historicCustomerDataTable"
+					value="#{hierarchyController.customerHistoricDataList}"
+					size="small" scrollable="true" resizableColumns="true"
+					emptyMessage="No data to show" showGridlines="true"
+					paginator="true"
+						rows="4" paginatorPosition="bottom">
+
+					<f:facet name="header">				
+							HISTORIC CUSTOMER DATA	
+						</f:facet>
+
+					<p:column id="historicCustomerId"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ID" rendered="true">
+						<h:outputText id="historicCustomerIdText"
+							value="#{historicCustomerDataTable.customerId}" />
+					</p:column>
+
+					<p:column id="historicCustomerStartDateHist"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="START DATE" rendered="true">
+						<h:outputText id="historicCustomerStartDateOutputHist"
+							value="#{historicCustomerDataTable.startDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="historicCustomerEndDateHist"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="END DATE" rendered="true">
+
+						<h:outputText id="historicCustomerEndDateOutputHist"
+							value="#{historicCustomerDataTable.endDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+
+					<p:column id="historicCustomerType"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="TYPE" rendered="true">
+						<p:selectOneMenu id="historicCustomerTypeOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{historicCustomerDataTable.customerTypeId}">
+							<f:selectItems id="historicSelectItemsCustomerTypeOutput"
+								itemDisabled="true" var="IdentityCardType"
+								value="#{hierarchyController.customerTypeSelectItems()}"
+								itemValue="#{historicCustomerDataTable.customerTypeId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+
+					<p:column id="historicCustomerStatus"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="STATUS" rendered="true">
+						<p:selectOneMenu id="historicCustomerStatusOutput"
+							editable="false" disabled="true" immediate="true"
+							value="#{historicCustomerDataTable.statusId}">
+							<f:selectItems id="historicSelectItemsStatusOutput"
+								itemDisabled="true" var="Status"
+								value="#{hierarchyController.statusInstanceSelectItems()}"
+								itemValue="#{historicCustomerDataTable.statusId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column id="historicCustomerActiveDate"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ACTIVE DATE" rendered="true">
+						<h:outputText id="historicCustomerActiveDateText"
+							value="#{historicCustomerDataTable.activeDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="historicCustomerCancelledDate"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CANCELLED DATE" rendered="true">
+						<h:outputText id="historicCustomerCancelledDateText"
+							value="#{historicCustomerDataTable.cancelledDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="historicCustomerName"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="NAME" rendered="true">
+						<h:outputText id="historicCustomerNameText"
+							value="#{historicCustomerDataTable.givenName}" />
+					</p:column>
+
+					<p:column id="historicCustomer1stSurname"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="1st SURNAME" rendered="true">
+						<h:outputText id="historicCustomer1stSurnameText"
+							value="#{historicCustomerDataTable.firstSurname}" />
+					</p:column>
+
+					<p:column id="historicCustomer2ndSurname"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="2nd SURNAME" rendered="true">
+						<h:outputText id="historicCustomer2ndSurnameText"
+							value="#{historicCustomerDataTable.secondSurname}" />
+					</p:column>
+
+
+					<p:column id="historicCustomerIdentityCardType"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;A
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ID. CARD TYPE" rendered="true">
+						<p:selectOneMenu id="historicCustomerIdCardTypeOutput"
+							editable="false" disabled="true" immediate="true"
+							value="#{historicCustomerDataTable.identityCardTypeId}">
+							<f:selectItems id="historicSelectItemsCustomerIdCardOutput"
+								itemDisabled="true" var="IdentityCardType"
+								value="#{hierarchyController.identityCardTypeSelectItems()}"
+								itemValue="#{historicCustomerDataTable.identityCardTypeId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column id="historicCustomerIdentityCard"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ID. CARD" rendered="true">
+						<h:outputText id="historicCustomerIdCardText"
+							value="#{historicCustomerDataTable.identityCard}" />
+					</p:column>
+
+					<p:column id="historicCustomerContactPhone"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="PHONE" rendered="true">
+						<h:outputText id="historicCustomerContactPhoneText"
+							value="#{historicCustomerDataTable.contactPhone}" />
+					</p:column>
+
+					<p:column id="historicCustomerEMail"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="E-MAIL" rendered="true">
+						<h:outputText id="historicCustomerEMailText"
+							value="#{historicCustomerDataTable.EMail}" />
+					</p:column>
+
+					<p:column id="historicCustomerAddress"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ADDRESS" rendered="true">
+						<h:outputText id="historicCustomerAddressText"
+							value="#{historicCustomerDataTable.address}" />
+					</p:column>
+
+					<p:column id="historicCustomerCity"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CITY" rendered="true">
+						<h:outputText id="historicCustomerCityText"
+							value="#{historicCustomerDataTable.city}" />
+					</p:column>
+
+
+					<p:column id="historicCustomerState"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="STATE" rendered="true">
+						<h:outputText id="hisoricCustomerStateText"
+							value="#{historicCustomerDataTable.state}" />
+					</p:column>
+
+					<p:column id="historicCustomerCountry"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="COUNTRY" rendered="true">
+						<h:outputText id="historicCustomerCountryText"
+							value="#{historicCustomerDataTable.country}" />
+					</p:column>
+
+					<p:column id="historicCustomerPostCode"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="POST CODE" rendered="true">
+						<h:outputText id="historicCustomerPostCodeText"
+							value="#{historicCustomerDataTable.postCode}" />
+					</p:column>
+
+					<p:column id="historicCustomerIban"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="IBAN" rendered="true">
+						<h:outputText id="historicCustomerIbanText"
+							value="#{historicCustomerDataTable.iban}" />
+					</p:column>
+
+					<p:column id="historicCustomerBankEntity"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="B. ENTITY" rendered="true">
+						<h:outputText id="historicCustomerBankEntityText"
+							value="#{historicCustomerDataTable.bankEntity}" />
+					</p:column>
+
+					<p:column id="historicCustomerBankBranch"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="B. BRANCH" rendered="true">
+						<h:outputText id="historicCustomerBankBranchText"
+							value="#{historicCustomerDataTable.bankBranch}" />
+					</p:column>
+
+					<p:column id="historicCustomerBankControlDigit"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="B. CONTROL. D." rendered="true">
+						<h:outputText id="historicCustomerBankControlDigitText"
+							value="#{historicCustomerDataTable.bankControlDigit}" />
+					</p:column>
+
+					<p:column id="historicCustomerBankAccountNr"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="B. CUST. NR." rendered="true">
+						<h:outputText id="historicCustomerBankAccountNrText"
+							value="#{historicCustomerDataTable.bankAccountNumber}" />
+					</p:column>
+				</p:dataTable>
+
+
+				<p:dataTable id="historicAccountTable"
+					widgetVar="historicAccountTableWidget"
+					rendered="#{hierarchyController.showAccountHistoricInfo}"
+					var="historicAccountDataTable"
+					value="#{hierarchyController.accountHistoricDataList}" size="small"
+					scrollable="true" resizableColumns="true"
+					emptyMessage="No data to show" showGridlines="true"
+					paginator="true"
+						rows="4" paginatorPosition="bottom">
+
+					<f:facet name="header">				
+							HISTORIC ACCOUNT DATA	
+						</f:facet>
+
+					<p:column id="historicAccountCode"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CODE " rendered="true">
+						<h:outputText id="historicAccountCodeText"
+							value="#{historicAccountDataTable.code}" />
+					</p:column>
+
+
+					<p:column id="historicAccountStartDateHist"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="START DATE" rendered="true">
+						<h:outputText id="historicAccountStartDateOutputHist"
+							value="#{historicAccountDataTable.startDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="historicAccountEndDateHist"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="END DATE" rendered="true">
+
+						<h:outputText id="historicAccountEndDateOutputHist"
+							value="#{historicAccountDataTable.endDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="historicAccountType"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="TYPE" rendered="true">
+						<p:selectOneMenu id="historicAccountTypeOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{historicAccountDataTable.accountTypeId}">
+							<f:selectItems id="historicSelectItemsAccountTypeOutput"
+								itemDisabled="true" var="IdentityCardType"
+								value="#{hierarchyController.accountTypeSelectItems()}"
+								itemValue="#{historicAccountDataTable.accountTypeId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+
+
+					<p:column id="historicAccountContractNr"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CONTRACT NR. " rendered="true">
+						<h:outputText id="historicAccountContractNrText"
+							value="#{historicAccountDataTable.contractNumber}" />
+					</p:column>
+
+
+					<p:column id="historicAccountStatus"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="STATUS" rendered="true">
+						<p:selectOneMenu id="historicAccountStatusOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{historicAccountDataTable.statusId}">
+							<f:selectItems id="historicSelectItemsStatusOutput"
+								itemDisabled="true" var="Status"
+								value="#{hierarchyController.statusInstanceSelectItems()}"
+								itemValue="#{historicAccountDataTable.statusId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column id="historicAccountActiveDate"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ACTIVE DATE" rendered="true">
+						<h:outputText id="historicAccountActiveDateText"
+							value="#{historicAccountDataTable.activeDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="historicAccountCancelledDate"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CANCELLED DATE" rendered="true">
+						<h:outputText id="historicAccountCancelledDateText"
+							value="#{historicAccountDataTable.cancelledDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="historicAccountName"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="NAME" rendered="true">
+						<h:outputText id="historicAccountNameText"
+							value="#{historicAccountDataTable.givenName}" />
+					</p:column>
+
+					<p:column id="historicAccount1stSurname"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="1st SURNAME" rendered="true">
+						<h:outputText id="historicAccount1stSurnameText"
+							value="#{historicAccountDataTable.firstSurname}" />
+					</p:column>
+
+					<p:column id="historicAccount2ndSurname"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="2nd SURNAME" rendered="true">
+						<h:outputText id="historicAccount2ndSurnameText"
+							value="#{historicAccountDataTable.secondSurname}" />
+					</p:column>
+
+
+					<p:column id="historicAccountIdentityCardType"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;A
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ID. CARD TYPE" rendered="true">
+						<p:selectOneMenu id="historicAccountIdCardTypeOutput"
+							editable="false" disabled="true" immediate="true"
+							value="#{historicAccountDataTable.identityCardTypeId}">
+							<f:selectItems id="historicSelectItemsAccountIdCardOutput"
+								itemDisabled="true" var="IdentityCardType"
+								value="#{hierarchyController.identityCardTypeSelectItems()}"
+								itemValue="#{historicAccountDataTable.identityCardTypeId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column id="historicAccountIdentityCard"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ID. CARD" rendered="true">
+						<h:outputText id="historicAccountIdCardText"
+							value="#{historicAccountDataTable.identityCard}" />
+					</p:column>
+
+					<p:column id="historicAccountContactPhone"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="PHONE" rendered="true">
+						<h:outputText id="historicAccountContactPhoneText"
+							value="#{historicAccountDataTable.contactPhone}" />
+					</p:column>
+
+					<p:column id="historicAccountEMail"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="E-MAIL" rendered="true">
+						<h:outputText id="historicAccountEMailText"
+							value="#{historicAccountDataTable.EMail}" />
+					</p:column>
+
+					<p:column id="historicAccountAddress"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ADDRESS" rendered="true">
+						<h:outputText id="historicAccountAddressText"
+							value="#{historicAccountDataTable.address}" />
+					</p:column>
+
+					<p:column id="historicAccountCity"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CITY" rendered="true">
+						<h:outputText id="historicAccountCityText"
+							value="#{historicAccountDataTable.city}" />
+					</p:column>
+
+
+					<p:column id="historicAccountState"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="STATE" rendered="true">
+						<h:outputText id="hisoricAccountStateText"
+							value="#{historicAccountDataTable.state}" />
+					</p:column>
+
+					<p:column id="historicAccountCountry"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="COUNTRY" rendered="true">
+						<h:outputText id="historicAccountCountryText"
+							value="#{historicAccountDataTable.country}" />
+					</p:column>
+
+					<p:column id="historicAccountPostCode"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="POST CODE" rendered="true">
+						<h:outputText id="historicAccountPostCodeText"
+							value="#{historicAccountDataTable.postCode}" />
+					</p:column>
+
+					<p:column id="historicAccountIban"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="IBAN" rendered="true">
+						<h:outputText id="historicAccountIbanText"
+							value="#{historicAccountDataTable.iban}" />
+					</p:column>
+
+					<p:column id="historicAccountBankEntity"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="B. ENTITY" rendered="true">
+						<h:outputText id="historicAccountBankEntityText"
+							value="#{historicAccountDataTable.bankEntity}" />
+					</p:column>
+
+					<p:column id="historicAccountBankBranch"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="B. BRANCH" rendered="true">
+						<h:outputText id="historicAccountBankBranchText"
+							value="#{historicAccountDataTable.bankBranch}" />
+					</p:column>
+
+					<p:column id="historicAccountBankControlDigit"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CONTROL. D." rendered="true">
+						<h:outputText id="historicAccountBankControlDigitText"
+							value="#{historicAccountDataTable.bankControlDigit}" />
+					</p:column>
+
+					<p:column id="historicAccountBankAccountNr"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="B. CUST. NR." rendered="true">
+						<h:outputText id="historicAccountBankAccountNrText"
+							value="#{historicAccountDataTable.bankAccountNumber}" />
+					</p:column>
+				</p:dataTable>
+
+				<p:dataTable id="historicProductTable"
+					widgetVar="historicProductTableWidget"
+					rendered="#{hierarchyController.showProductHistoricInfo}"
+					var="historicProductDataTable"
+					value="#{hierarchyController.productHistoricDataList}" size="small"
+					scrollable="true" resizableColumns="true"
+					emptyMessage="No data to show" showGridlines="true"
+					paginator="true"
+						rows="4" paginatorPosition="bottom">
+
+					<f:facet name="header">				
+							HISTORIC PRODUCT DATA	
+						</f:facet>
+
+					<p:column id="historicProductCode"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CODE" rendered="true">
+						<h:outputText id="historicProductIdText"
+							value="#{historicProductDataTable.code}" />
+					</p:column>
+
+
+					<p:column id="historicProductStartDateHist"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="START DATE" rendered="true">
+						<h:outputText id="historicProductStartDateOutputHist"
+							value="#{historicProductDataTable.startDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="historicProductEndDateHist"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="END DATE" rendered="true">
+
+						<h:outputText id="historicProductEndDateOutputHist"
+							value="#{historicProductDataTable.endDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="historicProductType"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="TYPE" rendered="true">
+						<p:selectOneMenu id="historicProductTypeOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{historicProductDataTable.productTypeId}">
+							<f:selectItems id="historicSelectItemsProductTypeOutput"
+								itemDisabled="true" var="ProductType"
+								value="#{hierarchyController.productTypeSelectItems()}"
+								itemValue="#{historicProductDataTable.productTypeId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+
+
+					<p:column id="historicProductStatus"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="STATUS" rendered="true">
+						<p:selectOneMenu id="StatusOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{historicProductDataTable.statusId}">
+							<f:selectItems id="historicSelectItemsStatusOutput"
+								itemDisabled="true" var="Status"
+								value="#{hierarchyController.statusInstanceSelectItems()}"
+								itemValue="#{historicProductDataTable.statusId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column id="historicProductActiveDate"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ACTIVE DATE" rendered="true">
+						<h:outputText id="historicProductActiveDateText"
+							value="#{historicProductDataTable.activeDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="historicProductCancelledDate"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CANCELLED DATE" rendered="true">
+						<h:outputText id="historicProductCancelledDateText"
+							value="#{historicProductDataTable.cancelledDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+				
+				<p:dataTable id="historicServiceTable"
+					widgetVar="historicServiceTableWidget"
+					rendered="#{hierarchyController.showServiceHistoricInfo}"
+					var="historicServiceDataTable"
+					value="#{hierarchyController.serviceHistoricDataList}" size="small"
+					scrollable="true" resizableColumns="true"
+					emptyMessage="No data to show" showGridlines="true"
+					paginator="true"
+						rows="4" paginatorPosition="bottom">
+
+					<f:facet name="header">				
+							HISTORIC PRODUCT DATA	
+						</f:facet>
+
+					<p:column id="historicServiceNr"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="Number" rendered="true">
+						<h:outputText id="historicServiceNumberText"
+							value="#{historicServiceDataTable.serviceNumber}" />
+					</p:column>
+
+
+					<p:column id="historicServiceStartDateHist"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="START DATE" rendered="true">
+						<h:outputText id="historicServiceStartDateOutputHist"
+							value="#{historicServiceDataTable.startDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="historicServiceEndDateHist"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="END DATE" rendered="true">
+
+						<h:outputText id="historicServiceEndDateOutputHist"
+							value="#{historicServiceDataTable.endDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="historicServiceType"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="TYPE" rendered="true">
+						<p:selectOneMenu id="historicServiceTypeOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{historicServiceDataTable.serviceTypeId}">
+							<f:selectItems id="historicSelectItemsServiceTypeOutput"
+								itemDisabled="true" var="ServiceType"
+								value="#{hierarchyController.serviceTypeSelectItems()}"
+								itemValue="#{historicServiceDataTable.serviceTypeId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+
+
+					<p:column id="historicServiceStatus"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="STATUS" rendered="true">
+						<p:selectOneMenu id="StatusOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{historicServiceDataTable.statusId}">
+							<f:selectItems id="historicSelectItemsStatusOutput"
+								itemDisabled="true" var="Status"
+								value="#{hierarchyController.statusInstanceSelectItems()}"
+								itemValue="#{historicServiceDataTable.statusId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column id="historicServiceActiveDate"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ACTIVE DATE" rendered="true">
+						<h:outputText id="historicServiceActiveDateText"
+							value="#{historicServiceDataTable.activeDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="historicServiceCancelledDate"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CANCELLED DATE" rendered="true">
+						<h:outputText id="historicServiceCancelledDateText"
+							value="#{historicServiceDataTable.cancelledDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+				
+				<p:dataTable id="historicFeeTable"
+					widgetVar="historicFeeTableWidget"
+					rendered="#{hierarchyController.showFeeHistoricInfo}"
+					var="historicFeeDataTable"
+					value="#{hierarchyController.feeHistoricDataList}" size="small"
+					scrollable="true" resizableColumns="true"
+					emptyMessage="No data to show" showGridlines="true"
+					paginator="true"
+						rows="4" paginatorPosition="bottom">
+
+					<f:facet name="header">				
+							HISTORIC FEE DATA	
+						</f:facet>
+
+					<p:column id="historicFeeCode"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CODE" rendered="true">
+						<h:outputText id="historicFeeCodeText"
+							value="#{historicFeeDataTable.code}" />
+					</p:column>
+
+
+					<p:column id="historicFeeStartDateHist"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="START DATE" rendered="true">
+						<h:outputText id="historicFeeStartDateOutputHist"
+							value="#{historicFeeDataTable.startDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="historicFeeEndDateHist"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="END DATE" rendered="true">
+
+						<h:outputText id="historicFeeEndDateOutputHist"
+							value="#{historicFeeDataTable.endDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="historicFeeType"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="TYPE" rendered="true">
+						<p:selectOneMenu id="historicFeeTypeOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{historicFeeDataTable.feeTypeId}">
+							<f:selectItems id="historicSelectItemsFeeTypeOutput"
+								itemDisabled="true" var="FeeType"
+								value="#{hierarchyController.feeTypeSelectItems()}"
+								itemValue="#{historicFeeDataTable.feeTypeId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column id="historicFeeApplicationLevel"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="APP. LEVEL" rendered="true">
+						<p:selectOneMenu id="historicFeeApplicationLevelOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{historicFeeDataTable.applicationLevelId}">
+							<f:selectItems id="historicFeeSelectItemsApplicationLevelOutput"
+								itemDisabled="true" var="ApplicationLevel"
+								value="#{hierarchyController.applicationLevelSelectItems()}"
+								itemValue="#{historicFeeDataTable.applicationLevelId}" />
+						</p:selectOneMenu>
+					</p:column>
+					
+					<p:column id="historicFeeProrate"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="PRORATE?" rendered="true">
+						<p:selectOneMenu id="historicFeeProrateOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{historicFeeDataTable.prorate}">
+							<f:selectItems id="historicFeeSelectItemsProrateOutput"
+								itemDisabled="true" var="ApplicationLevel"
+								value="#{hierarchyController.booleanSelectItems()}"
+								itemValue="#{historicFeeDataTable.prorate}" />
+						</p:selectOneMenu>
+					</p:column>
+					
+		     <p:column id="historicFeePrice"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="PRICE" rendered="true">
+						<h:outputText id="historicFeePriceText"
+							value="#{historicFeeDataTable.price}" />
+					</p:column>
+					
+					
+					<p:column id="historicFeeStatus"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="STATUS" rendered="true">
+						<p:selectOneMenu id="StatusOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{historicFeeDataTable.statusId}">
+							<f:selectItems id="historicSelectItemsStatusOutput"
+								itemDisabled="true" var="Status"
+								value="#{hierarchyController.statusInstanceSelectItems()}"
+								itemValue="#{historicFeeDataTable.statusId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column id="historicFeeActiveDate"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ACTIVE DATE" rendered="true">
+						<h:outputText id="historicFeeActiveDateText"
+							value="#{historicFeeDataTable.activeDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="historicFeeCancelledDate"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CANCELLED DATE" rendered="true">
+						<h:outputText id="historicFeeCancelledDateText"
+							value="#{historicFeeDataTable.cancelledDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+				
+				<p:dataTable id="historicPromotionTable"
+					widgetVar="historicPromotionTableWidget"
+					rendered="#{hierarchyController.showPromotionHistoricInfo}"
+					var="historicPromotionDataTable"
+					value="#{hierarchyController.promotionHistoricDataList}" size="small"
+					scrollable="true" resizableColumns="true"
+					emptyMessage="No data to show" showGridlines="true"
+					paginator="true"
+						rows="4" paginatorPosition="bottom">
+						
+					<f:facet name="header">				
+							HISTORIC PROMOTION DATA	
+						</f:facet>
+
+					<p:column id="historicPromotionCode"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CODE" rendered="true">
+						<h:outputText id="historicPromotionCodeText"
+							value="#{historicPromotionDataTable.code}" />
+					</p:column>
+
+
+					<p:column id="historicPromotionStartDateHist"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="START DATE" rendered="true">
+						<h:outputText id="historicPromotionStartDateOutputHist"
+							value="#{historicPromotionDataTable.startDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="historicPromotionEndDateHist"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="END DATE" rendered="true">
+
+						<h:outputText id="historicPromotionEndDateOutputHist"
+							value="#{historicPromotionDataTable.endDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="historicPromotionType"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="TYPE" rendered="true">
+						<p:selectOneMenu id="historicPromotionTypeOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{historicPromotionDataTable.promotionTypeId}">
+							<f:selectItems id="historicSelectItemsPromotionTypeOutput"
+								itemDisabled="true" var="PromotionType"
+								value="#{hierarchyController.promotionTypeSelectItems()}"
+								itemValue="#{historicPromotionDataTable.promotionTypeId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column id="historicPromotionApplicationLevel"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="APP. LEVEL" rendered="true">
+						<p:selectOneMenu id="historicPromotionApplicationLevelOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{historicPromotionDataTable.applicationLevelId}">
+							<f:selectItems id="historicPromotionSelectItemsApplicationLevelOutput"
+								itemDisabled="true" var="ApplicationLevel"
+								value="#{hierarchyController.applicationLevelSelectItems()}"
+								itemValue="#{historicPromotionDataTable.applicationLevelId}" />
+						</p:selectOneMenu>
+					</p:column>
+					
+					<p:column id="historicPromotionDiscountType"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="DISC. TYPE" rendered="true">
+						<p:selectOneMenu id="historicPromotionDiscountTypeOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{historicPromotionDataTable.discountTypeId}">
+							<f:selectItems id="historicPromotionSelectItemsDiscountTypeOutput"
+								itemDisabled="true" var="DiscountType"
+								value="#{hierarchyController.discountTypeSelectItems()}"
+								itemValue="#{historicPromotionDataTable.discountTypeId}" />
+						</p:selectOneMenu>
+					</p:column>
+					
+		     <p:column id="historicPromotionDiscountValue"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="DISC. VALUE" rendered="true">
+						<h:outputText id="historicPromotionDiscountValueText"
+							value="#{historicPromotionDataTable.discountValue}" />
+					</p:column>
+					
+					
+					<p:column id="historicPromotionStatus"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="STATUS" rendered="true">
+						<p:selectOneMenu id="StatusOutput" editable="false"
+							disabled="true" immediate="true"
+							value="#{historicPromotionDataTable.statusId}">
+							<f:selectItems id="historicSelectItemsStatusOutput"
+								itemDisabled="true" var="Status"
+								value="#{hierarchyController.statusInstanceSelectItems()}"
+								itemValue="#{historicPromotionDataTable.statusId}" />
+						</p:selectOneMenu>
+					</p:column>
+
+					<p:column id="historicPromotionActiveDate"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="ACTIVE DATE" rendered="true">
+						<h:outputText id="historicPromotionActiveDateText"
+							value="#{historicPromotionDataTable.activeDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+
+					<p:column id="historicPromotionCancelledDate"
+						style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+						headerText="CANCELLED DATE" rendered="true">
+						<h:outputText id="historicPromotionCancelledDateText"
+							value="#{historicPromotionDataTable.cancelledDate}">
+							<f:converter
+								converterId="com.comasw.converter.localDateTimeConverter" />
+						</h:outputText>
+					</p:column>
+				</p:dataTable>
+
+
+			</p:panel>
+		</p:panelGrid>
+
+	</h:form>
+
+</body>
+</html>
