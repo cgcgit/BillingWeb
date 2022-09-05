@@ -262,7 +262,7 @@
                                   width: 100px;    
                                   overflow: hidden"
 							headerText="TAX TYPE" rendered="true"
-							filterBy="#{historicDataTable.taxTypeId}" filterMatchMode="exact">
+							filterBy="#{dataTable.serviceTaxTypeId}" filterMatchMode="exact">
 							<f:facet id="taxTypeFilter" name="filter">
 								<p:selectOneMenu id="taxTypeFilterMenuHist"
 									onchange="PF('historicTableWidget').filter()">
@@ -274,20 +274,20 @@
 								<f:facet id="taxTypeHistOutputFacet" name="output">
 									<p:selectOneMenu id="taxTypeHistOutput" editable="false"
 										disabled="true" immediate="true"
-										value="#{historicDataTable.taxTypeId}">
+										value="#{dataTable.serviceTaxTypeId}">
 										<f:selectItems
 											value="#{productController.taxTypeSelectItems()}"
 											id="selectItemsTaxTypeHistOutput" itemDisabled="true"
-											var="Status" itemValue="#{historicDataTable.taxTypeId}" />
+											var="Status" itemValue="#{dataTable.serviceTaxTypeId}" />
 									</p:selectOneMenu>
 								</f:facet>
 								<f:facet id="taxTypeHistInputFacet" name="input">
 									<p:selectOneMenu id="taxTypeHistInput"										
-										value="#{historicDataTable.taxTypeId}" immediate="true">
+										value="#{dataTable.serviceTaxTypeId}" immediate="true">
 										<f:selectItems
 											value="#{productController.taxTypeSelectItems()}"
 											id="selectItemsTaxTypeHistInput" var="TaxType"
-											itemValue="#{historicDataTable.taxTypeId}">
+											itemValue="#{dataTable.serviceTaxTypeId}">
 										</f:selectItems>
 										<p:ajax event="change" immediate="true"
 											update="taxTypeHistOutput" />

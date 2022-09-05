@@ -164,12 +164,24 @@ public class ManageUserController extends BasicType<ItUsers> implements Serializ
 	@PostConstruct
 	public void init() {
 
-		if (this.selectedData == null) {
-			this.selectedData = new ItUsers();
+		if (this.getSelectedData() == null) {
+			this.setSelectedData (new ItUsers());
 		}
 
-		if (this.backupData == null) {
-			this.backupData = new ItUsers();
+		if (this.getBackupData() == null) {
+			this.setBackupData (new ItUsers());
+		}
+		
+		if (this.getProfileList() == null) {
+			this.setProfileList(new ArrayList<>());
+		}
+			
+		if (this.getDataList() == null ) {
+			this.setDataList(new  ArrayList<ItUsers> ());
+		}
+		
+		if (this.getBackupData() == null){
+			this.setBackupData(new ItUsers());
 		}
 
 	}

@@ -28,7 +28,8 @@ public class ApplicationMenuController implements Serializable {
 
 	private static final long serialVersionUID = 1398156738340556972L;
 
-	protected static ResourceBundle generalProperties = ResourceBundle.getBundle("com.comasw.properties.general");
+	//protected static ResourceBundle generalProperties = ResourceBundle.getBundle("com.comasw.properties.general");
+	protected static ResourceBundle urlProperties = ResourceBundle.getBundle("com.comasw.properties.urlPage");
 
 	private MenuModel model;
 
@@ -133,7 +134,7 @@ public class ApplicationMenuController implements Serializable {
 					} else {
 						// final element --> with functionality --> item for the submenu
 						DefaultMenuItem item = DefaultMenuItem.builder().value(p.getName()).url(
-								generalProperties.getString("ROOT_APP_FILE_URL") + p.getPage() + "?faces-redirect=true")
+								urlProperties.getString("ROOT_APP_FILE_URL") + p.getPage() + "?faces-redirect=true")
 								.ajax(true).build();
 						// add item to the given subMenu
 						subMenu.getElements().add(item);

@@ -60,7 +60,7 @@
 						<p:commandButton id="createNewButton" value="New data"
 							icon="#{uiValue.addIcon}" ajax="true"
 							actionListener="#{consumptionClassController.pushCreateNewButton()}"
-							rendered="#{consumptionClassController.canUserModify()}"
+							rendered="#{consumptionClassController.adminPermissions()}"
 							disabled="#{consumptionClassController.editingMode}"
 							update=":form:createNewDialogPanelData"
 							styleClass="ui-button-info" style="margin-right: .5rem">
@@ -99,7 +99,7 @@
                                    width: 60px;    
                                    overflow: hidden"
 				headerText="DEL ROW"
-				rendered="#{consumptionClassController.canUserModify()}">
+				rendered="#{consumptionClassController.adminPermissions()}">
 				<p:commandButton id="deleteRowButton"
 					class="ui-button-warning rounded-button"
 					icon="#{uiValue.deleteIcon}"
@@ -107,7 +107,7 @@
 					immediate="true" onclick="PF('deleteRowDialogWidget').show()"
 					disabled="#{consumptionClassController.editingMode}"
 					oncomplete="if(!args.validationFailed) {updateDataTable()}"
-					rendered="#{consumptionClassController.canUserModify()}">
+					rendered="#{consumptionClassController.adminPermissions()}">
 					<f:setPropertyActionListener value="#{dataTable}"
 						target="#{consumptionClassController.selectedData}" />
 				</p:commandButton>
@@ -119,10 +119,10 @@
                                   width: 60px;    
                                   overflow: hidden"
 				headerText="EDIT ROW"
-				rendered="#{consumptionClassController.canUserModify()}">
+				rendered="#{consumptionClassController.adminPermissions()}">
 				<p:rowEditor id="editRowButton" editTitle="Edit Row"
 					cancelTitle="Cancel Edit" saveTitle="Save Row"
-					rendered="#{consumptionClassController.canUserModify()}">
+					rendered="#{consumptionClassController.adminPermissions()}">
 				</p:rowEditor>
 			</p:column>
 

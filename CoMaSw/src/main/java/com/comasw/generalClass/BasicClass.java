@@ -102,6 +102,14 @@ public class BasicClass {
 		return result;
 
 	}
+	
+	public boolean adminPermissions() {
+		if(this.getLoggedUser().getProfileCode().compareToIgnoreCase("ADMIN")== 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 
 	public void createMessage(FacesContext facesContext, ExternalContext externalContext,
 			FacesMessage.Severity messageConcept, String textMessage, String textMessageDetail) {

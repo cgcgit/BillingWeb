@@ -60,7 +60,7 @@
 						<p:commandButton id="createNewButton" value="New data"
 							icon="#{uiValue.addIcon}" ajax="true"
 							actionListener="#{billingPeriodController.pushCreateNewButton()}"
-							rendered="#{billingPeriodController.canUserModify()}"
+							rendered="#{billingPeriodController.adminPermissions()}"
 							disabled="#{billingPeriodController.editingMode}"
 							update=":form:createNewDialogPanelData"
 							styleClass="ui-button-info" style="margin-right: .5rem">
@@ -99,7 +99,7 @@
                                    width: 60px;    
                                    overflow: hidden"
 				headerText="DEL ROW"
-				rendered="#{billingPeriodController.canUserModify()}">
+				rendered="#{billingPeriodController.adminPermissions()}">
 				<p:commandButton id="deleteRowButton"
 					class="ui-button-warning rounded-button"
 					icon="#{uiValue.deleteIcon}"
@@ -107,7 +107,7 @@
 					immediate="true" onclick="PF('deleteRowDialogWidget').show()"
 					disabled="#{billingPeriodController.editingMode}"
 					oncomplete="if(!args.validationFailed) {updateDataTable()}"
-					rendered="#{billingPeriodController.canUserModify()}">
+					rendered="#{billingPeriodController.adminPermissions()}">
 					<f:setPropertyActionListener value="#{dataTable}"
 						target="#{billingPeriodController.selectedData}" />
 				</p:commandButton>
@@ -119,10 +119,10 @@
                                   width: 60px;    
                                   overflow: hidden"
 				headerText="EDIT ROW"
-				rendered="#{billingPeriodController.canUserModify()}">
+				rendered="#{billingPeriodController.adminPermissions()}">
 				<p:rowEditor id="editRowButton" editTitle="Edit Row"
 					cancelTitle="Cancel Edit" saveTitle="Save Row"
-					rendered="#{billingPeriodController.canUserModify()}">
+					rendered="#{billingPeriodController.adminPermissions()}">
 				</p:rowEditor>
 			</p:column>
 

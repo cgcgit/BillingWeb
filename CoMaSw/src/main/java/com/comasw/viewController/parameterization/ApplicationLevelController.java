@@ -461,5 +461,5 @@ public class ApplicationLevelController extends BasicType<PtApplicationLevel> im
 		this.loadDataList();
 		Ajax.update(DATA_TABLE_ID);
 	}
-
+	
 }

@@ -53,10 +53,10 @@ button.ui-button {
 		<!--  DATA TABLE -->
 
 		<p:remoteCommand id="remoteCommandUpdateMainTable"
-			name="updateMainTable" process="@this" update="form:mainTable" />
+			name="updateMainTable" process="@this" update="form:dataTable" />
 
 
-		<p:dataTable id="mainTable" widgetVar="mainTableWidget"
+		<p:dataTable id="dataTable" widgetVar="dataTableWidget"
 			var="dataTable" value="#{manageUserController.dataList}"
 			editable="true" rowIndexVar="rowIndexMainTable" rows="10"
 			showGridlines="true" stripedRows="true" scrollable="true"
@@ -90,7 +90,7 @@ button.ui-button {
 			<p:ajax id="ajaxRowEditInit" event="rowEditInit"
 				listener="#{manageUserController.onRowInit}"
 				disabled="#{manageUserController.editingMode}"
-				update="form:growlMessage createNewButton form:mainTable">
+				update="form:growlMessage createNewButton form:dataTable">
 			</p:ajax>
 			<p:ajax id="ajaxRowEdit" event="rowEdit"
 				listener="#{manageUserController.onRowEdit}"
