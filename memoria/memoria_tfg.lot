@@ -1,0 +1,51 @@
+\selectlanguage *{spanish}
+\bgroup 
+\selectlanguage *{english}
+\egroup 
+\selectlanguage *{spanish}
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {3.1}{\ignorespaces Evolución de Java EE\relax }}{18}{table.caption.12}%
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {4.1}{\ignorespaces CU-05 Editar histórico de elemento seleccionado\relax }}{36}{table.caption.43}%
+\contentsline {table}{\numberline {4.2}{\ignorespaces CU-06 Cancelar el registro de histórico del elemento seleccionado\relax }}{37}{table.caption.44}%
+\contentsline {table}{\numberline {4.3}{\ignorespaces CU-07 Añadir histórico de elemento seleccionado\relax }}{38}{table.caption.45}%
+\contentsline {table}{\numberline {4.4}{\ignorespaces CU-09 Borrar histórico del elemento seleccionado\relax }}{39}{table.caption.46}%
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\addvspace {10\p@ }
+\contentsline {table}{\numberline {B.1}{\ignorespaces CU-01 Inicio de sesión\relax }}{56}{table.caption.62}%
+\contentsline {table}{\numberline {B.2}{\ignorespaces CU-02 Término de sesión\relax }}{57}{table.caption.63}%
+\contentsline {table}{\numberline {B.3}{\ignorespaces CU-03 Crear nueva entidad de parametrización\relax }}{58}{table.caption.65}%
+\contentsline {table}{\numberline {B.4}{\ignorespaces CU-04 Editar elemento seleccionado\relax }}{59}{table.caption.66}%
+\contentsline {table}{\numberline {B.5}{\ignorespaces CU-05 Editar histórico de elemento seleccionado\relax }}{60}{table.caption.67}%
+\contentsline {table}{\numberline {B.6}{\ignorespaces CU-06 Cancelar el registro de histórico del elemento seleccionado\relax }}{61}{table.caption.68}%
+\contentsline {table}{\numberline {B.7}{\ignorespaces CU-07 Añadir histórico de elemento seleccionado\relax }}{62}{table.caption.69}%
+\contentsline {table}{\numberline {B.8}{\ignorespaces CU-08 Borrar elemento seleccionado\relax }}{63}{table.caption.70}%
+\contentsline {table}{\numberline {B.9}{\ignorespaces CU-09 Borrar histórico del elemento seleccionado\relax }}{64}{table.caption.71}%
+\contentsline {table}{\numberline {B.10}{\ignorespaces CU-10 Buscar elementos con histórico\relax }}{65}{table.caption.72}%
+\contentsline {table}{\numberline {B.11}{\ignorespaces CU-11 Buscar relación para elementos simples\relax }}{66}{table.caption.73}%
+\contentsline {table}{\numberline {B.12}{\ignorespaces CU-12 Buscar relación para elementos simples\relax }}{67}{table.caption.74}%
+\contentsline {table}{\numberline {B.13}{\ignorespaces CU-13 Obtener información de los registros de histórico del elemento\relax }}{68}{table.caption.75}%
+\contentsline {table}{\numberline {B.14}{\ignorespaces CU-14 Obtener información del padre de la relación\relax }}{68}{table.caption.76}%
+\contentsline {table}{\numberline {B.15}{\ignorespaces CU-15 Obtener elementos relacionados\relax }}{69}{table.caption.77}%
+\contentsline {table}{\numberline {B.16}{\ignorespaces CU-16 Obtener elementos candidatos\relax }}{70}{table.caption.78}%
+\contentsline {table}{\numberline {B.17}{\ignorespaces CU-17 Añadir relación\relax }}{70}{table.caption.79}%
+\contentsline {table}{\numberline {B.18}{\ignorespaces CU-18 Eliminar relación\relax }}{71}{table.caption.80}%
+\contentsline {table}{\numberline {B.19}{\ignorespaces CU-19 Mostrar ficha personal\relax }}{71}{table.caption.82}%
+\contentsline {table}{\numberline {B.20}{\ignorespaces CU-20 Cambiar contraseña\relax }}{72}{table.caption.83}%
+\contentsline {table}{\numberline {B.21}{\ignorespaces CU-21 Editar ficha personal\relax }}{73}{table.caption.84}%
+\contentsline {table}{\numberline {B.22}{\ignorespaces CU-22 Listar elementos de entidades de parametrización\relax }}{74}{table.caption.86}%
+\contentsline {table}{\numberline {B.23}{\ignorespaces CU-23 Listar elementos de entidades simples del catálogo\relax }}{75}{table.caption.88}%
+\contentsline {table}{\numberline {B.24}{\ignorespaces CU-24 Listar elementos de la entidad histórica seleccionada del catálogo\relax }}{76}{table.caption.89}%
+\contentsline {table}{\numberline {B.25}{\ignorespaces CU-25 Listar relaciones para elementos simples del catálogo\relax }}{78}{table.caption.91}%
+\contentsline {table}{\numberline {B.26}{\ignorespaces CU-26 Listar relaciones para elementos con histórico del catálogo\relax }}{79}{table.caption.92}%
+\contentsline {table}{\numberline {B.27}{\ignorespaces CU-27 Listar la instancia de la entidad seleccionada\relax }}{80}{table.caption.94}%
+\contentsline {table}{\numberline {B.28}{\ignorespaces CU-28 Gestión de usuarios\relax }}{81}{table.caption.96}%
+\contentsline {table}{\numberline {B.29}{\ignorespaces \relax }}{85}{table.caption.101}%
+\contentsline {table}{\numberline {B.30}{\ignorespaces Recursos\relax }}{85}{table.B.30}%
+\contentsline {table}{\numberline {B.31}{\ignorespaces Clases generadas\relax }}{86}{table.B.31}%
