@@ -23,8 +23,8 @@ Es por ello que se definen tres perfiles de acceso a la herramienta en función 
 
 \begin{itemize}
 \item READ: perfil que da sólo acceso a la consulta de los datos almacenados en el sistema, esto es, los usuarios que tengan este perfil asociado solo podrán listar la información, pero no podrán realizar ninguna modificación sobre los mismos.
-\item WRITE: perfil que además de permitir la consulta de los datos almacenados en el sistema permite realizar altas, bajas y modificaciones sobre todos los elementos que conforman el sistema.
-\item ADMIN: perfil que amplía el acceso a las funcionalidades definidas para el perfil WRITE, otorgándole acceso a la gestión de usuarios: podrá dar de alta nuevos usuarios, modificar usuarios existentes (incluido el cambio de contraseña) o darlos de baja.
+\item MODIF: perfil que además de permitir la consulta de los datos almacenados en el sistema permite realizar altas, bajas y modificaciones sobre todos los elementos que conforman el sistema.
+\item ADMIN: perfil que amplía el acceso a las funcionalidades definidas para el perfil MODIF, otorgándole acceso a la gestión de usuarios: podrá dar de alta nuevos usuarios, modificar usuarios existentes (incluido el cambio de contraseña) o darlos de baja.
 \end{itemize}
 
 
@@ -49,7 +49,9 @@ Esta aplicación tendrá el objetivo de formar parte de un ecosistema mayor, int
 \acrshort{itil} define el catálogo de servicios como~\cite{catalogoITIL}:
 \textquote{una base de datos centralizada que contiene información precisa sobre las ofertas de servicios de TI activas y un subconjunto de la cartera de servicios del proveedor de servicios de TI}. De forma simple vendría siendo la \textit{mercancía} que ofrece una determinada empresa. Pero va un paso más allá del listado de elementos ofertados en este momento, si no que  lleva registro del ciclo de vida de todos los productos y servicios gestionados por la empresa, tanto los servicios y productos retirados como los que se ofrecen actualmente e incluso los que están en desarrollo.
 
-La idea es la siguiente: la empresa define su catálogo de servicios(tecnología a ofertar), los elementos facturables a aplicar por la prestación de servicios y los descuentos existentes sobre dichos elementos facturables. Se distinguen dos tipos de elementos facturables: cuotas (cargos periódicos asociados a la prestación de los distintos servicios) y consumos (cargos puntuales derivados del consumo de algún elemento definido como consumible)
+Entendemos por prestación de servicios aquella actividad o actividades llevadas a cabo por un proveedor con el propósito de satisfacer una determinada necesidad del cliente a través de servicios, entendiendo por servicio un activo de naturaleza económica intangible.
+
+La idea es la siguiente: la empresa define su catálogo de servicios (tecnología a ofertar), los elementos facturables a aplicar por la prestación de servicios y los descuentos existentes sobre dichos elementos facturables. Se distinguen dos tipos de elementos facturables: cuotas (cargos periódicos asociados a la prestación de los distintos servicios) y consumos (cargos puntuales derivados del consumo de algún elemento definido como consumible)
 El catálogo de servicio de nuestra empresa estará formado por cinco entidades principales y las relaciones que guardan entre sí (figura \ref{fig:catalogo}, página \pageref{fig:catalogo}):
 
 \paragraph{Tipo de producto} es el elemento raiz del catálogo del sistema sobre el que se irán definiendo el resto de elementos que se pueden ofrecer al cliente. Podemos verlo como el \textit{paquete} que contendrá todo lo que se le ofrece al cliente.
@@ -115,7 +117,7 @@ Se definen tres tipos de usuarios de la aplicación en función de los funcional
 
 \begin{itemize}
 \item READ: perfil de sólo lectura. Sólamente permite visualizar la información almacenada en la aplicación, pero no puede realizar ninguna modificación, salvo la relativa a su información de contacto y su contraseña.
-\item WRITE: perfil de lectura y modificación. Además de las funcionalidades descritas para el perfil READ, permite realizar modificaciones sobre las distintas entidades del sistema (altas/bajas/modificaciones).
+\item MODIF: perfil de lectura y modificación. Además de las funcionalidades descritas para el perfil READ, permite realizar modificaciones sobre las distintas entidades del sistema (altas/bajas/modificaciones).
 \item ADMIN: perfil de administrador. Además de las funcionalidades descritas para el perfil WRITE, permite la gestión de usuarios (altas/bajas/modificaciones).
 \end{itemize}
 
@@ -134,7 +136,7 @@ Se definen tres tipos de usuarios de la aplicación en función de los funcional
 El actor ADMIN representa a los usuarios de la aplicación que tienen
 acceso completo a todas las funciones, incluyendo la gestión de usuarios.
 
-Los actores  READ y  WRITE representa a cualquier usuario con un perfil READ o WRITE que haya sido dado de alta previamente por un actor ADMIN, que representa a cualquier usuario con perfil ADMIN, y disponga de un nombre de usuario y una contraseña.
+Los actores  READ y  WRITE representa a cualquier usuario con un perfil READ o MODIF, respectivamente, que haya sido dado de alta previamente por un actor ADMIN, que representa a cualquier usuario con perfil ADMIN, y disponga de un nombre de usuario y una contraseña.
 
 
 
@@ -172,11 +174,47 @@ Todos los usuarios comparten los casos de uso de acceso y los relativos a la con
 
 
 A continuación se muestra un caso de uso destacable que representa
-aspecto centrales de la aplicación.La definición completa de casos de uso se encuentra en el apéndice \ref{chap:ref-tecnica}. 
+aspecto centrales de la aplicación. La definición completa de casos de uso se encuentra en el apéndice \ref{chap:ref-tecnica}. 
 
-Se trata de los casos de uso CU-05 (tabla \ref{tab:cu-editar-historico}, página \pageref{tab:cu-editar-historico}), CU-06 (tabla \ref{tab:cu-cancelar-historico}, página \pageref{tab:cu-cancelar-historico}), CU-07 (tabla \ref{tab:cu-anhadir-historico-elemento}, página \pageref{tab:cu-anhadir-historico-elemento}) y CU-09 (tabla \ref{tab:cu-borrar-historico-elemento} página \pageref{tab:cu-borrar-historico-elemento}, que hacen referencia a la modificación de un registro de histórico de una entidad con histórico de registros (como pudiera ser un tipo de cuota). A estos casos de uso pueden acceder los actores WRITE y ADMIN a través del correspondiente caso de uso de listado de la entidad a tratar y seleccionando el correspondiente registro de histórico a modificar.
+Se trata del caso de uso CU-24 (\ref{tab:cu-listar-catálogo-historico}, página \pageref{tab:cu-listar-catálogo-historico} y los casos de uso asociados  CU-05 (tabla \ref{tab:cu-editar-historico}, página \pageref{tab:cu-editar-historico}), CU-06 (tabla \ref{tab:cu-cancelar-historico}, página \pageref{tab:cu-cancelar-historico}), CU-07 (tabla \ref{tab:cu-anhadir-historico-elemento}, página \pageref{tab:cu-anhadir-historico-elemento}) y CU-09 (tabla \ref{tab:cu-borrar-historico-elemento} página \pageref{tab:cu-borrar-historico-elemento}, que hacen referencia a la modificación de un registro de histórico de una entidad con histórico de registros (como pudiera ser un tipo de cuota). A estos casos de uso pueden acceder los actores WRITE y ADMIN a través del correspondiente caso de uso de listado de la entidad a tratar y seleccionando el correspondiente registro de histórico a modificar.
 
 Para este tipo de entidades con registro de histórico es fundamental que exista una consecución temporal de los mismos. No puede haber registros de histórico que se solapen para una misma instacia de una entidad, ni tampoco \textit{huecos} en la línea temporal del ciclo de vida de la misma. Por lo tanto se debe revisar que los cambios producidos en las fechas de una entidad con registro de histórico sean coherentes con lo almacenado en el sistema, actualizando fechas de registros anteriores y/o posteriores en caso de ser necesario, para \textit{acortarlos} o \textit{alargarlos} según sea el caso.
+
+
+\begin{table} [H]
+    \centering
+    \rowcolors{2}{white}{white}
+    \setlength{\leftmargini}{0.4cm}
+	\resizebox{14cm}{!} { % evita que la tabla sobresalga de la p\'agina, ajustando tama\'no de letra y grosor de l\'ineas
+    \begin{tabular}{| m{3cm} | m{11cm} |}   
+    \hline
+	  \textbf{CU-24} & \textbf{Acceder al catálogo entidad con históricos} \\\hline
+	  \textbf{Descripción} & Listar entidad histórica de catálogo seleccionada y gestionar los datos si se tienen los permisos correspondientes. \\\hline
+	  \textbf{Actores} & READ, WRITE y ADMIN. \\\hline
+	  \textbf{Precondiciones} & El usuario está conectado y ha seleccionado del menú la entidad histórica a listar del catálogo. \\\hline
+	  \textbf{Postcondiciones} & Se muestra el listado de históricos de la entidad seleccionada. \\\hline
+	  \textbf{Flujo básico} & 
+		\begin{enumerate}
+	  	\item Se muestran un área de búsqueda con dos opciones, buscar histórico completo o buscar por fecha, y un botón para realizar la búsqueda de la entidad en función del criterio seleccionado.
+	  	\item Si el usuario es el actor WRITE o ADMIN se muestra un botón para crear una nueva entidad.
+	  	\item Si el cliente pulsa el botón de búsqueda se da paso al caso de uso \ref{tab:cu-buscar-elementos-historico} y a continuación se muestra el listado del elemento seleccionado.
+	  	\item Si el usuario es el actor WRITE o ADMIN y selecciona la opción crear nuevo se da paso al \ref{tab:cu-nuevo-elemento} (\pageref{tab:cu-nuevo-elemento} y a continuación se muestra el listado del nuevo elemento creado.
+		\item Si el usuario es el actor WRITE o ADMIN, sobre cada registro de histórico se mostrarán tres botones, uno para añadir registro de histórico, otro para editar el registro y otro para borrar el registro. Si el usuario selecciona un registro del listado y
+		    \begin{enumerate}
+		         \item Pulsa el botón de añadir se da paso al caso de uso \ref{tab:cu-anhadir-historico-elemento} (página \pageref{tab:cu-anhadir-historico-elemento})
+		        \item Pulsa el botón de edición se da paso a los casos de uso \ref{tab:cu-editar-historico} (página \pageref{tab:cu-editar-historico}) y \ref{tab:cu-cancelar-historico} (página \pageref{tab:cu-cancelar-historico}).
+		        \item Pulsa el botón de borrado se da paso al caso de uso \ref{tab:cu-borrar-historico-elemento} (página \pageref{tab:cu-borrar-historico-elemento}).
+		    \end{enumerate} 
+		\item Finaliza el caso de uso.
+	  \end{enumerate} 	  	  
+	  \\\hline
+    \end{tabular}
+    } % end /resizebox
+    \caption{CU-24 Acceder al catálog entidad con históricos}
+    \label{tab:cu-listar-catálogo-historico}
+\end{table}
+
+
 
 
 \begin{table} [H]
