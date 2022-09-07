@@ -1,13 +1,13 @@
 \glossaryentry{Jakarta EE?\glossentry{jee}|setentrycounter[]{page}"\glsnumberformat}{1}
 \glossaryentry{Jakarta EE?\glossentry{jee}|setentrycounter[]{page}"\glsnumberformat}{1}
-\glossaryentry{ARIS?\glossentry{aris}|setentrycounter[]{page}"\glsnumberformat}{iii}
-\glossaryentry{BPM?\glossentry{bpm}|setentrycounter[]{page}"\glsnumberformat}{iii}
-\glossaryentry{TMN?\glossentry{tmn}|setentrycounter[]{page}"\glsnumberformat}{iii}
-\glossaryentry{TMN?\glossentry{tmn}|setentrycounter[]{page}"\glsnumberformat}{iii}
-\glossaryentry{ITIL?\glossentry{itil}|setentrycounter[]{page}"\glsnumberformat}{iii}
-\glossaryentry{ITSM?\glossentry{itsm}|setentrycounter[]{page}"\glsnumberformat}{iii}
-\glossaryentry{eToM?\glossentry{etom}|setentrycounter[]{page}"\glsnumberformat}{iii}
-\glossaryentry{ITIL?\glossentry{itil}|setentrycounter[]{page}"\glsnumberformat}{iii}
+\glossaryentry{ARIS?\glossentry{aris}|setentrycounter[]{page}"\glsnumberformat}{iv}
+\glossaryentry{BPM?\glossentry{bpm}|setentrycounter[]{page}"\glsnumberformat}{iv}
+\glossaryentry{TMN?\glossentry{tmn}|setentrycounter[]{page}"\glsnumberformat}{iv}
+\glossaryentry{TMN?\glossentry{tmn}|setentrycounter[]{page}"\glsnumberformat}{iv}
+\glossaryentry{ITIL?\glossentry{itil}|setentrycounter[]{page}"\glsnumberformat}{iv}
+\glossaryentry{ITSM?\glossentry{itsm}|setentrycounter[]{page}"\glsnumberformat}{iv}
+\glossaryentry{eToM?\glossentry{etom}|setentrycounter[]{page}"\glsnumberformat}{iv}
+\glossaryentry{ITIL?\glossentry{itil}|setentrycounter[]{page}"\glsnumberformat}{iv}
 \glossaryentry{CRM?\glossentry{crm}|setentrycounter[]{page}"\glsnumberformat}{1}
 \glossaryentry{CRM?\glossentry{crm}|setentrycounter[]{page}"\glsnumberformat}{1}
 \glossaryentry{CRM?\glossentry{crm}|setentrycounter[]{page}"\glsnumberformat}{1}
@@ -263,24 +263,39 @@
 \glossaryentry{SQL?\glossentry{sql}|setentrycounter[]{page}"\glsnumberformat}{26}
 \glossaryentry{TFG?\glossentry{tfg}|setentrycounter[]{page}"\glsnumberformat}{28}
 \glossaryentry{ITIL?\glossentry{itil}|setentrycounter[]{page}"\glsnumberformat}{30}
-\glossaryentry{MVC?\glossentry{mvc}|setentrycounter[]{page}"\glsnumberformat}{39}
-\glossaryentry{GUI?\glossentry{gui}|setentrycounter[]{page}"\glsnumberformat}{40}
-\glossaryentry{API?\glossentry{api}|setentrycounter[]{page}"\glsnumberformat}{40}
-\glossaryentry{JSF?\glossentry{jsf}|setentrycounter[]{page}"\glsnumberformat}{41}
-\glossaryentry{MVC?\glossentry{mvc}|setentrycounter[]{page}"\glsnumberformat}{41}
-\glossaryentry{MVC?\glossentry{mvc}|setentrycounter[]{page}"\glsnumberformat}{41}
-\glossaryentry{POJO?\glossentry{pojo}|setentrycounter[]{page}"\glsnumberformat}{42}
-\glossaryentry{Jakarta EE?\glossentry{jee}|setentrycounter[]{page}"\glsnumberformat}{43}
-\glossaryentry{IDE?\glossentry{ide}|setentrycounter[]{page}"\glsnumberformat}{43}
-\glossaryentry{IDE?\glossentry{ide}|setentrycounter[]{page}"\glsnumberformat}{43}
-\glossaryentry{SGBD?\glossentry{sgbd}|setentrycounter[]{page}"\glsnumberformat}{44}
-\glossaryentry{UML?\glossentry{uml}|setentrycounter[]{page}"\glsnumberformat}{44}
-\glossaryentry{UML?\glossentry{uml}|setentrycounter[]{page}"\glsnumberformat}{44}
-\glossaryentry{UML?\glossentry{uml}|setentrycounter[]{page}"\glsnumberformat}{44}
-\glossaryentry{TFG?\glossentry{tfg}|setentrycounter[]{page}"\glsnumberformat}{48}
-\glossaryentry{Jakarta EE?\glossentry{jee}|setentrycounter[]{page}"\glsnumberformat}{48}
-\glossaryentry{TFG?\glossentry{tfg}|setentrycounter[]{page}"\glsnumberformat}{53}
-\glossaryentry{XHTML?\glossentry{xhtml}|setentrycounter[]{page}"\glsnumberformat}{85}
-\glossaryentry{XHTML?\glossentry{xhtml}|setentrycounter[]{page}"\glsnumberformat}{86}
-\glossaryentry{XHTML?\glossentry{xhtml}|setentrycounter[]{page}"\glsnumberformat}{86}
-\glossaryentry{JOOQ?\glossentry{jooq}|setentrycounter[]{page}"\glsnumberformat}{86}
+\glossaryentry{MVC?\glossentry{mvc}|setentrycounter[]{page}"\glsnumberformat}{40}
+\glossaryentry{GUI?\glossentry{gui}|setentrycounter[]{page}"\glsnumberformat}{41}
+\glossaryentry{API?\glossentry{api}|setentrycounter[]{page}"\glsnumberformat}{41}
+\glossaryentry{JSF?\glossentry{jsf}|setentrycounter[]{page}"\glsnumberformat}{42}
+\glossaryentry{MVC?\glossentry{mvc}|setentrycounter[]{page}"\glsnumberformat}{42}
+\glossaryentry{MVC?\glossentry{mvc}|setentrycounter[]{page}"\glsnumberformat}{42}
+\glossaryentry{POJO?\glossentry{pojo}|setentrycounter[]{page}"\glsnumberformat}{43}
+\glossaryentry{Jakarta EE?\glossentry{jee}|setentrycounter[]{page}"\glsnumberformat}{45}
+\glossaryentry{IDE?\glossentry{ide}|setentrycounter[]{page}"\glsnumberformat}{45}
+\glossaryentry{IDE?\glossentry{ide}|setentrycounter[]{page}"\glsnumberformat}{45}
+\glossaryentry{SGBD?\glossentry{sgbd}|setentrycounter[]{page}"\glsnumberformat}{46}
+\glossaryentry{UML?\glossentry{uml}|setentrycounter[]{page}"\glsnumberformat}{46}
+\glossaryentry{UML?\glossentry{uml}|setentrycounter[]{page}"\glsnumberformat}{46}
+\glossaryentry{UML?\glossentry{uml}|setentrycounter[]{page}"\glsnumberformat}{46}
+\glossaryentry{TFG?\glossentry{tfg}|setentrycounter[]{page}"\glsnumberformat}{50}
+\glossaryentry{Jakarta EE?\glossentry{jee}|setentrycounter[]{page}"\glsnumberformat}{51}
+\glossaryentry{TFG?\glossentry{tfg}|setentrycounter[]{page}"\glsnumberformat}{131}
+\glossaryentry{XHTML?\glossentry{xhtml}|setentrycounter[]{page}"\glsnumberformat}{164}
+\glossaryentry{EJB?\glossentry{ejb}|setentrycounter[]{page}"\glsnumberformat}{165}
+\glossaryentry{CRUD?\glossentry{crud}|setentrycounter[]{page}"\glsnumberformat}{165}
+\glossaryentry{EJB?\glossentry{ejb}|setentrycounter[]{page}"\glsnumberformat}{165}
+\glossaryentry{CRUD?\glossentry{crud}|setentrycounter[]{page}"\glsnumberformat}{165}
+\glossaryentry{EJB?\glossentry{ejb}|setentrycounter[]{page}"\glsnumberformat}{165}
+\glossaryentry{CRUD?\glossentry{crud}|setentrycounter[]{page}"\glsnumberformat}{165}
+\glossaryentry{EJB?\glossentry{ejb}|setentrycounter[]{page}"\glsnumberformat}{166}
+\glossaryentry{CRUD?\glossentry{crud}|setentrycounter[]{page}"\glsnumberformat}{166}
+\glossaryentry{CRUD?\glossentry{crud}|setentrycounter[]{page}"\glsnumberformat}{166}
+\glossaryentry{EJB?\glossentry{ejb}|setentrycounter[]{page}"\glsnumberformat}{166}
+\glossaryentry{CRUD?\glossentry{crud}|setentrycounter[]{page}"\glsnumberformat}{166}
+\glossaryentry{JSF?\glossentry{jsf}|setentrycounter[]{page}"\glsnumberformat}{168}
+\glossaryentry{JSF?\glossentry{jsf}|setentrycounter[]{page}"\glsnumberformat}{168}
+\glossaryentry{XHTML?\glossentry{xhtml}|setentrycounter[]{page}"\glsnumberformat}{169}
+\glossaryentry{XHTML?\glossentry{xhtml}|setentrycounter[]{page}"\glsnumberformat}{169}
+\glossaryentry{XHTML?\glossentry{xhtml}|setentrycounter[]{page}"\glsnumberformat}{169}
+\glossaryentry{XHTML?\glossentry{xhtml}|setentrycounter[]{page}"\glsnumberformat}{169}
+\glossaryentry{JOOQ?\glossentry{jooq}|setentrycounter[]{page}"\glsnumberformat}{170}
