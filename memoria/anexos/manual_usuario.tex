@@ -2,7 +2,6 @@
 \label{chap:manual}
 
 \lettrine{CoMaSw} (\emph{\textbf{Co}}ntract \emph{\textbf{Ma}}nagement \emph{\textbf{S}}of\emph{\textbf{w}}are) una aplicación software desarrollado para la gestión de la contratación de una empresa proveedora de servicios. Las dos actividades principales de esta herramienta son:
-
 \begin{itemize}
 \item La gestión del catálogo de servicios de la empresa, mediante la definción de nuevos productos y servicios, elementos facturables como cuotas de consumo y aplicación de descuentos a través de promociones o modificación de las ya existentes.
 \item La gestión de la cartera de clientes, creando nuevos clientes o modificando clientes existentes y estableciendo las contrataciones oportunas de los distintos elementos ofertados por la empresa para esos clientes.
@@ -27,9 +26,7 @@ En esta sección veremos todo lo relacionado con la administración de la aplica
 Los requisitos hardware y software para garantizar el funcionamiento correcto de
 la aplicación son los que se indican a continuación, aunque es posible que funcione
 sobre un hardware con características inferiores y con otras versiones de los requisitos
-software no está garantizada la compatibilidad.\newline
-
-
+software no está garantizada la compatibilidad.
 \begin{itemize}
 \item \textbf{REQUISITOS HARDWARE}\newline
 Los requisitos hardware son los generales para un servidor de base de datos y unservidor web básico. Dependiendo del número de usuarios y del volumen de datos será necesario aumentar el número de recursos.
@@ -61,7 +58,6 @@ Los requisitos software necesarios para ejecutar la aplicación son los siguient
 \subsubsection{Procedimiento de instalación}
 \label{sub:proceso-instalacion}
 A continuación se detallan los pasos a seguir para el proceso de instalación (nota: Antes de comenzar la instalación, revisar que el software necesario esté instalado y configurado correctamente).
-
 \begin{enumerate}
 \item \underline{\textbf{Descomprimir el fichero \emph{comasw\_files.zip}}} \newline
 Este fichero comprimido contiene lo siguiente:
@@ -132,18 +128,17 @@ Las credenciales establecidas por defecto para el usuario administrador son ADMI
 \subsection{Gestión de usuarios}
 \label{sub:gestion-usuarios}
 
-Cualquier usuario con perfil ADMIN puede gestionar las altas, bajas y modificaciones de otros usuarios del sistema. Los usuarios con este perfil tienen habilitado un botón \emph{Configuration} situado en la esquina superior derecha de la aplicación, que al pulsarlo despliega un menú con úna única opción Manage Users (figura \ref{fig:boton-gestion-usuarios}, página \pageref{fig:boton-gestion-usuarios}):
+Cualquier usuario con perfil ADMIN puede gestionar las altas, bajas y modificaciones de otros usuarios del sistema. Los usuarios con este perfil tienen habilitado un botón \emph{Configuration} situado en la esquina superior derecha de la aplicación, que al pulsarlo despliega un menú con úna única opción Manage Users (\figurename~\ref{fig:boton-gestion-usuarios}):
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.40\textwidth]{imaxes/gestion-usuarios-01.png}
+  \includegraphics[width=0.25\textwidth]{imaxes/gestion-usuarios-01.png}
   \caption{Acceso a la pantalla de gestión de usuarios}
   \label{fig:boton-gestion-usuarios}
 \end{figure}
 
 
 Cada usuario tendrá asociado un perfil que define los permisos que tiene sobre la aplicación:
-
 \begin{itemize}
 \item \textbf{ADMIN} - permisos de administrador. Los usuarios con este perfil puede realizar altas, bajas y modificaciones de cualquier entidad de la aplicación: elementos de la parametrización, del catálogo, de la contratación o los usuarios del sistema.
 \item \textbf{ADMIN} - permisos de lectura/escritura. Los usuarios con este perfil puede realizar altas, bajas y modificaciones de las entidades del catálogo del servicio, así como de las contrataciones, y únicamente consultar las entidades de la parametrización. No tienen habilitado el acceso a la gestión de usuarios.
@@ -151,24 +146,20 @@ Cada usuario tendrá asociado un perfil que define los permisos que tiene sobre 
 \end{itemize}
 
 
-Una vez seleccionado se nos mostrará el listado de todos los usuarios del sistema (figura
-\ref{fig:listado-usuarios}, página \pageref{fig:listado-usuarios}). Desde ahí se pueden gestionar las siguientes operaciones:\newline
+Una vez seleccionado se nos mostrará el listado de todos los usuarios del sistema (\figurename~\ref{fig:listado-usuarios}).
+Desde ahí se pueden gestionar las siguientes operaciones:
+\begin{description}
+\item[\underline{\textsl{\textbf{Crear nuevo usuario}}}] Para crear un nuevo usuario se pulsará el botón \emph{New Data} situado en la parte superior de la tabla. Aparecerá una ventana emergente que mostrará un formulario con los campos a cubrir, entre ellos el perfil con el que se va a crear el usuario y que definirá los permisos de este sobre los elementos de la aplicación.
 
+\item[\underline{\textsl{\textbf{Editar usuario}}}] Para editar un usuario se seleccionará del listado y se pulsará el botón editar de la columna \emph{EDIT ROW}. Se editarán los campos pertinentes de la tabla para realizar las modificaciones oportunas. 
 
-\underline{\textsl{\textbf{Crear nuevo usuario}}}
-Para crear un nuevo usuario se pulsará el botón \emph{New Data} situado en la parte superior de la tabla. Aparecerá una ventana emergente que mostrará un formulario con los campos a cubrir, entre ellos el perfil con el que se va a crear el usuario y que definirá los permisos de este sobre los elementos de la aplicación.
-
-
-\underline{\textsl{\textbf{Editar usuario}}}
-Para editar un usuario se seleccionará del listado y se pulsará el botón editar de la columna \emph{EDIT ROW}. Se editarán los campos pertinentes de la tabla para realizar las modificaciones oportunas. 
-
-\underline{\textsl{\textbf{Borrar usuario}}}
-Para borrar un usuario se seleccionará del listado y se pulsará el botón amarillo de borrar de la columna \emph{DEL ROW} correspondiente.\newline
+\item[\underline{\textsl{\textbf{Borrar usuario}}}] Para borrar un usuario se seleccionará del listado y se pulsará el botón amarillo de borrar de la columna \emph{DEL ROW} correspondiente.
+\end{description}
 
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.40\textwidth]{imaxes/gestion-usuarios-02.png}
+  \includegraphics[width=\textwidth]{imaxes/gestion-usuarios-02.png}
   \caption{Listado de usuarios}
   \label{fig:listado-usuarios}
 \end{figure}
@@ -191,11 +182,11 @@ Antes de explicar cómo usar \emph{CoMaSw} veamos la visión de contratación qu
 \subsubsection{Conceptos relativos a las contrataciones}
 \label{sub:contratacion-conceptos}
 
-Una contratación es una estructura jerárquica en la que el que la \textit{cabeza} de la misma es el cliente. Dicho cliente puede tener una o más cuentas asociadas. Cada una de estas cuentas es responsable de la contratación de un conjunto de productos, servicios, cuotas y promociones ofertados por la empresa. La figura \ref{fig:estructura-contratacion} (página \pageref{fig:estructura-contratacion}) muestra dicha estructura de contratación:
+Una contratación es una estructura jerárquica en la que el que la \textit{cabeza} de la misma es el cliente. Dicho cliente puede tener una o más cuentas asociadas. Cada una de estas cuentas es responsable de la contratación de un conjunto de productos, servicios, cuotas y promociones ofertados por la empresa. La \figurename~\ref{fig:estructura-contratacion} muestra dicha estructura de contratación.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.60\textwidth]{imaxes/estructura-contratacion.png}
+  \includegraphics[width=0.9\textwidth]{imaxes/estructura-contratacion.png}
   \caption{Estructura de la contratación}
   \label{fig:estructura-contratacion}
 \end{figure}
@@ -203,11 +194,11 @@ Una contratación es una estructura jerárquica en la que el que la \textit{cabe
 
 Vamos a introducir algunos conceptos al respecto.
 
-\paragraph{Cliente} por cliente entendemos la persona física (particular o autónomo) o persona jurídica que adquiere los bienes y servicios proporcionados por la empresa a cambio de una transacción monetaria. Es el responsable último de la contratación de los servicios.
+\paragraph{Cliente:} por cliente entendemos la persona física (particular o autónomo) o persona jurídica que adquiere los bienes y servicios proporcionados por la empresa a cambio de una transacción monetaria. Es el responsable último de la contratación de los servicios.
 
-\paragraph{Cuenta} por cuenta entendemos la entidad del sistema que permite gestionar los distintos productos y servicios contratados por el cliente y es la responsable de la transacción económica asociada a la contratación, esto es, el \textit{pagador}, por lo que tendrá asociada una persona física o jurídica que es la que efectuará el pago y que puede coincidir con el cliente o ser otra distinta. Por lo tanto el ciclo de facturación que aplicará sobre los distintos elementos contratados vendrá dado por la cuenta asociada a los mismos.
+\paragraph{Cuenta:} por cuenta entendemos la entidad del sistema que permite gestionar los distintos productos y servicios contratados por el cliente y es la responsable de la transacción económica asociada a la contratación, esto es, el \textit{pagador}, por lo que tendrá asociada una persona física o jurídica que es la que efectuará el pago y que puede coincidir con el cliente o ser otra distinta. Por lo tanto el ciclo de facturación que aplicará sobre los distintos elementos contratados vendrá dado por la cuenta asociada a los mismos.
 
-\paragraph{Entidad facturable} por entidad facturable entendemos todo aquel elemento del sistema susceptible de generar un cargo facturable, y por lo tanto ha de tener un tipo impositivo asociado a la generación de estos cargos, de acuerdo con la ley vigente. Los cargos facturables se denomina elementos facturables y se clasifican en dos tipos:
+\paragraph{Entidad facturable:} por entidad facturable entendemos todo aquel elemento del sistema susceptible de generar un cargo facturable, y por lo tanto ha de tener un tipo impositivo asociado a la generación de estos cargos, de acuerdo con la ley vigente. Los cargos facturables se denomina elementos facturables y se clasifican en dos tipos:
 \begin{itemize}
 	\item \emph{\textbf{Cuotas}}: son los elementos que definen los cargos fijos a aplicar sobre las distintas entidades contratadas. Puede tratarse de un cargo que se emite una única vez durante el ciclo de vida de la entidad facturable (por ejemplo la cuota de alta) o cargos periódicos asociados a la prestación de servicios (por ejemplo la cuota mensual).
 	\begin{itemize}
@@ -221,11 +212,11 @@ Vamos a introducir algunos conceptos al respecto.
 \end{itemize}
 
 
-\paragraph{Producto} un producto es una entidad facturable conformada por el conjunto de servicios facturables y los posibles descuentos a aplicar sobre los distintos elementos facturables. Es el \textit{paquete} que la empesa oferta a sus clientes. Los únicos elementos facturables que se pueden aplicar sobre este tipo de entidad son del tipo cuota, y por lo tanto los descuentos a aplicar sólo afectarán a dichos cargos facturables.
+\paragraph{Producto:} un producto es una entidad facturable conformada por el conjunto de servicios facturables y los posibles descuentos a aplicar sobre los distintos elementos facturables. Es el \textit{paquete} que la empesa oferta a sus clientes. Los únicos elementos facturables que se pueden aplicar sobre este tipo de entidad son del tipo cuota, y por lo tanto los descuentos a aplicar sólo afectarán a dichos cargos facturables.
 
-\paragraph{Servicio} un servicio es otra entidad facturable que representa el bien inmateriar que se le presta al cliente y que es el verdadero objetivo de la contratación. Sobre este tipo de entidad pueden aplicarse tanto cuotas como consumos  y por lo tanto los descuentos a aplicar pueden afectara ambos tipos de elementos facturables.
+\paragraph{Servicio:} un servicio es otra entidad facturable que representa el bien inmateriar que se le presta al cliente y que es el verdadero objetivo de la contratación. Sobre este tipo de entidad pueden aplicarse tanto cuotas como consumos  y por lo tanto los descuentos a aplicar pueden afectara ambos tipos de elementos facturables.
 
-\paragraph{Promoción} se entiene por promoción aquella entidad encargada de aplicar los descuentos previamente definidos sobre los distintos elementos facturables. \newline
+\paragraph{Promoción:} se entiene por promoción aquella entidad encargada de aplicar los descuentos previamente definidos sobre los distintos elementos facturables.
 
 
 
@@ -233,11 +224,11 @@ Vamos a introducir algunos conceptos al respecto.
 \label{sub:catálogo-conceptos}
 
 
-Para llevar a cabo las distintas contratacione deberemos saber qué características puede tener cada uno de los elementos que intervienen y elegir unas u otras en función de las necesidades que presenta el cliente. Estas características vienen definidas por unas entidades \textit{plantillas} denominadas tipos que se encuentran englobadas dentro de lo que damos en denominar catálogo. En la figura \ref{fig:estructura-catalogo} (página \pageref{fig:estructura-catalogo}) se muestra la estructura que define el catálogo de servicios de la aplicación y su implementación en una contratación de los mismos:
+Para llevar a cabo las distintas contratacione deberemos saber qué características puede tener cada uno de los elementos que intervienen y elegir unas u otras en función de las necesidades que presenta el cliente. Estas características vienen definidas por unas entidades \textit{plantillas} denominadas tipos que se encuentran englobadas dentro de lo que damos en denominar catálogo. En la \figurename~\ref{fig:estructura-catalogo} se muestra la estructura que define el catálogo de servicios de la aplicación y su implementación en una contratación de los mismos.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.90\textwidth]{imaxes/estructura-catalogo.png}
+  \includegraphics[width=\textwidth]{imaxes/estructura-catalogo.png}
   \caption{Estructura del catálogo de servicios y su implementación en una contratación}
   \label{fig:estructura-catalogo}
 \end{figure}
@@ -257,15 +248,14 @@ En la sección \ref{sec:manual-usuario} de la página \pageref{sec:manual-usuari
 Puesto que los elementos que conforman las contrataciones son suceptibles de sufrir modificaciones durante su ciclo de vida (nuevas altas de productos, modificación en el precio de las cuotas, expiración de promociones, etc.) todas estas entidades están conformadas por un conjunto de registros históricos que contienen la \textit{foto} de la contratación para el período temporal indicado por las fechas incio y fin de dicho registro. Lo mismo ocurre con los elementos del catálogo que también pueden sufrir modificaciones en sus condiciones de aplicación, como son las definiciones de cuotas y promociones.
 
 En todos estos casos los registros deben ser consecutivos en el tiempo, para lo que se define una serie de limitaciones a tener en cuenta a la hora de manejar los distintos registros de histórico. Por lo tanto, dado el total de registros de histórico para una determinada entidad ordenados de forma cronólogica, desde la menor fecha de inicio a la mayor, estos registros deberán cumplir con las siguientes condiciones:
-
 \begin{itemize}
 \item Si existen varios registros en el sistema para una entidad dada, la fecha de inicio de cada uno de ellos deberá ser igual a la fecha  de finalización del registro inmediatamente anterior más un día, salvo para el primero de los registros de histórico.
 	\item Si existen varios registros en el sistema para una entidad dada, la fecha de fin de cada uno de ellos deberá ser igual a la fecha  de inicio del registro inmediatamente anterior menos un día, salvo para el último de los registros de histórico.
 	\item Si queremos \textit{partir} un registro existente para introducir un nuevo registro de histórico se modificarán las fechas de inicio y fin del registro existente para adaptarlo a las condiciones indicadas en los dos puntos anteriores, de tal forma que:
 	\begin{itemize}
-		\item Si la fecha de inicio del nuevo registro a insertar coincide con la fecha de inicio del nuevo registro a insertar, se modificará la fecha de inicio del registro existente a la fecha de fin del nuevo registro más un día, por lo que en este caso debe haber un \underline{margen de al menos un día entre la fecha de inicio y la fecha fin del registro existente} que se desea partir. 
-		\item Si la fecha de fin del nuevo registro a insertar coincide con la fecha de fin del nuevo registro a insertar, se modificará la fecha de fin del registro existente a la fecha de inicio del nuevo registro menos un día, por lo que en este caso debe haber un \underline{margen de al menos un día entre la fecha de inicio y la fecha fin del registro existente} que se desea partir. 
-		\item Si las fechas de inicio y fin del nuevo registro a insertar están comprendidas dentro de las fechas de inicio y fin del registro existente, pero no coinciden con éstas, a partir del registro existente se creará una copia del registro con la misma información que el registro existente de tal forma que la fecha de fin del registro existente será la fecha de inicio menos un día del nuevo registro y la fecha de inicio del registro copiado será la fecha de fin del nuevo registro más un día, por lo que en este caso debe haber un \underline{margen de al menos un día entre la fecha de inicio del registro existente y la fecha de inicio del nuevo registro} y  \underline{otro margen de al menos un día entre la fecha de fin del nuevo registro y la fecha de fin del registro existente}.
+		\item Si la fecha de inicio del nuevo registro a insertar coincide con la fecha de inicio del nuevo registro a insertar, se modificará la fecha de inicio del registro existente a la fecha de fin del nuevo registro más un día, por lo que en este caso debe haber un \uline{margen de al menos un día entre la fecha de inicio y la fecha fin del registro existente} que se desea partir. 
+		\item Si la fecha de fin del nuevo registro a insertar coincide con la fecha de fin del nuevo registro a insertar, se modificará la fecha de fin del registro existente a la fecha de inicio del nuevo registro menos un día, por lo que en este caso debe haber un \uline{margen de al menos un día entre la fecha de inicio y la fecha fin del registro existente} que se desea partir. 
+		\item Si las fechas de inicio y fin del nuevo registro a insertar están comprendidas dentro de las fechas de inicio y fin del registro existente, pero no coinciden con éstas, a partir del registro existente se creará una copia del registro con la misma información que el registro existente de tal forma que la fecha de fin del registro existente será la fecha de inicio menos un día del nuevo registro y la fecha de inicio del registro copiado será la fecha de fin del nuevo registro más un día, por lo que en este caso debe haber un \uline{margen de al menos un día entre la fecha de inicio del registro existente y la fecha de inicio del nuevo registro} y  \uline{otro margen de al menos un día entre la fecha de fin del nuevo registro y la fecha de fin del registro existente}.
 	\end{itemize}
 	\item Si se borra un registro de histórico intermedio, la fecha de fin del registro anterior al registro borrado se modificará a la fecha de fin del registro posterior al borrado menos un día. Si se borra el primer o el último elemento del histórico no se realiza ninguna modificación adicional sobre el resto de los registros de histórico.	
 \end{itemize}
@@ -275,7 +265,6 @@ En todos estos casos los registros deben ser consecutivos en el tiempo, para lo 
 \label{sub:registro-operaciones}
 
 La aplicación lleva a cabo un registro de las operaciones de edición sobre las entidades del sistema, de tal forma que:
-
 \begin{itemize}
 \item si se crea una nueva entidad, se registrará el usuario y la fecha en la que se realizó dicho alta.
 \item si se modifica alguna entidad existente, se registrará el usuario y la fecha en la que se realizó dicha modificación sobre la entidad. Para el caso de las entidades con registro de histórico este registro se realizará sobre los registros de histórico afectados.
@@ -309,7 +298,7 @@ Para salir de la aplicación pulsaremos el botón con nuestro nombre de usuario 
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.40\textwidth]{imaxes/logout.png}
+  \includegraphics[width=0.25\textwidth]{imaxes/logout.png}
   \caption{Logout}
   \label{fig:login}
 \end{figure}
@@ -320,26 +309,25 @@ Para salir de la aplicación pulsaremos el botón con nuestro nombre de usuario 
 Un usuario puede modificar tanto su contraseña de acceso como los datos relativos a su ficha. Para ello pulsará el botón de la esquina superior derecha con su nombre de usuario y seleccionará la opción \textit{View User Info} .
 Se mostrará una pantalla con un botón para cambiar la contraseña así como un área con los datos del usuario y un botón para editar la información.
 
-\underline{\textsl{Modificar contraseña}}
-Se pulsará el botón \emph{Change Password}. Aparecerán dos campos editables para introducir la nueva contraseña a cambiar y un botón para guardar los cambios. Los valores introducidos en ambos campos deberán ser iguales. En caso contrario la aplicación mostrará un error de validación y no se modificará la contraseña.
+\begin{description}
+\item[\underline{\textsl{Modificar contraseña}}] Se pulsará el botón \emph{Change Password}. Aparecerán dos campos editables para introducir la nueva contraseña a cambiar y un botón para guardar los cambios. Los valores introducidos en ambos campos deberán ser iguales. En caso contrario la aplicación mostrará un error de validación y no se modificará la contraseña.
 
-\underline{\textsl{Editar información del usuario}}
-Pulsando el botón \emph{Edit Data} se habilitará la edición de los campos con la información del usuario y un botón para guardar los cambios.
+\item[\underline{\textsl{Editar información del usuario}}] Pulsando el botón \emph{Edit Data} se habilitará la edición de los campos con la información del usuario y un botón para guardar los cambios.
+\end{description}
 
 
 \subsection{Acceder al menú de la aplicación}
 \label{sub:menu}
-Pulsando el botón \emph{Menu} de la esquina superior izquierda se despliega el menú de la aplicación (figura \ref{fig:menu}, página \pageref{fig:menu}).
+Pulsando el botón \emph{Menu} de la esquina superior izquierda se despliega el menú de la aplicación (\figurename~\ref{fig:menu}).
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.40\textwidth]{imaxes/menu-aplicacion.png}
+  \includegraphics[width=0.6\textwidth]{imaxes/menu-aplicacion.png}
   \caption{Detalle del menú de la aplicación}
   \label{fig:menu}
 \end{figure}
 
 El menú se divide en cuatro bloques:
-
 \begin{itemize}
 \item \emph{\textbf{PARAMETERS}}: da acceso a las distintas entidades de parametrización, necesarias para la definición del resto de entidades de la aplicación.
 \item \emph{\textbf{CATALOG}}: da acceso a las distintas entidades del catálogo de servicios de la aplicación.
@@ -355,7 +343,7 @@ A continuación entraremos en detalle en cada uno de estos apartados.
 \subsection{Parametrización}
 \label{sub:parametrizacion}
 
-Con idea de hacer lo más flexible y adaptable posible esta aplicación, se han definido una serie de elementos de parametrización para la definición de las distintas entidades de la aplicación. En la tabla \ref{tab:parametrizacion} (página \pageref{tab:parametrizacion}) se puede consultar un listado de los elementos de parametrización existentes en la aplicación. Para acceder a cada una de estas entidades se desplegará la sección \emph{PARAMETERS} del menú principal y se seleccionará el tipo de entidad correspondiente del listado desplegado.
+Con idea de hacer lo más flexible y adaptable posible esta aplicación, se han definido una serie de elementos de parametrización para la definición de las distintas entidades de la aplicación. En la \tablename~\ref{tab:parametrizacion} se puede consultar un listado de los elementos de parametrización existentes en la aplicación. Para acceder a cada una de estas entidades se desplegará la sección \emph{PARAMETERS} del menú principal y se seleccionará el tipo de entidad correspondiente del listado desplegado.
 
 
 
@@ -384,18 +372,17 @@ Billing Period & Los distintos períodos de facturación definidos. Usado para d
   \label{tab:parametrizacion}
 \end{table}
 
-La gestión de estas entidades no está disponible para todos los usuarios, tal y como se muestra en la figura \ref{fig:parametrizacion} (página \pageref{fig:parametrizacion}). Sólo los usuarios con permisos de administrador de la aplicación podrán añadir, editar o borrar elementos, habilitándoseles los correspondientes botones para dichas operaciones (figura  \ref{fig:parametrizacion-admin}). Para el resto de usuarios sólo se mostrará el listado de dichos elementos (figura \ref{fig:parametrizacion-usuario}).
+La gestión de estas entidades no está disponible para todos los usuarios, tal y como se muestra en la \figurename~\ref{fig:parametrizacion}). Sólo los usuarios con permisos de administrador de la aplicación podrán añadir, editar o borrar elementos, habilitándoseles los correspondientes botones para dichas operaciones (\figurename~\ref{fig:parametrizacion-admin}). Para el resto de usuarios sólo se mostrará el listado de dichos elementos (\figurename~\ref{fig:parametrizacion-usuario}).
 
 
 \begin{figure}[H]
   \centering
-  \begin{subfigure}[c]{0.4\textwidth}
+  \begin{subfigure}[c]{0.9\textwidth}
     \includegraphics[width=\textwidth]{imaxes/entity-type-admin.png}
-    \caption{Vista de la pantalla Entity Types para usuarios con perfil de administrador}
+    \caption{Vista de la pantalla Entity Types para usuarios con perfil de administrador\newline}
     \label{fig:parametrizacion-admin}
   \end{subfigure}
-  \hspace{0.1\textwidth}
-  \begin{subfigure}[c]{0.4\textwidth}
+  \begin{subfigure}[c]{0.9\textwidth}
     \includegraphics[width=\textwidth,height=3cm]{imaxes/entity-type-usuario.png}
     \caption{Vista de la pantalla Entity Types para el resto de perfiles de usuario}
     \label{fig:parametrizacion-usuario}
@@ -406,16 +393,13 @@ La gestión de estas entidades no está disponible para todos los usuarios, tal 
 
 Para los usuarios con perfil de administrador se definen las siguients operaciones, siendo \textit{entidad} el tipo de elemto al que hemos accedido a través del menú. El funcionamiento es el mismo para todas las entidades, sólo cambia la información a almacenar, que vendrá dada por la naturaleza de la misma.
 
+\begin{description}
+\item[\underline{\textsl{\textbf{Crear nueva entidad}}}] Para crear una nueva entidad se pulsará el botón \textit{New Data} situado en la parte superior de la tabla. Aparecerá una ventana emergente que mostrará un formulario con los campos a cubrir.
 
-\underline{\textsl{\textbf{Crear nueva entida}}}\newline
-Para crear una nueva entidad se pulsará el botón \textit{New Data} situado en la parte superior de la tabla. Aparecerá una ventana emergente que mostrará un formulario con los campos a cubrir.
+\item[\underline{\textsl{\textbf{Editar entidad existente}}}] Para editar una entidad se seleccionará del listado y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas. 
 
-
-\underline{\textsl{\textbf{Editar entidad existente}}}\newline
-Para editar una entidad se seleccionará del listado y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas. 
-
-\underline{\textsl{\textbf{Borrar entidad}}}\newline
-Para borrar una entidad se seleccionará del listado y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.\newline
+\item[\underline{\textsl{\textbf{Borrar entidad}}}] Para borrar una entidad se seleccionará del listado y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.
+\end{description}
 
 Todos los valores mostrados para la entidad son obligatorios y deberán cubrirse al realizar un alta o modificación. Asimismo el valor del campo CODE es único. No pueden existir dos entidades del mismo tipo con el mismo código.
 
@@ -432,7 +416,6 @@ Todos los usuarios del sistema tienen acceso a los elementos del catálogo, pero
 
 
 Se definen tres estados distintos para las entidades del catálogo:
-
 \begin{itemize}
 \item ACTIVE - estado activo. Para las entidades del catálogo que están disponibles para ofertar.
 \item DEVELOP - estado \textit{en desarrollo}. Para las entidades del catálogo que todavía no están disponibles para ofertar.
@@ -450,7 +433,7 @@ Nota: Para acceder a la pantalla que da acceso a la operativa de este tipo de en
 
 La facturación escapa del ámbito de esta aplicación. Sin embargo toda contratación de servicios tiene como fin último monetizar la prestación de un servicio, por lo que la información del ciclo de facturación en el que va a entrar un elemento contratado es un factor a tener en cuenta a la hora de de realizar las contrataciones.
 
-Un tipo de ciclo de facturación viene definido por los elementos indicados en la tabla \ref{tab:ciclo-facturacion} (página \pageref{tab:ciclo-facturacion}):
+Un tipo de ciclo de facturación viene definido por los elementos indicados en la \tablename~\ref{tab:ciclo-facturacion}:
 
 
 
@@ -503,7 +486,7 @@ Nota: Para acceder a la pantalla que da acceso a la operativa de este tipo de en
 En este apartado nos centraremos en la gestión de los tipos de cliente, que permiten clasificar los distintos clientes de la cartera de clientes existentes en el sistema.
 
 
-Un tipo de cliente viene definido por los elementos indicados en la tabla \ref{tab:tipo-cliente}(página \pageref{tab:tipo-cliente}):
+Un tipo de cliente viene definido por los elementos indicados en la \tablename~\ref{tab:tipo-cliente}:
 
 
 
@@ -553,7 +536,7 @@ En este apartado nos centraremos en la gestión de los tipos de cuenta, que perm
 Una cuenta es la entidad que alberga el conjunto de elementos contratados y es sobre la que se definen los datos de facturación. Un cliente puede tener varias cuentas en función de, por ejemplo, la ubicación en la que se encuentran los servicios contratados (por ejemplo una cuenta para la vivienda habitual y otra para la segunda residencia). 
 
 
-Un tipo de cuenta viene definido por los elementos indicados en la tabla \ref{tab:tipo-cuenta}(página \pageref{tab:tipo-cuenta}):
+Un tipo de cuenta viene definido por los elementos indicados en la \tablename~\ref{tab:tipo-cuenta}:
 
 
 
@@ -606,7 +589,7 @@ Como ya hemos indicado anteriormente, el importe a facturar por los consumos no 
 
 Para simplificar su manejo nos hemos quedado con una definición lo más simple posible de este tipo de elementos facturables para poder establecer una relación entre estos elementos y los posibles descuentos a aplicar sobre los mismos. Por lo tanto se ignora lo relativo la información relativa a los costes asociados a los mismos, ya que esto está ligado a la definición de la tarificación de estos elementos facturables y consideramos que entra dentro del ámbito de un sistema de tarificación. 
 
-Un tipo de consumo viene definido por los elementos indicados en la tabla \ref{tab:tipo-consumo}(página \pageref{tab:tipo-consumo}):
+Un tipo de consumo viene definido por los elementos indicados en la \tablename~\ref{tab:tipo-consumo}:
 
 
 
@@ -660,7 +643,7 @@ A diferencia de los consumos, los cargos a facturar generados por las cuotas sí
 Puesto que el importe de los cargos a facturar generados por las cuotas varían con el tiempo, se ha considerado la necesidad de llevar un registro de estos cambios a lo largo de la vida útil de este tipo de elementos. Por lo tanto una entidad de este tipo estará conformada por uno o varios registros con una fecha incio y una fecha fin que definen el período en el que aplican las condiciones definidas para esa entidad. Estos registros deben ser consecutivos de forma que si existen varios registros la fecha de inicio de un registro debe ser la fecha de fin del registro anterior mas un día (salvo para el primer registro que conforma el período del ciclo de vida del elemento). De igual forma la fecha de finalización de un registro debe ser la fecha de inicio del registro siguiente menos un día (salvo para el último registro que conforma el período del ciclo de vida del elemento).
 
 
-Un tipo de cuota viene definido por los elementos indicados en la tabla \ref{tab:tipo-cuota}(página \pageref{tab:tipo-cuota}):
+Un tipo de cuota viene definido por los elementos indicados en la \tablename~\ref{tab:tipo-cuota}:
 
 
 
@@ -698,7 +681,6 @@ Las operaciones definidas para esta entidad son las siguientes:
 Esta operación está disponible para todos los usuarios de la aplicación.
 
 Puesto que los tipos de cuota son entidades con histórico, por motivos de operatividad no se muestra el listado de todas las entidades del sistema por defecto, si no que se establecen unos criterios de búsqueda para seleccionar el tipo de cuota a consultar. Para ello se define un área de búsqueda en los que se definen los criterios de búsqueda a tener en cuenta:
-
 \begin{itemize}
 \item Buscar todos los históricos de los tipos de consumo. Se realizará una búsqueda de todos los históricos de los distintos tipos de consumo.
 \item Buscar por fecha. Se realizará una búsqueda de los históricos de todos los tipos de consumo existentes en el sistema para los que la fecha de búsqueda definida se encuentre entre la fecha de inicio y fin del registro de histórico. Opción marcada por defecto
@@ -842,7 +824,7 @@ Entendemos por tipo de producto un paquete a ofertar a los clientes que tiene as
 
 La definición completa de un tipo de producto viene dado por sí mismo y las relaciones que establece con el resto de entidades del catálogo de servicios ofertados: tipos de cuotas que aplican sobre el producto, tipos de promociones que pueden aplicar descuentos sobre esos tipos de cuotas y tipos de servicio que dependen del tipo de producto. En este apartado nos centraremos en la definición del tipo de producto \textit{per se} dejando la definición del tipo de producto con el resto de tipos de entidades para más adelante, una vez visto el resto de elementos que conforman el catálogo de servicios.
 
-Un tipo de producto viene definido por los elementos indicados en la tabla \ref{tab:tipo-producto}(página \pageref{tab:tipo-producto}):
+Un tipo de producto viene definido por los elementos indicados en la \tablename~\ref{tab:tipo-producto}:
 
 
 
@@ -981,7 +963,6 @@ Las operaciones definidas para esta entidad son las siguientes:
 \underline{\textsl{\textbf{Buscar un tipo de promoción existente}}}\newline
 Esta operación está disponible para todos los usuarios de la aplicación.
 Puesto que los tipos de promoción son entidades con histórico, por motivos de operatividad no se muestra el listado de todas las entidades del sistema por defecto, si no que se establecen unos criterios de búsqueda para seleccionar el tipo de promoción a consultar. Para ello se define un área de búsqueda en los que se definen los criterios de búsqueda a tener en cuenta:
-
 \begin{itemize}
 \item Buscar todos los históricos de los tipos de consumo. Se realizará una búsqueda de todos los históricos de los distintos tipos de consumo.
 \item Buscar por fecha. Se realizará una búsqueda de los históricos de todos los tipos de consumo existentes en el sistema para los que la fecha de búsqueda definida se encuentre entre la fecha de inicio y fin del registro de histórico. Opción marcada por defecto
@@ -1308,7 +1289,6 @@ Un cliente puede tener una o varias cuentas, que son las que definen el conjunto
 Puesto que los elementos de contratación pueden variar (y mucho) a lo largo de su ciclo de vida, se han definido todos ellos como elementos con histórico, por lo que aplican las restricciones relativas a los registros de histórico indicadas en secciones anteriores.
 
 Se definen cinco estados distintos para las entidades de contratación:
-
 \begin{itemize}
 \item ACTIVE - estado activo. Para las entidades de contratación que están en vigencia.
 \item CANCEL - estado cancelado. Para las entidades de contratación que han cursado baja.
@@ -1372,7 +1352,6 @@ Las operaciones definidas para esta entidad son las siguientes:
 Esta operación está disponible para todos los usuarios de la aplicación.
 
 Se define un área de búsqueda en los que se definen los criterios de búsqueda a tener en cuenta:
-
 \begin{itemize}
 \item Customer Id: identificador del cliente.
 \item Identity Card: número del documento de identificación del cliente (NIF, NIE,\dots).
@@ -1385,7 +1364,6 @@ Una vez cubiertos los criterios indicados se pulsará el botón \emph{Search}, q
 \underline{\textsl{\textbf{Crear nuevo cliente}}}\newline
 Esta operación sólo está habilitada para usuarios con permisos de edición.
 Para crear un nuevo cliente se pulsará el botón \textit{New Data} situado en el área \emph{Create New Customer} en la parte superior derecha de la ventana. Aparecerá una ventana emergente que mostrará un formulario con distintas pestañas relativas a la información a cubrir. A continuación se detallan dichas pestañas:
-
 \begin{enumerate}
 \item Pestaña Instance: aquí se define, entre otros, el tipo de cliente que va a tener asociado este cliente. Los campos a definir son los siguientes y son todos obligatorios:
 	\begin{itemize}
@@ -1524,7 +1502,6 @@ Las operaciones definidas para esta entidad son las siguientes:
 Esta operación está disponible para todos los usuarios de la aplicación.
 
 Se define un área de búsqueda en los que se definen los criterios de búsqueda a tener en cuenta:
-
 \begin{itemize}
 	\item Área Account Data: en este área se definen los criterios de búsqueda relativos a la propia cuenta:
 	\begin{itemize}
@@ -1546,7 +1523,6 @@ Una vez cubiertos los criterios indicados se pulsará el botón \emph{Search}, q
 \underline{\textsl{\textbf{Crear nueva cuenta}}}\newline
 Esta operación sólo está habilitada para usuarios con permisos de edición.
 Para crear una nueva cuenta se pulsará el botón \textit{New Data} situado en el área \emph{Create New Account} en la parte superior derecha de la ventana. Aparecerá una ventana emergente que mostrará un formulario con distintas pestañas relativas a la información a cubrir. A continuación se detallan dichas pestañas:
-
 \begin{enumerate}
 \item Pestaña Contract and Customer Data: en este apartado se define tanto el contrato asociado a la cuenta como el cliente del que depende. 
 	\begin{itemize}
@@ -1681,7 +1657,6 @@ Las operaciones definidas para esta entidad son las siguientes:
 Esta operación está disponible para todos los usuarios de la aplicación.
 
 Se define un área de búsqueda en los que se definen los criterios de búsqueda a tener en cuenta:
-
 \begin{itemize}
 	\item Área Account Data: en este área se definen los criterios de búsqueda relativos a la cuenta a la que está asociado el producto:
 	\begin{itemize}
@@ -1707,7 +1682,6 @@ Para crear una nueva producto se pulsará el botón \textit{New Data} situado en
 Si sabemos el id de la cuenta a la que vamos a asociar el producto la especificaremos en el área de texto \emph{Account Id} del área \emph{Account Criteria} del apartado \emph{Parent Data}. En caso de no saber el id procederemos a cubrir alguno de los campos del formulario del apartado \emph{Parent Data} y pulsaremos el botón \emph{Search}. Aparecerá un listado con todas las cuentas resultado de la búsqueda. Seleccionaremos el registro deseado y pulsaremos el botón amarillo de la columna \emph{Select} correspondiente. Se cargará la información correspondiente en el apartado \emph{Parent Data}.
 
 A continuación cubriremos el resto de los datos correspondientes al producto a crear y que se encuentran debajo del apartado apartado \emph{Parent Data}:
-
 \begin{itemize}
 	\item Start Date: fecha de inicio del registro a crear (fecha desde la que queremos que el producto figure como registrado en el sistema). Por defecto aparece la fecha actual.
 	\item End Date: fecha de fin del registro a crear. Por defecto aparece la máxima fecha del sistema (31/12/9999). Recomendamos no modificar esta fecha.
@@ -1804,7 +1778,6 @@ Las operaciones definidas para esta entidad son las siguientes:
 Esta operación está disponible para todos los usuarios de la aplicación.
 
 Se define un área de búsqueda en los que se definen los criterios de búsqueda a tener en cuenta:
-
 \begin{itemize}
 	\item Área Account Data: en este área se definen los criterios de búsqueda relativos a la cuenta a la que está asociado el servicio:
 		\begin{itemize}
@@ -1840,7 +1813,6 @@ Para crear una nueva servicio se pulsará el botón \textit{New Data} situado en
 Si sabemos el id del producto a la que vamos a asociar el servicio la especificaremos en el área de texto \emph{Product Id} del área \emph{Product Criteria} del apartado \emph{Parent Data}. En caso de no saber el id procederemos a cubrir alguno de los campos del formulario del apartado \emph{Parent Data} de forma análoga a lo realizado para especificar los criterios de búsquda del servicio y pulsaremos el botón \emph{Search}. Aparecerá un listado con todos los productos resultado de la búsqueda. Seleccionaremos el registro deseado y pulsaremos el botón amarillo de la columna \emph{Select} correspondiente. Se cargará la información correspondiente en el apartado \emph{Parent Data}.
 
 A continuación cubriremos el resto de los datos correspondientes al servicio a crear y que se encuentran debajo del apartado apartado \emph{Parent Data}:
-
 \begin{itemize}
 	\item Start Date: fecha de inicio del registro a crear (fecha desde la que queremos que el servicio figure como registrado en el sistema). Por defecto aparece la fecha actual.
 	\item End Date: fecha de fin del registro a crear. Por defecto aparece la máxima fecha del sistema (31/12/9999). Recomendamos no modificar esta fecha.
@@ -1918,7 +1890,6 @@ Las operaciones definidas para esta entidad son las siguientes:
 Esta operación está disponible para todos los usuarios de la aplicación.
 
 Se define un área de búsqueda en los que se definen los criterios de búsqueda a tener en cuenta:
-
 \begin{itemize}
 	\item Área Account Data: en este área se definen los criterios de búsqueda relativos a la cuenta a la que está asociada la cuota:
 		\begin{itemize}
@@ -1958,7 +1929,6 @@ Para crear una nueva servicio se pulsará el botón \textit{New Data} situado en
 Si sabemos el id de la entidad a la que vamos a asociar la cuota la especificaremos en el área de texto \emph{Parent Id}. En caso de no saber el id procederemos a realizar la correspondiente búsqueda en el área  \emph{Search Parent Data}. Para ello desplegaremos ese área pulsando sobre \emph{Search Parent Data} y procederemos a cubrir alguno de los campos del formulario del apartado \emph{Search Parent Data} de forma análoga a lo realizado para especificar los criterios de búsquda de la cuota y pulsaremos el botón \emph{Search}. Aparecerá un listado con todos los productos o servicios (en función del nivel de aplicación seleccionado) resultado de la búsqueda. Seleccionaremos el registro deseado y pulsaremos el botón amarillo de la columna \emph{Select} correspondiente. Se cargará la información correspondiente en el apartado \emph{Search Parent Data}, así como los datos de \emph{Application Level} y \emph{Parent Id} del área de datos de la instancia de la cuota a crear.
 
 A continuación cubriremos el resto de los datos correspondientes a la cuota a crear y que se encuentran debajo del apartado \emph{Search Parent Data} (importante: si el apartado \emph{Search Parent Data} está desplegado es posible que no se vea todo el formulario de creación de la cuota, por lo que habrá que minimizarlo pulsando en el nombre del apartado (\emph{Search Parent Data})).
-
 \begin{itemize}
 	\item Start Date: fecha de inicio del registro a crear (fecha desde la que queremos que la cuota figure como registrado en el sistema). Por defecto aparece la fecha actual.
 	\item End Date: fecha de fin del registro a crear. Por defecto aparece la máxima fecha del sistema (31/12/9999). Recomendamos no modificar esta fecha.
@@ -2075,7 +2045,6 @@ Las operaciones definidas para esta entidad son las siguientes:
 Esta operación está disponible para todos los usuarios de la aplicación.
 
 Se define un área de búsqueda en los que se definen los criterios de búsqueda a tener en cuenta:
-
 \begin{itemize}
 	\item Área Account Data: en este área se definen los criterios de búsqueda relativos a la cuenta a la que está asociada la promoción:
 		\begin{itemize}
@@ -2115,7 +2084,6 @@ Para crear una nueva servicio se pulsará el botón \textit{New Data} situado en
 Si sabemos el id de la entidad a la que vamos a asociar la promoción la especificaremos en el área de texto \emph{Parent Id}. En caso de no saber el id procederemos a realizar la correspondiente búsqueda en el área  \emph{Search Parent Data}. Para ello desplegaremos ese área pulsando sobre \emph{Search Parent Data} y procederemos a cubrir alguno de los campos del formulario del apartado \emph{Search Parent Data} de forma análoga a lo realizado para especificar los criterios de búsquda de la promoción y pulsaremos el botón \emph{Search}. Aparecerá un listado con todos los productos o servicios (en función del nivel de aplicación seleccionado) resultado de la búsqueda. Seleccionaremos el registro deseado y pulsaremos el botón amarillo de la columna \emph{Select} correspondiente. Se cargará la información correspondiente en el apartado \emph{Search Parent Data}, así como los datos de \emph{Application Level} y \emph{Parent Id} del área de datos de la instancia de la promoción a crear.
 
 A continuación cubriremos el resto de los datos correspondientes a la promoción a crear y que se encuentran debajo del apartado \emph{Search Parent Data} (importante: si el apartado \emph{Search Parent Data} está desplegado es posible que no se vea todo el formulario de creación de la promoción, por lo que habrá que minimizarlo pulsando en el nombre del apartado (\emph{Search Parent Data})).
-
 \begin{itemize}
 	\item Start Date: fecha de inicio del registro a crear (fecha desde la que queremos que la promoción figure como registrado en el sistema). Por defecto aparece la fecha actual.
 	\item End Date: fecha de fin del registro a crear. Por defecto aparece la máxima fecha del sistema (31/12/9999). Recomendamos no modificar esta fecha.
@@ -2190,7 +2158,6 @@ Para borrar completamente una promoción se deben borrar uno a uno todos los reg
 Para visualizar de forma simple y cómoda las distintas contrataciones existentes en el sistema se ha definido una vista de jerarquía de la misma. A la misma se accece a través del menú \emph{HIERARCHY} seleccionando la opción \emph{Hierarchy View} y muestra toda la información existente en el servicio para un cliente dado: sus cuentas asociadas así como los productos y servicios contratados para cada una de ellas junto a las cuotas y promociones que tienen asociadas.
 
 Al acceder a esta pantalla se muestra un área de búsqueda, similar a las vistas en las entidades de contratación, con las siguientes áreas:
-
 \begin{itemize}
 	\item Área Account Data: en este área se definen los criterios de búsqueda relativos a una de las cuentas que pertenece al cliente a buscar:
 		\begin{itemize}
