@@ -2,7 +2,7 @@
 \label{chap:fmtos-técnicos}
 
 
-\lettrine{E}{n} este capítulo realizaremos una aproximación a las diferentes tecnologías usadas en el desarrollo del presente \acrshort{tfg}.
+\lettrine{E}{n} este capítulo introduciremos las diferentes tecnologías usadas en el desarrollo del presente \acrshort{tfg}.
 
 
 \section{Jakarta EE}
@@ -16,10 +16,9 @@ Jakarta EE ofrece a los desarrolladores un conjunto completo de especificaciones
 \subsection{Historia}
 \label{sec:historia}
 
-El lenguaje de programación Java nació en 1991 de la mano de James Gosling, que en aquellos momentos trabajaba en Sun Microsystems, y su equipo. Los objetivos de Gosling eran implementar una máquina virtual y un lenguaje con una estructura y sintaxis similar a C++. La promesa inicial de Gosling era  \textquote{\textit{Write Once, Run Anywhere}} (Escríbelo una vez, ejecútalo en cualquier lugar), proporcionando un lenguaje independiente de la plataforma y un entorno de ejecución ligero y gratuito para las plataformas más populares (la \acrfull{jvm}), de forma que los binarios (bytecode) de las aplicaciones Java pudiesen ejecutarse en cualquier plataforma. En 1995 fue lanzado comercialmente por Sun Microsystems como un componente fundamental de la plataforma Java~\cite{WikiJava-esp}. 
+El lenguaje de programación Java nació en 1991 de la mano de James Gosling, que en aquellos momentos trabajaba en Sun Microsystems, y su equipo. Los objetivos de Gosling eran implementar una máquina virtual y un lenguaje con una estructura y sintaxis similar a C++. La promesa inicial de Gosling era  \textquote{\textit{Write Once, Run Anywhere}} (Escríbelo una vez, ejecútalo en cualquier lugar), proporcionando un lenguaje independiente de la plataforma y un entorno de ejecución ligero y gratuito para las plataformas más populares (la \acrfull{jvm}), de forma que los binarios (\emph{bytecode}) de las aplicaciones Java pudiesen ejecutarse en cualquier plataforma. En 1995 fue lanzado comercialmente por Sun Microsystems como un componente fundamental de la plataforma Java~\cite{WikiJava-esp}. 
 
 La plataforma Java es un conjunto de programas que facilitan el desarrollo y la ejecución de programas escritos en el lenguaje de programación Java~\cite{WikiJavaSwPlatform}. Una plataforma Java incluye un motor de ejecución (la \acrshort{jvm}), un compilador y un conjunto de bibliotecas. También puede haber servidores adicionales y bibliotecas alternativas que dependen de los requisitos. Las plataformas Java se han implementado para una amplia variedad de hardware y sistemas operativos con el fin de permitir que los programas Java se ejecuten de manera idéntica en todos ellos. Existen distintas plataformas orientadas adistintas clases de dispositivos y aplicaciones, a saber:
-
 \begin{itemize}
 \item Java Card: Una tecnología que permite que las pequeñas aplicaciones basadas en Java (applets) se ejecuten de forma segura en tarjetas inteligentes y dispositivos similares de pequeña memoria. 
 \item Java ME (Micro Edition): especifica varios conjuntos diferentes de bibliotecas (conocidas como perfiles) para dispositivos con capacidades limitadas de almacenamiento, visualización y energía. A menudo se utiliza para desarrollar aplicaciones para dispositivos móviles, PDA, decodificadores de TV e impresoras. 
@@ -28,17 +27,16 @@ La plataforma Java es un conjunto de programas que facilitan el desarrollo y la 
 \end{itemize}
 
 
-Puesto que el desarrollo de este trabajo ha sido a través de Jakarta EE, que nos centraremos en dicha plataforma. Java Enterprise Edition fue un proyecto iniciado por Sun Microsystems en el año 1999 bajo el nombre de J2EE y adquirida por Oracle diez años más tarde, dando continuidad al proyecto hasta 2017, momento en el que el proyecto pasó a manos de la Eclipse Foundation, quien continúa con su desarrollo bajo la modalidad de código abierto en la actualidad ~\cite{JakartaEE-eclipse}.
+Puesto que el desarrollo de este trabajo ha sido a través de Jakarta EE, nos centraremos en dicha plataforma. Java Enterprise Edition fue un proyecto iniciado por Sun Microsystems en el año 1999 bajo el nombre de J2EE y adquirida por Oracle diez años más tarde, dando continuidad al proyecto hasta 2017, momento en el que el proyecto pasó a manos de la Eclipse Foundation, quien continúa con su desarrollo bajo la modalidad de código abierto en la actualidad ~\cite{JakartaEE-eclipse}.
 
-Esta transferencia de proyecto de Oracle a Eclipse Foundation no incluyó el uso de la marca Java, por lo que Eclipse Foundation renombró el proyecto pasando a denominarse Jakarta EE. La primera versión lanzada bajo el parguas de Eclipse Foundation fue la 8 (versión con la que se ha desarrollado la aplicación de este \acrshort{tfg}) y actualmente está disponible la versión 9.1 (página~\pageref{tab:evolucionJavaEE}).
-
+Esta transferencia de proyecto de Oracle a Eclipse Foundation no incluyó el uso de la marca Java, por lo que Eclipse Foundation renombró el proyecto pasando a denominarse Jakarta EE. La primera versión lanzada bajo el paráguas de Eclipse Foundation fue la 8 (versión con la que se ha desarrollado la aplicación de este \acrshort{tfg}) y actualmente está disponible la versión 9.1. La \tablename~\ref{tab:evolucionJavaEE} muestra la evolución histórica de Java EE y Jakarta EE:
 
 \begin{table}[hp!]
   \centering
   \rowcolors{2}{white}{udcgray!25}
   \begin{tabular}{c|c|c|c}
   \rowcolor{udcpink!25}
-  \textbf{Versión} & \textbf{Año} & \textbf{Soporte Java SE} & \textbf{Empresa} \\hline
+  \textbf{Versión} & \textbf{Año} & \textbf{Soporte Java SE} & \textbf{Empresa}\\
 J2EE 1.2 & 1999 & J2SE 1.2 & Sun Microsystems \\
 J2EE 1.3 & 2001 & J2SE 1.3 & Sun Microsystems \\
 J2EE 1.4 &2003 & J2SE 1.4 & Sun Microsystems \\
@@ -60,18 +58,17 @@ Jakarta EE 9.1 & 2021 & Java SE 11//Java SE 8 & Eclipse Foundation \\
 \label{sec:arquitectura}
 
 
-\acrshort{jee} se define por su especificación. La especificación define las \acrfull{api} y sus interacciones. \acrshort{jee} incluye varias especificaciones que sirven para diferentes propósitos, como pueden ser generar páginas web, leer y escribir desde una base de datos de manera transaccional, administrar colas distribuidas. Las \acrshort{api} de \acrshort{jee} incluyen varias tecnologías que amplían la funcionalidad de las \acrshort{api} de Java SE base, como Jakarta Enterprise Beans, conectores, servlets, Jakarta Server Pages y varias tecnologías de servicios web~\cite{WikiJakartaEE-engl}. En la figura ~\ref{fig:arquitecturaJakartaEE} se muestra la arquitectura \acrshort{jee} (página ~\pageref{fig:arquitecturaJakartaEE})\cite{WikiJakartaEE-engl}.
+\acrshort{jee} se define por su especificación. La especificación define las \acrfull{api} y sus interacciones. \acrshort{jee} incluye varias especificaciones que sirven para diferentes propósitos, como pueden ser generar páginas web, leer y escribir desde una base de datos de manera transaccional, administrar colas distribuidas. Las \acrshort{api} de \acrshort{jee} incluyen varias tecnologías que amplían la funcionalidad de las \acrshort{api} de Java SE base, como Jakarta Enterprise Beans, conectores, servlets, Jakarta Server Pages y varias tecnologías de servicios web~\cite{WikiJakartaEE-engl}. En la \figurename~\ref{fig:arquitecturaJakartaEE} se muestra la arquitectura \acrshort{jee} \cite{WikiJakartaEE-engl}.
 
 
 \begin{figure}[hp!]
   \centering
-  \includegraphics[width=0.50\textwidth]{imaxes/JakartaEE-Architecture.png}
+  \includegraphics[width=0.6\textwidth]{imaxes/JakartaEE-Architecture.png}
   \caption{Arquitectura Jakarta EE}
   \label{fig:arquitecturaJakartaEE}
 \end{figure}
 
 Entre las distintas especificaciones de \acrshort{jee} cabe destacar las siguientes:
-
 \begin{itemize}
    \item Especificaciones web
      \begin{itemize}
@@ -109,8 +106,7 @@ Entre las distintas especificaciones de \acrshort{jee} cabe destacar las siguien
 
 \subsection{Componentes Jakarta EE}
 \label{sec:componentes}
-\acrshort{jee} define cuatro tipos de componentes de aplicación~\cite{jee}: 
-
+\acrshort{jee} define cuatro tipos de componentes de aplicación~\cite{JakartaEE}:
 \begin{itemize}
    \item Aplicaciones cliente: suelen ser programas \acrfull{gui} que se ejecutan en un equipo de escritorio.
    \item Applets: son componentes de \acrshort{gui} que normalmente se ejecutan en un navegador web, pero pueden ejecutarse en una variedad de otras aplicaciones o dispositivos que admiten el modelo de programación de applets. 
@@ -165,7 +161,6 @@ En \acrshort{jsf} se define un servlet llamado Faces Servlet dentro de un archiv
 \subsubsection{Ciclo de vida de una aplicación JSF}
 \label{sec:ciclo-vida-jsf}
 El ciclo de vida de una aplicación \acrshort{jsf} consta de las siguientes fases~\cite{DesarrolloJakartaEE}:
-
 \begin{enumerate}
 \item Restaurar la vista: en esta etapa \acrshort{jsf} comprueba si la solicitud \acrshort{http} recibida es nueva o no con el fin de crear o restaurar el árbol de componentes (objetos Java necesarios).
 \item Aplicar los valores de la solicitud: una vez creado el arbol cada componente actualiza sus valores con los parámetros presentes en la solicitud.
@@ -182,7 +177,6 @@ El ciclo de vida de una aplicación \acrshort{jsf} consta de las siguientes fase
 Primefaces es una librería de componentes visuales open source que cuenta con un amplio conjunto de componentes enriquecidos para diseñar interfaces de usuario creada por PrimeTek Informatics. El desarrollo inicial de PrimeFaces se inició a finales de 2008\cite{WikiPrimefaces}.
 
 Las principales características que presenta son las siguientes~\cite{Primefaces}:
-
 \begin{itemize}
 \item Amplio conjunto de componentes (HtmlEditor, Dialog, Autocompletar, Gráficos y muchos más).
 \item Soporte nativo AJAX basado en API JSF AJAX estándar. 
@@ -195,9 +189,9 @@ Las principales características que presenta son las siguientes~\cite{Primeface
 \subsection{Omnifaces}
 \label{sec:omnifaces}
 
-OmniFaces es una biblioteca de utilidades open source para \acrshort{jsf} desarrollada por dos miembros de la JSF Expert Group (JSF EG), Bauke Scholtz (alias BalusC) y Arjan Tijms\cite{WikiOmnifaces}.
+OmniFaces es una biblioteca de utilidades open source para \acrshort{jsf} desarrollada por dos miembros de la JSF Expert Group (JSF EG), Bauke Scholtz (alias BalusC) y Arjan Tijms~\cite{WikiOmnifaces}.
 
-A diferencia de otras bibliotecas de componentes \acrshort{jsf}  existentes en el mercado (como PrimeFaces, BootsFaces o ButterFaces), OmniFaces no contiene ningún componente orientado a enbellecer la visualización, si no que está más orientado a las "utilidades" que resuelven problemas prácticos cotidianos y soluciones para (pequeñas) deficiencias en la \acrshort{api}  \acrshort{jsf}. Esta librería se centra en utilidades que facilitan las tareas cotidianas con la \acrshort{api} \acrshort{jsf} estándar. Estamos ante una respuesta a los problemas recurrentes con los que los autores se han encontrado a lo largo de su desarrollo profesional con \acrshort{jsf} y de las preguntas que se publican en Stack Overflow.
+A diferencia de otras bibliotecas de componentes \acrshort{jsf}  existentes en el mercado (como PrimeFaces, BootsFaces o ButterFaces), OmniFaces no contiene ningún componente orientado a enbellecer la visualización, si no que está más orientado a las ``utilidades'' que resuelven problemas prácticos cotidianos y soluciones para (pequeñas) deficiencias en la \acrshort{api}  \acrshort{jsf}. Esta librería se centra en utilidades que facilitan las tareas cotidianas con la \acrshort{api} \acrshort{jsf} estándar. Estamos ante una respuesta a los problemas recurrentes con los que los autores se han encontrado a lo largo de su desarrollo profesional con \acrshort{jsf} y de las preguntas que se publican en Stack Overflow.
 
 \subsection{Java Object Oriented Querying}
 \label{sec:jooq}
@@ -206,8 +200,6 @@ A diferencia de otras bibliotecas de componentes \acrshort{jsf}  existentes en e
 El enfoque de \acrshort{jooq} pone el foco en el lado de \acrfull{sql} en lugar de \acrshort{jpa} como hacen los \acrfull{orm} como por ejemplo Hibernate.
 
 Alguna de las características que presenta \acrshort{jooq} son las siguientes\citep{VentajasJooq}:
-
-
 \begin{itemize}
 \item Proporciona un generador de código que permite, mediante ingeniería inversa, converir el esquema de base de datos en conjunto de tablas de modelado de clases Java, registros, secuencias, POJO, DAO, procedimientos almacenados, tipos definidos por el usuario y muchos más listas para usarse. 
 \item Ofrece la posibilidad de utilizar toda la funcionalidad de la base de datos seleccionada en lugar de una abstracción o un subconjunto limitado gracias a su \acrfull{dsl} fluido que se asigna uno a uno con \acrshort{sql}
@@ -224,9 +216,8 @@ Alguna de las características que presenta \acrshort{jooq} son las siguientes\c
 
 \subsection{Log4j}
  Es una biblioteca \gls{opensource} perteneciente a los Java Logging Frameworks desarrollada en Java por la Apache Software Foundation que permite generar mensajes de logging de una forma limpia, sencilla, permitiendo filtrarlos por importancia y pudiendo configurar su salida por vía consola, fichero u otras distintas.
- 
-  Existen diversos niveles de prioridad. A continuación se muestran los más utlizados
-  
+
+Existen diversos niveles de prioridad. A continuación se muestran los más utilizados
 \begin{itemize}
 \item DEBUG: usado para escribir mensajes de depuración.
 \item INFO: mensajes puramente informativos.
@@ -250,36 +241,30 @@ Los datos se han almacenado en una base de datos relacional. Para ello se ha opt
 
 El sistema de gestión de bases de datos objeto-relacionales ahora conocido como PostgreSQL se deriva del paquete POSTGRES escrito en la Universidad de California en Berkeley. Con más de dos décadas de desarrollo a sus espaldas, PostgreSQL es ahora la base de datos de código abierto más avanzada disponible en cualquier lugar.
 
-\subsubsection{Inicios. POSTGRES}
-\label{sec:postgres}
-
-La implementación de POSTGRES comenzó en 1986. Desde entonces ha tenido varios lanzamientos importantes. El primer sistema "demoware\footnote{Tipo de software que permite su uso sin ninguna restricción por un período limitado de tiempo, por un número de usos o por progresión hasta un determinado punto. Generalmente pasado el período de prueba, se deshabilitan todas las funciones o parte de ellas.} " entró en funcionamiento en 1987 y se mostró en la Conferencia ACM-SIGMOD de 1988. La versión 1 fue lanzada a algunos usuarios externos en junio de 1989. La Versión 2 fue lanzada en junio de 1990 con un nuevo sistema de reglas. La versión 3 apareció en 1991 y agregó soporte para múltiples administradores de almacenamiento, un ejecutor de consultas mejorado y un sistema de reglas reescrito. En su mayor parte, las versiones posteriores hasta Postgres95 se centraron en la portabilidad y la confiabilidad.
+\paragraph{Inicios}
+La implementación de POSTGRES comenzó en 1986. Desde entonces ha tenido varios lanzamientos importantes. El primer sistema \emph{``demoware''}\footnote{Tipo de software que permite su uso sin ninguna restricción por un período limitado de tiempo, por un número de usos o por progresión hasta un determinado punto. Generalmente pasado el período de prueba, se deshabilitan todas las funciones o parte de ellas.} entró en funcionamiento en 1987 y se mostró en la Conferencia ACM-SIGMOD de 1988. La versión 1 fue lanzada a algunos usuarios externos en junio de 1989. La Versión 2 fue lanzada en junio de 1990 con un nuevo sistema de reglas. La versión 3 apareció en 1991 y agregó soporte para múltiples administradores de almacenamiento, un ejecutor de consultas mejorado y un sistema de reglas reescrito. En su mayor parte, las versiones posteriores hasta Postgres95 se centraron en la portabilidad y la confiabilidad.
 
 POSTGRES se ha utilizado para implementar muchas aplicaciones diferentes de investigación y producción. También se ha utilizado como una herramienta educativa en varias universidades. A finales de 1992, POSTGRES se convirtió en el principal gestor de datos del proyecto de computación científica Sequoia 2000.
 
-\subsubsection{Postgres95}
-\label{sec:postgres95}
-
+\paragraph{Postgres95}
 En 1994, Andrew Yu y Jolly Chen agregaron un intérprete de lenguaje \acrshort{sql} a POSTGRES. Bajo un nuevo nombre, Postgres95 fue posteriormente lanzado a la web para encontrar su propio camino en el mundo como un descendiente de código abierto del código original de POSTGRES Berkeley. Estaba codificado completamente en ANSI C y redujo su tamaño un 25\% respecto al código original. También se mejoró el rendimiento y la capacidad de mantenimiento.
 
-\subsubsection{PostgreSQL}
-\label{sec:postgresql}
-
+\paragraph{PostgreSQL}
 En 1996 se eligió un nuevo nombre, PostgreSQL, para reflejar la relación entre el POSTGRES original y las versiones más recientes con capacidad \acrshort{sql}. Al mismo tiempo se configuró la numeración de la versión para que comenzara en 6.0, poniendo los números de nuevo en la secuencia originalmente iniciada por el proyecto POSTGRES de Berkeley.
 
-Durante el desarrollo de PostgreSQL el foco se trasladó hacia el aumento de las características y capacidades 
+Durante el desarrollo de PostgreSQL el foco se trasladó hacia el aumento de las características y capacidades .
 
 \subsection{Características}
 \label{sec:caracteristicas}
 
 PostgreSQL es compatible con una gran parte del estándar SQL y entre sus caraterísticas figuran las siguientes: 
 \begin{itemize}
-\item Es \textit{open source}
-\item Emplea un lenguaje SQL estandar.lo que permite la importación de otras bases de datos.
+\item Es \textit{open source}.
+\item Emplea un lenguaje SQL estandar lo que permite la importación de otras bases de datos.
 \item Cumple con el modelo ACID (atomicidad, consistencia, aislamiento y durabilidad de los datos almacenados).
 \item Capacidad de realizar consultas complejas.
 \item Claves foráneas.
-\item Triggers(disparadores).
+\item Triggers (disparadores).
 \item Vistas actualizables.
 \item Integridad transaccional.
 \item Control de versiones simultánea.
