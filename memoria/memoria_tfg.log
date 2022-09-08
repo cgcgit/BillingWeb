@@ -1,4 +1,4 @@
-This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2022.8.25)  4 SEP 2022 22:06
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2022/dev/Debian) (preloaded format=xelatex 2022.8.25)  8 SEP 2022 14:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1772,7 +1772,32 @@ LaTeX Info: Redefining \ttfamily on input line 15.
 (./contido/teoria.aux) (./contido/apartado-tecnico.aux)
 (./contido/analisis-disenho.aux) (./contido/implementacion.aux)
 (./contido/pruebas.aux) (./contido/planificacion.aux)
-(./contido/conclusions.aux) (./anexos/adicional.aux) (./anexos/ref_tecnica.aux
+(./contido/conclusions.aux) (./anexos/manual_usuario.aux
+
+LaTeX Warning: Label `fig:login' multiply defined.
+
+
+LaTeX Warning: Label `sub:parametrizacion' multiply defined.
+
+
+LaTeX Warning: Label `tab:tipo-cuota' multiply defined.
+
+
+LaTeX Warning: Label `sub:product-fee-type-relation' multiply defined.
+
+
+LaTeX Warning: Label `sub:product-promotion-type-relation' multiply defined.
+
+
+LaTeX Warning: Label `sub:contratacion' multiply defined.
+
+
+LaTeX Warning: Label `fig:parametrizacion' multiply defined.
+
+
+LaTeX Warning: Label `fig:parametrizacion' multiply defined.
+
+) (./anexos/ref_tecnica.aux
 
 LaTeX Warning: Label `sub:casos-uso' multiply defined.
 
@@ -1801,7 +1826,13 @@ LaTeX Warning: Label `tab:cu-anhadir-historico-elemento' multiply defined.
 LaTeX Warning: Label `tab:cu-borrar-historico-elemento' multiply defined.
 
 
+LaTeX Warning: Label `tab:cu-listar-catálogo-historico' multiply defined.
+
+
 LaTeX Warning: Label `sub:cu-catalogo' multiply defined.
+
+
+LaTeX Warning: Label `tab:cu-listar-instancia' multiply defined.
 
 
 LaTeX Warning: Label `sub:cu-catalogo' multiply defined.
@@ -2179,17 +2210,18 @@ Requested font "cmr10" at 10.95pt
 
 
 
-])
-\tf@toc=\write7
-\openout7 = `memoria_tfg.toc'.
-
+]
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/n' will be
-(Font)              scaled to size 10.0pt on input line 83.
+(Font)              scaled to size 10.0pt on input line 107.
 Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;m
 apping=tex-text;" at 10.0pt
  -> /usr/share/texlive/texmf-dist/fonts/opentype/public/libertine/LinLibertine_
 R.otf
- [2] (./memoria_tfg.lof
+ [2])
+\tf@toc=\write7
+\openout7 = `memoria_tfg.toc'.
+
+ [3] (./memoria_tfg.lof
 LaTeX Info: Redefining \rmfamily on input line 1.
 LaTeX Info: Redefining \sffamily on input line 1.
 LaTeX Info: Redefining \ttfamily on input line 1.
@@ -2201,16 +2233,16 @@ LaTeX Info: Redefining \sffamily on input line 5.
 LaTeX Info: Redefining \ttfamily on input line 5.
 
 
-Package natbib Warning: Citation `Itil-eTom' on page iii undefined on input lin
-e 14.
+Package natbib Warning: Citation `Itil-eTom' on page iv undefined on input line
+ 14.
 
-[3
+[4
 
-])
+] [5])
 \tf@lof=\write8
 \openout8 = `memoria_tfg.lof'.
 
- [4] (./memoria_tfg.lot
+ [6] (./memoria_tfg.lot
 LaTeX Info: Redefining \rmfamily on input line 1.
 LaTeX Info: Redefining \sffamily on input line 1.
 LaTeX Info: Redefining \ttfamily on input line 1.
@@ -2220,13 +2252,13 @@ LaTeX Info: Redefining \ttfamily on input line 3.
 LaTeX Info: Redefining \rmfamily on input line 5.
 LaTeX Info: Redefining \sffamily on input line 5.
 LaTeX Info: Redefining \ttfamily on input line 5.
- [5
+ [7
 
 ])
 \tf@lot=\write9
 \openout9 = `memoria_tfg.lot'.
 
- [6]
+ [8]
 \openout2 = `contido/introducion.aux'.
 
  (./contido/introducion.tex
@@ -2559,43 +2591,43 @@ File: imaxes/cu-read-write.png Graphic file (type bmp)
 <imaxes/cu-read-write.png>
 File: imaxes/cu-admin.png Graphic file (type bmp)
 <imaxes/cu-admin.png>
- [34]
+ [34] [35]
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/it' will be
-(Font)              scaled to size 10.95pt on input line 209.
+(Font)              scaled to size 10.95pt on input line 247.
 Requested font "[LinLibertine_RBI.otf]/OT:script=latn;language=dflt;+tnum;+lnum
 ;mapping=tex-text;" at 10.95pt
  -> /usr/share/texlive/texmf-dist/fonts/opentype/public/libertine/LinLibertine_
 RBI.otf
- [35] [36] [37] [38]
+ [36] [37] [38] [39]
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/it' will be
-(Font)              scaled to size 9.0pt on input line 323.
+(Font)              scaled to size 9.0pt on input line 361.
 Requested font "[LinLibertine_RI.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
 mapping=tex-text;" at 9.0pt
  -> /usr/share/texlive/texmf-dist/fonts/opentype/public/libertine/LinLibertine_
 RI.otf
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/it' will be
-(Font)              scaled to size 9.0pt on input line 323.
+(Font)              scaled to size 9.0pt on input line 361.
 Requested font "[LinLibertine_RBI.otf]/OT:script=latn;language=dflt;+tnum;+lnum
 ;mapping=tex-text;" at 9.0pt
  -> /usr/share/texlive/texmf-dist/fonts/opentype/public/libertine/LinLibertine_
 RBI.otf
 
 
-Package natbib Warning: Citation `ibmMVC' on page 39 undefined on input line 32
-3.
+Package natbib Warning: Citation `ibmMVC' on page 40 undefined on input line 36
+1.
 
-[39]
+[40]
 File: imaxes/arquitectura-3-niveles.png Graphic file (type bmp)
 <imaxes/arquitectura-3-niveles.png>
 
 
-Package natbib Warning: Citation `ibmMVC' on page 40 undefined on input line 34
-2.
+Package natbib Warning: Citation `ibmMVC' on page 41 undefined on input line 38
+0.
 
-[40] [41]
+[41] [42]
 File: imaxes/mvc-patron.png Graphic file (type bmp)
 <imaxes/mvc-patron.png>
-) [42]
+) [43] [44]
 \openout2 = `contido/implementacion.aux'.
 
  (./contido/implementacion.tex
@@ -2624,7 +2656,7 @@ Underfull \hbox (badness 10000) in paragraph at lines 34--37
 
  []
 
-[43
+[45
 
 
 
@@ -2674,12 +2706,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 72--75
 
  []
 
-) [44]
+) [46]
 \openout2 = `contido/pruebas.aux'.
 
  (./contido/pruebas.tex
 Capítulo 6.
-) [45
+) [47
 
 
 
@@ -2691,12 +2723,12 @@ Capítulo 6.
 Capítulo 7.
 File: imaxes/planificacion.png Graphic file (type bmp)
 <imaxes/planificacion.png>
-[46
+[48
 
 
 
 
-]) [47]
+]) [49]
 \openout2 = `contido/conclusions.aux'.
 
  (./contido/conclusions.tex
@@ -2705,46 +2737,479 @@ Package lettrine.sty Info: Targeted height = 21.55566pt
 (lettrine.sty)             (for loversize=0, accent excluded),
 (lettrine.sty)             Lettrine height = 21.42354pt (E);
 (lettrine.sty)             reported on input line 4.
-[48
+[50
 
 
 
 
-]) [49]
+]) [51]
 LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/n' will be
 (Font)              scaled to size 24.88pt on input line 109.
 Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;m
 apping=tex-text;" at 24.88pt
  -> /usr/share/texlive/texmf-dist/fonts/opentype/public/libertine/LinLibertine_
 R.otf
- [50
+ [52
 
 
 
 ]
-\openout2 = `anexos/adicional.aux'.
+\openout2 = `anexos/manual_usuario.aux'.
 
- (./anexos/adicional.tex
+ (./anexos/manual_usuario.tex
 Apéndice A.
 Package lettrine.sty Info: Targeted height = 21.55566pt
 (lettrine.sty)             (for loversize=0, accent excluded),
-(lettrine.sty)             Lettrine height = 21.42354pt (E);
+(lettrine.sty)             Lettrine height = 21.72063pt (CoMaSw);
 (lettrine.sty)             reported on input line 4.
-) [51
+
+Underfull \hbox (badness 10000) in paragraph at lines 27--31
+
+ []
+
+[53
 
 
-] [52]
+] [54]
+Underfull \hbox (badness 10000) in paragraph at lines 83--84
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 85--86
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 87--88
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 89--90
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 91--92
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 93--94
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 103--105
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 106--108
+
+ []
+
+
+Overfull \hbox (23.73761pt too wide) in paragraph at lines 109--111
+[]\TU/LinLibertine(0)/m/it/10.95 /subsystem=datasources/jdbc-driver=postgres:ad
+d(driver-name=”postgres”,driver-module-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 109--111
+
+ []
+
+[55]
+File: imaxes/gestion-usuarios-01.png Graphic file (type bmp)
+<imaxes/gestion-usuarios-01.png>
+ [56]
+Underfull \hbox (badness 10000) in paragraph at lines 154--156
+
+ []
+
+LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/sl' in size <10.95> not av
+ailable
+(Font)              Font shape `TU/LinLibertine(0)/m/it' tried instead on input
+ line 158.
+LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/it' will be
+(Font)              scaled to size 10.95pt on input line 158.
+LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/sl' in size <10.95> not av
+ailable
+(Font)              Font shape `TU/LinLibertine(0)/b/it' tried instead on input
+ line 158.
+LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/it' will be
+(Font)              scaled to size 10.95pt on input line 158.
+
+Underfull \hbox (badness 10000) in paragraph at lines 165--167
+
+ []
+
+File: imaxes/gestion-usuarios-02.png Graphic file (type bmp)
+<imaxes/gestion-usuarios-02.png>
+File: imaxes/estructura-contratacion.png Graphic file (type bmp)
+<imaxes/estructura-contratacion.png>
+[57] [58]
+Underfull \hbox (badness 10000) in paragraph at lines 228--229
+
+ []
+
+File: imaxes/estructura-catalogo.png Graphic file (type bmp)
+<imaxes/estructura-catalogo.png>
+[59] [60]
+Overfull \hbox (20.32129pt too wide) in paragraph at lines 266--267
+[]$
+ []
+
+
+Overfull \hbox (20.32129pt too wide) in paragraph at lines 267--268
+[]$
+ []
+
+
+Overfull \hbox (205.0551pt too wide) in paragraph at lines 268--269
+\TU/LinLibertine(0)/m/n/10.95 so debe haber un $[]$
+ []
+
+
+Overfull \hbox (135.15028pt too wide) in paragraph at lines 268--269
+\TU/LinLibertine(0)/m/n/10.95 y $[]$. 
+ []
+
+[61]
+File: imaxes/login.png Graphic file (type bmp)
+<imaxes/login.png>
+File: imaxes/logout.png Graphic file (type bmp)
+<imaxes/logout.png>
+ [62]
+File: imaxes/menu-aplicacion.png Graphic file (type bmp)
+<imaxes/menu-aplicacion.png>
+ [63]
+Underfull \hbox (badness 10000) in paragraph at lines 382--382
+[]|\TU/LinLibertine(0)/b/n/10.95 Consumption
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 382--382
+[]|\TU/LinLibertine(0)/b/n/10.95 Application Le-
+ []
+
+[64]
+File: imaxes/entity-type-admin.png Graphic file (type bmp)
+<imaxes/entity-type-admin.png>
+File: imaxes/entity-type-usuario.png Graphic file (type bmp)
+<imaxes/entity-type-usuario.png>
+ [65]
+Underfull \hbox (badness 10000) in paragraph at lines 417--419
+
+ []
+
+[66]
+Underfull \hbox (badness 10000) in paragraph at lines 476--476
+[]|\TU/LinLibertine(0)/b/n/10.95 BILLING PE-
+ []
+
+[67]
+Underfull \hbox (badness 10000) in paragraph at lines 491--493
+
+ []
+
+[68]
+Underfull \hbox (badness 10000) in paragraph at lines 538--540
+
+ []
+
+[69]
+Underfull \hbox (badness 10000) in paragraph at lines 577--577
+[]|\TU/LinLibertine(0)/b/n/10.95 PAYMENT
+ []
+
+
+Underfull \hbox (badness 8038) in paragraph at lines 577--577
+[]|\TU/LinLibertine(0)/b/n/10.95 ORDINARY CY-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 577--577
+[]|\TU/LinLibertine(0)/b/n/10.95 CORRECTIVE
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 590--592
+
+ []
+
+[70]
+Underfull \hbox (badness 10000) in paragraph at lines 629--629
+[]|\TU/LinLibertine(0)/b/n/10.95 CONSUMPTION
+ []
+
+[71]
+Underfull \hbox (badness 10000) in paragraph at lines 642--644
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 688--688
+[]|\TU/LinLibertine(0)/b/n/10.95 APPLICATION
+ []
+
+[72]
+File: imaxes/seleccion-tipo-cuota.png Graphic file (type bmp)
+<imaxes/seleccion-tipo-cuota.png>
+ [73]
+File: imaxes/listado-historicos-tipo-cuota.png Graphic file (type bmp)
+<imaxes/listado-historicos-tipo-cuota.png>
+
+Underfull \hbox (badness 10000) in paragraph at lines 742--745
+
+ []
+
+[74]
+File: imaxes/añadir-registro-historico-tipo-cuota.png Graphic file (type bmp)
+<imaxes/añadir-registro-historico-tipo-cuota.png>
+ [75]
+File: imaxes/listado-historico-tipo-consumo-tras-añadir.png Graphic file (type 
+bmp)
+<imaxes/listado-historico-tipo-consumo-tras-añadir.png>
+File: imaxes/borrado-historico-tipo-cuota.png Graphic file (type bmp)
+<imaxes/borrado-historico-tipo-cuota.png>
+ [76]
+File: imaxes/listado-historico-tipo-consumo-tras-borrar.png Graphic file (type 
+bmp)
+<imaxes/listado-historico-tipo-consumo-tras-borrar.png>
+File: imaxes/listado-tipos-cuotas-inicial.png Graphic file (type bmp)
+<imaxes/listado-tipos-cuotas-inicial.png>
+File: imaxes/confirmación-cambio-estado-cancelado.png Graphic file (type bmp)
+<imaxes/confirmación-cambio-estado-cancelado.png>
+ [77]
+File: imaxes/cambio-estado-cancelado.png Graphic file (type bmp)
+<imaxes/cambio-estado-cancelado.png>
+ [78]
+Underfull \hbox (badness 10000) in paragraph at lines 877--879
+
+ []
+
+[79]
+Underfull \hbox (badness 10000) in paragraph at lines 928--930
+
+ []
+
+[80]
+
+LaTeX Warning: Reference `tab:tipo-promoción' on page 81 undefined on input lin
+e 949.
+
+
+LaTeX Warning: Reference `tab:tipo-promoción' on page 81 undefined on input lin
+e 949.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 972--972
+[]|\TU/LinLibertine(0)/b/n/10.95 APPLICATION
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 972--972
+[]|\TU/LinLibertine(0)/b/n/10.95 DISCOUNT TY-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 972--972
+[]|\TU/LinLibertine(0)/b/n/10.95 DISCOUNT VA-
+ []
+
+[81] [82]
+Underfull \hbox (badness 10000) in paragraph at lines 1007--1010
+
+ []
+
+[83]
+File: imaxes/area-relacion-tipos-entidades.png Graphic file (type bmp)
+<imaxes/area-relacion-tipos-entidades.png>
+File: imaxes/area-tipos-entidades-candidatas.png Graphic file (type bmp)
+<imaxes/area-tipos-entidades-candidatas.png>
+ [84]
+File: imaxes/botones-añadir-eliminar-relacion-tipos.png Graphic file (type bmp)
+
+<imaxes/botones-añadir-eliminar-relacion-tipos.png>
+ [85] [86] [87]
+Overfull \hbox (11.3516pt too wide) in paragraph at lines 1145--1147
+[]$[]$ \TU/LinLibertine(0)/m/n/10.95 Para edi-
+ []
+
+[88] [89]
+Overfull \hbox (11.3516pt too wide) in paragraph at lines 1218--1220
+[]$[]$ \TU/LinLibertine(0)/m/n/10.95 Para edi-
+ []
+
+[90] [91] [92]
+Overfull \hbox (3.3362pt too wide) in paragraph at lines 1293--1295
+[]$[]$ \TU/LinLibertine(0)/m/n/10.95 Para edi-
+ []
+
+[93]
+Underfull \hbox (badness 10000) in paragraph at lines 1361--1361
+[]|\TU/LinLibertine(0)/b/n/10.95 ADDRESS\TU/LinLibertine(0)/m/n/10.95 , \TU/Lin
+Libertine(0)/b/n/10.95 CITY\TU/LinLibertine(0)/m/n/10.95 , \TU/LinLibertine(0)/
+b/n/10.95 STATE\TU/LinLibertine(0)/m/n/10.95 , \TU/LinLibertine(0)/b/n/10.95 PO
+ST
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1361--1361
+[]|\TU/LinLibertine(0)/b/n/10.95 IBAN\TU/LinLibertine(0)/m/n/10.95 , \TU/LinLib
+ertine(0)/b/n/10.95 BANK ENTITY\TU/LinLibertine(0)/m/n/10.95 , \TU/LinLibertine
+(0)/b/n/10.95 BANK
+ []
+
+
+Underfull \hbox (badness 2073) in paragraph at lines 1361--1361
+\TU/LinLibertine(0)/b/n/10.95 BRANCH\TU/LinLibertine(0)/m/n/10.95 , \TU/LinLibe
+rtine(0)/b/n/10.95 BANK CONTROL DI-
+ []
+
+[94] [95] [96]
+File: imaxes/formulario-alta-cliente.png Graphic file (type bmp)
+<imaxes/formulario-alta-cliente.png>
+ [97]
+File: imaxes/mensaje-id-cliente.png Graphic file (type bmp)
+<imaxes/mensaje-id-cliente.png>
+ [98]
+Underfull \hbox (badness 10000) in paragraph at lines 1462--1465
+
+ []
+
+[99]
+Underfull \hbox (badness 10000) in paragraph at lines 1513--1513
+[]|\TU/LinLibertine(0)/b/n/10.95 ADDRESS\TU/LinLibertine(0)/m/n/10.95 , \TU/Lin
+Libertine(0)/b/n/10.95 CITY\TU/LinLibertine(0)/m/n/10.95 , \TU/LinLibertine(0)/
+b/n/10.95 STATE\TU/LinLibertine(0)/m/n/10.95 , \TU/LinLibertine(0)/b/n/10.95 PO
+ST
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1513--1513
+[]|\TU/LinLibertine(0)/b/n/10.95 IBAN\TU/LinLibertine(0)/m/n/10.95 , \TU/LinLib
+ertine(0)/b/n/10.95 BANK ENTITY\TU/LinLibertine(0)/m/n/10.95 , \TU/LinLibertine
+(0)/b/n/10.95 BANK
+ []
+
+
+Underfull \hbox (badness 2073) in paragraph at lines 1513--1513
+\TU/LinLibertine(0)/b/n/10.95 BRANCH\TU/LinLibertine(0)/m/n/10.95 , \TU/LinLibe
+rtine(0)/b/n/10.95 BANK CONTROL DI-
+ []
+
+[100]
+Overfull \vbox (157.93472pt too high) has occurred while \output is active []
+
+
+[101] [102] [103]
+File: imaxes/formulario-alta-cuenta.png Graphic file (type bmp)
+<imaxes/formulario-alta-cuenta.png>
+ [104]
+File: imaxes/mensaje-id-cuenta.png Graphic file (type bmp)
+<imaxes/mensaje-id-cuenta.png>
+ [105]
+Underfull \hbox (badness 10000) in paragraph at lines 1628--1631
+
+ []
+
+[106] [107] [108]
+File: imaxes/formulario-alta-producto.png Graphic file (type bmp)
+<imaxes/formulario-alta-producto.png>
+ [109]
+File: imaxes/nuevo-historico-producto.png Graphic file (type bmp)
+<imaxes/nuevo-historico-producto.png>
+
+Underfull \hbox (badness 10000) in paragraph at lines 1752--1755
+
+ []
+
+[110] [111] [112] [113]
+File: imaxes/formulario-alta-servicio.png Graphic file (type bmp)
+<imaxes/formulario-alta-servicio.png>
+ [114]
+File: imaxes/nuevo-historico-servicio.png Graphic file (type bmp)
+<imaxes/nuevo-historico-servicio.png>
+ [115]
+Underfull \hbox (badness 10000) in paragraph at lines 1890--1893
+
+ []
+
+[116] [117] [118]
+File: imaxes/formulario-alta-cuota-01.png Graphic file (type bmp)
+<imaxes/formulario-alta-cuota-01.png>
+LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/it' will be
+(Font)              scaled to size 10.0pt on input line 1980.
+Requested font "[LinLibertine_RI.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
+mapping=tex-text;" at 10.0pt
+ -> /usr/share/texlive/texmf-dist/fonts/opentype/public/libertine/LinLibertine_
+RI.otf
+File: imaxes/formulario-alta-cuota-02.png Graphic file (type bmp)
+<imaxes/formulario-alta-cuota-02.png>
+ [119] [120]
+File: imaxes/nuevo-historico-cuota.png Graphic file (type bmp)
+<imaxes/nuevo-historico-cuota.png>
+ [121]
+Underfull \hbox (badness 10000) in paragraph at lines 2020--2023
+
+ []
+
+[122] [123] [124] [125] [126]
+File: imaxes/formulario-alta-promocion-01.png Graphic file (type bmp)
+<imaxes/formulario-alta-promocion-01.png>
+File: imaxes/formulario-alta-promocion-02.png Graphic file (type bmp)
+<imaxes/formulario-alta-promocion-02.png>
+ [127]
+File: imaxes/nuevo-historico-promocion.png Graphic file (type bmp)
+<imaxes/nuevo-historico-promocion.png>
+ [128]
+Underfull \hbox (badness 10000) in paragraph at lines 2176--2179
+
+ []
+
+[129]
+File: imaxes/vista-jerarquia-01.png Graphic file (type bmp)
+<imaxes/vista-jerarquia-01.png>
+ [130]
+File: imaxes/vista-jerarquia-desplegada.png Graphic file (type bmp)
+<imaxes/vista-jerarquia-desplegada.png>
+ [131]
+File: imaxes/vista-jearquia-informacion-nodo.png Graphic file (type bmp)
+<imaxes/vista-jearquia-informacion-nodo.png>
+) [132]
 \openout2 = `anexos/ref_tecnica.aux'.
 
  (./anexos/ref_tecnica.tex
 Apéndice B.
-Package lettrine.sty Info: Targeted height = 21.55566pt
+LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/sc' will be
+(Font)              scaled to size 12.0pt on input line 4.
+Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;+
+smcp;mapping=tex-text;" at 12.0pt
+ -> /usr/share/texlive/texmf-dist/fonts/opentype/public/libertine/LinLibertine_
+R.otf
+LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/n' will be
+(Font)              scaled to size 22.52597pt on input line 4.
+Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;m
+apping=tex-text;" at 22.52597pt
+ -> /usr/share/texlive/texmf-dist/fonts/opentype/public/libertine/LinLibertine_
+R.otf
+LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/n' will be
+(Font)              scaled to size 34.49597pt on input line 4.
+Requested font "[LinLibertine_R.otf]/OT:script=latn;language=dflt;+tnum;+lnum;m
+apping=tex-text;" at 34.49597pt
+ -> /usr/share/texlive/texmf-dist/fonts/opentype/public/libertine/LinLibertine_
+R.otf
+Package lettrine.sty Info: Targeted height = 22.52597pt
 (lettrine.sty)             (for loversize=0, accent excluded),
-(lettrine.sty)             Lettrine height = 21.42354pt (E);
+(lettrine.sty)             Lettrine height = 22.38788pt (E);
 (lettrine.sty)             reported on input line 4.
 File: imaxes/actores.png Graphic file (type bmp)
 <imaxes/actores.png>
-[53
+[133
 
 
 
@@ -2756,185 +3221,407 @@ File: imaxes/cu-read-write.png Graphic file (type bmp)
 <imaxes/cu-read-write.png>
 File: imaxes/cu-admin.png Graphic file (type bmp)
 <imaxes/cu-admin.png>
- [54] [55] [56] [57] [58] [59] [60] [61] [62] [63] [64] [65] [66] [67]
-[68] [69] [70] [71] [72] [73] [74] [75] [76] [77] [78] [79] [80] [81]
-Overfull \hbox (14.82085pt too wide) in paragraph at lines 1070--1071
-[]\TU/LinLibertine(0)/m/n/10.95 it_<entidad> hace referencia a las entidades en
-globadas en el catálogo (instancias)(\TU/LinLibertine(0)/m/it/10.95 instances
- []
+ [134] [135] [136] [137] [138] [139] [140] [141] [142] [143] [144]
+[145] [146] [147] [148] [149] [150] [151] [152] [153] [154] [155] [156]
+[157] [158] [159]
+Overfull \vbox (22.80989pt too high) has occurred while \output is active []
 
-[82]
+
+[160] [161] [162]
+LaTeX Font Info:    Font shape `TU/LinLibertine(0)/m/it' will be
+(Font)              scaled to size 12.0pt on input line 1094.
+Requested font "[LinLibertine_RI.otf]/OT:script=latn;language=dflt;+tnum;+lnum;
+mapping=tex-text;" at 12.0pt
+ -> /usr/share/texlive/texmf-dist/fonts/opentype/public/libertine/LinLibertine_
+RI.otf
+ [163]
 File: imaxes/er-catalogo-01.png Graphic file (type bmp)
 <imaxes/er-catalogo-01.png>
 File: imaxes/er-catalogo-02.png Graphic file (type bmp)
 <imaxes/er-catalogo-02.png>
- [83
+ [164
 
 ]
 File: imaxes/er-instancia-01.png Graphic file (type bmp)
 <imaxes/er-instancia-01.png>
 File: imaxes/er-instancia-02.png Graphic file (type bmp)
 <imaxes/er-instancia-02.png>
- [84
+ [165
 
 
 ]
-Overfull \hbox (12.34155pt too wide) in paragraph at lines 1140--1140
+Overfull \hbox (12.34155pt too wide) in paragraph at lines 1166--1166
 []|\TU/LinLibertine(0)/b/n/10.95 CoMaSw/src/main/resources| 
  []
 
 
-Overfull \hbox (3.483pt too wide) in paragraph at lines 1140--1140
+Overfull \hbox (3.483pt too wide) in paragraph at lines 1166--1166
 []|\TU/LinLibertine(0)/b/n/10.95 CoMaSw/src/main/webapp| 
  []
 
 
-Overfull \hbox (0.52652pt too wide) in paragraph at lines 1140--1140
+Overfull \hbox (0.52652pt too wide) in paragraph at lines 1166--1166
 []|\TU/LinLibertine(0)/b/n/10.95 CoMaSwtarget/generated-
  []
 
+LaTeX Font Info:    Font shape `TU/LinLibertine(0)/b/it' will be
+(Font)              scaled to size 12.0pt on input line 1176.
+Requested font "[LinLibertine_RBI.otf]/OT:script=latn;language=dflt;+tnum;+lnum
+;mapping=tex-text;" at 12.0pt
+ -> /usr/share/texlive/texmf-dist/fonts/opentype/public/libertine/LinLibertine_
+RBI.otf
 
-Overfull \hbox (86.22635pt too wide) in alignment at lines 1155--1179
+Underfull \hbox (badness 4765) in paragraph at lines 1184--1202
+\TU/LinLibertine(0)/m/it/12 peEJBLocal.java\TU/LinLibertine(0)/m/n/12 , \TU/Lin
+Libertine(0)/m/it/12 AccountTypeEJB.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLib
+ertine(0)/m/it/12 BillCycleTypeEJB.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLibe
+rtine(0)/m/it/12 Con-
+ []
+
+
+Underfull \hbox (badness 1024) in paragraph at lines 1184--1202
+\TU/LinLibertine(0)/m/it/12 sumptionTypeEJB.java\TU/LinLibertine(0)/m/n/12 , \T
+U/LinLibertine(0)/m/it/12 CustomerTypeEJB.java\TU/LinLibertine(0)/m/n/12 , \TU/
+LinLibertine(0)/m/it/12 FeeTypeEJB.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLibe
+rtine(0)/m/it/12 Pro-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1203--1219
+\TU/LinLibertine(0)/m/it/12 ProductFeeTypeEJBLocal.java\TU/LinLibertine(0)/m/n/
+12 , \TU/LinLibertine(0)/m/it/12 ProductPromotionTypeEJBLocal.java\TU/LinLibert
+ine(0)/m/n/12 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1203--1219
+\TU/LinLibertine(0)/m/it/12 ProductFeeTypeEJB.java\TU/LinLibertine(0)/m/n/12 , 
+\TU/LinLibertine(0)/m/it/12 ProductServiceTypeEJBLocal.java\TU/LinLibertine(0)/
+m/n/12 , \TU/LinLibertine(0)/m/it/12 Promo-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1203--1219
+\TU/LinLibertine(0)/m/it/12 tionConsumptionTypeDiscountEJBLocal.java\TU/LinLibe
+rtine(0)/m/n/12 , \TU/LinLibertine(0)/m/it/12 PromotionFeeType-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1203--1219
+\TU/LinLibertine(0)/m/it/12 DiscountEJBLocal.java\TU/LinLibertine(0)/m/n/12 , \
+TU/LinLibertine(0)/m/it/12 ServiceFeeTypeEJBLocal.java\TU/LinLibertine(0)/m/n/1
+2 , \TU/LinLibertine(0)/m/it/12 ServicePro-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1203--1219
+\TU/LinLibertine(0)/m/it/12 motionTypeEJBLocal.java\TU/LinLibertine(0)/m/n/12 ,
+ \TU/LinLibertine(0)/m/it/12 ProductPromotionTypeEJB.java\TU/LinLibertine(0)/m/
+n/12 , \TU/LinLibertine(0)/m/it/12 Produc-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1203--1219
+\TU/LinLibertine(0)/m/it/12 tServiceTypeEJB.java\TU/LinLibertine(0)/m/n/12 , \T
+U/LinLibertine(0)/m/it/12 PromotionConsumptionTypeDiscountEJB.java\TU/LinLibert
+ine(0)/m/n/12 ,
+ []
+
+
+Underfull \hbox (badness 7099) in paragraph at lines 1203--1219
+\TU/LinLibertine(0)/m/it/12 PromotionFeeTypeDiscountEJB.java\TU/LinLibertine(0)
+/m/n/12 , \TU/LinLibertine(0)/m/it/12 ServiceFeeTypeEJB.java\TU/LinLibertine(0)
+/m/n/12 , \TU/LinLibertine(0)/m/it/12 Service-
+ []
+
+
+Underfull \hbox (badness 2512) in paragraph at lines 1227--1247
+\TU/LinLibertine(0)/m/it/12 EntityTypeEJBLocal.java\TU/LinLibertine(0)/m/n/12 ,
+ \TU/LinLibertine(0)/m/it/12 BillingPeriodEJBLocal.java\TU/LinLibertine(0)/m/n/
+12 , \TU/LinLibertine(0)/m/it/12 PaymentMetho-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1227--1247
+\TU/LinLibertine(0)/m/it/12 dEJBLocal.java\TU/LinLibertine(0)/m/n/12 , \TU/LinL
+ibertine(0)/m/it/12 TaxTypeEJBLocal.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLib
+ertine(0)/m/it/12 DiscountTypeEJBLocal.java\TU/LinLibertine(0)/m/n/12 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1227--1247
+\TU/LinLibertine(0)/m/it/12 ConsumptionClassEJBLocal.java\TU/LinLibertine(0)/m/
+n/12 , \TU/LinLibertine(0)/m/it/12 ApplicationLevelEJBLocal.java\TU/LinLibertin
+e(0)/m/n/12 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1227--1247
+\TU/LinLibertine(0)/m/it/12 IdentityCardTypeEJBLocal.java\TU/LinLibertine(0)/m/
+n/12 , \TU/LinLibertine(0)/m/it/12 StatusEJBLocal.java\TU/LinLibertine(0)/m/n/1
+2 , \TU/LinLibertine(0)/m/it/12 Application-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1227--1247
+\TU/LinLibertine(0)/m/it/12 LevelEJB.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLi
+bertine(0)/m/it/12 BillingPeriodEJB.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLib
+ertine(0)/m/it/12 ConsumptionClassEJB.java\TU/LinLibertine(0)/m/n/12 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1227--1247
+\TU/LinLibertine(0)/m/it/12 DiscountTypeEJB.java\TU/LinLibertine(0)/m/n/12 , \T
+U/LinLibertine(0)/m/it/12 IdentityCardTypeEJB.java\TU/LinLibertine(0)/m/n/12 , 
+\TU/LinLibertine(0)/m/it/12 PaymentMetho-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1249--1265
+\TU/LinLibertine(0)/m/it/12 ContractEJBLocal.java\TU/LinLibertine(0)/m/n/12 , \
+TU/LinLibertine(0)/m/it/12 ContractEJB.java\TU/LinLibertine(0)/m/n/12 , \TU/Lin
+Libertine(0)/m/it/12 AccountEJBLocal.java\TU/LinLibertine(0)/m/n/12 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1249--1265
+\TU/LinLibertine(0)/m/it/12 ProductEJBLocal.java\TU/LinLibertine(0)/m/n/12 , \T
+U/LinLibertine(0)/m/it/12 ServiceEJBLocal.java\TU/LinLibertine(0)/m/n/12 , \TU/
+LinLibertine(0)/m/it/12 PromotionEJBLo-
+ []
+
+
+Underfull \hbox (badness 1874) in paragraph at lines 1249--1265
+\TU/LinLibertine(0)/m/it/12 cal.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLiberti
+ne(0)/m/it/12 FeeEJBLocal.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLibertine(0)/
+m/it/12 CustomerEJBLocal.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLibertine(0)/m
+/it/12 AccountEJB.java\TU/LinLibertine(0)/m/n/12 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1249--1265
+\TU/LinLibertine(0)/m/it/12 FeeEJB.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLibe
+rtine(0)/m/it/12 ProductEJB.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLibertine(0
+)/m/it/12 PromotionEJB.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLibertine(0)/m/i
+t/12 ServiceEJB.java\TU/LinLibertine(0)/m/n/12 ,
+ []
+
+
+Underfull \hbox (badness 1067) in paragraph at lines 1273--1284
+\TU/LinLibertine(0)/m/it/12 ApplicationLevelController.java\TU/LinLibertine(0)/
+m/n/12 , \TU/LinLibertine(0)/m/it/12 BillingPeriodController.java\TU/LinLiberti
+ne(0)/m/n/12 , \TU/LinLibertine(0)/m/it/12 Consum-
+ []
+
+
+Underfull \hbox (badness 6477) in paragraph at lines 1273--1284
+\TU/LinLibertine(0)/m/it/12 troller.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLib
+ertine(0)/m/it/12 IdentityCardTypeController.java\TU/LinLibertine(0)/m/n/12 , \
+TU/LinLibertine(0)/m/it/12 PaymentMethodContro-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1286--1296
+\TU/LinLibertine(0)/m/it/12 AccountTypeController.java\TU/LinLibertine(0)/m/n/1
+2 , \TU/LinLibertine(0)/m/it/12 BillCycleTypeController.java\TU/LinLibertine(0)
+/m/n/12 , \TU/LinLibertine(0)/m/it/12 Consum-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1286--1296
+\TU/LinLibertine(0)/m/it/12 ptionTypeController.java\TU/LinLibertine(0)/m/n/12 
+, \TU/LinLibertine(0)/m/it/12 CustomerTypeController.java\TU/LinLibertine(0)/m/
+n/12 , \TU/LinLibertine(0)/m/it/12 ProductTy-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1286--1296
+\TU/LinLibertine(0)/m/it/12 peController.java\TU/LinLibertine(0)/m/n/12 , \TU/L
+inLibertine(0)/m/it/12 ServiceTypeController.java\TU/LinLibertine(0)/m/n/12 , \
+TU/LinLibertine(0)/m/it/12 PromotionTypeContro-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1298--1307
+\TU/LinLibertine(0)/m/it/12 ProductServiceTypeController.java\TU/LinLibertine(0
+)/m/n/12 , \TU/LinLibertine(0)/m/it/12 ProductFeeTypeController.java\TU/LinLibe
+rtine(0)/m/n/12 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1298--1307
+\TU/LinLibertine(0)/m/it/12 PromotionConsumptionTypeDiscController.java\TU/LinL
+ibertine(0)/m/n/12 , \TU/LinLibertine(0)/m/it/12 ProductPromotionTy-
+ []
+
+
+Underfull \hbox (badness 4582) in paragraph at lines 1298--1307
+\TU/LinLibertine(0)/m/it/12 peController.java\TU/LinLibertine(0)/m/n/12 , \TU/L
+inLibertine(0)/m/it/12 ServicePromotionTypeController.java\TU/LinLibertine(0)/m
+/n/12 , \TU/LinLibertine(0)/m/it/12 ServiceFeeTy-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1310--1320
+\TU/LinLibertine(0)/m/it/12 AccountController.java\TU/LinLibertine(0)/m/n/12 , 
+\TU/LinLibertine(0)/m/it/12 ContractController.java\TU/LinLibertine(0)/m/n/12 ,
+ \TU/LinLibertine(0)/m/it/12 CustomerContro-
+ []
+
+
+Underfull \hbox (badness 1675) in paragraph at lines 1310--1320
+\TU/LinLibertine(0)/m/it/12 ller.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLibert
+ine(0)/m/it/12 FeeController.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLibertine(
+0)/m/it/12 HierarchyController.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLibertin
+e(0)/m/it/12 ProductContro-
+ []
+
+
+Underfull \hbox (badness 7649) in paragraph at lines 1329--1334
+\TU/LinLibertine(0)/m/it/12 LogoutController.java\TU/LinLibertine(0)/m/n/12 , \
+TU/LinLibertine(0)/m/it/12 LoginController.java\TU/LinLibertine(0)/m/n/12 , \TU
+/LinLibertine(0)/m/it/12 ApplicationMenuContro-
+ []
+
+
+Underfull \hbox (badness 3861) in paragraph at lines 1361--1375
+\TU/LinLibertine(0)/m/it/12 BasicClass.java\TU/LinLibertine(0)/m/n/12 , \TU/Lin
+Libertine(0)/m/it/12 BasicHistoricType.java\TU/LinLibertine(0)/m/n/12 , \TU/Lin
+Libertine(0)/m/it/12 BasicInstance.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLibe
+rtine(0)/m/it/12 BasicIns-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1361--1375
+\TU/LinLibertine(0)/m/it/12 tanceWithViews.java\TU/LinLibertine(0)/m/n/12 , \TU
+/LinLibertine(0)/m/it/12 BasicListsForInstance.java\TU/LinLibertine(0)/m/n/12 ,
+ \TU/LinLibertine(0)/m/it/12 BasicRelationTy-
+ []
+
+
+Underfull \hbox (badness 1466) in paragraph at lines 1361--1375
+\TU/LinLibertine(0)/m/it/12 DoubleHistoricRelation.java\TU/LinLibertine(0)/m/n/
+12 , \TU/LinLibertine(0)/m/it/12 RelatedInstance.java\TU/LinLibertine(0)/m/n/12
+ , \TU/LinLibertine(0)/m/it/12 SimpleHistoricRela-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1377--1388
+\TU/LinLibertine(0)/m/it/12 IDoubleHistoricRelationsTable.java\TU/LinLibertine(
+0)/m/n/12 , \TU/LinLibertine(0)/m/it/12 IEditableHistoricTable.java\TU/LinLiber
+tine(0)/m/n/12 , \TU/LinLibertine(0)/m/it/12 IE-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1377--1388
+\TU/LinLibertine(0)/m/it/12 ditableTable.java\TU/LinLibertine(0)/m/n/12 , \TU/L
+inLibertine(0)/m/it/12 IHistoricTable.java\TU/LinLibertine(0)/m/n/12 , \TU/LinL
+ibertine(0)/m/it/12 IInstanceTable.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLibe
+rtine(0)/m/it/12 IRela-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1377--1388
+\TU/LinLibertine(0)/m/it/12 tionsTable.java\TU/LinLibertine(0)/m/n/12 , \TU/Lin
+Libertine(0)/m/it/12 ISimpleHistoricRelationsTable.java\TU/LinLibertine(0)/m/n/
+12 , \TU/LinLibertine(0)/m/it/12 ITableAdd.java\TU/LinLibertine(0)/m/n/12 ,
+ []
+
+
+Overfull \hbox (86.22635pt too wide) in alignment at lines 1180--1405
  [] [] 
  []
 
-[85
+[166
 
-]
-Underfull \hbox (badness 1163) in paragraph at lines 1203--1266
-\TU/LinLibertine(0)/m/it/10.95 CtAccountType.java\TU/LinLibertine(0)/m/n/10.95 
-, \TU/LinLibertine(0)/m/it/10.95 CtBillCycleType.java\TU/LinLibertine(0)/m/n/10
-.95 , \TU/LinLibertine(0)/m/it/10.95 CtConsumptionType.java\TU/LinLibertine(0)/
-m/n/10.95 , \TU/LinLibertine(0)/m/it/10.95 CtCus-
- []
-
-
-Underfull \hbox (badness 8056) in paragraph at lines 1203--1266
-\TU/LinLibertine(0)/m/it/10.95 tomerType.java\TU/LinLibertine(0)/m/n/10.95 , \T
-U/LinLibertine(0)/m/it/10.95 CtFeeType.java\TU/LinLibertine(0)/m/n/10.95 , \TU/
-LinLibertine(0)/m/it/10.95 CtProdFeeType.java\TU/LinLibertine(0)/m/n/10.95 , \T
-U/LinLibertine(0)/m/it/10.95 CtProdServType.java\TU/LinLibertine(0)/m/n/10.95 ,
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1203--1266
-\TU/LinLibertine(0)/m/it/10.95 CtProductType.java\TU/LinLibertine(0)/m/n/10.95 
-, \TU/LinLibertine(0)/m/it/10.95 CtPromoConsumTypeDiscount.java\TU/LinLibertine
-(0)/m/n/10.95 , \TU/LinLibertine(0)/m/it/10.95 CtPromoFeeType-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1203--1266
-\TU/LinLibertine(0)/m/it/10.95 Discount.java\TU/LinLibertine(0)/m/n/10.95 , \TU
-/LinLibertine(0)/m/it/10.95 CtPromoProdType.java\TU/LinLibertine(0)/m/n/10.95 ,
- \TU/LinLibertine(0)/m/it/10.95 CtPromoServType.java\TU/LinLibertine(0)/m/n/10.
-95 , \TU/LinLibertine(0)/m/it/10.95 CtPromo-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1203--1266
-\TU/LinLibertine(0)/m/it/10.95 tionType.java\TU/LinLibertine(0)/m/n/10.95 , \TU
-/LinLibertine(0)/m/it/10.95 CtServFeeType.java\TU/LinLibertine(0)/m/n/10.95 , \
-TU/LinLibertine(0)/m/it/10.95 CtServiceType.java\TU/LinLibertine(0)/m/n/10.95 ,
- \TU/LinLibertine(0)/m/it/10.95 IdtAccount.java\TU/LinLibertine(0)/m/n/10.95 ,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1203--1266
-\TU/LinLibertine(0)/m/it/10.95 IdtCustomer.java\TU/LinLibertine(0)/m/n/10.95 , 
-\TU/LinLibertine(0)/m/it/10.95 IdtFee.java\TU/LinLibertine(0)/m/n/10.95 , \TU/L
-inLibertine(0)/m/it/10.95 IdtFeeType.java\TU/LinLibertine(0)/m/n/10.95 , \TU/Li
-nLibertine(0)/m/it/10.95 IdtProductFee.java\TU/LinLibertine(0)/m/n/10.95 , \TU/
-LinLibertine(0)/m/it/10.95 IdtPro-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1203--1266
-\TU/LinLibertine(0)/m/it/10.95 IdtPromotionType.java\TU/LinLibertine(0)/m/n/10.
-95 , \TU/LinLibertine(0)/m/it/10.95 IdtServiceFee.java\TU/LinLibertine(0)/m/n/1
-0.95 , \TU/LinLibertine(0)/m/it/10.95 IdtService.java\TU/LinLibertine(0)/m/n/10
-.95 , \TU/LinLibertine(0)/m/it/10.95 IdtServicePro-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1203--1266
-\TU/LinLibertine(0)/m/it/10.95 motion.java\TU/LinLibertine(0)/m/n/10.95 , \TU/L
-inLibertine(0)/m/it/10.95 ItAccount.java\TU/LinLibertine(0)/m/n/10.95 , \TU/Lin
-Libertine(0)/m/it/10.95 ItContract.java\TU/LinLibertine(0)/m/n/10.95 , \TU/LinL
-ibertine(0)/m/it/10.95 ItCustomer.java\TU/LinLibertine(0)/m/n/10.95 , \TU/LinLi
-bertine(0)/m/it/10.95 ItFee.java\TU/LinLibertine(0)/m/n/10.95 ,
- []
-
-
-Underfull \hbox (badness 4072) in paragraph at lines 1203--1266
-\TU/LinLibertine(0)/m/it/10.95 ItProduct.java\TU/LinLibertine(0)/m/n/10.95 , \T
-U/LinLibertine(0)/m/it/10.95 ItProfiles.java\TU/LinLibertine(0)/m/n/10.95 , \TU
-/LinLibertine(0)/m/it/10.95 ItPromotion.java\TU/LinLibertine(0)/m/n/10.95 , \TU
-/LinLibertine(0)/m/it/10.95 ItService.java\TU/LinLibertine(0)/m/n/10.95 , \TU/L
-inLibertine(0)/m/it/10.95 ItUsers.java\TU/LinLibertine(0)/m/n/10.95 ,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1203--1266
-\TU/LinLibertine(0)/m/it/10.95 MtApplicationMenu.java\TU/LinLibertine(0)/m/n/10
-.95 , \TU/LinLibertine(0)/m/it/10.95 PtApplicationLevel.java\TU/LinLibertine(0)
-/m/n/10.95 , \TU/LinLibertine(0)/m/it/10.95 PtBillingPeriod.java\TU/LinLibertin
-e(0)/m/n/10.95 ,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1203--1266
-\TU/LinLibertine(0)/m/it/10.95 PtConsumptionClass.java\TU/LinLibertine(0)/m/n/1
-0.95 , \TU/LinLibertine(0)/m/it/10.95 PtDiscountType.java\TU/LinLibertine(0)/m/
-n/10.95 , \TU/LinLibertine(0)/m/it/10.95 PtEntityType.java\TU/LinLibertine(0)/m
-/n/10.95 , \TU/LinLibertine(0)/m/it/10.95 PtIden-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1203--1266
-\TU/LinLibertine(0)/m/it/10.95 tityCardType.java\TU/LinLibertine(0)/m/n/10.95 ,
- \TU/LinLibertine(0)/m/it/10.95 PtPaymentMethod.java\TU/LinLibertine(0)/m/n/10.
-95 , \TU/LinLibertine(0)/m/it/10.95 PtStatus.java\TU/LinLibertine(0)/m/n/10.95 
-, \TU/LinLibertine(0)/m/it/10.95 PtTaxType.java\TU/LinLibertine(0)/m/n/10.95 ,
- []
-
-
-Underfull \hbox (badness 7151) in paragraph at lines 1203--1266
-\TU/LinLibertine(0)/m/it/10.95 ProductFeeType.java \TU/LinLibertine(0)/m/n/10.9
-5 , \TU/LinLibertine(0)/m/it/10.95 VwProductInstance.java\TU/LinLibertine(0)/m/
-n/10.95 , \TU/LinLibertine(0)/m/it/10.95 VwProductServiceType.java\TU/LinLibert
-ine(0)/m/n/10.95 ,
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1203--1266
-\TU/LinLibertine(0)/m/it/10.95 VwPromoConsumTypeDiscount.java\TU/LinLibertine(0
-)/m/n/10.95 , \TU/LinLibertine(0)/m/it/10.95 VwPromotionFeeTypeDiscount.java\TU
-/LinLibertine(0)/m/n/10.95 ,
- []
-
-
-Overfull \hbox (86.22635pt too wide) in alignment at lines 1189--1280
+] [167] [168] [169]
+Overfull \hbox (86.22635pt too wide) in alignment at lines 1415--1427
  [] [] 
  []
 
-[86]) [87]
+[170]
+Overfull \hbox (86.22635pt too wide) in alignment at lines 1436--1459
+ [] [] 
+ []
+
+[171]
+Underfull \hbox (badness 6741) in paragraph at lines 1473--1481
+\TU/LinLibertine(0)/m/it/12 DefaultCatalog.java\TU/LinLibertine(0)/m/n/12 , \TU
+/LinLibertine(0)/m/it/12 Keys.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLibertine
+(0)/m/it/12 Public.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLibertine(0)/m/it/12
+ Routines.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLibertine(0)/m/it/12 Sequen-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1483--1546
+\TU/LinLibertine(0)/m/it/12 CtAccountType.java\TU/LinLibertine(0)/m/n/12 , \TU/
+LinLibertine(0)/m/it/12 CtBillCycleType.java\TU/LinLibertine(0)/m/n/12 , \TU/Li
+nLibertine(0)/m/it/12 CtConsumptionType.java\TU/LinLibertine(0)/m/n/12 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1483--1546
+\TU/LinLibertine(0)/m/it/12 CtCustomerType.java\TU/LinLibertine(0)/m/n/12 , \TU
+/LinLibertine(0)/m/it/12 CtFeeType.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLibe
+rtine(0)/m/it/12 CtProdFeeType.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLibertin
+e(0)/m/it/12 CtProd-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1483--1546
+\TU/LinLibertine(0)/m/it/12 IdtService.java\TU/LinLibertine(0)/m/n/12 , \TU/Lin
+Libertine(0)/m/it/12 IdtServicePromotion.java\TU/LinLibertine(0)/m/n/12 , \TU/L
+inLibertine(0)/m/it/12 ItAccount.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLibert
+ine(0)/m/it/12 ItCon-
+ []
+
+
+Underfull \hbox (badness 3769) in paragraph at lines 1483--1546
+\TU/LinLibertine(0)/m/it/12 tract.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLiber
+tine(0)/m/it/12 ItCustomer.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLibertine(0)
+/m/it/12 ItFee.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLibertine(0)/m/it/12 ItP
+roduct.java\TU/LinLibertine(0)/m/n/12 , \TU/LinLibertine(0)/m/it/12 ItProfiles.
+java\TU/LinLibertine(0)/m/n/12 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1483--1546
+\TU/LinLibertine(0)/m/it/12 PtDiscountType.java\TU/LinLibertine(0)/m/n/12 , \TU
+/LinLibertine(0)/m/it/12 PtEntityType.java\TU/LinLibertine(0)/m/n/12 , \TU/LinL
+ibertine(0)/m/it/12 PtIdentityCardType.java\TU/LinLibertine(0)/m/n/12 ,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 1483--1546
+\TU/LinLibertine(0)/m/it/12 PromoConsumTypeDiscount.java\TU/LinLibertine(0)/m/n
+/12 , \TU/LinLibertine(0)/m/it/12 VwPromotionFeeTypeDiscount.java\TU/LinLiberti
+ne(0)/m/n/12 ,
+ []
+
+
+Underfull \hbox (badness 3536) in paragraph at lines 1483--1546
+\TU/LinLibertine(0)/m/it/12 VwPromotionInstance.java\TU/LinLibertine(0)/m/n/12 
+, \TU/LinLibertine(0)/m/it/12 VwPromotionProductType.java\TU/LinLibertine(0)/m/
+n/12 , \TU/LinLibertine(0)/m/it/12 VwPromo-
+ []
+
+
+Underfull \hbox (badness 6995) in paragraph at lines 1483--1546
+\TU/LinLibertine(0)/m/it/12 tionServiceType.java\TU/LinLibertine(0)/m/n/12 , \T
+U/LinLibertine(0)/m/it/12 VwServiceFeeType.java\TU/LinLibertine(0)/m/n/12 , \TU
+/LinLibertine(0)/m/it/12 VwServiceInstance.java\TU/LinLibertine(0)/m/n/12 ,
+ []
+
+
+Overfull \hbox (86.22635pt too wide) in alignment at lines 1469--1560
+ [] [] 
+ []
+
+[172]) [173]
 No file memoria_tfg.acr.
 No file memoria_tfg.gls.
-! Undefined control sequence.
-<argument> \bibconf 
-                    ,bibliografia/bibliografia
-l.119 ...raphy{\bibconf,bibliografia/bibliografia}
-                                                  
-The control sequence at the end of the top line
-of your error message was never \def'ed. If you have
-misspelled it (e.g., `\hobx'), type `I' and the correct
-spelling (e.g., `I\hbox'). Otherwise just continue,
-and I'll forget about whatever was undefined.
-
 No file memoria_tfg.bbl.
-[88
+[174
 
 
 ]
@@ -3025,20 +3712,29 @@ LaTeX Info: Redefining \ttfamily on input line 15.
 (./contido/apartado-tecnico.aux) (./contido/analisis-disenho.aux)
 (./contido/implementacion.aux) (./contido/pruebas.aux)
 (./contido/planificacion.aux) (./contido/conclusions.aux)
-(./anexos/adicional.aux) (./anexos/ref_tecnica.aux))
+(./anexos/manual_usuario.aux) (./anexos/ref_tecnica.aux))
+
+LaTeX Warning: There were undefined references.
+
 
 LaTeX Warning: There were multiply-defined labels.
 
-Package rerunfilecheck Info: File `memoria_tfg.out' has not changed.
-(rerunfilecheck)             Checksum: E6186E7CCE838A40956C7076AA0FE8CE;6302.
+
+Package rerunfilecheck Warning: File `memoria_tfg.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `memoria_tfg.out':
+(rerunfilecheck)             Before: F18B1AEA94F689FB48646E5761EF8AB0;8604
+(rerunfilecheck)             After:  87D1B0B615290DFE60BEC7DFCF174862;8546.
  ) 
 Here is how much of TeX's memory you used:
- 40095 strings out of 476191
- 814007 string characters out of 5812072
- 1136157 words of memory out of 5000000
- 60102 multiletter control sequences out of 15000+600000
- 481726 words of font info for 124 fonts, out of 8000000 for 9000
+ 40548 strings out of 476191
+ 829647 string characters out of 5812072
+ 1160538 words of memory out of 5000000
+ 60511 multiletter control sequences out of 15000+600000
+ 481945 words of font info for 130 fonts, out of 8000000 for 9000
  1348 hyphenation exceptions out of 8191
  106i,13n,145p,1494b,695s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on memoria_tfg.pdf (99 pages).
+Output written on memoria_tfg.pdf (187 pages).

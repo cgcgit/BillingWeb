@@ -31,47 +31,47 @@
 \contentsline {figure}{\numberline {7.1}{\ignorespaces Tabla de tiempos de planificación del proyecto\relax }}{49}{figure.caption.57}%
 \addvspace {10\p@ }
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {A.1}{\ignorespaces Estructura de la contratación\relax }}{54}{figure.caption.59}%
-\contentsline {figure}{\numberline {A.2}{\ignorespaces Estructura del catálogo de servicios y su implementación en una contratación\relax }}{56}{figure.caption.67}%
-\contentsline {figure}{\numberline {A.3}{\ignorespaces Acceso a la pantalla de gestión de usuarios\relax }}{59}{figure.caption.74}%
-\contentsline {figure}{\numberline {A.4}{\ignorespaces Listado de usuarios\relax }}{60}{figure.caption.75}%
-\contentsline {figure}{\numberline {A.5}{\ignorespaces Pantalla de logado\relax }}{61}{figure.caption.76}%
-\contentsline {figure}{\numberline {A.6}{\ignorespaces Logout\relax }}{61}{figure.caption.77}%
-\contentsline {figure}{\numberline {A.7}{\ignorespaces Detalle del menú de la aplicación\relax }}{62}{figure.caption.78}%
-\contentsline {figure}{\numberline {A.8}{\ignorespaces Comparativa de las vistas de la pantalla Entity Types según los permisos del usuario.\relax }}{64}{figure.caption.80}%
-\contentsline {figure}{\numberline {A.9}{\ignorespaces Selección del tipo de cuota a modificar\relax }}{72}{figure.caption.91}%
-\contentsline {figure}{\numberline {A.10}{\ignorespaces Listado de los históricos del tipo de cuota\relax }}{72}{figure.caption.92}%
-\contentsline {figure}{\numberline {A.11}{\ignorespaces Formulario para añadir un nuevo registro de histórico del tipo de cuota\relax }}{74}{figure.caption.94}%
-\contentsline {figure}{\numberline {A.12}{\ignorespaces Listado de registros de histórico tras la adición de un nuevo registro de histórico\relax }}{74}{figure.caption.95}%
-\contentsline {figure}{\numberline {A.13}{\ignorespaces Diálogo de confirmación del borrado del registro de histórico seleccionado\relax }}{75}{figure.caption.97}%
-\contentsline {figure}{\numberline {A.14}{\ignorespaces Listado de registros de histórico tras el borrado de un registro de histórico\relax }}{75}{figure.caption.98}%
-\contentsline {figure}{\numberline {A.15}{\ignorespaces Listado inicial de registros de histórico\relax }}{75}{figure.caption.100}%
-\contentsline {figure}{\numberline {A.16}{\ignorespaces Diálogo de confirmación para el cambio de estado del registro de la entidad\relax }}{75}{figure.caption.101}%
-\contentsline {figure}{\numberline {A.17}{\ignorespaces Listado actualizado con el cambio de estado\relax }}{76}{figure.caption.102}%
-\contentsline {figure}{\numberline {A.18}{\ignorespaces Área que muestra los tipos de entidad cuota relacionada con el producto\relax }}{82}{figure.caption.110}%
-\contentsline {figure}{\numberline {A.19}{\ignorespaces Área que muestra los tipos de entidad cuota candidatas a establecer relación con el producto\relax }}{83}{figure.caption.111}%
-\contentsline {figure}{\numberline {A.20}{\ignorespaces Detalle de los botones para gestionar las relaciones: a la izquierda el botón de añadir relación, a la derecha el botón de eliminar relación\relax }}{83}{figure.caption.112}%
-\contentsline {figure}{\numberline {A.21}{\ignorespaces Detalle del formulario de alta de clientes.\relax }}{96}{figure.caption.121}%
-\contentsline {figure}{\numberline {A.22}{\ignorespaces Detalle del mensaje que informa del id del cliente creado.\relax }}{96}{figure.caption.122}%
-\contentsline {figure}{\numberline {A.23}{\ignorespaces Detalle del formulario de alta de cuentas\relax }}{102}{figure.caption.125}%
-\contentsline {figure}{\numberline {A.24}{\ignorespaces Detalle del mensaje que informa del id de la cuenta creado.\relax }}{103}{figure.caption.126}%
-\contentsline {figure}{\numberline {A.25}{\ignorespaces Detalle del formulario de alta de productos\relax }}{107}{figure.caption.129}%
-\contentsline {figure}{\numberline {A.26}{\ignorespaces Detalle del formulario para añadir un nuevo registro de histórico de producto\relax }}{108}{figure.caption.130}%
-\contentsline {figure}{\numberline {A.27}{\ignorespaces Detalle del formulario de alta de servicios\relax }}{112}{figure.caption.133}%
-\contentsline {figure}{\numberline {A.28}{\ignorespaces Detalle del formulario para añadir un nuevo registro de histórico de servicio\relax }}{114}{figure.caption.134}%
-\contentsline {figure}{\numberline {A.29}{\ignorespaces Detalles del formulario de alta de cuota\relax }}{118}{figure.caption.136}%
-\contentsline {figure}{\numberline {A.30}{\ignorespaces Detalle del formulario para añadir un nuevo registro de histórico de cuota\relax }}{120}{figure.caption.137}%
-\contentsline {figure}{\numberline {A.31}{\ignorespaces Detalles del formulario de alta de promoción\relax }}{125}{figure.caption.140}%
-\contentsline {figure}{\numberline {A.32}{\ignorespaces Detalle del formulario para añadir un nuevo registro de histórico de promoción\relax }}{127}{figure.caption.141}%
-\contentsline {figure}{\numberline {A.33}{\ignorespaces Detalle del resultado de la búsqueda del cliente para mostrar la jerarquía de contrataciones\relax }}{129}{figure.caption.143}%
-\contentsline {figure}{\numberline {A.34}{\ignorespaces Detalle del resultado de la búsqueda del cliente para mostrar la jerarquía de contrataciones\relax }}{129}{figure.caption.144}%
-\contentsline {figure}{\numberline {A.35}{\ignorespaces Detalle de la información mostrada al seleccionar un nodo del arbol de jerarquía de contrataciones del cliente\relax }}{130}{figure.caption.145}%
+\contentsline {figure}{\numberline {A.1}{\ignorespaces Acceso a la pantalla de gestión de usuarios\relax }}{56}{figure.caption.60}%
+\contentsline {figure}{\numberline {A.2}{\ignorespaces Listado de usuarios\relax }}{57}{figure.caption.61}%
+\contentsline {figure}{\numberline {A.3}{\ignorespaces Estructura de la contratación\relax }}{58}{figure.caption.63}%
+\contentsline {figure}{\numberline {A.4}{\ignorespaces Estructura del catálogo de servicios y su implementación en una contratación\relax }}{60}{figure.caption.71}%
+\contentsline {figure}{\numberline {A.5}{\ignorespaces Pantalla de logado\relax }}{62}{figure.caption.74}%
+\contentsline {figure}{\numberline {A.6}{\ignorespaces Logout\relax }}{63}{figure.caption.75}%
+\contentsline {figure}{\numberline {A.7}{\ignorespaces Detalle del menú de la aplicación\relax }}{63}{figure.caption.76}%
+\contentsline {figure}{\numberline {A.8}{\ignorespaces Comparativa de las vistas de la pantalla Entity Types según los permisos del usuario.\relax }}{66}{figure.caption.78}%
+\contentsline {figure}{\numberline {A.9}{\ignorespaces Selección del tipo de cuota a modificar\relax }}{74}{figure.caption.89}%
+\contentsline {figure}{\numberline {A.10}{\ignorespaces Listado de los históricos del tipo de cuota\relax }}{74}{figure.caption.90}%
+\contentsline {figure}{\numberline {A.11}{\ignorespaces Formulario para añadir un nuevo registro de histórico del tipo de cuota\relax }}{76}{figure.caption.92}%
+\contentsline {figure}{\numberline {A.12}{\ignorespaces Listado de registros de histórico tras la adición de un nuevo registro de histórico\relax }}{76}{figure.caption.93}%
+\contentsline {figure}{\numberline {A.13}{\ignorespaces Diálogo de confirmación del borrado del registro de histórico seleccionado\relax }}{77}{figure.caption.95}%
+\contentsline {figure}{\numberline {A.14}{\ignorespaces Listado de registros de histórico tras el borrado de un registro de histórico\relax }}{77}{figure.caption.96}%
+\contentsline {figure}{\numberline {A.15}{\ignorespaces Listado inicial de registros de histórico\relax }}{77}{figure.caption.98}%
+\contentsline {figure}{\numberline {A.16}{\ignorespaces Diálogo de confirmación para el cambio de estado del registro de la entidad\relax }}{77}{figure.caption.99}%
+\contentsline {figure}{\numberline {A.17}{\ignorespaces Listado actualizado con el cambio de estado\relax }}{78}{figure.caption.100}%
+\contentsline {figure}{\numberline {A.18}{\ignorespaces Área que muestra los tipos de entidad cuota relacionada con el producto\relax }}{84}{figure.caption.108}%
+\contentsline {figure}{\numberline {A.19}{\ignorespaces Área que muestra los tipos de entidad cuota candidatas a establecer relación con el producto\relax }}{85}{figure.caption.109}%
+\contentsline {figure}{\numberline {A.20}{\ignorespaces Detalle de los botones para gestionar las relaciones: a la izquierda el botón de añadir relación, a la derecha el botón de eliminar relación\relax }}{85}{figure.caption.110}%
+\contentsline {figure}{\numberline {A.21}{\ignorespaces Detalle del formulario de alta de clientes.\relax }}{98}{figure.caption.119}%
+\contentsline {figure}{\numberline {A.22}{\ignorespaces Detalle del mensaje que informa del id del cliente creado.\relax }}{98}{figure.caption.120}%
+\contentsline {figure}{\numberline {A.23}{\ignorespaces Detalle del formulario de alta de cuentas\relax }}{104}{figure.caption.123}%
+\contentsline {figure}{\numberline {A.24}{\ignorespaces Detalle del mensaje que informa del id de la cuenta creado.\relax }}{105}{figure.caption.124}%
+\contentsline {figure}{\numberline {A.25}{\ignorespaces Detalle del formulario de alta de productos\relax }}{109}{figure.caption.127}%
+\contentsline {figure}{\numberline {A.26}{\ignorespaces Detalle del formulario para añadir un nuevo registro de histórico de producto\relax }}{110}{figure.caption.128}%
+\contentsline {figure}{\numberline {A.27}{\ignorespaces Detalle del formulario de alta de servicios\relax }}{114}{figure.caption.131}%
+\contentsline {figure}{\numberline {A.28}{\ignorespaces Detalle del formulario para añadir un nuevo registro de histórico de servicio\relax }}{116}{figure.caption.132}%
+\contentsline {figure}{\numberline {A.29}{\ignorespaces Detalles del formulario de alta de cuota\relax }}{120}{figure.caption.134}%
+\contentsline {figure}{\numberline {A.30}{\ignorespaces Detalle del formulario para añadir un nuevo registro de histórico de cuota\relax }}{122}{figure.caption.135}%
+\contentsline {figure}{\numberline {A.31}{\ignorespaces Detalles del formulario de alta de promoción\relax }}{127}{figure.caption.138}%
+\contentsline {figure}{\numberline {A.32}{\ignorespaces Detalle del formulario para añadir un nuevo registro de histórico de promoción\relax }}{129}{figure.caption.139}%
+\contentsline {figure}{\numberline {A.33}{\ignorespaces Detalle del resultado de la búsqueda del cliente para mostrar la jerarquía de contrataciones\relax }}{131}{figure.caption.141}%
+\contentsline {figure}{\numberline {A.34}{\ignorespaces Detalle del resultado de la búsqueda del cliente para mostrar la jerarquía de contrataciones\relax }}{131}{figure.caption.142}%
+\contentsline {figure}{\numberline {A.35}{\ignorespaces Detalle de la información mostrada al seleccionar un nodo del arbol de jerarquía de contrataciones del cliente\relax }}{132}{figure.caption.143}%
 \addvspace {10\p@ }
-\contentsline {figure}{\numberline {B.1}{\ignorespaces Actores del sistema\relax }}{133}{figure.caption.146}%
-\contentsline {figure}{\numberline {B.2}{\ignorespaces Caso de uso del acceso al sistema - Actores READ, WRITE y ADMIN\relax }}{133}{figure.caption.147}%
-\contentsline {figure}{\numberline {B.3}{\ignorespaces Casos de uso de los actores READ, WRITE\relax }}{133}{figure.caption.148}%
-\contentsline {figure}{\numberline {B.4}{\ignorespaces Casos de uso del actor ADMIN\relax }}{133}{figure.caption.149}%
-\contentsline {figure}{\numberline {B.5}{\ignorespaces Diagrama ER del catálogo y la parametrizacion (I)\relax }}{162}{figure.caption.190}%
-\contentsline {figure}{\numberline {B.6}{\ignorespaces Diagrama ER del catálogo y la parametrizacion (y II)\relax }}{162}{figure.caption.191}%
-\contentsline {figure}{\numberline {B.7}{\ignorespaces Diagrama ER de la contratación, el catálogo y la parametrizacion (I)\relax }}{163}{figure.caption.192}%
-\contentsline {figure}{\numberline {B.8}{\ignorespaces Diagrama ER de la contratación, el catálogo y la parametrizacion(y II)\relax }}{163}{figure.caption.193}%
+\contentsline {figure}{\numberline {B.1}{\ignorespaces Actores del sistema\relax }}{135}{figure.caption.144}%
+\contentsline {figure}{\numberline {B.2}{\ignorespaces Caso de uso del acceso al sistema - Actores READ, WRITE y ADMIN\relax }}{135}{figure.caption.145}%
+\contentsline {figure}{\numberline {B.3}{\ignorespaces Casos de uso de los actores READ, WRITE\relax }}{135}{figure.caption.146}%
+\contentsline {figure}{\numberline {B.4}{\ignorespaces Casos de uso del actor ADMIN\relax }}{135}{figure.caption.147}%
+\contentsline {figure}{\numberline {B.5}{\ignorespaces Diagrama ER del catálogo y la parametrizacion (I)\relax }}{164}{figure.caption.188}%
+\contentsline {figure}{\numberline {B.6}{\ignorespaces Diagrama ER del catálogo y la parametrizacion (y II)\relax }}{164}{figure.caption.189}%
+\contentsline {figure}{\numberline {B.7}{\ignorespaces Diagrama ER de la contratación, el catálogo y la parametrizacion (I)\relax }}{165}{figure.caption.190}%
+\contentsline {figure}{\numberline {B.8}{\ignorespaces Diagrama ER de la contratación, el catálogo y la parametrizacion(y II)\relax }}{165}{figure.caption.191}%
