@@ -11,10 +11,180 @@
 Para mayor flexibilidad se han definido una serie de elementos parametrizables cuyo objetivo es dotar de mayor adaptabilidad a las entidades ante nuevas necesidades que puedan surgir en el futuro.
 
 
-\section{Introducción}
-\label{sec:introduccion}
 
-Antes de explicar cómo usar \emph{CoMaSw} vamos a explicar de forma conjunta la visión de contratación que propone la aplicación y los elementos que la conforman.
+
+\section{Manual del administrador}
+\label{sec:manual-administrador}
+
+En esta sección veremos todo lo relacionado con la administración de la aplicación: instalación y gestión de usuarios.
+
+\subsection{Instalación}
+\label{sub:instalacion}
+
+\subsubsection{Requisitos hardware y sofware}
+\label{sub:requisitos}
+
+Los requisitos hardware y software para garantizar el funcionamiento correcto de
+la aplicación son los que se indican a continuación, aunque es posible que funcione
+sobre un hardware con características inferiores y con otras versiones de los requisitos
+software no está garantizada la compatibilidad.\newline
+
+
+\begin{itemize}
+\item \textbf{REQUISITOS HARDWARE}\newline
+Los requisitos hardware son los generales para un servidor de base de datos y unservidor web básico. Dependiendo del número de usuarios y del volumen de datos será necesario aumentar el número de recursos.
+Requisitos mínimos de instalación:
+	\begin{itemize}
+	\item Memoria: 8 GB
+	\item Disco Duro: 30 GB de espacio libre.
+	\end{itemize} 
+
+\item \textbf{REQUISITOS SOFTWARE}\newline
+Los requisitos software necesarios para ejecutar la aplicación son los siguientes:
+	\begin{itemize}
+		\item \textit{\textbf{Servidor}}
+		\begin{itemize}
+			\item Servidor web: Wildfly 20.0.1
+			\item Sistema gestor de bases de datos: PostgreSQL 14.5
+		\end{itemize}
+
+		\item \textit{\textbf{Cliente}}
+		\begin{itemize}
+			\item Navegador web: Mozilla Firefox 104.0.1, Chromium 105.0.5195.52
+		\end{itemize}
+	\end{itemize}
+\end{itemize}
+
+
+
+
+\subsubsection{Procedimiento de instalación}
+\label{sub:proceso-instalacion}
+A continuación se detallan los pasos a seguir para el proceso de instalación (nota: Antes de comenzar la instalación, revisar que el software necesario esté instalado y configurado correctamente).
+
+\begin{enumerate}
+\item \underline{\textbf{Descomprimir el fichero \emph{comasw\_files.zip}}} \newline
+Este fichero comprimido contiene lo siguiente:
+	\begin{itemize}
+		\item CoMaSw.war - fichero war de la aplicación.
+		\item postgresql-42.4.1.jar - driver jdbc para postgres.
+		\item creacion\_db.sql - script con los pasos necesarios para la creación de la base de datos.
+		\item db\_comasw.sql - fichero de importación de la base de datos.
+	\end{itemize}
+
+\item \underline{\textbf{Configurar la base de datos}}\newline
+La base de datos de la aplicación se llama \emph{\textbf{db\_comasw}} y tiene dos usuarios:
+	\begin{itemize}
+		\item \emph{comasw\_admin} - usuario propietario de la base de datos. Todo nuevo objeto a crear en la base de datos de la aplicación deberá crearse con este usuario.
+		\item \emph{comasw\_app} - usuario de la aplicación CoMaSw (con el que establece conexión la aplicación a la base de datos). En caso de crear nuevos objetos en la base de datos relacionados con la aplicación deberán otorgársele los permisos correspondientes a este usuario sobre dichos objetos.
+	\end{itemize}
+A continuación se describen los pasos a seguir para crear y configurar la base de datos.	
+	\begin{enumerate}
+		\item \underline{\textbf{Crear la base de datos \emph{\textbf{db\_comasw}}}}.\newline
+
+Desde la ruta en la que hemos descomprimido el fichero nos conectaremos a la base de datos de postgresql y ejecutamos lo siguiente:\newline
+
+\emph{creacion\_db.sql}\newline
+
+	\item \underline{\textbf{Importar la base de datos \emph{\textbf{db\_comasw}}}}.\newline
+
+Desde el terminal nos colocamos en la ruta en la que hemos descomprimido el fichero y ejecutamos lo siguiente:\newline
+
+\emph{psql -U postgres db\_comasw < db\_comasw.sql} \newline
+
+	\end{enumerate}
+\item \underline{C\textbf{onfigurar el servidor web Wildfly}}\newline
+A través del CLI de Wildfly ejecutar lo siguiente:
+
+	\begin{enumerate}
+	\item  \underline{\textbf{Desplegar el driver JDBC}}.\newline
+Ejecutamos lo siguiente, siendo \textbf{[ruta\_driver]} la ruta en la que hemos ubicado el driver contenido en el fichero \emph{comasw\_files.zip}:
+
+\emph{module add --name=org.postgresql --resources=\textbf{[ruta\_driver]}/postgresql-42.4.1.jar --dependencies=javax.api,javax.transaction.api}
+\newline
+
+	\item \underline{\textbf{Añadimos el driver JDBC}}.\newline
+Ejecutamos lo siguiente:\newline
+
+\emph{/subsystem=datasources/jdbc-driver=postgres:add(driver-name="postgres",driver-module-name="org.postgresql",driver-class-name=org.postgresql.Driver)}
+\newline
+	\end{enumerate}
+
+\item \underline{\textbf{Copiar el fichero comasw.war a la carpeta de aplicaciones de Wildfly}}
+\item \underline{\textbf{Desplegar la apliación en el servidor}}
+\end{enumerate}
+
+
+ 
+\subsection{Acceso}
+\label{sub:acceso-administrador}
+ 
+Para acceder a la aplicación escribir en la barra de direcciones de la aplicación la
+siguiente URL: http://[servidor]:8080, donde servidor es el nombre del servidor web.
+
+La aplicación utiliza usuarios para el control de acceso y para auditar la
+modificación de la información almacenada.
+
+Las credenciales establecidas por defecto para el usuario administrador son ADMIN/ADMIN como nombre de usuario/contraseña. Por razones de seguridad es recomendable que una vez iniciada la sesión se cambie la contraseña del usuario administrador.
+ 
+ 
+ 
+\subsection{Gestión de usuarios}
+\label{sub:gestion-usuarios}
+
+Cualquier usuario con perfil ADMIN puede gestionar las altas, bajas y modificaciones de otros usuarios del sistema. Los usuarios con este perfil tienen habilitado un botón \emph{Configuration} situado en la esquina superior derecha de la aplicación, que al pulsarlo despliega un menú con úna única opción Manage Users (figura \ref{fig:boton-gestion-usuarios}, página \pageref{fig:boton-gestion-usuarios}):
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.40\textwidth]{imaxes/gestion-usuarios-01.png}
+  \caption{Acceso a la pantalla de gestión de usuarios}
+  \label{fig:boton-gestion-usuarios}
+\end{figure}
+
+
+Cada usuario tendrá asociado un perfil que define los permisos que tiene sobre la aplicación:
+
+\begin{itemize}
+\item \textbf{ADMIN} - permisos de administrador. Los usuarios con este perfil puede realizar altas, bajas y modificaciones de cualquier entidad de la aplicación: elementos de la parametrización, del catálogo, de la contratación o los usuarios del sistema.
+\item \textbf{ADMIN} - permisos de lectura/escritura. Los usuarios con este perfil puede realizar altas, bajas y modificaciones de las entidades del catálogo del servicio, así como de las contrataciones, y únicamente consultar las entidades de la parametrización. No tienen habilitado el acceso a la gestión de usuarios.
+\item \textbf{READ} - permisos de solo lectura. Los usuarios con este perfil sólo pueden consultar los datos de la aplicación correspondientes a la parametriación, el catálogo o la contratación. No tienen habilitado el acceso a la gestión de usuarios.
+\end{itemize}
+
+
+Una vez seleccionado se nos mostrará el listado de todos los usuarios del sistema (figura
+\ref{fig:listado-usuarios}, página \pageref{fig:listado-usuarios}). Desde ahí se pueden gestionar las siguientes operaciones:\newline
+
+
+\underline{\textsl{\textbf{Crear nuevo usuario}}}
+Para crear un nuevo usuario se pulsará el botón \emph{New Data} situado en la parte superior de la tabla. Aparecerá una ventana emergente que mostrará un formulario con los campos a cubrir, entre ellos el perfil con el que se va a crear el usuario y que definirá los permisos de este sobre los elementos de la aplicación.
+
+
+\underline{\textsl{\textbf{Editar usuario}}}
+Para editar un usuario se seleccionará del listado y se pulsará el botón editar de la columna \emph{EDIT ROW}. Se editarán los campos pertinentes de la tabla para realizar las modificaciones oportunas. 
+
+\underline{\textsl{\textbf{Borrar usuario}}}
+Para borrar un usuario se seleccionará del listado y se pulsará el botón amarillo de borrar de la columna \emph{DEL ROW} correspondiente.\newline
+
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=0.40\textwidth]{imaxes/gestion-usuarios-02.png}
+  \caption{Listado de usuarios}
+  \label{fig:listado-usuarios}
+\end{figure}
+
+
+
+\section{Manual de usuario}
+\label{sec:manual-usuario}
+
+En esta sección se mostrará toda la información necesaria para conocer el funcionamiento por parte del usuario de CoMaSw.
+
+
+\subsection{Introducción}
+\label{sub:introduccion}
+
+Antes de explicar cómo usar \emph{CoMaSw} veamos la visión de contratación que propone la aplicación y los elementos que la conforman.
 
 
 
@@ -112,125 +282,6 @@ La aplicación lleva a cabo un registro de las operaciones de edición sobre las
 \end{itemize}
 
 
-\section{Manual del administrador}
-\label{sec:manual-administrador}
-
-En esta sección veremos todo lo relacionado con la administración de la aplicación: instalación y gestión de usuarios.
-
-\subsection{Instalación}
-\label{sub:instalacion}
-
-\subsubsection{Requisitos hardware y sofware}
-\label{sub:requisitos}
-
-Los requisitos hardware y software para garantizar el funcionamiento correcto de
-la aplicación son los que se indican a continuación, aunque es posible que funcione
-sobre un hardware con características inferiores y con otras versiones de los requisitos
-software no está garantizada la compatibilidad.
-
-\textbf{HARDWARE}\newline
-Los requisitos hardware son los generales para un servidor de base de datos y un
-servidor web básico. Dependiendo del número de usuarios y del volumen de datos será
-necesario aumentar el número de recursos.
-Requisitos mínimos de instalación:
-\begin{itemize}
-\item Memoria: 4 GB
-\item Disco Duro: 30 GB de espacio libre.
-\end{itemize}
-
-
-\textbf{SOFTWARE}\newline
-
-\begin{itemize}
-	\item \textit{\textbf{Servidor}}
-	\begin{itemize}
-		\item Servidor web: Wildfly 20.0.1
-		\item Sistema gestor de bases de datos: PostgreSQL 14.5
-	\end{itemize}
-
-	\item \textit{\textbf{Cliente}}
-	\begin{itemize}
-		\item Navegador web: Mozilla Firefox 104.0.1, Chromium 105.0.5195.52
-	\end{itemize}
-\end{itemize}
-
-
-\subsubsection{Procedimiento de instalación}
-\label{sub:proceso-instalacion}
-
-Antes de comenzar la instalación, revisar que el software necesario esté instalado
-y configurado correctamente.
-\begin{enumerate}
-\item Ejecutar el script comasw.sql que se encuentra en la carpeta BBDD.
-\item Copiar el fichero comasw.war a la carpeta de aplicaciones de Wildfly.
-\item Desplegar la aplicación en el servidor.
-\end{enumerate}
- 
- 
-\subsubsection{Acceso}
-\label{sub:acceso-administrador}
- 
-Para acceder a la aplicación escribir en la barra de direcciones de la aplicación la
-siguiente URL: http://[servidor]:8080, donde servidor es el nombre del servidor web.
-
-La aplicación utiliza usuarios para el control de acceso y para auditar la
-modificación de la información almacenada.
-
-Las credenciales establecidas por defecto para el usuario administrador son ADMIN/ADMIN como nombre de usuario/contraseña. Por razones de seguridad es recomendable que una vez iniciada la sesión se cambie la contraseña del usuario administrador.
- 
- 
- 
-\subsubsection{Gestión de usuarios}
-\label{sub:gestion-usuarios}
-
-Cualquier usuario con perfil ADMIN puede gestionar las altas, bajas y modificaciones de otros usuarios del sistema. Los usuarios con este perfil tienen habilitado un botón \emph{Configuration} situado en la esquina superior derecha de la aplicación, que al pulsarlo despliega un menú con úna única opción Manage Users (figura \ref{fig:boton-gestion-usuarios}, página \pageref{fig:boton-gestion-usuarios}):
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.40\textwidth]{imaxes/gestion-usuarios-01.png}
-  \caption{Acceso a la pantalla de gestión de usuarios}
-  \label{fig:boton-gestion-usuarios}
-\end{figure}
-
-
-Cada usuario tendrá asociado un perfil que define los permisos que tiene sobre la aplicación:
-
-\begin{itemize}
-\item \textbf{ADMIN} - permisos de administrador. Los usuarios con este perfil puede realizar altas, bajas y modificaciones de cualquier entidad de la aplicación: elementos de la parametrización, del catálogo, de la contratación o los usuarios del sistema.
-\item \textbf{ADMIN} - permisos de lectura/escritura. Los usuarios con este perfil puede realizar altas, bajas y modificaciones de las entidades del catálogo del servicio, así como de las contrataciones, y únicamente consultar las entidades de la parametrización. No tienen habilitado el acceso a la gestión de usuarios.
-\item \textbf{READ} - permisos de solo lectura. Los usuarios con este perfil sólo pueden consultar los datos de la aplicación correspondientes a la parametriación, el catálogo o la contratación. No tienen habilitado el acceso a la gestión de usuarios.
-\end{itemize}
-
-
-Una vez seleccionado se nos mostrará el listado de todos los usuarios del sistema (figura
-\ref{fig:listado-usuarios}, página \pageref{fig:listado-usuarios}). Desde ahí se pueden gestionar las siguientes operaciones:\newline
-
-
-\underline{\textsl{\textbf{Crear nuevo usuario}}}
-Para crear un nuevo usuario se pulsará el botón \emph{New Data} situado en la parte superior de la tabla. Aparecerá una ventana emergente que mostrará un formulario con los campos a cubrir, entre ellos el perfil con el que se va a crear el usuario y que definirá los permisos de este sobre los elementos de la aplicación.
-
-
-\underline{\textsl{\textbf{Editar usuario}}}
-Para editar un usuario se seleccionará del listado y se pulsará el botón editar de la columna \emph{EDIT ROW}. Se editarán los campos pertinentes de la tabla para realizar las modificaciones oportunas. 
-
-\underline{\textsl{\textbf{Borrar usuario}}}
-Para borrar un usuario se seleccionará del listado y se pulsará el botón amarillo de borrar de la columna \emph{DEL ROW} correspondiente.\newline
-
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.40\textwidth]{imaxes/gestion-usuarios-02.png}
-  \caption{Listado de usuarios}
-  \label{fig:listado-usuarios}
-\end{figure}
-
-
-
-\section{Manual de usuario}
-\label{sec:manual-usuario}
-
-En esta sección se mostrará toda la información necesaria para conocer el funcionamiento por parte del usuario de CoMaSw.
-
 
 \subsection{Acceso}
 
@@ -277,7 +328,7 @@ Pulsando el botón \emph{Edit Data} se habilitará la edición de los campos con
 
 
 \subsection{Acceder al menú de la aplicación}
-\subsection{menu}
+\label{sub:menu}
 Pulsando el botón \emph{Menu} de la esquina superior izquierda se despliega el menú de la aplicación (figura \ref{fig:menu}, página \pageref{fig:menu}).
 
 \begin{figure}[H]
