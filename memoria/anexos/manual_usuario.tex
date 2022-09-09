@@ -3,7 +3,7 @@
 
 \lettrine{CoMaSw} (\emph{\textbf{Co}}ntract \emph{\textbf{Ma}}nagement \emph{\textbf{S}}of\emph{\textbf{w}}are) una aplicación software desarrollado para la gestión de la contratación de una empresa proveedora de servicios. Las dos actividades principales de esta herramienta son:
 \begin{itemize}
-\item La gestión del catálogo de servicios de la empresa, mediante la definción de nuevos productos y servicios, elementos facturables como cuotas de consumo y aplicación de descuentos a través de promociones o modificación de las ya existentes.
+\item La gestión del catálogo de servicios de la empresa, mediante la definición de nuevos productos y servicios, elementos facturables como cuotas de consumo y aplicación de descuentos a través de promociones o modificación de las ya existentes.
 \item La gestión de la cartera de clientes, creando nuevos clientes o modificando clientes existentes y estableciendo las contrataciones oportunas de los distintos elementos ofertados por la empresa para esos clientes.
 \end{itemize}
 
@@ -74,36 +74,37 @@ La base de datos de la aplicación se llama \emph{\textbf{db\_comasw}} y tiene d
 		\item \emph{comasw\_admin} - usuario propietario de la base de datos. Todo nuevo objeto a crear en la base de datos de la aplicación deberá crearse con este usuario.
 		\item \emph{comasw\_app} - usuario de la aplicación CoMaSw (con el que establece conexión la aplicación a la base de datos). En caso de crear nuevos objetos en la base de datos relacionados con la aplicación deberán otorgársele los permisos correspondientes a este usuario sobre dichos objetos.
 	\end{itemize}
+
 A continuación se describen los pasos a seguir para crear y configurar la base de datos.	
 	\begin{enumerate}
-		\item \underline{\textbf{Crear la base de datos \emph{\textbf{db\_comasw}}}}.\newline
+		\item \underline{\textbf{Crear la base de datos \emph{\textbf{db\_comasw}}}}\\
+Desde la ruta en la que hemos descomprimido el fichero nos conectaremos a la base de datos de postgresql y ejecutamos lo siguiente:
+\begin{lstlisting}[style=comando]
+  $ creacion_db.sql
+\end{lstlisting}
 
-Desde la ruta en la que hemos descomprimido el fichero nos conectaremos a la base de datos de postgresql y ejecutamos lo siguiente:\newline
-
-\emph{creacion\_db.sql}\newline
-
-	\item \underline{\textbf{Importar la base de datos \emph{\textbf{db\_comasw}}}}.\newline
-
-Desde el terminal nos colocamos en la ruta en la que hemos descomprimido el fichero y ejecutamos lo siguiente:\newline
-
-\emph{psql -U postgres db\_comasw < db\_comasw.sql} \newline
+	\item \underline{\textbf{Importar la base de datos \emph{\textbf{db\_comasw}}}}.\\
+Desde el terminal nos colocamos en la ruta en la que hemos descomprimido el fichero y ejecutamos lo siguiente:
+\begin{lstlisting}[style=comando]
+  $ psql -U postgres db_comasw < db_comasw.sql
+\end{lstlisting}
 
 	\end{enumerate}
-\item \underline{C\textbf{onfigurar el servidor web Wildfly}}\newline
+\item \underline{\textbf{Configurar el servidor web Wildfly}}\newline
 A través del CLI de Wildfly ejecutar lo siguiente:
 
 	\begin{enumerate}
-	\item  \underline{\textbf{Desplegar el driver JDBC}}.\newline
+	\item  \underline{\textbf{Desplegar el driver JDBC}}\newline
 Ejecutamos lo siguiente, siendo \textbf{[ruta\_driver]} la ruta en la que hemos ubicado el driver contenido en el fichero \emph{comasw\_files.zip}:
+\begin{lstlisting}[style=comando]
+  module add --name=org.postgresql --resources=(*\bfseries[ruta\_driver]*)/postgresql-42.4.1.jar --dependencies=javax.api,javax.transaction.api
+\end{lstlisting}
 
-\emph{module add --name=org.postgresql --resources=\textbf{[ruta\_driver]}/postgresql-42.4.1.jar --dependencies=javax.api,javax.transaction.api}
-\newline
-
-	\item \underline{\textbf{Añadimos el driver JDBC}}.\newline
-Ejecutamos lo siguiente:\newline
-
-\emph{/subsystem=datasources/jdbc-driver=postgres:add(driver-name="postgres",driver-module-name="org.postgresql",driver-class-name=org.postgresql.Driver)}
-\newline
+	\item \underline{\textbf{Añadimos el driver JDBC}}\newline
+Ejecutamos lo siguiente:
+\begin{lstlisting}[style=comando]
+/subsystem=datasources/jdbc-driver=postgres:add( driver-name="postgres", driver-module-name="org.postgresql", driver-class-name=org.postgresql.Driver)
+\end{lstlisting}
 	\end{enumerate}
 
 \item \underline{\textbf{Copiar el fichero comasw.war a la carpeta de aplicaciones de Wildfly}}
@@ -116,7 +117,7 @@ Ejecutamos lo siguiente:\newline
 \label{sub:acceso-administrador}
  
 Para acceder a la aplicación escribir en la barra de direcciones de la aplicación la
-siguiente URL: http://[servidor]:8080, donde servidor es el nombre del servidor web.
+siguiente URL: {\footnotesize \tt http://[servidor]:8080}, donde servidor es el nombre del servidor web.
 
 La aplicación utiliza usuarios para el control de acceso y para auditar la
 modificación de la información almacenada.
@@ -182,23 +183,20 @@ Antes de explicar cómo usar \emph{CoMaSw} veamos la visión de contratación qu
 \subsubsection{Conceptos relativos a las contrataciones}
 \label{sub:contratacion-conceptos}
 
-Una contratación es una estructura jerárquica en la que el que la \textit{cabeza} de la misma es el cliente. Dicho cliente puede tener una o más cuentas asociadas. Cada una de estas cuentas es responsable de la contratación de un conjunto de productos, servicios, cuotas y promociones ofertados por la empresa. La \figurename~\ref{fig:estructura-contratacion} muestra dicha estructura de contratación.
+Una contratación es una estructura jerárquica en la que el que la \textit{cabeza} de la misma es el cliente. Dicho cliente puede tener una o más cuentas asociadas. Cada una de estas cuentas es responsable de la contratación de un conjunto de productos, servicios, cuotas y promociones ofertados por la empresa. La \figurename~\ref{fig:estructura-contratacion} muestra dicha estructura de contratación. Vamos a introducir algunos conceptos al respecto.
 
-\begin{figure}[H]
+\begin{figure}
   \centering
-  \includegraphics[width=0.9\textwidth]{imaxes/estructura-contratacion.png}
+  \includegraphics[width=\textwidth]{imaxes/estructura-contratacion.png}
   \caption{Estructura de la contratación}
   \label{fig:estructura-contratacion}
 \end{figure}
 
+\paragraph{Cliente.} Por cliente entendemos la persona física (particular o autónomo) o persona jurídica que adquiere los bienes y servicios proporcionados por la empresa a cambio de una transacción monetaria. Es el responsable último de la contratación de los servicios.
 
-Vamos a introducir algunos conceptos al respecto.
+\paragraph{Cuenta.} Por cuenta entendemos la entidad del sistema que permite gestionar los distintos productos y servicios contratados por el cliente y es la responsable de la transacción económica asociada a la contratación, esto es, el \textit{pagador}, por lo que tendrá asociada una persona física o jurídica que es la que efectuará el pago y que puede coincidir con el cliente o ser otra distinta. Por lo tanto el ciclo de facturación que aplicará sobre los distintos elementos contratados vendrá dado por la cuenta asociada a los mismos.
 
-\paragraph{Cliente:} por cliente entendemos la persona física (particular o autónomo) o persona jurídica que adquiere los bienes y servicios proporcionados por la empresa a cambio de una transacción monetaria. Es el responsable último de la contratación de los servicios.
-
-\paragraph{Cuenta:} por cuenta entendemos la entidad del sistema que permite gestionar los distintos productos y servicios contratados por el cliente y es la responsable de la transacción económica asociada a la contratación, esto es, el \textit{pagador}, por lo que tendrá asociada una persona física o jurídica que es la que efectuará el pago y que puede coincidir con el cliente o ser otra distinta. Por lo tanto el ciclo de facturación que aplicará sobre los distintos elementos contratados vendrá dado por la cuenta asociada a los mismos.
-
-\paragraph{Entidad facturable:} por entidad facturable entendemos todo aquel elemento del sistema susceptible de generar un cargo facturable, y por lo tanto ha de tener un tipo impositivo asociado a la generación de estos cargos, de acuerdo con la ley vigente. Los cargos facturables se denomina elementos facturables y se clasifican en dos tipos:
+\paragraph{Entidad facturable.} Por entidad facturable entendemos todo aquel elemento del sistema susceptible de generar un cargo facturable, y por lo tanto ha de tener un tipo impositivo asociado a la generación de estos cargos, de acuerdo con la ley vigente. Los cargos facturables se denomina elementos facturables y se clasifican en dos tipos:
 \begin{itemize}
 	\item \emph{\textbf{Cuotas}}: son los elementos que definen los cargos fijos a aplicar sobre las distintas entidades contratadas. Puede tratarse de un cargo que se emite una única vez durante el ciclo de vida de la entidad facturable (por ejemplo la cuota de alta) o cargos periódicos asociados a la prestación de servicios (por ejemplo la cuota mensual).
 	\begin{itemize}
@@ -212,11 +210,11 @@ Vamos a introducir algunos conceptos al respecto.
 \end{itemize}
 
 
-\paragraph{Producto:} un producto es una entidad facturable conformada por el conjunto de servicios facturables y los posibles descuentos a aplicar sobre los distintos elementos facturables. Es el \textit{paquete} que la empesa oferta a sus clientes. Los únicos elementos facturables que se pueden aplicar sobre este tipo de entidad son del tipo cuota, y por lo tanto los descuentos a aplicar sólo afectarán a dichos cargos facturables.
+\paragraph{Producto.} Un producto es una entidad facturable conformada por el conjunto de servicios facturables y los posibles descuentos a aplicar sobre los distintos elementos facturables. Es el \textit{paquete} que la empesa oferta a sus clientes. Los únicos elementos facturables que se pueden aplicar sobre este tipo de entidad son del tipo cuota, y por lo tanto los descuentos a aplicar sólo afectarán a dichos cargos facturables.
 
-\paragraph{Servicio:} un servicio es otra entidad facturable que representa el bien inmateriar que se le presta al cliente y que es el verdadero objetivo de la contratación. Sobre este tipo de entidad pueden aplicarse tanto cuotas como consumos  y por lo tanto los descuentos a aplicar pueden afectara ambos tipos de elementos facturables.
+\paragraph{Servicio.} Un servicio es otra entidad facturable que representa el bien inmateriar que se le presta al cliente y que es el verdadero objetivo de la contratación. Sobre este tipo de entidad pueden aplicarse tanto cuotas como consumos  y por lo tanto los descuentos a aplicar pueden afectara ambos tipos de elementos facturables.
 
-\paragraph{Promoción:} se entiene por promoción aquella entidad encargada de aplicar los descuentos previamente definidos sobre los distintos elementos facturables.
+\paragraph{Promoción.} Se entiene por promoción aquella entidad encargada de aplicar los descuentos previamente definidos sobre los distintos elementos facturables.
 
 
 
@@ -282,7 +280,7 @@ El administrador se encargará de proporcionarle un usuario y contraseña válid
 La aplicación utiliza usuarios para el control de acceso y para auditar la
 modificación de la información almacenada. 
 
-Una vez introducida la dirección web indicada por nuestro administrador, aparecerá una ventana con un formulario de acceso(figura \ref{fig:login}, página \pageref{fig:login}. Introduciremos el usuario y la contraseña y pulsaremos aceptar. 
+Una vez introducida la dirección web indicada por nuestro administrador, aparecerá una ventana con un formulario de acceso(\figurename~\ref{fig:login}). Introduciremos el usuario y la contraseña y pulsaremos aceptar. 
 
 
 \begin{figure}[H]
@@ -294,13 +292,13 @@ Una vez introducida la dirección web indicada por nuestro administrador, aparec
 
 Si los datos introducidos son correctos se mostrará la página de inicio de la aplicación.
 
-Para salir de la aplicación pulsaremos el botón con nuestro nombre de usuario situado en la esquina superior derecha y seleccionaremos la opción logout. Una vez pulsado se cierra la sesión y la aplicación nos redirige a la pantalla de inicio de sesión.
+Para salir de la aplicación pulsaremos el botón con nuestro nombre de usuario situado en la esquina superior derecha y seleccionaremos la opción logout (ver \figurename~\ref{fig:logout}). Una vez pulsado se cierra la sesión y la aplicación nos redirige a la pantalla de inicio de sesión.
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.25\textwidth]{imaxes/logout.png}
   \caption{Logout}
-  \label{fig:login}
+  \label{fig:logout}
 \end{figure}
 
 
@@ -352,7 +350,7 @@ Con idea de hacer lo más flexible y adaptable posible esta aplicación, se han 
   \rowcolors{2}{white}{udcgray!25}
   \setlength{\leftmargini}{0.4cm}
   \resizebox{14cm}{!} {
-  \begin{tabular}{|m{3cm} m{11cm}|}
+  \begin{tabular}{|m{4cm} m{11cm}|}
   \rowcolor{udcpink!25}
   \hline
   	\textbf{Elemento} & \textbf{Descripción} \\\hline
@@ -377,12 +375,12 @@ La gestión de estas entidades no está disponible para todos los usuarios, tal 
 
 \begin{figure}[H]
   \centering
-  \begin{subfigure}[c]{0.9\textwidth}
+  \begin{subfigure}[c]{\textwidth}
     \includegraphics[width=\textwidth]{imaxes/entity-type-admin.png}
     \caption{Vista de la pantalla Entity Types para usuarios con perfil de administrador\newline}
     \label{fig:parametrizacion-admin}
   \end{subfigure}
-  \begin{subfigure}[c]{0.9\textwidth}
+  \begin{subfigure}[c]{\textwidth}
     \includegraphics[width=\textwidth,height=3cm]{imaxes/entity-type-usuario.png}
     \caption{Vista de la pantalla Entity Types para el resto de perfiles de usuario}
     \label{fig:parametrizacion-usuario}
@@ -416,11 +414,11 @@ Todos los usuarios del sistema tienen acceso a los elementos del catálogo, pero
 
 
 Se definen tres estados distintos para las entidades del catálogo:
-\begin{itemize}
-\item ACTIVE - estado activo. Para las entidades del catálogo que están disponibles para ofertar.
-\item DEVELOP - estado \textit{en desarrollo}. Para las entidades del catálogo que todavía no están disponibles para ofertar.
-\item CANCEL - estado cancelado. Para las entidades del catálogo que están disponibles para ofertar.
-\end{itemize}
+\begin{description}
+\item[ACTIVE] Estado activo. Para las entidades del catálogo que están disponibles para ofertar.
+\item[DEVELOP] Estado \textit{en desarrollo}. Para las entidades del catálogo que todavía no están disponibles para ofertar.
+\item[CANCEL] Estado cancelado. Para las entidades del catálogo que están disponibles para ofertar.
+\end{description}
 
 
 
@@ -442,7 +440,7 @@ Un tipo de ciclo de facturación viene definido por los elementos indicados en l
   \rowcolors{2}{white}{udcgray!25}
   \setlength{\leftmargini}{0.4cm}
   \resizebox{14cm}{!} {
-  \begin{tabular}{|m{3cm} m{11cm}|}
+  \begin{tabular}{|m{3.5cm} m{11cm}|}
   \rowcolor{udcpink!25}
   \hline
   	\textbf{Elemento} & \textbf{Descripción} \\\hline
@@ -463,16 +461,13 @@ Un tipo de ciclo de facturación viene definido por los elementos indicados en l
 
 
 Las operaciones definidas para esta entidad son las siguientes (nota: sólo están habilitadas para usuarios con permisos de edición):
+\begin{description}
+  \item[\underline{\textsl{\textbf{Crear nuevo tipo de ciclo de facturación}}}] Para crear un nuevo tipo ciclo de facturación se pulsará el botón \textit{New Data} situado en la parte superior de la tabla. Aparecerá una ventana emergente que mostrará un formulario con los campos a cubrir.
 
-\underline{\textsl{\textbf{Crear nuevo tipo de ciclo de facturación}}}\newline
-Para crear un nuevo tipo ciclo de facturación se pulsará el botón \textit{New Data} situado en la parte superior de la tabla. Aparecerá una ventana emergente que mostrará un formulario con los campos a cubrir.
+  \item[\underline{\textsl{\textbf{Editar tipo de ciclo de facturación existente}}}] Para editar un tipo de ciclo de facturación existente se seleccionará del listado y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas. 
 
-
-\underline{\textsl{\textbf{Editar tipo de ciclo de facturación existente}}}\newline
-Para editar un tipo de ciclo de facturación existente se seleccionará del listado y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas. 
-
-\underline{\textsl{\textbf{Borrar ciclo de facturación}}}\newline
-Para borrar un tipo de ciclo de facturación se seleccionará del listado y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.\newline
+  \item[\underline{\textsl{\textbf{Borrar ciclo de facturación}}}] Para borrar un tipo de ciclo de facturación se seleccionará del listado y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.
+\end{description}
 
 Todos los valores mostrados para la entidad son obligatorios y deberán cubrirse al realizar un alta o modificación. Asimismo el valor del campo CODE es único. No pueden existir dos entidades del mismo tipo con el mismo código.
 
@@ -511,15 +506,13 @@ Un tipo de cliente viene definido por los elementos indicados en la \tablename~\
 \end{table}
 
 Las operaciones definidas para esta entidad son las siguientes (nota: sólo están habilitadas para usuarios con permisos de edición):
+\begin{description}
+\item[\underline{\textsl{\textbf{Crear nuevo tipo de cliente}}}] Para crear un nuevo cliente se pulsará el botón \textit{New Data} situado en la parte superior de la tabla. Aparecerá una ventana emergente que mostrará un formulario con los campos a cubrir.
 
-\underline{\textsl{\textbf{Crear nuevo tipo de cliente}}}\newline
-Para crear un nuevo cliente se pulsará el botón \textit{New Data} situado en la parte superior de la tabla. Aparecerá una ventana emergente que mostrará un formulario con los campos a cubrir.
+\item[\underline{\textsl{\textbf{Editar tipo de cliente existente}}}] Para editar un tipo de cliente existente se seleccionará del listado y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas. 
 
-\underline{\textsl{\textbf{Editar tipo de cliente existente}}}\newline
-Para editar un tipo de cliente existente se seleccionará del listado y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas. 
-
-\underline{\textsl{\textbf{Borrar tipo de cliente}}}\newline
-Para borrar un tipo de cliente se seleccionará del listado y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.\newline
+\item[\underline{\textsl{\textbf{Borrar tipo de cliente}}}] Para borrar un tipo de cliente se seleccionará del listado y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.
+\end{description}
 
 Todos los valores mostrados para la entidad son obligatorios y deberán cubrirse al realizar un alta o modificación. Asimismo el valor del campo CODE es único. No pueden existir dos entidades del mismo tipo con el mismo código.
 
@@ -545,7 +538,7 @@ Un tipo de cuenta viene definido por los elementos indicados en la \tablename~\r
   \rowcolors{2}{white}{udcgray!25}
   \setlength{\leftmargini}{0.4cm}
   \resizebox{14cm}{!} {
-  \begin{tabular}{|m{3cm} m{11cm}|}
+  \begin{tabular}{|m{4cm} m{11cm}|}
   \rowcolor{udcpink!25}
   \hline
   	\textbf{Elemento} & \textbf{Descripción} \\\hline
@@ -563,15 +556,13 @@ Un tipo de cuenta viene definido por los elementos indicados en la \tablename~\r
 \end{table}
 
 Las operaciones definidas para esta entidad son las siguientes (nota: sólo están habilitadas para usuarios con permisos de edición):
+\begin{description}
+\item[\underline{\textsl{\textbf{Crear nuevo tipo de cuenta}}}] Para crear una nueva cuenta se pulsará el botón \textit{New Data} situado en la parte superior de la tabla. Aparecerá una ventana emergente que mostrará un formulario con los campos a cubrir.
 
-\underline{\textsl{\textbf{Crear nuevo tipo de cuenta}}}\newline
-Para crear una nueva cuenta se pulsará el botón \textit{New Data} situado en la parte superior de la tabla. Aparecerá una ventana emergente que mostrará un formulario con los campos a cubrir.
+\item[\underline{\textsl{\textbf{Editar tipo de cuenta existente}}}] Para editar un tipo de cuenta existente se seleccionará del listado y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas.
 
-\underline{\textsl{\textbf{Editar tipo de cuenta existente}}}\newline
-Para editar un tipo de cuenta existente se seleccionará del listado y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas. 
-
-\underline{\textsl{\textbf{Borrar tipo de cuenta}}}\newline
-Para borrar un tipo de cuenta se seleccionará del listado y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.\newline
+\item[\underline{\textsl{\textbf{Borrar tipo de cuenta}}}] Para borrar un tipo de cuenta se seleccionará del listado y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.
+\end{description}
 
 Todos los valores mostrados para la entidad son obligatorios y deberán cubrirse al realizar un alta o modificación. Asimismo el valor del campo CODE es único. No pueden existir dos entidades del mismo tipo con el mismo código.
 
@@ -615,15 +606,13 @@ Un tipo de consumo viene definido por los elementos indicados en la \tablename~\
 \end{table}
 
 Las operaciones definidas para esta entidad son las siguientes (nota: sólo están habilitadas para usuarios con permisos de edición):
+\begin{description}
+\item[\underline{\textsl{\textbf{Crear nuevo tipo de consumo}}}] Para crear un nuevo consumo se pulsará el botón \textit{New Data} situado en la parte superior de la tabla. Aparecerá una ventana emergente que mostrará un formulario con los campos a cubrir.
 
-\underline{\textsl{\textbf{Crear nuevo tipo de consumo}}}\newline
-Para crear un nuevo consumo se pulsará el botón \textit{New Data} situado en la parte superior de la tabla. Aparecerá una ventana emergente que mostrará un formulario con los campos a cubrir.
+\item[\underline{\textsl{\textbf{Editar tipo de consumo existente}}}] Para editar un tipo de consumo existente se seleccionará del listado y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas.
 
-\underline{\textsl{\textbf{Editar tipo de consumo existente}}}\newline
-Para editar un tipo de consumo existente se seleccionará del listado y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas. 
-
-\underline{\textsl{\textbf{Borrar tipo de consumo}}}\newline
-Para borrar un tipo de consumo se seleccionará del listado y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.\newline
+\item[\underline{\textsl{\textbf{Borrar tipo de consumo}}}] Para borrar un tipo de consumo se seleccionará del listado y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.
+\end{description}
 
 Todos los valores mostrados para la entidad son obligatorios y deberán cubrirse al realizar un alta o modificación. Asimismo el valor del campo CODE es único. No pueden existir dos entidades del mismo tipo con el mismo código.
 
@@ -676,9 +665,8 @@ Un tipo de cuota viene definido por los elementos indicados en la \tablename~\re
 
 
 Las operaciones definidas para esta entidad son las siguientes:
-
-\underline{\textsl{\textbf{Buscar un tipo de cuota existente}}}\newline
-Esta operación está disponible para todos los usuarios de la aplicación.
+\begin{description}
+\item[\underline{\textsl{\textbf{Buscar un tipo de cuota existente}}}] Esta operación está disponible para todos los usuarios de la aplicación.
 
 Puesto que los tipos de cuota son entidades con histórico, por motivos de operatividad no se muestra el listado de todas las entidades del sistema por defecto, si no que se establecen unos criterios de búsqueda para seleccionar el tipo de cuota a consultar. Para ello se define un área de búsqueda en los que se definen los criterios de búsqueda a tener en cuenta:
 \begin{itemize}
@@ -686,79 +674,72 @@ Puesto que los tipos de cuota son entidades con histórico, por motivos de opera
 \item Buscar por fecha. Se realizará una búsqueda de los históricos de todos los tipos de consumo existentes en el sistema para los que la fecha de búsqueda definida se encuentre entre la fecha de inicio y fin del registro de histórico. Opción marcada por defecto
 \end{itemize}
 
-Pulsando el botón \emph{Search} se mostrará un panel emergente con el listado de los registros encontrados. Seleccionaremos el elemento sobre el que queramos operar pulsando el botón amarillo de la columna \emph{Show Historic} (figura \ref{fig:seleccion-tipo-cuota}, página \pageref{fig:seleccion-tipo-cuota}):
+Pulsando el botón \emph{Search} se mostrará un panel emergente con el listado de los registros encontrados. Seleccionaremos el elemento sobre el que queramos operar pulsando el botón amarillo de la columna \emph{Show Historic} (\figurename~\ref{fig:seleccion-tipo-cuota}):
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.70\textwidth]{imaxes/seleccion-tipo-cuota.png}
+  \includegraphics[width=0.90\textwidth]{imaxes/seleccion-tipo-cuota.png}
   \caption{Selección del tipo de cuota a modificar}
   \label{fig:seleccion-tipo-cuota}
 \end{figure}
 
 
-Se mostrará el área de históricos de la entidad con los distintos registros de histórico existentes (figura \ref{fig:listado-historicos-tipo-cuota}, página \pageref{fig:listado-historicos-tipo-cuota}):
+Se mostrará el área de históricos de la entidad con los distintos registros de histórico existentes (\figurename~\ref{fig:listado-historicos-tipo-cuota}):
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.70\textwidth]{imaxes/listado-historicos-tipo-cuota.png}
+  \includegraphics[width=\textwidth]{imaxes/listado-historicos-tipo-cuota.png}
   \caption{Listado de los históricos del tipo de cuota}
   \label{fig:listado-historicos-tipo-cuota}
 \end{figure}
 
 
-
-\underline{\textsl{\textbf{Crear nuevo tipo de cuota}}}\newline
-Esta operación sólo está habilitada para usuarios con permisos de edición.
+\item[\underline{\textsl{\textbf{Crear nuevo tipo de cuota}}}] Esta operación sólo está habilitada para usuarios con permisos de edición.
 Para crear un nuevo consumo se pulsará el botón \textit{New Data} situado en la parte superior de la tabla. Aparecerá una ventana emergente que mostrará un formulario con los campos a cubrir. Por defecto se establecen como fecha de inicio y fin del nuevo tipo de cuota las fechas 01/01/1900 y 31/12/9999.
 
-\underline{\textsl{\textbf{Editar registro de histórico de un tipo de cuota existente}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
-Para editar un tipo de consumo existente se seleccionará del listado y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas teniendo en cuenta los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}.
+\item[\underline{\textsl{\textbf{Editar registro de histórico de un tipo de cuota existente}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
+Para editar un tipo de consumo existente se seleccionará del listado y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas teniendo en cuenta los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}).
 
-\underline{\textsl{\textbf{Añadir registro de histórico de un tipo de cuota existente}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
+\item[\underline{\textsl{\textbf{Añadir registro de histórico de un tipo de cuota existente}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
 Para añadir un nuevo registro de histórico sobre tipo de consumo existente se seleccionará del listado el registro en el que se ubicará el nuevo registro a añadir 
+y se pulsará el botón añadir de la columna \textit{ADD ROW} correspondiente. Aparecerá una nueva ventana emergente como la que se muestra en la operación de creación, pero con los campos cubiertos con la información del registro sobre el que se va a añadir el nuevo registro y se realizán las moficaciones oportunas teniendo en cuenta los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}).
 
-y se pulsará el botón añadir de la columna \textit{ADD ROW} correspondiente. Aparecerá una nueva ventana emergente como la que se muestra en la operación de creación, pero con los campos cubiertos con la información del registro sobre el que se va a añadir el nuevo registro y se realizán las moficaciones oportunas teniendo en cuenta los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}.
+\item[\underline{\textsl{\textbf{Borrar registro de histórico del tipo de cuota}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
+Para borrar un registro de histórico del tipo de consumo se seleccionará del listado el registro a borrar y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.
 
-\underline{\textsl{\textbf{Borrar registro de histórico del tipo de cuota}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
-Para borrar un registro de histórico del tipo de consumo se seleccionará del listado el registro a borrar y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.\newline
-
-\underline{\textsl{\textbf{Borrar el tipo de cuota}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
+\item[\underline{\textsl{\textbf{Borrar el tipo de cuota}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
 Para borrar completamente un tipo de cuota se deben borrar uno a uno todos los registros de histórico del tipo de cuota según lo indicado en el punto anterior. 
 
 Todos los valores mostrados para la entidad son obligatorios y deberán cubrirse al realizar un alta o modificación. Asimismo el valor del campo CODE es único. No pueden existir dos entidades del mismo tipo con el mismo código.
-
+\end{description}
 
 A continuación describimos cómo proceder para realizar las distintas operaciones de modificación de un registro de histórico (edición de registro de histórico, añadir un nuevo registro de histórico y borrar un registro de histórico). Como paso previo a estas operaciones debermos haber buscado la entidad de tipo cuota a modificar:
 
 
-\paragraph{Añadir un nuevo registro de histórico} para ello seleccionamos el registro de histórico a modificar y pulsamos el botón verde \emph{ADD ROW}. Aparecerá una ventana emergente con un formulario de edición. Modificamos los datos correspondientes, por ejemplo la fecha inicio del nuevo registro y el importe de la cuota y pulsamos el botón azul \emph{OK} de confirmación (figur \ref{fig:añadir-registro-historico-tipo-cuota}, página \pageref{fig:añadir-registro-historico-tipo-cuota}):
+\paragraph{Añadir un nuevo registro de histórico:} para ello seleccionamos el registro de histórico a modificar y pulsamos el botón verde \emph{ADD ROW}. Aparecerá una ventana emergente con un formulario de edición. Modificamos los datos correspondientes, por ejemplo la fecha inicio del nuevo registro y el importe de la cuota y pulsamos el botón azul \emph{OK} de confirmación (\figurename~\ref{fig:añadir-registro-historico-tipo-cuota}).
 
-\begin{figure}[H]
+\begin{figure}
   \centering
-  \includegraphics[width=0.50\textwidth]{imaxes/añadir-registro-historico-tipo-cuota.png}
+  \includegraphics[width=0.45\textwidth]{imaxes/añadir-registro-historico-tipo-cuota.png}
   \caption{Formulario para añadir un nuevo registro de histórico del tipo de cuota}
   \label{fig:añadir-registro-historico-tipo-cuota}
 \end{figure}
 
 
-Una vez pulsado el botón de confirmación se cierra el formulario y se muestra la lista actualizada del registro de histórico con la nueva definición del tipo de consumo. Comprobamos que se ha modificado la fecha de incio del registro ya existente en el sistema y que figura el nuevo registro añadido con los correspondientes valores modificados, tal y como se muestra en la figura \ref{fig:listado-historico-tipo-consumo-tras-añadir} de la página \pageref{fig:listado-historico-tipo-consumo-tras-añadir}:
+Una vez pulsado el botón de confirmación se cierra el formulario y se muestra la lista actualizada del registro de histórico con la nueva definición del tipo de consumo. Comprobamos que se ha modificado la fecha de incio del registro ya existente en el sistema y que figura el nuevo registro añadido con los correspondientes valores modificados, tal y como se muestra en la \figurename~\ref{fig:listado-historico-tipo-consumo-tras-añadir}.
 
-\begin{figure}[H]
+\begin{figure}
   \centering
-  \includegraphics[width=0.70\textwidth]{imaxes/listado-historico-tipo-consumo-tras-añadir.png}
+  \includegraphics[width=\textwidth]{imaxes/listado-historico-tipo-consumo-tras-añadir.png}
   \caption{Listado de registros de histórico tras la adición de un nuevo registro de histórico}
   \label{fig:listado-historico-tipo-consumo-tras-añadir}
 \end{figure}
 
 
-\paragraph{Borrar un registro de histórico} para ello seleccionamos el registro de histórico a modificar y pulsamos el botón amarillo \emph{DEL ROW}, por ejemplo el registro añadido en el ejemplo anterior. Aparecerá un diálogo de confirmación indicando el período del registro a borrar, tal y como se muestra en la figura \ref{fig:borrado-historico-tipo-cuota} de la página \pageref{fig:borrado-historico-tipo-cuota}):
+\paragraph{Borrar un registro de histórico:} para ello seleccionamos el registro de histórico a modificar y pulsamos el botón amarillo \emph{DEL ROW}, por ejemplo el registro añadido en el ejemplo anterior. Aparecerá un diálogo de confirmación indicando el período del registro a borrar, tal y como se muestra en la \figurename~\ref{fig:borrado-historico-tipo-cuota}.
 
 
-\begin{figure}[H]
+\begin{figure}
   \centering
   \includegraphics[width=0.70\textwidth]{imaxes/borrado-historico-tipo-cuota.png}
   \caption{Diálogo de confirmación del borrado del registro de histórico seleccionado}
@@ -766,12 +747,12 @@ Una vez pulsado el botón de confirmación se cierra el formulario y se muestra 
 \end{figure}
 
 
-Una vez pulsado el botón  \emph{OK}  de confirmación de la operación se cerrará el cuadro de diálogo y se mostrará el listado de históricos de la entidad actualizado tal y como muestra la figura \ref{fig:listado-historico-tipo-consumo-tras-borrar} de la página \pageref{fig:listado-historico-tipo-consumo-tras-borrar}:
+Una vez pulsado el botón  \emph{OK}  de confirmación de la operación se cerrará el cuadro de diálogo y se mostrará el listado de históricos de la entidad actualizado tal y como muestra la \figurename~\ref{fig:listado-historico-tipo-consumo-tras-borrar}.
 
 
-\begin{figure}[H]
+\begin{figure}
   \centering
-  \includegraphics[width=0.70\textwidth]{imaxes/listado-historico-tipo-consumo-tras-borrar.png}
+  \includegraphics[width=\textwidth]{imaxes/listado-historico-tipo-consumo-tras-borrar.png}
   \caption{Listado de registros de histórico tras el borrado de un registro de histórico}
   \label{fig:listado-historico-tipo-consumo-tras-borrar}
 \end{figure}
@@ -779,33 +760,33 @@ Una vez pulsado el botón  \emph{OK}  de confirmación de la operación se cerra
 
 
 
-\paragraph{Editar un registro de histórico} para ello seleccionamos el registro de histórico a editar y pulsamos el botón de edición de la columna \emph{EDIT ROW}. El registro del diálogo muestra los campos susceptibles de modificarse como editables, pudiendo realizar las modificaciones oportunas en el registro del listado. En caso de modificar el campo \emph{STATUS} del registro a \emph{CANCEL} se mostrará un cuadro de diálogo solicitando confirmación de extender este estado a todos los registros de histórico posteriores al actual, ya que se considera que una vez cancelado un registro todos los registros posteriores deben compartir dicho estado.
+\paragraph{Editar un registro de histórico:} para ello seleccionamos el registro de histórico a editar y pulsamos el botón de edición de la columna \emph{EDIT ROW}. El registro del diálogo muestra los campos susceptibles de modificarse como editables, pudiendo realizar las modificaciones oportunas en el registro del listado. En caso de modificar el campo \emph{STATUS} del registro a \emph{CANCEL} se mostrará un cuadro de diálogo solicitando confirmación de extender este estado a todos los registros de histórico posteriores al actual, ya que se considera que una vez cancelado un registro todos los registros posteriores deben compartir dicho estado.
 
-Supongamos el siguiente ejemplo que se ve en la figura \ref{fig:listado-tipos-cuotas-inicial} de la página \pageref{fig:listado-tipos-cuotas-inicial}: un tipo de consumo con varios registros de histórico, al que vamos a cambiar el estado del segundo registro de histórico a \emph{CANCEL}.
+Supongamos el siguiente ejemplo que se ve en la \figurename~\ref{fig:listado-tipos-cuotas-inicial}: un tipo de consumo con varios registros de histórico, al que vamos a cambiar el estado del segundo registro de histórico a \emph{CANCEL}.
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.70\textwidth]{imaxes/listado-tipos-cuotas-inicial.png}
+  \includegraphics[width=\textwidth]{imaxes/listado-tipos-cuotas-inicial.png}
   \caption{Listado inicial de registros de histórico}
   \label{fig:listado-tipos-cuotas-inicial}
 \end{figure}
 
 
-Al seleccionar el estado \emph{CANCEL} del desplegable del campo correspondiente al estaod del registro se nos muestra el diálogo de confirmación de la figura \ref{fig:confirmación-cambio-estado-cancelado} de la página \pageref{fig:confirmación-cambio-estado-cancelado}:
+Al seleccionar el estado \emph{CANCEL} del desplegable del campo correspondiente al estaod del registro se nos muestra el diálogo de confirmación de la \figurename~\ref{fig:confirmación-cambio-estado-cancelado}:
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.70\textwidth]{imaxes/confirmación-cambio-estado-cancelado.png}
+  \includegraphics[width=0.9\textwidth]{imaxes/confirmación-cambio-estado-cancelado.png}
   \caption{Diálogo de confirmación para el cambio de estado del registro de la entidad}
   \label{fig:confirmación-cambio-estado-cancelado}
 \end{figure}
 
 
-Pulsamos el botón \emph{OK} de confirmación de la operación y se nos muestra el listado de los registros de histórico con los estados cambiados. Pulsando el botón de confirmar la edición se confirman los cambios realizados, actualizándose el listado de los registros de histórico con los cambios producidos, incluido el cambio de estado para el registro modificado y los siguientes, tal y como se muestra en la figura :
+Pulsamos el botón \emph{OK} de confirmación de la operación y se nos muestra el listado de los registros de histórico con los estados cambiados. Pulsando el botón de confirmar la edición se confirman los cambios realizados, actualizándose el listado de los registros de histórico con los cambios producidos, incluido el cambio de estado para el registro modificado y los siguientes, tal y como se muestra en la \figurename~\ref{fig:cambio-estado-cancelado}:
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.70\textwidth]{imaxes/cambio-estado-cancelado.png}
+  \includegraphics[width=\textwidth]{imaxes/cambio-estado-cancelado.png}
   \caption{Listado actualizado con el cambio de estado}
   \label{fig:cambio-estado-cancelado}
 \end{figure}
@@ -844,20 +825,18 @@ Un tipo de producto viene definido por los elementos indicados en la \tablename~
 	\\\hline
   \end{tabular}
   } % end /resizebox
-  \caption{Datos que define un tipo de producto.}
+  \caption{Datos que definen un tipo de producto.}
   \label{tab:tipo-producto}
 \end{table}
 
 Las operaciones definidas para esta entidad son las siguientes (nota: sólo están habilitadas para usuarios con permisos de edición):
+\begin{description}
+\item[\underline{\textsl{\textbf{Crear nuevo tipo de producto}}}] Para crear un nuevo tipo de producto se pulsará el botón \textit{New Data} situado en la parte superior de la tabla. Aparecerá una ventana emergente que mostrará un formulario con los campos a cubrir.
 
-\underline{\textsl{\textbf{Crear nuevo tipo de producto}}}\newline
-Para crear un nuevo tipo de producto se pulsará el botón \textit{New Data} situado en la parte superior de la tabla. Aparecerá una ventana emergente que mostrará un formulario con los campos a cubrir.
+\item[\underline{\textsl{\textbf{Editar tipo de producto existente}}}] Para editar un tipo de producto existente se seleccionará del listado y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas. 
 
-\underline{\textsl{\textbf{Editar tipo de producto existente}}}\newline
-Para editar un tipo de producto existente se seleccionará del listado y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas. 
-
-\underline{\textsl{\textbf{Borrar tipo de consumo}}}\newline
-Para borrar un tipo de producto se seleccionará del listado y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.\newline
+\item[\underline{\textsl{\textbf{Borrar tipo de consumo}}}] Para borrar un tipo de producto se seleccionará del listado y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.
+\end{description}
 
 Todos los valores mostrados para la entidad son obligatorios y deberán cubrirse al realizar un alta o modificación. Asimismo el valor del campo CODE es único. No pueden existir dos entidades del mismo tipo con el mismo código.
 
@@ -875,7 +854,7 @@ Entendemos por tipo de servicio el bien inmateriar que se le presta al cliente y
 
 La definición completa de un tipo de servicio viene dado por sí mismo y las relaciones que establece con el resto de entidades del catálogo de servicios ofertados: tipos de productos en los que está englobado, tipos de cuotas que pueden aplicar sobre él y los tipos de promociones que pueden aplicar descuentos sobre los distintos tipos de elementos facturables asociados al tipo de servicio. En este apartado nos centraremos en la definición del tipo de servicio \textit{per se} dejando la definición del tipo de servicio con el resto de tipos de entidades para más adelante, una vez visto el resto de elementos que conforman el catálogo de servicios.
 
-Un tipo de servicio viene definido por los elementos indicados en la tabla \ref{tab:tipo-servicio}(página \pageref{tab:tipo-servicio}):
+Un tipo de servicio viene definido por los elementos indicados en la \tablename~\ref{tab:tipo-servicio}:
 
 
 
@@ -900,15 +879,13 @@ Un tipo de servicio viene definido por los elementos indicados en la tabla \ref{
 \end{table}
 
 Las operaciones definidas para esta entidad son las siguientes (nota: sólo están habilitadas para usuarios con permisos de edición):
+\begin{description}
+\item[\underline{\textsl{\textbf{Crear nuevo tipo de producto}}}] Para crear un nuevo tipo de producto se pulsará el botón \textit{New Data} situado en la parte superior de la tabla. Aparecerá una ventana emergente que mostrará un formulario con los campos a cubrir.
 
-\underline{\textsl{\textbf{Crear nuevo tipo de producto}}}\newline
-Para crear un nuevo tipo de producto se pulsará el botón \textit{New Data} situado en la parte superior de la tabla. Aparecerá una ventana emergente que mostrará un formulario con los campos a cubrir.
+\item[\underline{\textsl{\textbf{Editar tipo de producto existente}}}] Para editar un tipo de producto existente se seleccionará del listado y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas. 
 
-\underline{\textsl{\textbf{Editar tipo de producto existente}}}\newline
-Para editar un tipo de producto existente se seleccionará del listado y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas. 
-
-\underline{\textsl{\textbf{Borrar tipo de consumo}}}\newline
-Para borrar un tipo de producto se seleccionará del listado y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.\newline
+\item[\underline{\textsl{\textbf{Borrar tipo de consumo}}}] Para borrar un tipo de producto se seleccionará del listado y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.
+\end{description}
 
 Todos los valores mostrados para la entidad son obligatorios y deberán cubrirse al realizar un alta o modificación. Asimismo el valor del campo CODE es único. No pueden existir dos entidades del mismo tipo con el mismo código.
 
@@ -928,15 +905,15 @@ La definición completa de un tipo de promoción viene dado por sí mismo y las 
 Al igual que ocurre con los tipos de cuota, los tipos de promoción pueden variar con el tiempo, modificándose las condiciones de descuento. Por lo tanto se ha considerado la necesidad de llevar un registro de estos cambios a lo largo de la vida útil de este tipo de elementos. Así pues una entidad de este tipo estará conformada por uno o varios registros con una fecha incio y una fecha fin que definen el período en el que aplican las condiciones definidas para esa entidad. Estos registros deben ser consecutivos de forma que si existen varios registros la fecha de inicio de un registro debe ser la fecha de fin del registro anterior mas un día (salvo para el primer registro que conforma el período del ciclo de vida del elemento). De igual forma la fecha de finalización de un registro debe ser la fecha de inicio del registro siguiente menos un día (salvo para el último registro que conforma el período del ciclo de vida del elemento).
 
 
-Un tipo de promoción viene definido por los elementos indicados en la tabla \ref{tab:tipo-promoción}(página \pageref{tab:tipo-promoción}):
+Un tipo de promoción viene definido por los elementos indicados en la \tablename~\ref{tab:tipo-promoción}.
+Las operaciones definidas para esta entidad son las siguientes:
 
-
-\begin{table}[H]
+\begin{table}
   \centering
   \rowcolors{2}{white}{udcgray!25}
   \setlength{\leftmargini}{0.4cm}
   \resizebox{14cm}{!} {
-  \begin{tabular}{|m{3cm} m{11cm}|}
+  \begin{tabular}{|m{4cm} m{11cm}|}
   \rowcolor{udcpink!25}
   \hline
   	\textbf{Elemento} & \textbf{Descripción} \\\hline
@@ -947,21 +924,17 @@ Un tipo de promoción viene definido por los elementos indicados en la tabla \re
 	\textbf{DESCRIPTION} & Descripción del tipo de promoción.\\
 	\textbf{APPLICATION LEVEL} & Nivel de aplicación del tipo de promoción, esto es, a qué entidad facturable va asociado. Los niveles de aplicación están definidos en la correspondiente entidad de \emph{PARAMETERS} definida en la sección \ref{sub:parametrizacion}.\\	
 	\textbf{DISCOUNT TYPE} & Indica el tipo de descuento a aplicar por el tipo de promoción. Los distintos tipos de descuento definidos en la correspondiente entidad de \emph{PARAMETERS} definida en la sección \ref{sub:parametrizacion}..\\
-	\textbf{DISCOUNT VALUE} & Descuento a aplicar en función del tipo de descuento definido en el tipo de promoción (volumen, unidades, porcentaje, \dots.\\
+	\textbf{DISCOUNT VALUE} & Descuento a aplicar en función del tipo de descuento definido en el tipo de promoción (volumen, unidades, porcentaje\dots.\\
 	\textbf{STATUS} & Estado del tipo de promoción.	
 	\\\hline
   \end{tabular}
   } % end /resizebox
   \caption{Datos que define un tipo de promoción.}
-  \label{tab:tipo-cuota}
+  \label{tab:tipo-promoción}
 \end{table}
 
-
-
-Las operaciones definidas para esta entidad son las siguientes:
-
-\underline{\textsl{\textbf{Buscar un tipo de promoción existente}}}\newline
-Esta operación está disponible para todos los usuarios de la aplicación.
+\begin{description}
+\item[\underline{\textsl{\textbf{Buscar un tipo de promoción existente}}}] Esta operación está disponible para todos los usuarios de la aplicación.
 Puesto que los tipos de promoción son entidades con histórico, por motivos de operatividad no se muestra el listado de todas las entidades del sistema por defecto, si no que se establecen unos criterios de búsqueda para seleccionar el tipo de promoción a consultar. Para ello se define un área de búsqueda en los que se definen los criterios de búsqueda a tener en cuenta:
 \begin{itemize}
 \item Buscar todos los históricos de los tipos de consumo. Se realizará una búsqueda de todos los históricos de los distintos tipos de consumo.
@@ -970,28 +943,22 @@ Puesto que los tipos de promoción son entidades con histórico, por motivos de 
 
 Pulsando el botón \emph{Search} se mostrará un panel emergente con el listado de los registros encontrados. Seleccionaremos el elemento sobre el que queramos operar pulsando el botón amarillo de la columna \emph{Show Historic} y se mostrará el área de históricos de la entidad con los distintos registros de histórico existentes de forma análogo a lo ya visto en la sección \ref{sub:fee-type}
 
-
-\underline{\textsl{\textbf{Crear nuevo tipo de promoción}}}\newline
-Esta operación sólo está diponible para usuarios con permisos de edición.
+\item[\underline{\textsl{\textbf{Crear nuevo tipo de promoción}}}] Esta operación sólo está diponible para usuarios con permisos de edición.
 Para crear un nuevo consumo se pulsará el botón \textit{New Data} situado en la parte superior de la tabla. Aparecerá una ventana emergente que mostrará un formulario con los campos a cubrir. Por defecto se establecen como fecha de inicio y fin del nuevo tipo de cuota las fechas 01/01/1900 y 31/12/9999.
 
-\underline{\textsl{\textbf{Editar registro de histórico de un tipo de promoción existente}}}\newline
-Esta operación sólo está diponible para usuarios con permisos de edición.
-Para editar un tipo de consumo existente se seleccionará del listado y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas teniendo en cuenta los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}.
+\item[\underline{\textsl{\textbf{Editar registro de histórico de un tipo de promoción existente}}}] Esta operación sólo está diponible para usuarios con permisos de edición.
+Para editar un tipo de consumo existente se seleccionará del listado y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas teniendo en cuenta los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}).
 
-\underline{\textsl{\textbf{Añadir registro de histórico de un tipo de promoción existente}}}\newline
-Esta operación sólo está diponible para usuarios con permisos de edición.
+\item[\underline{\textsl{\textbf{Añadir registro de histórico de un tipo de promoción existente}}}] Esta operación sólo está diponible para usuarios con permisos de edición.
 Para añadir un nuevo registro de histórico sobre tipo de consumo existente se seleccionará del listado el registro en el que se ubicará el nuevo registro a añadir 
+y se pulsará el botón añadir de la columna \textit{ADD ROW} correspondiente. Aparecerá una nueva ventana emergente como la que se muestra en la operación de creación, pero con los campos cubiertos con la información del registro sobre el que se va a añadir el nuevo registro y se realizán las moficaciones oportunas teniendo en cuenta los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}).
 
-y se pulsará el botón añadir de la columna \textit{ADD ROW} correspondiente. Aparecerá una nueva ventana emergente como la que se muestra en la operación de creación, pero con los campos cubiertos con la información del registro sobre el que se va a añadir el nuevo registro y se realizán las moficaciones oportunas teniendo en cuenta los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}.
+\item[\underline{\textsl{\textbf{Borrar registro de histórico del tipo de promoción}}}] Esta operación sólo está diponible para usuarios con permisos de edición.
+Para borrar un registro de histórico del tipo de consumo se seleccionará del listado el registro a borrar y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.
 
-\underline{\textsl{\textbf{Borrar registro de histórico del tipo de promoción}}}\newline
-Esta operación sólo está diponible para usuarios con permisos de edición.
-Para borrar un registro de histórico del tipo de consumo se seleccionará del listado el registro a borrar y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.\newline
-
-\underline{\textsl{\textbf{Borrar el tipo de promoción}}}\newline
-Esta operación sólo está diponible para usuarios con permisos de edición.
-Para borrar completamente un tipo de cuota se deben borrar uno a uno todos los registros de histórico del tipo de cuota según lo indicado en el punto anterior. 
+\item[\underline{\textsl{\textbf{Borrar el tipo de promoción}}}] Esta operación sólo está diponible para usuarios con permisos de edición.
+Para borrar completamente un tipo de cuota se deben borrar uno a uno todos los registros de histórico del tipo de cuota según lo indicado en el punto anterior.
+\end{description}
 
 Todos los valores mostrados para la entidad son obligatorios y deberán cubrirse al realizar un alta o modificación. Asimismo el valor del campo CODE es único. No pueden existir dos entidades del mismo tipo con el mismo código.
 
@@ -1007,19 +974,19 @@ Nota: Para acceder a la pantalla que da acceso a la operativa de este tipo de en
 A continuación veremos cómo gestionar las distintas relaciones que se establecen entre un tipo de producto y los tipos de cuotas que pueden asociarse al tipo de producto dado.
 
 
-En la parte superior de la pantalla se encuentra el área de búsqueda. Pulsando el botón verde \emph{SEARCH} aparece un listado de todos los productos del sistema. Seleccionaremos el tipo de producto sobre el que queramos consultar las relaciones de las entiades pulsando el botón amarillo de la columna \emph{Show Data}. A continuación se visualizará el área de relaciones del producto en los que se muestran los tipos de cuotas para los que existe una relación con el producto.
+En la parte superior de la pantalla se encuentra el área de búsqueda. Pulsando el botón verde \emph{SEARCH} aparece un listado de todos los productos del sistema. Seleccionaremos el tipo de producto sobre el que queramos consultar las relaciones de las entiades pulsando el botón amarillo de la columna \emph{Show Data}. A continuación se visualizará el área de relaciones del producto en los que se muestran los tipos de cuotas para los que existe una relación con el producto (ver \figurename~\ref{fig:area-relacion-tipos-entidades}).
 
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.70\textwidth]{imaxes/area-relacion-tipos-entidades.png}
+  \includegraphics[width=\textwidth]{imaxes/area-relacion-tipos-entidades.png}
   \caption{Área que muestra los tipos de entidad cuota relacionada con el producto}
   \label{fig:area-relacion-tipos-entidades}
 \end{figure}
 
 
 
-Al ser el tipo de cuota una entidad con registro de histórico en el área de relaciones se muestran por defecto los registros para los que la fecha definida en el área de visualización de la entidad relacionada (que por defecto es la fecha actual) se encuentra comprendida en el período del histórico. Si queremos mostrar todos los registros de histórico de las distintas entidades relacionadas seleccionaremos la opción de Show Historic Data y pulsaremos el botón de refrescar que se encuentra a la derecha del área de criterios de visualización. Lo mismo si queremos que se muestren los históricos para otra fecha distinta de la especificada por defecto: bastará con modificar la fecha y pulsar el botón de refrescar.
+Al ser el tipo de cuota una entidad con registro de histórico en el área de relaciones se muestran por defecto los registros para los que la fecha definida en el área de visualización de la entidad relacionada (que por defecto es la fecha actual) se encuentra comprendida en el período del histórico. Si queremos mostrar todos los registros de histórico de las distintas entidades relacionadas seleccionaremos la opción de \emph{Show Historic Data} y pulsaremos el botón de refrescar que se encuentra a la derecha del área de criterios de visualización. Lo mismo si queremos que se muestren los históricos para otra fecha distinta de la especificada por defecto: bastará con modificar la fecha y pulsar el botón de refrescar.
 
 Si accedemos a la vista con un usuario con permisos de edición se mostrará otro listado con los tipos de cuota con nivel de aplicación producto para los que no se ha establecido relación con el tipo de producto consultado, así como dos botones, uno con una flecha apuntando hacia arriba y otro con una flecha apuntando hacia abajo. Estos botones permitirán añadir un tipo de cuota a la relación con el producto o eliminar dicha relación respectivamente. 
 
@@ -1027,7 +994,7 @@ Si accedemos a la vista con un usuario con permisos de edición se mostrará otr
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.70\textwidth]{imaxes/area-tipos-entidades-candidatas.png}
+  \includegraphics[width=\textwidth]{imaxes/area-tipos-entidades-candidatas.png}
   \caption{Área que muestra los tipos de entidad cuota candidatas a establecer relación con el producto}
   \label{fig:area-tipos-entidades-candidatas}
 \end{figure}
@@ -1036,7 +1003,7 @@ Si accedemos a la vista con un usuario con permisos de edición se mostrará otr
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.30\textwidth]{imaxes/botones-añadir-eliminar-relacion-tipos.png}
+  \includegraphics[width=0.15\textwidth]{imaxes/botones-añadir-eliminar-relacion-tipos.png}
   \caption{Detalle de los botones para gestionar las relaciones: a la izquierda el botón de añadir relación, a la derecha el botón de eliminar relación}
   \label{fig:botones-añadir-eliminar-relacion-tipos}
 \end{figure}
@@ -1046,21 +1013,15 @@ A mayores el listado de entidades relacionadas permite editar el estado de la re
 
 
 Las operaciones definidas para esta vista son las siguientes (nota: sólo están habilitadas para usuarios con permisos de edición):
+\begin{description}
+\item[\underline{\textsl{\textbf{Añadir una nueva entidad tipo cuota a la relación}}}] Para añadir una nueva relación seleccionaremos el tipo de cuota deseado del listado de candidatos y pulsaremos el botón de la flecha que apunta hacia arriba (hacia el listado de entidades relacionadas). Se eliminará el registro del listado de candidatos y se añadirá al listado de tipos de cuotas relacionadas.
 
-\underline{\textsl{\textbf{Añadir una nueva entidad tipo cuota a la relación}}} \newline
-Para añadir una nueva relación seleccionaremos el tipo de cuota deseado del listado de candidatos y pulsaremos el botón de la flecha que apunta hacia arriba (hacia el listado de entidades relacionadas). Se eliminará el registro del listado de candidatos y se añadirá al listado de tipos de cuotas relacionadas.
+\item[\underline{\textsl{\textbf{Eliminar una entidad tipo cuota existente de la relación}}}] Para eliminar una relación existente seleccionaremos el tipo de cuota deseado del listado de relaciones y pulsaremos el botón de la flecha que apunta hacia abajo (hacia el listado de entidades candidatas). Se eliminará el registro del listado de relaciones y se añadirá al listado de tipos de cuotas candidatas.
 
+\item[\underline{\textsl{\textbf{Editar el estado de la relación de histórico de un tipo de cuota existente}}}] Para editar el estado de la relación se seleccionará la entidad del tipo cuota deseada del listado de entidades relacionadas y se pulsará el botón editar de la columna \textit{EDIT RELATION STATUS} correspondiente. Se editará el campo \emph{RELATION STATUS}  pertinentes directamente en la tabla para realizar las modificaciones oportunas.
 
-\underline{\textsl{\textbf{Eliminar una entidad tipo cuota existente de la relación}}}\newline
-Para eliminar una relación existente seleccionaremos el tipo de cuota deseado del listado de relaciones y pulsaremos el botón de la flecha que apunta hacia abajo (hacia el listado de entidades candidatas). Se eliminará el registro del listado de relaciones y se añadirá al listado de tipos de cuotas candidatas.
-
-
-\underline{\textsl{\textbf{Editar el estado de la relación de histórico de un tipo de cuota existente}}}
-Para editar el estado de la relación se seleccionará la entidad del tipo cuota deseada del listado de entidades relacionadas y se pulsará el botón editar de la columna \textit{EDIT RELATION STATUS} correspondiente. Se editará el campo \emph{RELATION STATUS}  pertinentes directamente en la tabla para realizar las modificaciones oportunas.
-
-\underline{\textsl{\textbf{Visualizar el registro de históricos de un tipo de cuota candidata}}}
-Para visualizar todos los históricos de un tipo de cuota candidata se seleccionará la entidad del tipo cuota deseada del listado de entidades relacionadas y se pulsará el botón amarillo de la columna \textit{SHOW HISTORICS}. Se mostrará un panel que muestra el listado de históricos para la entidad seleccionada. 
-
+\item[\underline{\textsl{\textbf{Visualizar el registro de históricos de un tipo de cuota candidata}}}] Para visualizar todos los históricos de un tipo de cuota candidata se seleccionará la entidad del tipo cuota deseada del listado de entidades relacionadas y se pulsará el botón amarillo de la columna \textit{SHOW HISTORICS}. Se mostrará un panel que muestra el listado de históricos para la entidad seleccionada.
+\end{description}
 
 
 \subsubsection{Product Service Type - Relación entre tipo de Producto y de Servicio}
@@ -1080,18 +1041,13 @@ A mayores el listado de entidades relacionadas permite editar el estado de la re
 
 
 Las operaciones definidas para esta vista son las siguientes (nota: sólo están habilitadas para usuarios con permisos de edición):
+\begin{description}
+\item[\underline{\textsl{\textbf{Añadir una nueva entidad tipo servicio a la relación}}}] Para añadir una nueva relación seleccionaremos el tipo de servicio deseado del listado de candidatos y pulsaremos el botón de la flecha que apunta hacia arriba (hacia el listado de entidades relacionadas). Se eliminará el registro del listado de candidatos y se añadirá al listado de tipos de servicio relacionados.
 
-\underline{\textsl{\textbf{Añadir una nueva entidad tipo servicio a la relación}}} \newline
-Para añadir una nueva relación seleccionaremos el tipo de servicio deseado del listado de candidatos y pulsaremos el botón de la flecha que apunta hacia arriba (hacia el listado de entidades relacionadas). Se eliminará el registro del listado de candidatos y se añadirá al listado de tipos de servicio relacionados.
+\item[\underline{\textsl{\textbf{Eliminar una entidad tipo servicio existente de la relación}}}] Para eliminar una relación existente seleccionaremos el tipo de servicio deseado del listado de relaciones y pulsaremos el botón de la flecha que apunta hacia abajo (hacia el listado de entidades candidatas). Se eliminará el registro del listado de relaciones y se añadirá al listado de tipos de servicios candidatas.
 
-
-\underline{\textsl{\textbf{Eliminar una entidad tipo servicio existente de la relación}}}\newline
-Para eliminar una relación existente seleccionaremos el tipo de servicio deseado del listado de relaciones y pulsaremos el botón de la flecha que apunta hacia abajo (hacia el listado de entidades candidatas). Se eliminará el registro del listado de relaciones y se añadirá al listado de tipos de servicios candidatas.
-
-
-\underline{\textsl{\textbf{Editar el estado de la relación de histórico de un tipo de servicio existente}}}
-Para editar el estado de la relación se seleccionará la entidad del tipo servicio de consumo deseado del listado de entidades relacionadas y se pulsará el botón editar de la columna \textit{EDIT RELATION STATUS} correspondiente. Se editará el campo \emph{RELATION STATUS} pertinentes directamente en la tabla para realizar las modificaciones oportunas.
-
+\item[\underline{\textsl{\textbf{Editar el estado de la relación de histórico de un tipo de servicio existente}}}] Para editar el estado de la relación se seleccionará la entidad del tipo servicio de consumo deseado del listado de entidades relacionadas y se pulsará el botón editar de la columna \textit{EDIT RELATION STATUS} correspondiente. Se editará el campo \emph{RELATION STATUS} pertinentes directamente en la tabla para realizar las modificaciones oportunas.
+\end{description}
 
 
 
@@ -1114,21 +1070,15 @@ A mayores el listado de entidades relacionadas permite editar el estado de la re
 
 
 Las operaciones definidas para esta vista son las siguientes (nota: sólo están habilitadas para usuarios con permisos de edición):
+\begin{description}
+\item[\underline{\textsl{\textbf{Añadir una nueva entidad tipo promoción a la relación}}}] Para añadir una nueva relación seleccionaremos el tipo de promoción deseado del listado de candidatos y pulsaremos el botón de la flecha que apunta hacia arriba (hacia el listado de entidades relacionadas). Se eliminará el registro del listado de candidatos y se añadirá al listado de tipos de cuotas relacionadas.
 
-\underline{\textsl{\textbf{Añadir una nueva entidad tipo promoción a la relación}}} \newline
-Para añadir una nueva relación seleccionaremos el tipo de promoción deseado del listado de candidatos y pulsaremos el botón de la flecha que apunta hacia arriba (hacia el listado de entidades relacionadas). Se eliminará el registro del listado de candidatos y se añadirá al listado de tipos de cuotas relacionadas.
+\item[\underline{\textsl{\textbf{Eliminar una entidad tipo promoción existente de la relación}}}] Para eliminar una relación existente seleccionaremos el tipo de promoción deseado del listado de relaciones y pulsaremos el botón de la flecha que apunta hacia abajo (hacia el listado de entidades candidatas). Se eliminará el registro del listado de relaciones y se añadirá al listado de tipos de promociones candidatas.
 
+\item[\underline{\textsl{\textbf{Editar el estado de la relación de histórico de un tipo de promoción existente}}}] Para editar el estado de la relación se seleccionará la entidad del tipo promoción  deseada del listado de entidades relacionadas y se pulsará el botón editar de la columna \textit{EDIT RELATION STATUS} correspondiente. Se editará el campo \emph{RELATION STATUS}  pertinentes directamente en la tabla para realizar las modificaciones oportunas.
 
-\underline{\textsl{\textbf{Eliminar una entidad tipo promoción existente de la relación}}}\newline
-Para eliminar una relación existente seleccionaremos el tipo de promoción deseado del listado de relaciones y pulsaremos el botón de la flecha que apunta hacia abajo (hacia el listado de entidades candidatas). Se eliminará el registro del listado de relaciones y se añadirá al listado de tipos de promociones candidatas.
-
-
-\underline{\textsl{\textbf{Editar el estado de la relación de histórico de un tipo de promoción existente}}}
-Para editar el estado de la relación se seleccionará la entidad del tipo promoción  deseada del listado de entidades relacionadas y se pulsará el botón editar de la columna \textit{EDIT RELATION STATUS} correspondiente. Se editará el campo \emph{RELATION STATUS}  pertinentes directamente en la tabla para realizar las modificaciones oportunas.
-
-\underline{\textsl{\textbf{Visualizar el registro de históricos de un tipo de promoción candidata}}}
-Para visualizar todos los históricos de un tipo de promoción candidata se seleccionará la entidad del tipo promoción deseada del listado de entidades relacionadas y se pulsará el botón amarillo de la columna \textit{SHOW HISTORICS}. Se mostrará un panel que muestra el listado de históricos para la entidad seleccionada. 
-
+\item[\underline{\textsl{\textbf{Visualizar el registro de históricos de un tipo de promoción candidata}}}] Para visualizar todos los históricos de un tipo de promoción candidata se seleccionará la entidad del tipo promoción deseada del listado de entidades relacionadas y se pulsará el botón amarillo de la columna \textit{SHOW HISTORICS}. Se mostrará un panel que muestra el listado de históricos para la entidad seleccionada. 
+\end{description}
 
 
 \subsubsection{Service Fee Type - Relación entre tipo de Servicio y de Cuota}
@@ -1151,20 +1101,15 @@ A mayores el listado de entidades relacionadas permite editar el estado de la re
 
 
 Las operaciones definidas para esta vista son las siguientes (nota: sólo están habilitadas para usuarios con permisos de edición):
+\begin{description}
+\item[\underline{\textsl{\textbf{Añadir una nueva entidad tipo cuota a la relación}}}] Para añadir una nueva relación seleccionaremos el tipo de cuota deseado del listado de candidatos y pulsaremos el botón de la flecha que apunta hacia arriba (hacia el listado de entidades relacionadas). Se eliminará el registro del listado de candidatos y se añadirá al listado de tipos de cuotas relacionadas.
 
-\underline{\textsl{\textbf{Añadir una nueva entidad tipo cuota a la relación}}} \newline
-Para añadir una nueva relación seleccionaremos el tipo de cuota deseado del listado de candidatos y pulsaremos el botón de la flecha que apunta hacia arriba (hacia el listado de entidades relacionadas). Se eliminará el registro del listado de candidatos y se añadirá al listado de tipos de cuotas relacionadas.
+\item[\underline{\textsl{\textbf{Eliminar una entidad tipo cuota existente de la relación}}}] Para eliminar una relación existente seleccionaremos el tipo de cuota deseado del listado de relaciones y pulsaremos el botón de la flecha que apunta hacia abajo (hacia el listado de entidades candidatas). Se eliminará el registro del listado de relaciones y se añadirá al listado de tipos de cuotas candidatas.
 
+\item[\underline{\textsl{\textbf{Editar el estado de la relación de histórico de un tipo de cuota existente}}}] Para editar el estado de la relación se seleccionará la entidad del tipo cuota deseada del listado de entidades relacionadas y se pulsará el botón editar de la columna \textit{EDIT RELATION STATUS} correspondiente. Se editará el campo \emph{RELATION STATUS}  pertinentes directamente en la tabla para realizar las modificaciones oportunas.
 
-\underline{\textsl{\textbf{Eliminar una entidad tipo cuota existente de la relación}}}\newline
-Para eliminar una relación existente seleccionaremos el tipo de cuota deseado del listado de relaciones y pulsaremos el botón de la flecha que apunta hacia abajo (hacia el listado de entidades candidatas). Se eliminará el registro del listado de relaciones y se añadirá al listado de tipos de cuotas candidatas.
-
-
-\underline{\textsl{\textbf{Editar el estado de la relación de histórico de un tipo de cuota existente}}}
-Para editar el estado de la relación se seleccionará la entidad del tipo cuota deseada del listado de entidades relacionadas y se pulsará el botón editar de la columna \textit{EDIT RELATION STATUS} correspondiente. Se editará el campo \emph{RELATION STATUS}  pertinentes directamente en la tabla para realizar las modificaciones oportunas.
-
-\underline{\textsl{\textbf{Visualizar el registro de históricos de un tipo de cuota candidata}}}
-Para visualizar todos los históricos de un tipo de cuota candidata se seleccionará la entidad del tipo cuota deseada del listado de entidades relacionadas y se pulsará el botón amarillo de la columna \textit{SHOW HISTORICS}. Se mostrará un panel que muestra el listado de históricos para la entidad seleccionada. 
+\item[\underline{\textsl{\textbf{Visualizar el registro de históricos de un tipo de cuota candidata}}}] Para visualizar todos los históricos de un tipo de cuota candidata se seleccionará la entidad del tipo cuota deseada del listado de entidades relacionadas y se pulsará el botón amarillo de la columna \textit{SHOW HISTORICS}. Se mostrará un panel que muestra el listado de históricos para la entidad seleccionada.
+\end{description}
 
 
 
@@ -1187,20 +1132,16 @@ A mayores el listado de entidades relacionadas permite editar el estado de la re
 
 
 Las operaciones definidas para esta vista son las siguientes (nota: sólo están habilitadas para usuarios con permisos de edición):
+\begin{description}
+\item[\underline{\textsl{\textbf{Añadir una nueva entidad tipo promoción a la relación}}}] Para añadir una nueva relación seleccionaremos el tipo de promoción deseado del listado de candidatos y pulsaremos el botón de la flecha que apunta hacia arriba (hacia el listado de entidades relacionadas). Se eliminará el registro del listado de candidatos y se añadirá al listado de tipos de cuotas relacionadas.
 
-\underline{\textsl{\textbf{Añadir una nueva entidad tipo promoción a la relación}}} \newline
-Para añadir una nueva relación seleccionaremos el tipo de promoción deseado del listado de candidatos y pulsaremos el botón de la flecha que apunta hacia arriba (hacia el listado de entidades relacionadas). Se eliminará el registro del listado de candidatos y se añadirá al listado de tipos de cuotas relacionadas.
+\item[\underline{\textsl{\textbf{Eliminar una entidad tipo promoción existente de la relación}}}] Para eliminar una relación existente seleccionaremos el tipo de promoción deseado del listado de relaciones y pulsaremos el botón de la flecha que apunta hacia abajo (hacia el listado de entidades candidatas). Se eliminará el registro del listado de relaciones y se añadirá al listado de tipos de promociones candidatas.
 
+\item[\underline{\textsl{\textbf{Editar el estado de la relación de histórico de un tipo de promoción existente}}}] Para editar el estado de la relación se seleccionará la entidad del tipo promoción  deseada del listado de entidades relacionadas y se pulsará el botón editar de la columna \textit{EDIT RELATION STATUS} correspondiente. Se editará el campo \emph{RELATION STATUS}  pertinentes directamente en la tabla para realizar las modificaciones oportunas.
 
-\underline{\textsl{\textbf{Eliminar una entidad tipo promoción existente de la relación}}}\newline
-Para eliminar una relación existente seleccionaremos el tipo de promoción deseado del listado de relaciones y pulsaremos el botón de la flecha que apunta hacia abajo (hacia el listado de entidades candidatas). Se eliminará el registro del listado de relaciones y se añadirá al listado de tipos de promociones candidatas.
-
-
-\underline{\textsl{\textbf{Editar el estado de la relación de histórico de un tipo de promoción existente}}}
-Para editar el estado de la relación se seleccionará la entidad del tipo promoción  deseada del listado de entidades relacionadas y se pulsará el botón editar de la columna \textit{EDIT RELATION STATUS} correspondiente. Se editará el campo \emph{RELATION STATUS}  pertinentes directamente en la tabla para realizar las modificaciones oportunas.
-
-\underline{\textsl{\textbf{Visualizar el registro de históricos de un tipo de promoción candidata}}}
+\item[\underline{\textsl{\textbf{Visualizar el registro de históricos de un tipo de promoción candidata}}}]
 Para visualizar todos los históricos de un tipo de promoción candidata se seleccionará la entidad del tipo promoción deseada del listado de entidades relacionadas y se pulsará el botón amarillo de la columna \textit{SHOW HISTORICS}. Se mostrará un panel que muestra el listado de históricos para la entidad seleccionada. 
+\end{description}
 
 
 \subsubsection{Promotion Fee Type - Relación entre tipo de Promoción y de Cuota}
@@ -1224,22 +1165,15 @@ A mayores el listado de entidades relacionadas permite editar el estado de la re
 
 
 Las operaciones definidas para esta vista son las siguientes (nota: sólo están habilitadas para usuarios con permisos de edición):
+\begin{description}
+\item[\underline{\textsl{\textbf{Añadir una nueva entidad tipo cuota a la relación}}}] Para añadir una nueva relación seleccionaremos el tipo de cuota deseado del listado de candidatos y pulsaremos el botón de la flecha que apunta hacia arriba (hacia el listado de entidades relacionadas). Se eliminará el registro del listado de candidatos y se añadirá al listado de tipos de cuotas relacionadas.
 
-\underline{\textsl{\textbf{Añadir una nueva entidad tipo cuota a la relación}}} \newline
-Para añadir una nueva relación seleccionaremos el tipo de cuota deseado del listado de candidatos y pulsaremos el botón de la flecha que apunta hacia arriba (hacia el listado de entidades relacionadas). Se eliminará el registro del listado de candidatos y se añadirá al listado de tipos de cuotas relacionadas.
+\item[\underline{\textsl{\textbf{Eliminar una entidad tipo cuota existente de la relación}}}] Para eliminar una relación existente seleccionaremos el tipo de cuota deseado del listado de relaciones y pulsaremos el botón de la flecha que apunta hacia abajo (hacia el listado de entidades candidatas). Se eliminará el registro del listado de relaciones y se añadirá al listado de tipos de promociones candidatas.
 
+\item[\underline{\textsl{\textbf{Editar el estado de la relación de histórico de un tipo de cuota existente}}}] Para editar el estado de la relación se seleccionará la entidad del tipo cuota  deseada del listado de entidades relacionadas y se pulsará el botón editar de la columna \textit{EDIT RELATION STATUS} correspondiente. Se editará el campo \emph{RELATION STATUS} pertinente directamente en la tabla para realizar las modificaciones oportunas.
 
-\underline{\textsl{\textbf{Eliminar una entidad tipo cuota existente de la relación}}}\newline
-Para eliminar una relación existente seleccionaremos el tipo de cuota deseado del listado de relaciones y pulsaremos el botón de la flecha que apunta hacia abajo (hacia el listado de entidades candidatas). Se eliminará el registro del listado de relaciones y se añadirá al listado de tipos de promociones candidatas.
-
-
-\underline{\textsl{\textbf{Editar el estado de la relación de histórico de un tipo de cuota existente}}}
-Para editar el estado de la relación se seleccionará la entidad del tipo cuota  deseada del listado de entidades relacionadas y se pulsará el botón editar de la columna \textit{EDIT RELATION STATUS} correspondiente. Se editará el campo \emph{RELATION STATUS} pertinente directamente en la tabla para realizar las modificaciones oportunas.
-
-\underline{\textsl{\textbf{Visualizar el registro de históricos de un tipo de cuota candidata}}}
-Para visualizar todos los históricos de un tipo de cuota candidata se seleccionará la entidad del tipo cuota deseada del listado de entidades relacionadas y se pulsará el botón amarillo de la columna \textit{SHOW HISTORICS}. Se mostrará un panel que muestra el listado de históricos para la entidad seleccionada. 
-
-
+\item[\underline{\textsl{\textbf{Visualizar el registro de históricos de un tipo de cuota candidata}}}] Para visualizar todos los históricos de un tipo de cuota candidata se seleccionará la entidad del tipo cuota deseada del listado de entidades relacionadas y se pulsará el botón amarillo de la columna \textit{SHOW HISTORICS}. Se mostrará un panel que muestra el listado de históricos para la entidad seleccionada. 
+\end{description}
 
 
 
@@ -1262,18 +1196,13 @@ A mayores el listado de entidades relacionadas permite editar el estado de la re
 
 
 Las operaciones definidas para esta vista son las siguientes (nota: sólo están habilitadas para usuarios con permisos de edición):
+\begin{description}
+\item[\underline{\textsl{\textbf{Añadir una nueva entidad tipo consumo a la relación}}}] Para añadir una nueva relación seleccionaremos el tipo de consumo deseado del listado de candidatos y pulsaremos el botón de la flecha que apunta hacia arriba (hacia el listado de entidades relacionadas). Se eliminará el registro del listado de candidatos y se añadirá al listado de tipos de consumos relacionadas.
 
-\underline{\textsl{\textbf{Añadir una nueva entidad tipo consumo a la relación}}} \newline
-Para añadir una nueva relación seleccionaremos el tipo de consumo deseado del listado de candidatos y pulsaremos el botón de la flecha que apunta hacia arriba (hacia el listado de entidades relacionadas). Se eliminará el registro del listado de candidatos y se añadirá al listado de tipos de consumos relacionadas.
+\item[\underline{\textsl{\textbf{Eliminar una entidad tipo consumo existente de la relación}}}] Para eliminar una relación existente seleccionaremos el tipo de consumo deseado del listado de relaciones y pulsaremos el botón de la flecha que apunta hacia abajo (hacia el listado de entidades candidatas). Se eliminará el registro del listado de relaciones y se añadirá al listado de tipos de promociones candidatas.
 
-
-\underline{\textsl{\textbf{Eliminar una entidad tipo consumo existente de la relación}}}\newline
-Para eliminar una relación existente seleccionaremos el tipo de consumo deseado del listado de relaciones y pulsaremos el botón de la flecha que apunta hacia abajo (hacia el listado de entidades candidatas). Se eliminará el registro del listado de relaciones y se añadirá al listado de tipos de promociones candidatas.
-
-
-\underline{\textsl{\textbf{Editar el estado de la relación de histórico de un tipo de consumo existente}}}
-Para editar el estado de la relación se seleccionará la entidad del tipo consumo  deseada del listado de entidades relacionadas y se pulsará el botón editar de la columna \textit{EDIT RELATION STATUS} correspondiente. Se editará el campo \emph{RELATION STATUS} pertinente directamente en la tabla para realizar las modificaciones oportunas.
-
+\item[\underline{\textsl{\textbf{Editar el estado de la relación de histórico de un tipo de consumo existente}}}] Para editar el estado de la relación se seleccionará la entidad del tipo consumo  deseada del listado de entidades relacionadas y se pulsará el botón editar de la columna \textit{EDIT RELATION STATUS} correspondiente. Se editará el campo \emph{RELATION STATUS} pertinente directamente en la tabla para realizar las modificaciones oportunas.
+\end{description}
 
 
 
@@ -1289,13 +1218,13 @@ Un cliente puede tener una o varias cuentas, que son las que definen el conjunto
 Puesto que los elementos de contratación pueden variar (y mucho) a lo largo de su ciclo de vida, se han definido todos ellos como elementos con histórico, por lo que aplican las restricciones relativas a los registros de histórico indicadas en secciones anteriores.
 
 Se definen cinco estados distintos para las entidades de contratación:
-\begin{itemize}
-\item ACTIVE - estado activo. Para las entidades de contratación que están en vigencia.
-\item CANCEL - estado cancelado. Para las entidades de contratación que han cursado baja.
-\item PEND - estado pendiente. Para las entidades de contratación pendientes de finalizar su proceso de provisión. Este estado se ha definido con vistas a una interacción con un sistema de provisión a desarrollar en el futuro.
-\item SUSP - estado suspendido. Para las entidades de contratación que actualmente tienen su estado suspendido, por ejemplo una suspensión temporal solicitada por el cliente porque durante un período de tiempo no va a usar un determinado servicio.
-\item DEB - estado deuda. Para las entidades de contratación cuyo cliente ha recurrido en impagos.
-\end{itemize}
+\begin{description}
+\item[ACTIVE] Estado activo. Para las entidades de contratación que están en vigencia.
+\item[CANCEL] Estado cancelado. Para las entidades de contratación que han cursado baja.
+\item[PEND] Estado pendiente. Para las entidades de contratación pendientes de finalizar su proceso de provisión. Este estado se ha definido con vistas a una interacción con un sistema de provisión a desarrollar en el futuro.
+\item[SUSP] Estado suspendido. Para las entidades de contratación que actualmente tienen su estado suspendido, por ejemplo una suspensión temporal solicitada por el cliente porque durante un período de tiempo no va a usar un determinado servicio.
+\item[DEB] Estado deuda. Para las entidades de contratación cuyo cliente ha recurrido en impagos.
+\end{description}
 
 
 Todos los usuarios del sistema tienen acceso a los elementos de contratación, pero aquellos que tengan permisos de edición (perfil ADMIN o MODIF) podrán gestionarlos (realizar altas, bajas y modificaciones). Los usuarios con el perfil READ sólo podrán acceder en modo consulta, y no se mostrarán habilitados los correspondientes botones para las operaciones de gestión. Por comodidad las imágenes que proceden a ilustrar esta sección se corresponderán con el acceso a las vistas de un usuario con permisos de edición. Los usuarios sin estos permisos verán la misma pantalla pero sin los botones que permiten la gestión de los datos.
@@ -1307,12 +1236,10 @@ A continuación veremos en detalle cada una de las vistas que conforman los dist
 \subsubsection{Customer - Clientes}
 \label{sub:customer}
 
-Esta vista muestra la información relativa a los clientes contenidos en la cartera de clientes de la empresa.
+Esta vista muestra la información relativa a los clientes contenidos en la cartera de clientes de la empresa. La \tablename~\ref{tab:cliente} recoge los elementos más relevantes en la definición de un cliente.
+Las operaciones definidas para esta entidad son las siguientes:
 
-
-La tabla \ref{tab:cliente}(página \pageref{tab:cliente}) recoge los elementos más relevantes en la definción de un cliente:
-
-\begin{table}[H]
+\begin{table}
   \centering
   \rowcolors{2}{white}{udcgray!25}
   \setlength{\leftmargini}{0.4cm}
@@ -1343,26 +1270,18 @@ La tabla \ref{tab:cliente}(página \pageref{tab:cliente}) recoge los elementos m
   \label{tab:cliente}
 \end{table}
 
-
-
-Las operaciones definidas para esta entidad son las siguientes:
-
-
-\underline{\textsl{\textbf{Buscar un cliente existente}}}\newline
-Esta operación está disponible para todos los usuarios de la aplicación.
-
+\begin{description}
+\item[\underline{\textsl{\textbf{Buscar un cliente existente}}}] Esta operación está disponible para todos los usuarios de la aplicación.
 Se define un área de búsqueda en los que se definen los criterios de búsqueda a tener en cuenta:
 \begin{itemize}
 \item Customer Id: identificador del cliente.
-\item Identity Card: número del documento de identificación del cliente (NIF, NIE,\dots).
+\item Identity Card: número del documento de identificación del cliente (NIF, NIE\dots).
 \item Search Date: fecha de referencia de búsqueda. Se obtendrá como resultado el registro de histórico en el que esté comprendida dicha fecha. Este campo es obligatorio para realizar la búsqueda.
 \end{itemize}
 
 Una vez cubiertos los criterios indicados se pulsará el botón \emph{Search}, que mostrará un panel emergente con el listado de los registros encontrados. Seleccionaremos el elemento sobre el que queramos operar pulsando el botón amarillo de la columna \emph{Show Historic}. Se mostrará el área de históricos de la entidad con los distintos registros de histórico existentes.
 
-
-\underline{\textsl{\textbf{Crear nuevo cliente}}}\newline
-Esta operación sólo está habilitada para usuarios con permisos de edición.
+\item[\underline{\textsl{\textbf{Crear nuevo cliente}}}] Esta operación sólo está habilitada para usuarios con permisos de edición.
 Para crear un nuevo cliente se pulsará el botón \textit{New Data} situado en el área \emph{Create New Customer} en la parte superior derecha de la ventana. Aparecerá una ventana emergente que mostrará un formulario con distintas pestañas relativas a la información a cubrir. A continuación se detallan dichas pestañas:
 \begin{enumerate}
 \item Pestaña Instance: aquí se define, entre otros, el tipo de cliente que va a tener asociado este cliente. Los campos a definir son los siguientes y son todos obligatorios:
@@ -1406,7 +1325,7 @@ Para crear un nuevo cliente se pulsará el botón \textit{New Data} situado en e
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.70\textwidth]{imaxes/formulario-alta-cliente.png}
+  \includegraphics[width=0.50\textwidth]{imaxes/formulario-alta-cliente.png}
   \caption{Detalle del formulario de alta de clientes.}
   \label{fig:formulario-alta-cliente}
 \end{figure}
@@ -1418,32 +1337,30 @@ Por defecto la fecha de Activación del cliente no se cubre, por lo que si quere
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.70\textwidth]{imaxes/mensaje-id-cliente.png}
+  \includegraphics[width=0.3\textwidth]{imaxes/mensaje-id-cliente.png}
   \caption{Detalle del mensaje que informa del id del cliente creado.}
   \label{fig:mensaje-id-cliente}
 \end{figure}
 
 
-\underline{\textsl{\textbf{Editar registro de histórico de cliente}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
-Para editar un registro de histórico se seleccionará el registro deseado del listado de históricos de la entidad y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas teniendo en cuenta los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}.
+\item[\underline{\textsl{\textbf{Editar registro de histórico de cliente}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
+Para editar un registro de histórico se seleccionará el registro deseado del listado de históricos de la entidad y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas teniendo en cuenta los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}).
 
 Al igual que para las entidades con históricos vistas en la sección del catálogo del sistema, si se cambia el estado de un cliente a cancelado, este cambio de estado se propagará a todos los registros posteriores al que cambiamos. Además se establecerá como fecha de cancelación la fecha en la que se realiza dicho cambio, propagándose ese dato por todos los registros de histórico del cliente, no sólo los que están a continuación del registro al que se le cambió el estado a cancelado.
 
 Esta propagación de la fecha de cancelación por todos los registros del histórico  también ocurre si se modifica dicha fecha. Lo mismo ocurre si se cambia la fecha de activación del cliente.
 
-\underline{\textsl{\textbf{Añadir registro de histórico a un cliente}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
-Para añadir un nuevo registro de histórico sobre el cliente se seleccionará del listado el registro en el que se ubicará el nuevo registro a añadir y se pulsará el botón añadir de la columna \textit{ADD ROW} correspondiente. Aparecerá una nueva ventana emergente como la que se muestra en la operación de creación pero con los campos cubiertos con la información del registro sobre el que se va a añadir el nuevo registro y se realizán las moficaciones oportunas sobre los mismos teniendo en cuenta los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}.
+\item[\underline{\textsl{\textbf{Añadir registro de histórico a un cliente}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
+Para añadir un nuevo registro de histórico sobre el cliente se seleccionará del listado el registro en el que se ubicará el nuevo registro a añadir y se pulsará el botón añadir de la columna \textit{ADD ROW} correspondiente. Aparecerá una nueva ventana emergente como la que se muestra en la operación de creación pero con los campos cubiertos con la información del registro sobre el que se va a añadir el nuevo registro y se realizán las moficaciones oportunas sobre los mismos teniendo en cuenta los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}).
 
 
-\underline{\textsl{\textbf{Borrar registro de histórico del cliente }}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
-Para borrar un registro de histórico del cliente se seleccionará del listado el registro a borrar y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.\newline
+\item[\underline{\textsl{\textbf{Borrar registro de histórico del cliente }}}] Esta operación sólo está disponible para usuarios con permisos de edición.
+Para borrar un registro de histórico del cliente se seleccionará del listado el registro a borrar y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.
 
-\underline{\textsl{\textbf{Borrar el cliente}}}\newline
+\item[\underline{\textsl{\textbf{Borrar el cliente}}}]
 Esta operación sólo está disponible para usuarios con permisos de edición.
-Para borrar completamente un cliente se deben borrar uno a uno todos los registros de histórico del cliente según lo indicado en el punto anterior. 
+Para borrar completamente un cliente se deben borrar uno a uno todos los registros de histórico del cliente según lo indicado en el punto anterior.
+\end{description}
 
 
 
@@ -1457,14 +1374,15 @@ Esta vista muestra la información relativa a las cuenta contenidas en la carter
 Una cuenta depende de un cliente, por lo que existe una relación directa entre una cuenta y su cliente, no puede existir de forma independiente. Puesto que la cuenta es la entidad del sistema que permite gestionar los distintos productos y servicios contratados por el cliente y es la responsable de la transacción económica asociada a la contratación, esto es, el \textit{pagador}, tendrá asociada una persona física o jurídica que es la que efectuará el pago y que puede coincidir con el cliente o ser otra distinta. Por lo tanto el ciclo de facturación que aplicará sobre los distintos elementos contratados vendrá dado por la cuenta asociada a los mismos y vendrá dado por el tipo de cuenta asociado a la misma.
 
 
-La tabla \ref{tab:cuenta}(página \pageref{tab:cuenta}) recoge los elementos más relevantes en la definción de un cuenta:
+La \tablename~\ref{tab:cuenta} recoge los elementos más relevantes en la definición de una cuenta.
+Las operaciones definidas para esta entidad son las siguientes:
 
-\begin{table}[H]
+\begin{table}
   \centering
   \rowcolors{2}{white}{udcgray!25}
   \setlength{\leftmargini}{0.4cm}
   \resizebox{14cm}{!} {
-  \begin{tabular}{|m{6cm} m{8cm}|}
+  \begin{tabular}{|m{5cm} m{9cm}|}
   \rowcolor{udcpink!25}
   \hline
   	\textbf{Elemento} & \textbf{Descripción} \\\hline
@@ -1493,26 +1411,20 @@ La tabla \ref{tab:cuenta}(página \pageref{tab:cuenta}) recoge los elementos má
   \label{tab:cuenta}
 \end{table}
 
-
-
-Las operaciones definidas para esta entidad son las siguientes:
-
-
-\underline{\textsl{\textbf{Buscar un cuenta existente}}}\newline
-Esta operación está disponible para todos los usuarios de la aplicación.
-
+\begin{description}
+\item[\underline{\textsl{\textbf{Buscar un cuenta existente}}}] Esta operación está disponible para todos los usuarios de la aplicación.
 Se define un área de búsqueda en los que se definen los criterios de búsqueda a tener en cuenta:
 \begin{itemize}
 	\item Área Account Data: en este área se definen los criterios de búsqueda relativos a la propia cuenta:
 	\begin{itemize}
 		\item Contract Nr: número de contrato asociado a la cuenta.
 		\item Account Id: identificador de la cuenta.
-		\item Account Identity Card: número del documento de identificación de la cuenta (NIF, NIE,\dots).
+		\item Account Identity Card: número del documento de identificación de la cuenta (NIF, NIE\dots).
 	\end{itemize}
 	\item Área Customer Data: en este área se definen los criterios de búsqueda del cliente del que depende la cuenta.
 	\begin{itemize}
 		\item Customer Id: identificador del cliente asociado a la cuenta.
-		\item Identity Card: número del documento de identificación del cliente asociado a la cuenta (NIF, NIE,\dots).
+		\item Identity Card: número del documento de identificación del cliente asociado a la cuenta (NIF, NIE\dots).
 	\end{itemize}
 	\item Área Search Date: fecha de referencia de búsqueda. Se obtendrá como resultado el registro de histórico en el que esté comprendida dicha fecha. Este campo es obligatorio para realizar la búsqueda.
 \end{itemize}
@@ -1520,8 +1432,7 @@ Se define un área de búsqueda en los que se definen los criterios de búsqueda
 Una vez cubiertos los criterios indicados se pulsará el botón \emph{Search}, que mostrará un panel emergente con el listado de los registros encontrados. Seleccionaremos el elemento sobre el que queramos operar pulsando el botón amarillo de la columna \emph{Show Historic}. Se mostrará el área de históricos de la entidad con los distintos registros de histórico existentes.
 
 
-\underline{\textsl{\textbf{Crear nueva cuenta}}}\newline
-Esta operación sólo está habilitada para usuarios con permisos de edición.
+\item[\underline{\textsl{\textbf{Crear nueva cuenta}}}] Esta operación sólo está habilitada para usuarios con permisos de edición.
 Para crear una nueva cuenta se pulsará el botón \textit{New Data} situado en el área \emph{Create New Account} en la parte superior derecha de la ventana. Aparecerá una ventana emergente que mostrará un formulario con distintas pestañas relativas a la información a cubrir. A continuación se detallan dichas pestañas:
 \begin{enumerate}
 \item Pestaña Contract and Customer Data: en este apartado se define tanto el contrato asociado a la cuenta como el cliente del que depende. 
@@ -1570,7 +1481,7 @@ Para crear una nueva cuenta se pulsará el botón \textit{New Data} situado en e
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.70\textwidth]{imaxes/formulario-alta-cuenta.png}
+  \includegraphics[width=0.9\textwidth]{imaxes/formulario-alta-cuenta.png}
   \caption{Detalle del formulario de alta de cuentas}
   \label{fig:formulario-alta-cuenta}
 \end{figure}
@@ -1582,33 +1493,29 @@ Por defecto la fecha de Activación de la cuenta no se cubre, por lo que si quer
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.70\textwidth]{imaxes/mensaje-id-cuenta.png}
+  \includegraphics[width=0.35\textwidth]{imaxes/mensaje-id-cuenta.png}
   \caption{Detalle del mensaje que informa del id de la cuenta creado.}
   \label{fig:mensaje-id-cuenta}
 \end{figure}
 
 
-\underline{\textsl{\textbf{Editar registro de histórico de cuenta}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
-Para editar un registro de histórico se seleccionará el registro deseado del listado de históricos de la entidad y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas teniendo en cuenta los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}.
+\item[\underline{\textsl{\textbf{Editar registro de histórico de cuenta}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
+Para editar un registro de histórico se seleccionará el registro deseado del listado de históricos de la entidad y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas teniendo en cuenta los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}).
 
 Al igual que para las entidades con históricos vistas en la sección del catálogo del sistema, si se cambia el estado de un cuenta a cancelado, este cambio de estado se propagará a todos los registros posteriores al que cambiamos. Además se establecerá como fecha de cancelación la fecha en la que se realiza dicho cambio, propagándose ese dato por todos los registros de histórico de la cuenta, no sólo los que están a continuación del registro al que se le cambió el estado a cancelado.
 
 Esta propagación de la fecha de cancelación por todos los registros del histórico  también ocurre si se modifica dicha fecha. Lo mismo ocurre si se cambia la fecha de activación de la cuenta.
 
-\underline{\textsl{\textbf{Añadir registro de histórico a un cuenta}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
-Para añadir un nuevo registro de histórico sobre el cuenta se seleccionará del listado el registro en el que se ubicará el nuevo registro a añadir y se pulsará el botón añadir de la columna \textit{ADD ROW} correspondiente. Aparecerá una nueva ventana emergente como la que se muestra en la operación de creación  con los campos cubiertos con la información del registro sobre el que se va a añadir el nuevo registro y se realizán las moficaciones oportunas sobre los mismos teniendo en cuenta los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}.
+\item[\underline{\textsl{\textbf{Añadir registro de histórico a un cuenta}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
+Para añadir un nuevo registro de histórico sobre el cuenta se seleccionará del listado el registro en el que se ubicará el nuevo registro a añadir y se pulsará el botón añadir de la columna \textit{ADD ROW} correspondiente. Aparecerá una nueva ventana emergente como la que se muestra en la operación de creación  con los campos cubiertos con la información del registro sobre el que se va a añadir el nuevo registro y se realizán las moficaciones oportunas sobre los mismos teniendo en cuenta los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}).
 
 
-\underline{\textsl{\textbf{Borrar registro de histórico de la cuenta}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
-Para borrar un registro de histórico de la cuenta se seleccionará del listado el registro a borrar y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.\newline
+\item[\underline{\textsl{\textbf{Borrar registro de histórico de la cuenta}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
+Para borrar un registro de histórico de la cuenta se seleccionará del listado el registro a borrar y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.
 
-\underline{\textsl{\textbf{Borrar el cuenta}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
+\item[\underline{\textsl{\textbf{Borrar la cuenta}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
 Para borrar completamente un cuenta se deben borrar uno a uno todos los registros de histórico de la cuenta según lo indicado en el punto anterior. 
-
+\end{description}
 
 
 
@@ -1621,7 +1528,7 @@ Esta vista muestra la información relativa a los productos contenidas en la car
 Un producto es una entidad facturable, por lo que cada instancia del mismo deberá llevar asociado el tipo impositivo asociado según marca la ley. Además el producto debe estar relacionado con una de las cuentas existentes en el sistema, no puede existir de forma independiente.
 
 
-La tabla \ref{tab:producto}(página \pageref{tab:producto}) recoge los elementos más relevantes en la definción de un producto:
+La \tablename~\ref{tab:producto} recoge los elementos más relevantes en la definición de un producto:
 
 \begin{table}[H]
   \centering
@@ -1652,22 +1559,20 @@ La tabla \ref{tab:producto}(página \pageref{tab:producto}) recoge los elementos
 
 Las operaciones definidas para esta entidad son las siguientes:
 
-
-\underline{\textsl{\textbf{Buscar un producto existente}}}\newline
-Esta operación está disponible para todos los usuarios de la aplicación.
-
+\begin{description}
+\item[\underline{\textsl{\textbf{Buscar un producto existente}}}] Esta operación está disponible para todos los usuarios de la aplicación.
 Se define un área de búsqueda en los que se definen los criterios de búsqueda a tener en cuenta:
 \begin{itemize}
 	\item Área Account Data: en este área se definen los criterios de búsqueda relativos a la cuenta a la que está asociado el producto:
 	\begin{itemize}
 		\item Contract Nr: número de contrato asociado a la cuenta.
 		\item Account Id: identificador de la cuenta.
-		\item Account Identity Card: número del documento de identificación de la cuenta (NIF, NIE,\dots).
+		\item Account Identity Card: número del documento de identificación de la cuenta (NIF, NIE\dots).
 	\end{itemize}
 	\item Área Customer Data: en este área se definen los criterios de búsqueda del cliente del que depende la cuenta asociada al producto.
 	\begin{itemize}
 		\item Customer Id: identificador del cliente asociado a la cuenta.
-		\item Identity Card: número del documento de identificación del cliente asociado a la cuenta (NIF, NIE,\dots).
+		\item Identity Card: número del documento de identificación del cliente asociado a la cuenta (NIF, NIE\dots).
 	\end{itemize}
 	\item Área Search Date: fecha de referencia de búsqueda. Se obtendrá como resultado el registro de histórico en el que esté comprendida dicha fecha. Este campo es obligatorio para realizar la búsqueda.
 \end{itemize}
@@ -1675,8 +1580,7 @@ Se define un área de búsqueda en los que se definen los criterios de búsqueda
 Una vez cubiertos los criterios indicados se pulsará el botón \emph{Search}, que mostrará un panel emergente con el listado de los registros encontrados. Seleccionaremos el elemento sobre el que queramos operar pulsando el botón amarillo de la columna \emph{Show Historic}. Se mostrará el área de históricos de la entidad con los distintos registros de histórico existentes.
 
 
-\underline{\textsl{\textbf{Crear nueva producto}}}\newline
-Esta operación sólo está habilitada para usuarios con permisos de edición.
+\item[\underline{\textsl{\textbf{Crear nueva producto}}}] Esta operación sólo está habilitada para usuarios con permisos de edición.
 Para crear una nueva producto se pulsará el botón \textit{New Data} situado en el área \emph{Create New Product} en la parte superior derecha de la ventana. Aparecerá una ventana emergente que mostrará dos partes diferenciadas. Un área superior denominada \emph{Parent Data} correspondiente a la cuenta asociada al producto y una parte inferior que se corresponde con los datos de la instancia del producto.
 
 Si sabemos el id de la cuenta a la que vamos a asociar el producto la especificaremos en el área de texto \emph{Account Id} del área \emph{Account Criteria} del apartado \emph{Parent Data}. En caso de no saber el id procederemos a cubrir alguno de los campos del formulario del apartado \emph{Parent Data} y pulsaremos el botón \emph{Search}. Aparecerá un listado con todas las cuentas resultado de la búsqueda. Seleccionaremos el registro deseado y pulsaremos el botón amarillo de la columna \emph{Select} correspondiente. Se cargará la información correspondiente en el apartado \emph{Parent Data}.
@@ -1703,34 +1607,30 @@ Una vez finaliza la introducción de datos se pulsará el botón \emph{OK} que c
 Por defecto la fecha de Activación del producto no se cubre, por lo que si queremos activar el producto deberemos especificarla manualmente a través de la edición del registro del producto creada.
 
 
-\underline{\textsl{\textbf{Editar registro de histórico de producto}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
-Para editar un registro de histórico se seleccionará el registro deseado del listado de históricos de la entidad y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas teniendo en producto los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}.
+\item[\underline{\textsl{\textbf{Editar registro de histórico de producto}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
+Para editar un registro de histórico se seleccionará el registro deseado del listado de históricos de la entidad y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas teniendo en producto los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}).
 
 Al igual que para las entidades con históricos vistas en la sección del catálogo del sistema, si se cambia el estado de un producto a cancelado, este cambio de estado se propagará a todos los registros posteriores al que cambiamos. Además se establecerá como fecha de cancelación la fecha en la que se realiza dicho cambio, propagándose ese dato por todos los registros de histórico del producto, no sólo los que están a continuación del registro al que se le cambió el estado a cancelado.
 
 Esta propagación de la fecha de cancelación por todos los registros del histórico  también ocurre si se modifica dicha fecha. Lo mismo ocurre si se cambia la fecha de activación del producto.
 
-\underline{\textsl{\textbf{Añadir registro de histórico a un producto}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
-Para añadir un nuevo registro de histórico sobre el producto se seleccionará del listado el registro en el que se ubicará el nuevo registro a añadir y se pulsará el botón añadir de la columna \textit{ADD ROW} correspondiente. Aparecerá una nueva ventana emergente como la que se muestra en la operación de creación sin el área de búsqueda \emph{Parent Data} y con los campos cubiertos con la información del registro sobre el que se va a añadir el nuevo registro y se realizán las moficaciones oportunas sobre los mismos teniendo en servicio los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}.
+\item[\underline{\textsl{\textbf{Añadir registro de histórico a un producto}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
+Para añadir un nuevo registro de histórico sobre el producto se seleccionará del listado el registro en el que se ubicará el nuevo registro a añadir y se pulsará el botón añadir de la columna \textit{ADD ROW} correspondiente. Aparecerá una nueva ventana emergente como la que se muestra en la operación de creación sin el área de búsqueda \emph{Parent Data} y con los campos cubiertos con la información del registro sobre el que se va a añadir el nuevo registro y se realizán las moficaciones oportunas sobre los mismos teniendo en servicio los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}). En la \figurename~\ref{fig:nuevo-historico-producto} se puede ver un detalle del formulario correspondiente.
 
-\begin{figure}[H]
+\begin{figure}
   \centering
-  \includegraphics[width=0.70\textwidth]{imaxes/nuevo-historico-producto.png}
+  \includegraphics[width=0.4\textwidth]{imaxes/nuevo-historico-producto.png}
   \caption{Detalle del formulario para añadir un nuevo registro de histórico de producto}
   \label{fig:nuevo-historico-producto}
 \end{figure}
 
 
-\underline{\textsl{\textbf{Borrar registro de histórico del producto}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
-Para borrar un registro de histórico del producto se seleccionará del listado el registro a borrar y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.\newline
+\item[\underline{\textsl{\textbf{Borrar registro de histórico del producto}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
+Para borrar un registro de histórico del producto se seleccionará del listado el registro a borrar y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.
 
-\underline{\textsl{\textbf{Borrar el producto}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
+\item[\underline{\textsl{\textbf{Borrar el producto}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
 Para borrar completamente un producto se deben borrar uno a uno todos los registros de histórico del producto según lo indicado en el punto anterior. 
-
+\end{description}
 
 
 \subsubsection{Service Instance - Servicio}
@@ -1740,15 +1640,12 @@ Esta vista muestra la información relativa a los servicios contenidas en la car
 
 Un servicio es una entidad facturable, por lo que cada instancia del mismo deberá llevar asociado el tipo impositivo asociado según marca la ley. Además un servicio debe estar asociado a uno de los productos existentes en el sistema, no puede existir de forma independiente.
 
-
-La tabla \ref{tab:servicio}(página \pageref{tab:servicio}) recoge los elementos más relevantes en la definción de un servicio:
-
-\begin{table}[H]
+\begin{table}
   \centering
   \rowcolors{2}{white}{udcgray!25}
   \setlength{\leftmargini}{0.4cm}
   \resizebox{14cm}{!} {
-  \begin{tabular}{|m{6cm} m{8cm}|}
+  \begin{tabular}{|m{4.5cm} m{11cm}|}
   \rowcolor{udcpink!25}
   \hline
   	\textbf{Elemento} & \textbf{Descripción} \\\hline
@@ -1769,26 +1666,22 @@ La tabla \ref{tab:servicio}(página \pageref{tab:servicio}) recoge los elementos
   \label{tab:servicio}
 \end{table}
 
-
-
+La \tablename~\ref{tab:servicio} recoge los elementos más relevantes en la definición de un servicio.
 Las operaciones definidas para esta entidad son las siguientes:
-
-
-\underline{\textsl{\textbf{Buscar un servicio existente}}}\newline
-Esta operación está disponible para todos los usuarios de la aplicación.
-
+\begin{description}
+\item[\underline{\textsl{\textbf{Buscar un servicio existente}}}] Esta operación está disponible para todos los usuarios de la aplicación.
 Se define un área de búsqueda en los que se definen los criterios de búsqueda a tener en cuenta:
 \begin{itemize}
 	\item Área Account Data: en este área se definen los criterios de búsqueda relativos a la cuenta a la que está asociado el servicio:
 		\begin{itemize}
 			\item Contract Nr: número de contrato asociado a la cuenta.
 			\item Account Id: identificador de la cuenta.
-			\item Account Identity Card: número del documento de identificación de la cuenta (NIF, NIE,\dots).
+			\item Account Identity Card: número del documento de identificación de la cuenta (NIF, NIE\dots).
 		\end{itemize}
 	\item Área Customer Data: en este área se definen los criterios de búsqueda del cliente del que depende la cuenta asociada al servicio.
 		\begin{itemize}
 			\item Customer Id: identificador del cliente asociado a la cuenta.
-			\item Identity Card: número del documento de identificación del cliente asociado a la cuenta (NIF, NIE,\dots).
+			\item Identity Card: número del documento de identificación del cliente asociado a la cuenta (NIF, NIE\dots).
 		\end{itemize}
 	\item Área Product Data: en este área se definen los criterios de búsqueda del producto del que depende el servicio. Está pensada para completar la búsqueda con otra información aportada en el resto de áreas.	
 		\begin{itemize}
@@ -1805,9 +1698,7 @@ Se define un área de búsqueda en los que se definen los criterios de búsqueda
 
 Una vez cubiertos los criterios indicados se pulsará el botón \emph{Search}, que mostrará un panel emergente con el listado de los registros encontrados. Seleccionaremos el elemento sobre el que queramos operar pulsando el botón amarillo de la columna \emph{Show Historic}. Se mostrará el área de históricos de la entidad con los distintos registros de histórico existentes.
 
-
-\underline{\textsl{\textbf{Crear nueva servicio}}}\newline
-Esta operación sólo está habilitada para usuarios con permisos de edición.
+\item[\underline{\textsl{\textbf{Crear nueva servicio}}}] Esta operación sólo está habilitada para usuarios con permisos de edición.
 Para crear una nueva servicio se pulsará el botón \textit{New Data} situado en el área \emph{Create New Service} en la parte superior derecha de la ventana. Aparecerá una ventana emergente que mostrará dos partes diferenciadas. Un área superior denominada \emph{Parent Data} correspondiente al producto asociado al servicio y una parte inferior que se corresponde con los datos de la instancia del servicio.
 
 Si sabemos el id del producto a la que vamos a asociar el servicio la especificaremos en el área de texto \emph{Product Id} del área \emph{Product Criteria} del apartado \emph{Parent Data}. En caso de no saber el id procederemos a cubrir alguno de los campos del formulario del apartado \emph{Parent Data} de forma análoga a lo realizado para especificar los criterios de búsquda del servicio y pulsaremos el botón \emph{Search}. Aparecerá un listado con todos los productos resultado de la búsqueda. Seleccionaremos el registro deseado y pulsaremos el botón amarillo de la columna \emph{Select} correspondiente. Se cargará la información correspondiente en el apartado \emph{Parent Data}.
@@ -1825,48 +1716,46 @@ A continuación cubriremos el resto de los datos correspondientes al servicio a 
 	\item Status: por defecto aparece el status pending, con vistas a la provisión, pero se puede seleccionar otro.
 \end{itemize}
 
-
-\begin{figure}[H]
-  \centering
-  \includegraphics[width=0.70\textwidth]{imaxes/formulario-alta-servicio.png}
-  \caption{Detalle del formulario de alta de servicios}
-  \label{fig:formulario-alta-servicio}
-\end{figure}
-
 Una vez finaliza la introducción de datos se pulsará el botón \emph{OK} que confirma la operación del formulario de creación. Si todo es correcto se registra el servicio en el sistema y se muestran los datos del servicio creado la pantalla de visualización de la entidad.
 
 Por defecto la fecha de Activación del servicio no se cubre, por lo que si queremos activar el servicio deberemos especificarla manualmente a través de la edición del registro del servicio creada.
 
+La \figurename~\ref{fig:formulario-alta-servicio} muestra un detalle del formulario de alta de servicios.
 
-\underline{\textsl{\textbf{Editar registro de histórico de servicio}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
-Para editar un registro de histórico se seleccionará el registro deseado del listado de históricos de la entidad y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas teniendo en servicio los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}.
+\begin{figure}
+  \centering
+  \includegraphics[width=0.9\textwidth]{imaxes/formulario-alta-servicio.png}
+  \caption{Detalle del formulario de alta de servicios}
+  \label{fig:formulario-alta-servicio}
+\end{figure}
+
+
+\item[\underline{\textsl{\textbf{Editar registro de histórico de servicio}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
+Para editar un registro de histórico se seleccionará el registro deseado del listado de históricos de la entidad y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas teniendo en servicio los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}).
 
 Al igual que para las entidades con históricos vistas en la sección del catálogo del sistema, si se cambia el estado de un servicio a cancelado, este cambio de estado se propagará a todos los registros posteriores al que cambiamos. Además se establecerá como fecha de cancelación la fecha en la que se realiza dicho cambio, propagándose ese dato por todos los registros de histórico del servicio, no sólo los que están a continuación del registro al que se le cambió el estado a cancelado.
 
 Esta propagación de la fecha de cancelación por todos los registros del histórico  también ocurre si se modifica dicha fecha. Lo mismo ocurre si se cambia la fecha de activación del servicio.
 
-\underline{\textsl{\textbf{Añadir registro de histórico a un servicio}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
-Para añadir un nuevo registro de histórico sobre el servicio se seleccionará del listado el registro en el que se ubicará el nuevo registro a añadir y se pulsará el botón añadir de la columna \textit{ADD ROW} correspondiente. Aparecerá una nueva ventana emergente como la que se muestra en la operación de creación sin el área de búsqueda \emph{Parent Data} y con los campos cubiertos con la información del registro sobre el que se va a añadir el nuevo registro y se realizán las moficaciones oportunas sobre los mismos teniendo en servicio los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}.
+\item[\underline{\textsl{\textbf{Añadir registro de histórico a un servicio}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
+Para añadir un nuevo registro de histórico sobre el servicio se seleccionará del listado el registro en el que se ubicará el nuevo registro a añadir y se pulsará el botón añadir de la columna \textit{ADD ROW} correspondiente. Aparecerá una nueva ventana emergente como la que se muestra en la operación de creación sin el área de búsqueda \emph{Parent Data} y con los campos cubiertos con la información del registro sobre el que se va a añadir el nuevo registro y se realizán las moficaciones oportunas sobre los mismos teniendo en servicio los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}).
+
+La \figurename~\ref{fig:nuevo-historico-servicio} muestra un detalle del formulario para añadir un nuevo registro al histórico de un servicio:
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.70\textwidth]{imaxes/nuevo-historico-servicio.png}
+  \includegraphics[width=0.40\textwidth]{imaxes/nuevo-historico-servicio.png}
   \caption{Detalle del formulario para añadir un nuevo registro de histórico de servicio}
   \label{fig:nuevo-historico-servicio}
 \end{figure}
 
 
+\item[\underline{\textsl{\textbf{Borrar registro de histórico del servicio}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
+Para borrar un registro de histórico del servicio se seleccionará del listado el registro a borrar y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.
 
-\underline{\textsl{\textbf{Borrar registro de histórico del servicio}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
-Para borrar un registro de histórico del servicio se seleccionará del listado el registro a borrar y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.\newline
-
-\underline{\textsl{\textbf{Borrar el servicio}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
+\item[\underline{\textsl{\textbf{Borrar el servicio}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
 Para borrar completamente un servicio se deben borrar uno a uno todos los registros de histórico del servicio según lo indicado en el punto anterior. 
-
+\end{description}
 
 
 \subsubsection{Fee Instance - Cuota}
@@ -1879,28 +1768,50 @@ Una cuota debe estar asociado a un producto o servicio existentes en el sistema,
 Aunque los valores de prorrateo y precio de la cuota vienen definidos por el tipo de cuota asociado a la cuota contratada, estos valores pueden cambiar en la cuota, para adaptarse a las necesidades del cliente.
 
 
-La tabla \ref{tab:cuota}(página \pageref{tab:cuota}) recoge los elementos más relevantes en la definción de una cuota:
+\begin{table}
+  \centering
+  \rowcolors{2}{white}{udcgray!25}
+  \setlength{\leftmargini}{0.4cm}
+  \resizebox{14cm}{!} {
+  \begin{tabular}{|m{4cm} m{11cm}|}
+  \rowcolor{udcpink!25}
+  \hline
+  	\textbf{Elemento} & \textbf{Descripción} \\\hline
+  	\textbf{START DATE} & Fecha de inicio del período temporal para el que aplican las condiciones especificadas para dicho período.\\
+  	\textbf{END DATE} & Fecha de finalización del período temporal para el que aplican las condiciones especificadas para dicho período.\\
+	\textbf{PARENT ID} & Identificador unívoco de la instancia a la que está vinculada la cuota (product\_id si la cuota aplica a nivel de producto o service\_id si aplica a nivel de servicio).\\
+	\textbf{CODE} & Código identificativo de la cuota. Por defecto es el mismo que el tipo de cuota asociado.\\	
+	\textbf{FEE TYPE} & Tipo de cuota asociado a la cuota.\\
+	\textbf{APPLICATION LEVEL} & Nivel de aplicación de la cuota (producto o servicio). Viene dado por su tipo de cuota.\\
+	\textbf{PRORRATE} & Indica si la cuota es prorrateable (\textit{TRUE}) o no (\textit{FALSE}). Se toma como base el importe definido en el tipo de cuota, pero puede variar para adaptarse a las necesidades del cliente.\\
+	\textbf{PRICE} & Indica el importe a facturar por dicha cuota. Se toma como base el importe definido en el tipo de cuota, pero puede variar para adaptarse a las necesidades del cliente.\\
+	\textbf{ACTIVE DATE} & Fecha de activación de la cuota. Común a todos los registros de histórico. Sólo cubierta cuando la cuota se ha activado en el sistema.\\
+	\textbf{CANCELLED DATE} & Fecha de baja de la cuota. Común a todos los registros de histórico. Sólo cubierta cuando la cuota ha cursado baja (estado cancelado).\\
+	\textbf{STATUS} & Estado de la cuota para el histórico actual.	
+	\\\hline
+  \end{tabular}
+  } % end /resizebox
+  \caption{Datos que definen una cuota.}
+  \label{tab:cuota}
+\end{table}
 
-
-
+La \tablename~\ref{tab:cuota} recoge los elementos más relevantes en la definición de una cuota.
 Las operaciones definidas para esta entidad son las siguientes:
 
-
-\underline{\textsl{\textbf{Buscar una cuota existente}}}\newline
-Esta operación está disponible para todos los usuarios de la aplicación.
-
+\begin{description}
+\item[\underline{\textsl{\textbf{Buscar una cuota existente}}}] Esta operación está disponible para todos los usuarios de la aplicación.
 Se define un área de búsqueda en los que se definen los criterios de búsqueda a tener en cuenta:
 \begin{itemize}
 	\item Área Account Data: en este área se definen los criterios de búsqueda relativos a la cuenta a la que está asociada la cuota:
 		\begin{itemize}
 			\item Contract Nr: número de contrato asociado a la cuenta.
 			\item Account Id: identificador de la cuenta.
-			\item Account Identity Card: número del documento de identificación de la cuenta (NIF, NIE,\dots).
+			\item Account Identity Card: número del documento de identificación de la cuenta (NIF, NIE\dots).
 		\end{itemize}
 	\item Área Customer Data: en este área se definen los criterios de búsqueda del cliente del que depende la cuenta asociada a la cuota.
 		\begin{itemize}
 			\item Customer Id: identificador del cliente asociado a la cuenta.
-			\item Identity Card: número del documento de identificación del cliente asociado a la cuenta (NIF, NIE,\dots).
+			\item Identity Card: número del documento de identificación del cliente asociado a la cuenta (NIF, NIE\dots).
 		\end{itemize}
 	\item Área Paren Instance: en este área se definen los criterios de búsqueda de la entidad padre de la cuota. Para ello se selecciona el nivel de aplicación de la cuota a buscar. Se puede completar la búsqueda aportando información relativa a la entidad padre a la que está asociada la cuenta, para lo que se definen unos campos a cubrir. En función de si se ha seleccionado producto o servicio se muestran distintos campos:
 	\begin{itemize}
@@ -1922,8 +1833,7 @@ Se define un área de búsqueda en los que se definen los criterios de búsqueda
 Una vez cubiertos los criterios indicados se pulsará el botón \emph{Search}, que mostrará un panel emergente con el listado de los registros encontrados para las cuotas que cumplan los criterios de búsqueda especificados. Seleccionaremos el elemento sobre el que queramos operar pulsando el botón amarillo de la columna \emph{Show Historic}. Se mostrará el área de históricos de la entidad con los distintos registros de histórico existentes.
 
 
-\underline{\textsl{\textbf{Crear nueva cuota}}}\newline
-Esta operación sólo está habilitada para usuarios con permisos de edición.
+\item[\underline{\textsl{\textbf{Crear nueva cuota}}}] Esta operación sólo está habilitada para usuarios con permisos de edición.
 Para crear una nueva servicio se pulsará el botón \textit{New Data} situado en el área \emph{Create New Fee} en la parte superior derecha de la ventana. Aparecerá una ventana emergente que mostrará dos partes diferenciadas. Un área superior denominada \emph{Search Parent Data} minimizada correspondiente a la jerarquía de la entidad producto o servicio asociada a la cuota a crear y una parte inferior que se corresponde con los datos de la instancia de la cuota.
 
 Si sabemos el id de la entidad a la que vamos a asociar la cuota la especificaremos en el área de texto \emph{Parent Id}. En caso de no saber el id procederemos a realizar la correspondiente búsqueda en el área  \emph{Search Parent Data}. Para ello desplegaremos ese área pulsando sobre \emph{Search Parent Data} y procederemos a cubrir alguno de los campos del formulario del apartado \emph{Search Parent Data} de forma análoga a lo realizado para especificar los criterios de búsquda de la cuota y pulsaremos el botón \emph{Search}. Aparecerá un listado con todos los productos o servicios (en función del nivel de aplicación seleccionado) resultado de la búsqueda. Seleccionaremos el registro deseado y pulsaremos el botón amarillo de la columna \emph{Select} correspondiente. Se cargará la información correspondiente en el apartado \emph{Search Parent Data}, así como los datos de \emph{Application Level} y \emph{Parent Id} del área de datos de la instancia de la cuota a crear.
@@ -1943,58 +1853,57 @@ A continuación cubriremos el resto de los datos correspondientes a la cuota a c
 
 
 
-\begin{figure}[H]
+\begin{figure}
   \centering
-  \begin{subfigure}[c]{0.4\textwidth}
+  \begin{subfigure}[b]{0.3\textwidth}
     \includegraphics[width=\textwidth]{imaxes/formulario-alta-cuota-01.png}
-    \caption{Detalle del formulario de alta de cuota sin el área de \emph{Search Parent Data} desplegado}
+    \caption{Sin el área de \emph{Search Parent Data} desplegada}
     \label{fig:formulario-alta-cuota-01}
   \end{subfigure}
-  \hspace{0.1\textwidth}
-  \begin{subfigure}[c]{0.4\textwidth}
+%  \hspace{0.1\textwidth}
+  \begin{subfigure}[b]{0.69\textwidth}
     \includegraphics[width=\textwidth,height=3cm]{imaxes/formulario-alta-cuota-02.png}
-    \caption{Detalle del formulario de alta de cuota con el área de \emph{Search Parent Data} desplegado}
+    \caption{Con el área de \emph{Search Parent Data} desplegada}
     \label{fig:formulario-alta-cuota-02}
   \end{subfigure}
   \caption{Detalles del formulario de alta de cuota}
-  \label{fig:parametrizacion}
+  \label{fig:alta-cuota}
 \end{figure}
 
 
-Una vez finaliza la introducción de datos se pulsará el botón \emph{OK} que confirma la operación del formulario de creación. Si todo es correcto se registra la cuota en el sistema y se muestran los datos dla cuota creado la pantalla de visualización de la entidad.
+Una vez finaliza la introducción de datos se pulsará el botón \emph{OK} que confirma la operación del formulario de creación. Si todo es correcto se registra la cuota en el sistema y se muestran los datos de la cuota creado la pantalla de visualización de la entidad.
 
-Por defecto la fecha de Activación dla cuota no se cubre, por lo que si queremos activar la cuota deberemos especificarla manualmente a través de la edición del registro dla cuota creada.
+Por defecto la fecha de Activación de la cuota no se cubre, por lo que si queremos activar la cuota deberemos especificarla manualmente a través de la edición del registro de la cuota creada.
 
+La \figurename~\ref{fig:alta-cuota} muestra dos detalles del formulario para añadir una nueva cuota, con y sin el \emph{Search Parent Data} desplegado.
 
-\underline{\textsl{\textbf{Editar registro de histórico de servicio}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
-Para editar un registro de histórico se seleccionará el registro deseado del listado de históricos de la entidad y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas teniendo en servicio los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}.
+\item[\underline{\textsl{\textbf{Editar registro de histórico de servicio}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
+Para editar un registro de histórico se seleccionará el registro deseado del listado de históricos de la entidad y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas teniendo en servicio los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}).
 
-Al igual que para las entidades con históricos vistas en la sección del catálogo del sistema, si se cambia el estado de una cuota a cancelado, este cambio de estado se propagará a todos los registros posteriores al que cambiamos. Además se establecerá como fecha de cancelación la fecha en la que se realiza dicho cambio, propagándose ese dato por todos los registros de histórico dla cuota, no sólo los que están a continuación del registro al que se le cambió el estado a cancelado.
+Al igual que para las entidades con históricos vistas en la sección del catálogo del sistema, si se cambia el estado de una cuota a cancelado, este cambio de estado se propagará a todos los registros posteriores al que cambiamos. Además se establecerá como fecha de cancelación la fecha en la que se realiza dicho cambio, propagándose ese dato por todos los registros de histórico de la cuota, no sólo los que están a continuación del registro al que se le cambió el estado a cancelado.
 
-Esta propagación de la fecha de cancelación por todos los registros del histórico  también ocurre si se modifica dicha fecha. Lo mismo ocurre si se cambia la fecha de activación dla cuota.
+Esta propagación de la fecha de cancelación por todos los registros del histórico  también ocurre si se modifica dicha fecha. Lo mismo ocurre si se cambia la fecha de activación de la cuota.
 
-\underline{\textsl{\textbf{Añadir registro de histórico a una cuota}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
-Para añadir un nuevo registro de histórico sobre la cuota se seleccionará del listado el registro en el que se ubicará el nuevo registro a añadir y se pulsará el botón añadir de la columna \textit{ADD ROW} correspondiente. Aparecerá una nueva ventana emergente como la que se muestra en la operación de creación sin el área de búsqueda \emph{Parent Data} y con los campos cubiertos con la información del registro sobre el que se va a añadir el nuevo registro y se realizán las moficaciones oportunas sobre los mismos teniendo en servicio los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}.
+\item[\underline{\textsl{\textbf{Añadir registro de histórico a una cuota}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
+Para añadir un nuevo registro de histórico sobre la cuota se seleccionará del listado el registro en el que se ubicará el nuevo registro a añadir y se pulsará el botón añadir de la columna \textit{ADD ROW} correspondiente. Aparecerá una nueva ventana emergente como la que se muestra en la operación de creación sin el área de búsqueda \emph{Parent Data} y con los campos cubiertos con la información del registro sobre el que se va a añadir el nuevo registro y se realizán las moficaciones oportunas sobre los mismos teniendo en servicio los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}).
+
+La \figurename~\ref{fig:nuevo-historico-cuota} muestra un detalle del formulario para añadir un nuevo registro al histórico de una cuota:
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.70\textwidth]{imaxes/nuevo-historico-cuota.png}
+  \includegraphics[width=0.425\textwidth]{imaxes/nuevo-historico-cuota.png}
   \caption{Detalle del formulario para añadir un nuevo registro de histórico de cuota}
   \label{fig:nuevo-historico-cuota}
 \end{figure}
 
 
 
-\underline{\textsl{\textbf{Borrar registro de histórico dla cuota}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
-Para borrar un registro de histórico dla cuota se seleccionará del listado el registro a borrar y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.\newline
+\item[\underline{\textsl{\textbf{Borrar registro de histórico de la cuota}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
+Para borrar un registro de histórico de la cuota se seleccionará del listado el registro a borrar y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.
 
-\underline{\textsl{\textbf{Borrar la cuota}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
-Para borrar completamente una cuota se deben borrar uno a uno todos los registros de histórico dla cuota según lo indicado en el punto anterior. 
-
+\item[\underline{\textsl{\textbf{Borrar la cuota}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
+Para borrar completamente una cuota se deben borrar uno a uno todos los registros de histórico de la cuota según lo indicado en el punto anterior. 
+\end{description}
 
 
 
@@ -2009,53 +1918,25 @@ Aunque los valores de prorrateo y precio de la promoción vienen definidos por e
 
 
 
-\begin{table}[H]
-  \centering
-  \rowcolors{2}{white}{udcgray!25}
-  \setlength{\leftmargini}{0.4cm}
-  \resizebox{14cm}{!} {
-  \begin{tabular}{|m{6cm} m{8cm}|}
-  \rowcolor{udcpink!25}
-  \hline
-  	\textbf{Elemento} & \textbf{Descripción} \\\hline
-  	\textbf{START DATE} & Fecha de inicio del período temporal para el que aplican las condiciones especificadas para dicho período.\\
-  	\textbf{END DATE} & Fecha de finalización del período temporal para el que aplican las condiciones especificadas para dicho período.\\
-	\textbf{PARENT ID} & Identificador unívoco de la instancia a la que está vinculada la cuota (product\_id si la cuota aplica a nivel de producto o service\_id si aplica a nivel de servicio).\\
-	\textbf{CODE} & Código identificativo de la cuota. Por defecto es el mismo que el tipo de cuota asociado.\\	
-	\textbf{FEE TYPE} & Tipo de cuota asociado a la cuota.\\
-	\textbf{APPLICATION LEVEL} & Nivel de aplicación de la cuota (producto o servicio). Viene dado por su tipo de cuota.\\
-	\textbf{PRORRATE} & Indica si la cuota es prorrateable (\textit{TRUE}) o no (\textit{FALSE}). Se toma como base el importe definido en el tipo de cuota, pero puede variar para adaptarse a las necesidades del cliente.\\
-	\textbf{PRICE} & Indica el importe a facturar por dicha cuota. Se toma como base el importe definido en el tipo de cuota, pero puede variar para adaptarse a las necesidades del cliente.\\
-	\textbf{ACTIVE DATE} & Fecha de activación dla cuota. Común a todos los registros de histórico. Sólo cubierta cuando la cuota se ha activado en el sistema.\\
-	\textbf{CANCELLED DATE} & Fecha de baja de la cuota. Común a todos los registros de histórico. Sólo cubierta cuando la cuota ha cursado baja (estado cancelado).\\
-	\textbf{STATUS} & Estado dla cuota para el histórico actual.	
-	\\\hline
-  \end{tabular}
-  } % end /resizebox
-  \caption{Datos que definen una cuota.}
-  \label{tab:cuota}
-\end{table}
+
 
 
 
 Las operaciones definidas para esta entidad son las siguientes:
-
-
-\underline{\textsl{\textbf{Buscar una promoción existente}}}\newline
-Esta operación está disponible para todos los usuarios de la aplicación.
-
+\begin{description}
+\item[\underline{\textsl{\textbf{Buscar una promoción existente}}}] Esta operación está disponible para todos los usuarios de la aplicación.
 Se define un área de búsqueda en los que se definen los criterios de búsqueda a tener en cuenta:
 \begin{itemize}
 	\item Área Account Data: en este área se definen los criterios de búsqueda relativos a la cuenta a la que está asociada la promoción:
 		\begin{itemize}
 			\item Contract Nr: número de contrato asociado a la cuenta.
 			\item Account Id: identificador de la cuenta.
-			\item Account Identity Card: número del documento de identificación de la cuenta (NIF, NIE,\dots).
+			\item Account Identity Card: número del documento de identificación de la cuenta (NIF, NIE\dots).
 		\end{itemize}
 	\item Área Customer Data: en este área se definen los criterios de búsqueda del cliente del que depende la cuenta asociada a la promoción.
 		\begin{itemize}
 			\item Customer Id: identificador del cliente asociado a la cuenta.
-			\item Identity Card: número del documento de identificación del cliente asociado a la cuenta (NIF, NIE,\dots).
+			\item Identity Card: número del documento de identificación del cliente asociado a la cuenta (NIF, NIE\dots).
 		\end{itemize}
 	\item Área Paren Instance: en este área se definen los criterios de búsqueda de la entidad padre de la promoción. Para ello se selecciona el nivel de aplicación de la promoción a buscar. Se puede completar la búsqueda aportando información relativa a la entidad padre a la que está asociada la cuenta, para lo que se definen unos campos a cubrir. En función de si se ha seleccionado producto o servicio se muestran distintos campos:
 	\begin{itemize}
@@ -2077,8 +1958,7 @@ Se define un área de búsqueda en los que se definen los criterios de búsqueda
 Una vez cubiertos los criterios indicados se pulsará el botón \emph{Search}, que mostrará un panel emergente con el listado de los registros encontrados para las promociones que cumplan los criterios de búsqueda especificados. Seleccionaremos el elemento sobre el que queramos operar pulsando el botón amarillo de la columna \emph{Show Historic}. Se mostrará el área de históricos de la entidad con los distintos registros de histórico existentes.
 
 
-\underline{\textsl{\textbf{Crear nueva promoción}}}\newline
-Esta operación sólo está habilitada para usuarios con permisos de edición.
+\item[\underline{\textsl{\textbf{Crear nueva promoción}}}] Esta operación sólo está habilitada para usuarios con permisos de edición.
 Para crear una nueva servicio se pulsará el botón \textit{New Data} situado en el área \emph{Create New Fee} en la parte superior derecha de la ventana. Aparecerá una ventana emergente que mostrará dos partes diferenciadas. Un área superior denominada \emph{Search Parent Data} minimizada correspondiente a la jerarquía de la entidad producto o servicio asociada a la promoción a crear y una parte inferior que se corresponde con los datos de la instancia de la promoción.
 
 Si sabemos el id de la entidad a la que vamos a asociar la promoción la especificaremos en el área de texto \emph{Parent Id}. En caso de no saber el id procederemos a realizar la correspondiente búsqueda en el área  \emph{Search Parent Data}. Para ello desplegaremos ese área pulsando sobre \emph{Search Parent Data} y procederemos a cubrir alguno de los campos del formulario del apartado \emph{Search Parent Data} de forma análoga a lo realizado para especificar los criterios de búsquda de la promoción y pulsaremos el botón \emph{Search}. Aparecerá un listado con todos los productos o servicios (en función del nivel de aplicación seleccionado) resultado de la búsqueda. Seleccionaremos el registro deseado y pulsaremos el botón amarillo de la columna \emph{Select} correspondiente. Se cargará la información correspondiente en el apartado \emph{Search Parent Data}, así como los datos de \emph{Application Level} y \emph{Parent Id} del área de datos de la instancia de la promoción a crear.
@@ -2097,58 +1977,59 @@ A continuación cubriremos el resto de los datos correspondientes a la promoció
 \end{itemize}
 
 
-\begin{figure}[H]
+\begin{figure}
   \centering
-  \begin{subfigure}[c]{0.4\textwidth}
+  \begin{subfigure}[b]{0.35\textwidth}
     \includegraphics[width=\textwidth]{imaxes/formulario-alta-promocion-01.png}
-    \caption{Detalle del formulario de alta de promoción sin el área de \emph{Search Parent Data} desplegado}
+    \caption{Sin el área de \emph{Search Parent Data} desplegada}
     \label{fig:formulario-alta-promocion-01}
   \end{subfigure}
-  \hspace{0.1\textwidth}
-  \begin{subfigure}[c]{0.4\textwidth}
+%  \hspace{0.1\textwidth}
+  \begin{subfigure}[b]{0.64\textwidth}
     \includegraphics[width=\textwidth,height=3cm]{imaxes/formulario-alta-promocion-02.png}
-    \caption{Detalle del formulario de alta de promoción con el área de \emph{Search Parent Data} desplegado}
+    \caption{Con el área de \emph{Search Parent Data} desplegada}
     \label{fig:formulario-alta-promocion-02}
   \end{subfigure}
   \caption{Detalles del formulario de alta de promoción}
-  \label{fig:parametrizacion}
+  \label{fig:alta-promocion}
 \end{figure}
 
 
-Una vez finaliza la introducción de datos se pulsará el botón \emph{OK} que confirma la operación del formulario de creación. Si todo es correcto se registra la promoción en el sistema y se muestran los datos dla promoción creado la pantalla de visualización de la entidad.
+Una vez finaliza la introducción de datos se pulsará el botón \emph{OK} que confirma la operación del formulario de creación. Si todo es correcto se registra la promoción en el sistema y se muestran los datos de la promoción creado la pantalla de visualización de la entidad.
 
-Por defecto la fecha de Activación dla promoción no se cubre, por lo que si queremos activar la promoción deberemos especificarla manualmente a través de la edición del registro dla promoción creada.
+Por defecto la fecha de Activación de la promoción no se cubre, por lo que si queremos activar la promoción deberemos especificarla manualmente a través de la edición del registro de la promoción creada.
 
+La \figurename~\ref{fig:alta-promocion} muestra dos detalles del formulario para añadir una nueva promoción, con y sin el \emph{Search Parent Data} desplegado.
 
-\underline{\textsl{\textbf{Editar registro de histórico de servicio}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
-Para editar un registro de histórico se seleccionará el registro deseado del listado de históricos de la entidad y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas teniendo en servicio los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}.
+\item[\underline{\textsl{\textbf{Editar registro de histórico de servicio}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
+Para editar un registro de histórico se seleccionará el registro deseado del listado de históricos de la entidad y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas teniendo en servicio los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}).
 
-Al igual que para las entidades con históricos vistas en la sección del catálogo del sistema, si se cambia el estado de una promoción a cancelado, este cambio de estado se propagará a todos los registros posteriores al que cambiamos. Además se establecerá como fecha de cancelación la fecha en la que se realiza dicho cambio, propagándose ese dato por todos los registros de histórico dla promoción, no sólo los que están a continuación del registro al que se le cambió el estado a cancelado.
+Al igual que para las entidades con históricos vistas en la sección del catálogo del sistema, si se cambia el estado de una promoción a cancelado, este cambio de estado se propagará a todos los registros posteriores al que cambiamos. Además se establecerá como fecha de cancelación la fecha en la que se realiza dicho cambio, propagándose ese dato por todos los registros de histórico de la promoción, no sólo los que están a continuación del registro al que se le cambió el estado a cancelado.
 
-Esta propagación de la fecha de cancelación por todos los registros del histórico  también ocurre si se modifica dicha fecha. Lo mismo ocurre si se cambia la fecha de activación dla promoción.
+Esta propagación de la fecha de cancelación por todos los registros del histórico  también ocurre si se modifica dicha fecha. Lo mismo ocurre si se cambia la fecha de activación de la promoción.
 
-\underline{\textsl{\textbf{Añadir registro de histórico a una promoción}}}\newline
-Esta operación sólo está disponible para usuarios con permisos de edición.
-Para añadir un nuevo registro de histórico sobre la promoción se seleccionará del listado el registro en el que se ubicará el nuevo registro a añadir y se pulsará el botón añadir de la columna \textit{ADD ROW} correspondiente. Aparecerá una nueva ventana emergente como la que se muestra en la operación de creación sin el área de búsqueda \emph{Parent Data} y con los campos cubiertos con la información del registro sobre el que se va a añadir el nuevo registro y se realizán las moficaciones oportunas sobre los mismos teniendo en servicio los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}.
+\item[\underline{\textsl{\textbf{Añadir registro de histórico a una promoción}}}] Esta operación sólo está disponible para usuarios con permisos de edición.
+Para añadir un nuevo registro de histórico sobre la promoción se seleccionará del listado el registro en el que se ubicará el nuevo registro a añadir y se pulsará el botón añadir de la columna \textit{ADD ROW} correspondiente. Aparecerá una nueva ventana emergente como la que se muestra en la operación de creación sin el área de búsqueda \emph{Parent Data} y con los campos cubiertos con la información del registro sobre el que se va a añadir el nuevo registro y se realizán las moficaciones oportunas sobre los mismos teniendo en servicio los criterios de fechas establecidos (definidos en la sección \ref{sub:histórico-conceptos} de la página \pageref{sub:histórico-conceptos}).
+
+La \figurename~\ref{fig:nuevo-historico-promo} muestra un detalle del formulario para añadir un nuevo registro al histórico de una promoción:
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.70\textwidth]{imaxes/nuevo-historico-promocion.png}
+  \includegraphics[width=0.45\textwidth]{imaxes/nuevo-historico-promocion.png}
   \caption{Detalle del formulario para añadir un nuevo registro de histórico de promoción}
-  \label{fig:nuevo-historico-promocin}
+  \label{fig:nuevo-historico-promo}
 \end{figure}
 
 
 
-\underline{\textsl{\textbf{Borrar registro de histórico dla promoción}}}\newline
+\item[\underline{\textsl{\textbf{Borrar registro de histórico de la promoción}}}]
 Esta operación sólo está disponible para usuarios con permisos de edición.
-Para borrar un registro de histórico dla promoción se seleccionará del listado el registro a borrar y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.\newline
+Para borrar un registro de histórico de la promoción se seleccionará del listado el registro a borrar y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.
 
-\underline{\textsl{\textbf{Borrar la promoción}}}\newline
+\item[\underline{\textsl{\textbf{Borrar la promoción}}}]
 Esta operación sólo está disponible para usuarios con permisos de edición.
-Para borrar completamente una promoción se deben borrar uno a uno todos los registros de histórico dla promoción según lo indicado en el punto anterior. 
-
+Para borrar completamente una promoción se deben borrar uno a uno todos los registros de histórico de la promoción según lo indicado en el punto anterior. 
+\end{description}
 
 
 
@@ -2163,44 +2044,43 @@ Al acceder a esta pantalla se muestra un área de búsqueda, similar a las vista
 		\begin{itemize}
 			\item Contract Nr: número de contrato de la cuenta.
 			\item Account Id: identificador de la cuenta.
-			\item Account Identity Card: número del documento de identificación de la cuenta (NIF, NIE,\dots).
+			\item Account Identity Card: número del documento de identificación de la cuenta (NIF, NIE\dots).
 		\end{itemize}
 	\item Área Customer Data: en este área se definen los criterios de búsqueda del cliente.
 		\begin{itemize}
 			\item Customer Id: identificador del cliente.
-			\item Identity Card: número del documento de identificación del cliente (NIF, NIE,\dots).
+			\item Identity Card: número del documento de identificación del cliente (NIF, NIE\dots).
 		\end{itemize}
 	\item Área Product Data: en este área se definen los criterios de búsqueda de alguno de los productos contratados por el cliente, para lo que se define el campo \emph{Product Id} correspondiente al identificador del producto.
 	\item Área Service Data: en este área se definen los criterios de búsqueda de alguno de los servicios contratados por el cliente, para lo que se define el campo Service Nr: número del servicio a buscar.
 	\item Área Search Date: fecha de referencia de búsqueda. Se obtendrá como resultado el registro de histórico en el que esté comprendida dicha fecha. Este campo es obligatorio para realizar la búsqueda.
 \end{itemize}
 
-Una vez cubiertos los criterios indicados se pulsará el botón \emph{Search}. Si existen clientes para los criterios definidos se mostrará un recuadro debajo del área \emph{Search Criteria} con un icono de usuario, tal y como se muestra en la figura \ref{fig:vista-jerarquia-01} de la página \pageref{fig:vista-jerarquia-01}:
+Una vez cubiertos los criterios indicados se pulsará el botón \emph{Search}. Si existen clientes para los criterios definidos se mostrará un recuadro debajo del área \emph{Search Criteria} con un icono de usuario, tal y como se muestra en la \figurename~\ref{fig:vista-jerarquia-01}.
 
-\begin{figure}[H]
+\begin{figure}
   \centering
-  \includegraphics[width=0.70\textwidth]{imaxes/vista-jerarquia-01.png}
+  \includegraphics[width=\textwidth]{imaxes/vista-jerarquia-01.png}
   \caption{Detalle del resultado de la búsqueda del cliente para mostrar la jerarquía de contrataciones}
   \label{fig:vista-jerarquia-01}
 \end{figure}
 
-Pulsando en el símbolo \large{$>$} se despliega el nodo raiz correspondiente al cliente, y se van mostrando por niveles las distintas entidades de contratación que dependen del cliente: cuentas, productos contratados asociados a las cuentas, servicios, cuotas y promociones asociadas a los productos y cuotas y promociones asociadas a los servicios,  tal y como se muestra en la figura \ref{fig:vista-jerarquia-desplegada} de la página \pageref{fig:vista-jerarquia-desplegada}:
+Pulsando en el símbolo \large{$>$} se despliega el nodo raiz correspondiente al cliente, y se van mostrando por niveles las distintas entidades de contratación que dependen del cliente: cuentas, productos contratados asociados a las cuentas, servicios, cuotas y promociones asociadas a los productos y cuotas y promociones asociadas a los servicios,  tal y como se muestra en la \figurename~\ref{fig:vista-jerarquia-desplegada}:
 
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=0.70\textwidth]{imaxes/vista-jerarquia-desplegada.png}
+  \includegraphics[width=0.35\textwidth]{imaxes/vista-jerarquia-desplegada.png}
   \caption{Detalle del resultado de la búsqueda del cliente para mostrar la jerarquía de contrataciones}
   \label{fig:vista-jerarquia-desplegada}
 \end{figure}
 
 
-Si pulsamos en cualquiera de los nodos se nos muestra la información relevante relativa a las distintas entidades que se situan sobre él en la jerarquía, así como la información de los históricos de la entidad correspondiente al nodo seleccionado, tal y como se puede ver en la figura \ref{fig:vista-jerarquia-desplegada} de la página \pageref{fig:vista-jerarquia-desplegada}:
+Si pulsamos en cualquiera de los nodos se nos muestra la información relevante relativa a las distintas entidades que se situan sobre él en la jerarquía, así como la información de los históricos de la entidad correspondiente al nodo seleccionado, tal y como se puede ver en la \figurename~\ref{fig:vista-jerarquia-desplegada}.
 
-
-\begin{figure}[H]
+\begin{figure}
   \centering
-  \includegraphics[width=0.70\textwidth]{imaxes/vista-jearquia-informacion-nodo.png}
+  \includegraphics[width=\textwidth]{imaxes/vista-jearquia-informacion-nodo.png}
   \caption{Detalle de la información mostrada al seleccionar un nodo del arbol de jerarquía de contrataciones del cliente}
   \label{fig:vista-jearquia-informacion-nodo}
 \end{figure}
