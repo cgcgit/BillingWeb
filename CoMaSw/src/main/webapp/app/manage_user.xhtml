@@ -349,55 +349,62 @@ button.ui-button {
 				cellpadding="5">
 				<p:outputLabel id="newNameLabel" value="Name: " />
 				<p:inputText id="newNameInput" label="Name"
-					value="#{manageUserController.selectedData.name}">
+					value="#{manageUserController.newData.name}">
+					<p:ajax event="valueChange" immediate="true" process="@this" />
 				</p:inputText>
 
 				<p:outputLabel id="newSurnameLabel" value="Surname: " />
 				<p:inputText id="newSurnameInput" label="Surname"
-					value="#{manageUserController.selectedData.surname}">
+					value="#{manageUserController.newData.surname}">
+					<p:ajax event="valueChange" immediate="true" process="@this" />
 				</p:inputText>
 
 				<p:outputLabel id="newEmailLabel" value="Email: " />
 				<p:inputText id="newEmailInput" label="Email"
-					value="#{manageUserController.selectedData.email}">
+					value="#{manageUserController.newData.email}">
+					<p:ajax event="valueChange" immediate="true" process="@this" />
 				</p:inputText>
 
 				<p:outputLabel id="newPhoneContactLabel" value="Phone Contact: " />
 				<p:inputText id="newPhoneContactInput" label="PhoneContact"
-					value="#{manageUserController.selectedData.phoneContact}">
+					value="#{manageUserController.newData.phoneContact}">
 				</p:inputText>
 
 				<p:outputLabel id="newUserCodeLabel" value="User Code: " />
 				<p:inputText id="newUserCodeInput" label="UserCode"
-					value="#{manageUserController.selectedData.userCode}">
+					value="#{manageUserController.newData.userCode}">
+					<p:ajax event="valueChange" immediate="true" process="@this" />
 				</p:inputText>
 
 				<p:outputLabel id="newPasswordLabel" value="Password:" />
 				<p:password id="newPassword" label="Password:" toggleMask="true"
 					redisplay="true"
-					value="#{manageUserController.selectedData.password}">
+					value="#{manageUserController.newData.password}">
+					<p:ajax event="valueChange" immediate="true" process="@this" />
 				</p:password>
 
 				<p:outputLabel id="newProfileLabel" value="Profile: " />
 				<p:selectOneMenu id="profileInput"
-					value="#{manageUserController.selectedData.profileId}"
+					value="#{manageUserController.newData.profileId}"
 					immediate="true">
 					<f:selectItems
 						value="#{manageUserController.populateProfileMenu()}"
 						id="selectItemsProfileInput" var="Profile"
-						itemValue="#{manageUserController.selectedData.profileId}">
+						itemValue="#{manageUserController.newData.profileId}">
 					</f:selectItems>
+					<p:ajax event="valueChange" immediate="true" process="@this" />
 				</p:selectOneMenu>
 
 				<p:outputLabel id="newActiveFlagLabel" value="Active? " />
 				<p:selectOneMenu id="activeFlagInput"
-					value="#{manageUserController.selectedData.active}"
+					value="#{manageUserController.newData.active}"
 					immediate="true">
 					<f:selectItems
 						value="#{manageUserController.populateBooleanMenu()}"
 						id="selectItemsActiveFlagInput" var="Active"
-						itemValue="#{manageUserController.selectedData.active}">
+						itemValue="#{manageUserController.newData.active}">
 					</f:selectItems>
+					<p:ajax event="valueChange" immediate="true" process="@this" />
 				</p:selectOneMenu>
 
 			</h:panelGrid>

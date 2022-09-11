@@ -1,6 +1,24 @@
-/**
- * 
- */
+/*
+    CoMaSw - Contract Management Software is a software developed for 
+    the final academic project of the Universidade da Coruña (UDC).
+
+    Copyright (C) 2022  Catarina García Cal (catarina.garcia.cal@udc.es)
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*/
 package com.comasw.viewController.catalog.relationType;
 
 import java.io.Serializable;
@@ -69,10 +87,67 @@ public class ProductFeeTypeController extends SimpleHistoricRelation<CtProductTy
 
 	@EJB
 	private StatusEJBLocal statusEJB;
+	
+	private CtProductType injectSelectedData;
+
+	/**
+	 * Selected candidate data
+	 */
+	
+	private CtFeeType injectSelectedCandidateData;
+
+	/**
+	 * Selected related data
+	 */
+	
+	private VwProductFeeType injectSelectedRelatedData;
+
 
 	// -------------------
 	// METHODS
 	// -------------------
+
+	/**
+	 * @return the injectSelectedData
+	 */
+	public CtProductType getInjectSelectedData() {
+		return injectSelectedData;
+	}
+
+	/**
+	 * @param injectSelectedData the injectSelectedData to set
+	 */
+	public void setInjectSelectedData(CtProductType injectSelectedData) {
+		this.injectSelectedData = injectSelectedData;
+	}
+
+	/**
+	 * @return the injectSelectedCandidateData
+	 */
+	public CtFeeType getInjectSelectedCandidateData() {
+		return injectSelectedCandidateData;
+	}
+
+	/**
+	 * @param injectSelectedCandidateData the injectSelectedCandidateData to set
+	 */
+	public void setInjectSelectedCandidateData(CtFeeType injectSelectedCandidateData) {
+		this.injectSelectedCandidateData = injectSelectedCandidateData;
+	}
+
+	/**
+	 * @return the injectSelectedRelatedData
+	 */
+	public VwProductFeeType getInjectSelectedRelatedData() {
+		return injectSelectedRelatedData;
+	}
+
+	/**
+	 * @param injectSelectedRelatedData the injectSelectedRelatedData to set
+	 */
+	public void setInjectSelectedRelatedData(VwProductFeeType injectSelectedRelatedData) {
+		this.injectSelectedRelatedData = injectSelectedRelatedData;
+	}
 
 	/**
 	 *
@@ -266,18 +341,19 @@ public class ProductFeeTypeController extends SimpleHistoricRelation<CtProductTy
 		DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent(DATA_TABLE_ID);
 
 		// Gets the selected data
-		this.setSelectedData((CtProductType) dataTable.getRowData());
+		this.setInjectSelectedData((CtProductType) dataTable.getRowData());
 
-		if (this.getSelectedData() == null | this.getSelectedData().getProductTypeId() == null
-				|| this.getSelectedData().getProductTypeId() == 0) {
+		if (this.getInjectSelectedData() == null | this.getInjectSelectedData().getProductTypeId() == null
+				|| this.getInjectSelectedData().getProductTypeId() == 0) {
 			messageDetail = "The product type is null";
 			logger.error(message + " - " + messageDetail);
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 
 		} else {			
-			this.getSelectedDataList().clear();
-			this.getSelectedDataList().add(this.getSelectedData());
+			//this.getSelectedDataList().clear();
+			//this.getSelectedDataList().add(this.getInjectSelectedData());
 			
+			this.setSelectedData(this.getInjectSelectedData());			
 			this.loadCandidateDataList();
 			this.loadRelatedDataList();
 			this.setShowDependentData(true);
@@ -286,7 +362,7 @@ public class ProductFeeTypeController extends SimpleHistoricRelation<CtProductTy
 			this.resetFilterRelatedDataTable();
 
 			messageDetail = "Shown data for product: ";
-			logger.info(message + " - " + messageDetail + this.getSelectedData().toString());
+			logger.info(message + " - " + messageDetail + this.getInjectSelectedData().toString());
 			this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
 					messageDetail + this.getSelectedData().getCode());
 
@@ -356,11 +432,11 @@ public class ProductFeeTypeController extends SimpleHistoricRelation<CtProductTy
 				facesContext.validationFailed();
 			} else {
 				// Gets selectedData
-				this.setSelectedCandidateData ((CtFeeType) mainDataTable.getSelection());
+				this.setInjectSelectedCandidateData((CtFeeType) mainDataTable.getSelection());
 
 				CtProdFeeType dataObject = new CtProdFeeType();
 				dataObject.setProductTypeId(this.getSelectedData().getProductTypeId());
-				dataObject.setFeeTypeId(this.getSelectedCandidateData().getFeeTypeId());
+				dataObject.setFeeTypeId(this.getInjectSelectedCandidateData().getFeeTypeId());
 				dataObject.setInputUser(this.loggedUser.getUserCode());
 				dataObject.setInputDate(LocalDateTime.now());
 				dataObject.setStatusId((Integer) statusEJB.findDataByCode(ACTIVE_STATUS_CODE).getStatusId());
@@ -389,7 +465,7 @@ public class ProductFeeTypeController extends SimpleHistoricRelation<CtProductTy
 					facesContext.validationFailed();
 				}
 
-				this.setSelectedCandidateData (null);
+				this.setInjectSelectedCandidateData (null);
 
 			}
 		}
@@ -425,10 +501,10 @@ public class ProductFeeTypeController extends SimpleHistoricRelation<CtProductTy
 				facesContext.validationFailed();
 			} else {
 				// Gets selectedData
-				this.setSelectedRelatedData((VwProductFeeType) mainDataTable.getSelection());
+				this.setInjectSelectedRelatedData((VwProductFeeType) mainDataTable.getSelection());
 
 				CtProdFeeType dataObject = productFeeTypeEJB
-						.findEntityRelationType(this.getSelectedRelatedData().getProdFeeTypeId());
+						.findEntityRelationType(this.getInjectSelectedRelatedData().getProdFeeTypeId());
 				try {
 					productFeeTypeEJB.deleteData(dataObject);
 					this.loadCandidateDataList();
@@ -454,7 +530,7 @@ public class ProductFeeTypeController extends SimpleHistoricRelation<CtProductTy
 					facesContext.validationFailed();
 				}
 
-				this.setSelectedRelatedData(null);
+				this.setInjectSelectedRelatedData(null);
 			}
 		}
 

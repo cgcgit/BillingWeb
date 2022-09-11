@@ -1,3 +1,25 @@
+/*
+    CoMaSw - Contract Management Software is a software developed for 
+    the final academic project of the Universidade da Coruña (UDC).
+
+    Copyright (C) 2022  Catarina García Cal (catarina.garcia.cal@udc.es)
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*/
+
 package com.comasw.ejb.instance;
 
 import static com.comasw.model.Sequences.SEQ_FEE_ID;
@@ -379,14 +401,14 @@ public class FeeEJB implements FeeEJBLocal {
 
 					query.addConditions(exists(create.selectOne().from(VW_FEE_INSTANCE).where(VW_FEE_INSTANCE.FEE_ID
 							.eq(p.FEE_ID).and(VW_FEE_INSTANCE.PARENT_INSTANCE_ID.eq(p.PARENT_INSTANCE_ID))
-							.and(p.START_DATE.lessOrEqual(VW_FEE_INSTANCE.SERVICE_END_DATE))
-							.and(p.END_DATE.lessOrEqual(VW_FEE_INSTANCE.SERVICE_START_DATE))
-							.and(p.START_DATE.lessOrEqual(VW_FEE_INSTANCE.PRODUCT_END_DATE))
-							.and(p.END_DATE.lessOrEqual(VW_FEE_INSTANCE.PRODUCT_START_DATE))
-							.and(p.START_DATE.lessOrEqual(VW_FEE_INSTANCE.ACCOUNT_END_DATE))
-							.and(p.END_DATE.lessOrEqual(VW_FEE_INSTANCE.ACCOUNT_START_DATE))
-							.and(p.START_DATE.lessOrEqual(VW_FEE_INSTANCE.CUSTOMER_END_DATE))
-							.and(p.END_DATE.lessOrEqual(VW_FEE_INSTANCE.CUSTOMER_START_DATE))
+							.and(p.START_DATE.lessOrEqual(coalesce(VW_FEE_INSTANCE.SERVICE_END_DATE, p.START_DATE)))
+							.and(p.END_DATE.lessOrEqual(coalesce(VW_FEE_INSTANCE.SERVICE_START_DATE, p.END_DATE)))
+							.and(p.START_DATE.lessOrEqual(coalesce(VW_FEE_INSTANCE.PRODUCT_END_DATE, p.START_DATE)))
+							.and(p.END_DATE.lessOrEqual(coalesce(VW_FEE_INSTANCE.PRODUCT_START_DATE, p.END_DATE)))
+							.and(p.START_DATE.lessOrEqual(coalesce(VW_FEE_INSTANCE.ACCOUNT_END_DATE, p.START_DATE)))
+							.and(p.END_DATE.lessOrEqual(coalesce(VW_FEE_INSTANCE.ACCOUNT_START_DATE,p.END_DATE)))
+							.and(p.START_DATE.lessOrEqual(coalesce(VW_FEE_INSTANCE.CUSTOMER_END_DATE, p.START_DATE)))
+							.and(p.END_DATE.lessOrEqual(coalesce(VW_FEE_INSTANCE.CUSTOMER_START_DATE, p.END_DATE)))
 							.and(VW_FEE_INSTANCE.APPLICATION_LEVEL_CODE
 									.eq(coalesce(val(applicatioLevelCodeAux), VW_FEE_INSTANCE.APPLICATION_LEVEL_CODE)))
 							.and(VW_FEE_INSTANCE.PRODUCT_TYPE_ID
@@ -460,10 +482,10 @@ public class FeeEJB implements FeeEJBLocal {
 
 				if (searchDate.isPresent()) {
 					query.addConditions((val(searchDate.get()).between(p.FEE_START_DATE, p.FEE_END_DATE))
-							.and(val(searchDate.get()).between(p.SERVICE_START_DATE, p.SERVICE_END_DATE))
-							.and(val(searchDate.get()).between(p.PRODUCT_START_DATE, p.PRODUCT_END_DATE))
-							.and(val(searchDate.get()).between(p.CUSTOMER_START_DATE, p.CUSTOMER_END_DATE))
-							.and(val(searchDate.get()).between(p.ACCOUNT_START_DATE, p.ACCOUNT_END_DATE)));
+							.and(val(searchDate.get()).between(coalesce(p.SERVICE_START_DATE, val(searchDate.get())), coalesce(p.SERVICE_END_DATE, val(searchDate.get()))))
+							.and(val(searchDate.get()).between(coalesce(p.PRODUCT_START_DATE, val(searchDate.get())), coalesce(p.PRODUCT_END_DATE,val(searchDate.get()))))
+							.and(val(searchDate.get()).between(coalesce(p.CUSTOMER_START_DATE, val(searchDate.get())), coalesce(p.CUSTOMER_END_DATE, val(searchDate.get()))))
+							.and(val(searchDate.get()).between(coalesce(p.ACCOUNT_START_DATE, val(searchDate.get())), coalesce(p.ACCOUNT_END_DATE,val(searchDate.get())))));
 				}
 
 				if (!includeCancelledData) {

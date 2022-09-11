@@ -94,6 +94,6 @@
 		<role-name>ADMIN</role-name>
 	</security-role>
 	<welcome-file-list>
-		<welcome-file>app/hierachy.xhtml</welcome-file>
+		<welcome-file>app/home_page.xhtml</welcome-file>
 	</welcome-file-list>
 </web-app>

@@ -1664,7 +1664,7 @@
 								</f:facet>
 								<f:facet id="facetActiveDateInputHist" name="input">
 									<p:inputMask id="activeDateInputHist"
-										valueChangeListener="#{productController.changeActiveDate}"
+										valueChangeListener="#{accountController.changeActiveDate}"
 										value="#{historicDataTable.activeDate}" mask="99/99/9999"
 										style="width:96%">
 										<f:converter
@@ -1803,8 +1803,8 @@
 										class="ui-button-success rounded-button"
 										oncomplete="if (!args.validationFailed) {#{updateCustomerTable} PF('searchCustomerListWidget').show('#{component.clientId}')}">
 									</p:commandButton>
-									<p:divider type="dashed" />
-									<p:selectBooleanCheckbox id="copyDataFromCustomer"
+									<p:divider type="dashed"  rendered="false"/>
+									<p:selectBooleanCheckbox id="copyDataFromCustomer" rendered="false" 
 										value="#{accountController.copyDataFromCustomerFlag}"
 										valueChangeListener="#{accountController.changeCopyFromCustomer}"
 										itemLabel="Copy Data from Customer to Account?">
@@ -2097,7 +2097,7 @@
 								<p:outputLabel id="newStatusLabel" value="Status:"
 									for="newStatusInput" />
 								<p:selectOneMenu id="newStatusInput" editable="false"
-									disabled="true" immediate="true"
+									immediate="true"
 									value="#{accountController.newData.statusId}">
 									<f:selectItems id="selectItemsStatusOutputNew"
 										itemDisabled="true" var="Status"

@@ -128,7 +128,7 @@
 									<p:ajax event="valueChange" immediate="true" process="@this" />
 								</p:selectOneMenu>
 
-								<p:selectBooleanCheckbox id="includeCancelledData"
+								<p:selectBooleanCheckbox id="includeCancelledData" rendered="false"
 									value="#{productController.includeCanceledDataFlag}"
 									itemLabel="Include Canceled Data?">
 									<p:ajax event="valueChange" immediate="true" process="@this" />
@@ -1623,7 +1623,7 @@
 					update="form:growlMessage"
 					onclick="PF('createNewDialogWidget').hide()"
 					class="ui-button-secondary" />
-				<p:commandButton id="createNewDialogClean"
+				<p:commandButton id="createNewDialogClean" rendered="false"
 					value="#{uiValue.cleanLabel}" icon="#{uiValue.cleanCircleIcon}"
 					update="createNewDialogPanelData form:growlMessage" process="@this"
 					class="ui-button-secondary">

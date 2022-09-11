@@ -1,3 +1,24 @@
+/*
+    CoMaSw - Contract Management Software is a software developed for 
+    the final academic project of the Universidade da Coruña (UDC).
+
+    Copyright (C) 2022  Catarina García Cal (catarina.garcia.cal@udc.es)
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*/
 package com.comasw.generalClass;
 
 import java.util.ArrayList;
@@ -9,13 +30,14 @@ import javax.faces.model.SelectItem;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 
-
+import com.comasw.ejb.catalog.type.BillCycleTypeEJBLocal;
 import com.comasw.ejb.parameterization.ApplicationLevelEJBLocal;
 import com.comasw.ejb.parameterization.ConsumptionClassEJBLocal;
 import com.comasw.ejb.parameterization.DiscountTypeEJBLocal;
 import com.comasw.ejb.parameterization.PaymentMethodEJBLocal;
 import com.comasw.ejb.parameterization.StatusEJBLocal;
 import com.comasw.ejb.parameterization.TaxTypeEJBLocal;
+import com.comasw.model.tables.pojos.CtBillCycleType;
 import com.comasw.model.tables.pojos.PtApplicationLevel;
 import com.comasw.model.tables.pojos.PtConsumptionClass;
 import com.comasw.model.tables.pojos.PtDiscountType;
@@ -45,6 +67,9 @@ public class BasicTypeWithLists<T> extends BasicType<T> {
 	
 	@EJB
 	private TaxTypeEJBLocal taxTypeEJB;
+	
+	@EJB
+	private BillCycleTypeEJBLocal billCycleTypeEJB;
 
 
 	/*
@@ -257,5 +282,48 @@ public class BasicTypeWithLists<T> extends BasicType<T> {
 		return selectItem;
 	}
 
+	public List<SelectItem> ordinaryBillCycleSelectItemsMenu() {
+		List<SelectItem> selectItem = new ArrayList<>();
+		List<CtBillCycleType> list = billCycleTypeEJB.findOrdinaryCycleType();
+
+		SelectItem nullItem = new SelectItem();
+		nullItem.setLabel("Select One... ");
+		nullItem.setValue(null);
+		selectItem.add(nullItem);
+
+		if (list.isEmpty()) {
+			logger.error("ERROR - Not find profile list");
+		} else {
+			for (CtBillCycleType p : list) {
+				SelectItem item = new SelectItem();
+				item.setLabel(p.getCode());
+				item.setValue(p.getBillCycleTypeId());
+				selectItem.add(item);
+			}
+		}
+		return selectItem;
+	}
+
+	public List<SelectItem> correctiveBillCycleSelectItemsMenu() {
+		List<SelectItem> selectItem = new ArrayList<>();
+		List<CtBillCycleType> list = billCycleTypeEJB.findCorrectiveCycleType();
+
+		SelectItem nullItem = new SelectItem();
+		nullItem.setLabel("Select One... ");
+		nullItem.setValue(null);
+		selectItem.add(nullItem);
+
+		if (list.isEmpty()) {
+			logger.error("ERROR - Not find profile list");
+		} else {
+			for (CtBillCycleType p : list) {
+				SelectItem item = new SelectItem();
+				item.setLabel(p.getCode());
+				item.setValue(p.getBillCycleTypeId());
+				selectItem.add(item);
+			}
+		}
+		return selectItem;
+	}
 	
 }

@@ -7,6 +7,7 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
+
 <f:metadata>
 	<f:viewAction id="loadData"
 		action="#{accountTypeController.loadDataList()}"
@@ -19,18 +20,29 @@
 </f:metadata>
 
 
+<style type="text/css">
+button.ui-button {
+	margin-right: .5rem;
+}
+</style>
+
+
 <title>#{pageTitle.accountTypePage}</title>
 
 <body>
+
 	<h:outputStylesheet library="webjars"
 		name="primeflex/2.0.0/primeflex.min.css" />
+
 
 	<header>
 		<ui:include id="mainTemplate"
 			src="/WEB-INF/templates/mainTemplate.xhtml">
-			<ui:param name="title" value="ACCOUNT TYPE" />
 		</ui:include>
 	</header>
+
+
+
 	<h:form id="form">
 		<p:growl id="growlMessage" showDetail="true" keepAlive="true">
 			<p:autoUpdate />
@@ -40,25 +52,25 @@
 
 		<!--  DATA TABLE -->
 
-		<p:remoteCommand id="remoteCommandUpdateDataTable"
-			name="updateDataTable" process="@this" update="form:dataTable" />
+		<p:remoteCommand id="remoteCommandUpdateMainTable"
+			name="updateMainTable" process="@this" update="form:dataTable" />
+
 
 		<p:dataTable id="dataTable" widgetVar="dataTableWidget"
 			var="dataTable" value="#{accountTypeController.dataList}"
-			filteredValue="#{accountTypeController.filteredDataList}"
+			editable="true" rowIndexVar="rowIndexMainTable" rows="10"
 			showGridlines="true" stripedRows="true" scrollable="true"
-			reflow="true" editable="true" rowIndexVar="rowIndexDataTable"
-			paginator="true" rows="10" size="small" paginatorPosition="bottom">
+			reflow="true" resizableColumns="true" size="small" paginator="true"
+			paginatorPosition="bottom">
 
 			<!--  DATA TABLE - HEADER -->
 			<f:facet name="header">
 				<p:toolbar>
 					<p:toolbarGroup>
-						<h3>ACCOUNT TYPE DATA TABLE</h3>
-						<p:divider layout="vertical">
-						</p:divider>
+						<h3>ACCOUNT TYPE TABLE</h3>
+						<p:divider layout="vertical" />
 						<p:commandButton id="createNewButton" value="New data"
-							icon="#{uiValue.addIcon}" ajax="true"
+							icon="#{uiValue.addIcon}"
 							actionListener="#{accountTypeController.pushCreateNewButton()}"
 							rendered="#{accountTypeController.canUserModify()}"
 							disabled="#{accountTypeController.editingMode}"
@@ -78,16 +90,16 @@
 			<p:ajax id="ajaxRowEditInit" event="rowEditInit"
 				listener="#{accountTypeController.onRowInit}"
 				disabled="#{accountTypeController.editingMode}"
-				update="form:growlMessage createNewButton  form:dataTable">
+				update="form:growlMessage">
 			</p:ajax>
 			<p:ajax id="ajaxRowEdit" event="rowEdit"
 				listener="#{accountTypeController.onRowEdit}"
 				update="form:growlMessage"
-				oncomplete="if (!args.validationFailed) {updateDataTable()}">
+				oncomplete="if (!args.validationFailed) {updateMainTable()}">
 			</p:ajax>
 			<p:ajax id="ajaxRowEditCancel" event="rowEditCancel"
 				listener="#{accountTypeController.onRowCancel}"
-				update="form:growlMessage" oncomplete="updateDataTable()">
+				update="form:growlMessage" oncomplete="updateMainTable()">
 			</p:ajax>
 
 
@@ -97,7 +109,7 @@
                                    text-align: center;
                                    font-size: 11px;
                                    width: 60px;    
-                                   overflow: hidden"
+                                   "
 				headerText="DEL ROW"
 				rendered="#{accountTypeController.canUserModify()}">
 				<p:commandButton id="deleteRowButton"
@@ -106,7 +118,7 @@
 					actionListener="#{accountTypeController.pushDeleteRowButton()}"
 					immediate="true" onclick="PF('deleteRowDialogWidget').show()"
 					disabled="#{accountTypeController.editingMode}"
-					oncomplete="if(!args.validationFailed) {updateDataTable()}"
+					oncomplete="if(!args.validationFailed) {updateMainTable()}"
 					rendered="#{accountTypeController.canUserModify()}">
 					<f:setPropertyActionListener value="#{dataTable}"
 						target="#{accountTypeController.selectedData}" />
@@ -357,94 +369,92 @@
 							<p:ajax event="change" immediate="true" update="statusOutput" />
 						</p:selectOneMenu>
 					</f:facet>
-				</p:cellEditor>
+				</p:cellEditor>			
 			</p:column>
 		</p:dataTable>
 
 		<!--  CREATE NEW DIALOG -->
-		<p:dialog id="createNewDialog" header="Create new Account Type"
+		<p:dialog id="createNewDialog" header="Create New Account Type"
 			showEffect="fade" responsive="true" widgetVar="createNewDialogWidget">
 
 			<h:panelGrid id="createNewDialogPanelData" columns="2"
 				cellpadding="5">
 				<p:outputLabel id="newCodeLabel" value="Code: " />
 				<p:inputText id="newCodeInput" label="Code"
-					value="#{accountTypeController.selectedData.code}">
+					value="#{accountTypeController.newData.code}">
 				</p:inputText>
 
 				<p:outputLabel id="newNameLabel" value="Name: " />
 				<p:inputText id="newNameInput" label="Name"
-					value="#{accountTypeController.selectedData.name}">
+					value="#{accountTypeController.newData.name}">
 				</p:inputText>
 
 				<p:outputLabel id="newDescriptionLabel" value="Description: " />
 				<p:inputText id="newDescriptionInput" label="Description"
-					value="#{accountTypeController.selectedData.description}">
+					value="#{accountTypeController.newData.description}">
 				</p:inputText>
 
 				<p:outputLabel id="newPaymentMethodLabel" value="Payment Method " />
 				<p:selectOneMenu id="paymentMethodInput"
-					value="#{accountTypeController.selectedData.paymentMethodId}"
+					value="#{accountTypeController.newData.paymentMethodId}"
 					immediate="true">
 					<f:selectItems
 						value="#{accountTypeController.paymentMethodSelectItems()}"
 						id="selectItemsPaymentMethodInput" var="PaymentMethod"
-						itemValue="#{accountTypeController.selectedData.paymentMethodId}">
+						itemValue="#{accountTypeController.newData.paymentMethodId}">
 					</f:selectItems>
 				</p:selectOneMenu>
 
 				<p:outputLabel id="newOrdinaryBillCycleLabel"
 					value="Ordinary Bill Cycle Type " />
 				<p:selectOneMenu id="ordinaryBillCycleInput"
-					value="#{accountTypeController.selectedData.ordinaryBillCycleTypeId}"
+					value="#{accountTypeController.newData.ordinaryBillCycleTypeId}"
 					immediate="true">
 					<f:selectItems
 						value="#{accountTypeController.ordinaryBillCycleSelectItemsMenu()}"
 						id="selectItemsOrdinaryBillCycleInput" var="OrdinaryBillCycle"
-						itemValue="#{accountTypeController.selectedData.ordinaryBillCycleTypeId}">
+						itemValue="#{accountTypeController.newData.ordinaryBillCycleTypeId}">
 					</f:selectItems>
 				</p:selectOneMenu>
 
 				<p:outputLabel id="newCorrectiveBillCycleLabel"
 					value="Corrective Bill Cycle Type " />
 				<p:selectOneMenu id="correctiveBillCycleInput"
-					value="#{accountTypeController.selectedData.correctiveBillCycleTypeId}"
+					value="#{accountTypeController.newData.correctiveBillCycleTypeId}"
 					immediate="true">
 					<f:selectItems
 						value="#{accountTypeController.correctiveBillCycleSelectItemsMenu()}"
 						id="selectItemsCorrectiveBillCycleInput" var="CorrectiveBillCycle"
-						itemValue="#{accountTypeController.selectedData.correctiveBillCycleTypeId}">
+						itemValue="#{accountTypeController.newData.correctiveBillCycleTypeId}">
 					</f:selectItems>
 				</p:selectOneMenu>
 
 				<p:outputLabel id="newStatusLabel" value="Status: " />
 				<p:selectOneMenu id="statusInput"
-					value="#{accountTypeController.selectedData.statusId}"
-					immediate="true">
-					<f:selectItems value="#{accountTypeController.statusCatalogSelectItems()}"
+					value="#{accountTypeController.newData.statusId}" immediate="true">
+					<f:selectItems
+						value="#{accountTypeController.statusCatalogSelectItems()}"
 						id="selectItemsStatusInput" var="Status"
-						itemValue="#{accountTypeController.selectedData.statusId}">
+						itemValue="#{accountTypeController.newData.statusId}">
 					</f:selectItems>
 				</p:selectOneMenu>
-
 
 			</h:panelGrid>
 			<h:panelGrid id="createNewDialogPanelButtons" columns="3"
 				cellpadding="5">
 				<p:commandButton id="createNewDialogConfirm"
-					value="#{uiValue.okLabel}" update="form:growlMessage"
+					value="#{uiValue.okLabel}"
 					actionListener="#{accountTypeController.pushConfirmButtonCreateNewDialog()}"
 					styleClass="ui-confirmdialog-yes" icon="#{uiValue.okCircleIcon}"
-					oncomplete="if (!args.validationFailed) {updateDataTable()}">
+					oncomplete="if (!args.validationFailed) {updateMainTable()}">
 				</p:commandButton>
 				<p:commandButton id="createNewDialogCancel"
 					value="#{uiValue.cancelLabel}" icon="#{uiValue.cancelCircleIcon}"
-					update="form:growlMessage"
 					onclick="PF('createNewDialogWidget').hide()"
 					class="ui-button-secondary" />
 				<p:commandButton id="createNewDialogClean"
-					value="#{uiValue.cleanLabel}" icon="#{uiValue.cleanCircleIcon}"
-					update="createNewDialogPanelData form:growlMessage" process="@this"
+					value="#{uiValue.cleanLabel}" icon="#{uiValue.cleanIcon}"
+					update="createNewDialogPanelData" process="@this"
 					class="ui-button-secondary">
 					<p:resetInput target="createNewDialogPanelData" />
 				</p:commandButton>
@@ -454,11 +464,12 @@
 		<!--  DELETE ROW DIALOG -->
 		<p:confirmDialog global="true" styleClass="change-position"
 			showEffect="fade" responsive="true" widgetVar="deleteRowDialogWidget"
-			header="DELETE ROW" message="Do you really want to delete this row?">
+			header="DELETE ROW"
+			message="Do you really want to delete this row? (The row will be inmediately deleted from the system)">
 			<p:commandButton id="deleteDialogConfirm" value="#{uiValue.okLabel}"
 				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
 				actionListener="#{accountTypeController.pushConfirmButtonDeleteDialog()}"
-				oncomplete="updateDataTable(); PF('deleteRowDialogWidget').hide()"
+				oncomplete="updateMainTable(); PF('deleteRowDialogWidget').hide()"
 				process="@this" icon="#{uiValue.okCircleIcon}" />
 			<p:commandButton id="deleteDialogCancel"
 				value="#{uiValue.cancelLabel}" styleClass="ui-confirmdialog-no"
@@ -471,3 +482,4 @@
 
 </body>
 </html>
+

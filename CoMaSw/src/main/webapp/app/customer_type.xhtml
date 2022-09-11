@@ -7,6 +7,7 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
+
 <f:metadata>
 	<f:viewAction id="loadData"
 		action="#{customerTypeController.loadDataList()}"
@@ -19,18 +20,29 @@
 </f:metadata>
 
 
-<title>#{pageTitle.customerTypePage}</title>
+<style type="text/css">
+button.ui-button {
+	margin-right: .5rem;
+}
+</style>
+
+
+<title>#{pageTitle.billCycleTypePage}</title>
 
 <body>
+
 	<h:outputStylesheet library="webjars"
 		name="primeflex/2.0.0/primeflex.min.css" />
+
 
 	<header>
 		<ui:include id="mainTemplate"
 			src="/WEB-INF/templates/mainTemplate.xhtml">
-			<ui:param name="title" value="CUSTOMER  TYPE" />
 		</ui:include>
 	</header>
+
+
+
 	<h:form id="form">
 		<p:growl id="growlMessage" showDetail="true" keepAlive="true">
 			<p:autoUpdate />
@@ -40,25 +52,25 @@
 
 		<!--  DATA TABLE -->
 
-		<p:remoteCommand id="remoteCommandUpdateDataTable"
-			name="updateDataTable" process="@this" update="form:dataTable" />
+		<p:remoteCommand id="remoteCommandUpdateMainTable"
+			name="updateMainTable" process="@this" update="form:dataTable" />
+
 
 		<p:dataTable id="dataTable" widgetVar="dataTableWidget"
 			var="dataTable" value="#{customerTypeController.dataList}"
-			filteredValue="#{customerTypeController.filteredDataList}"
+			editable="true" rowIndexVar="rowIndexMainTable" rows="10"
 			showGridlines="true" stripedRows="true" scrollable="true"
-			reflow="true" editable="true" rowIndexVar="rowIndexDataTable"
-			paginator="true" rows="10" size="small" paginatorPosition="bottom">
+			reflow="true" resizableColumns="true" size="small" paginator="true"
+			paginatorPosition="bottom">
 
 			<!--  DATA TABLE - HEADER -->
 			<f:facet name="header">
 				<p:toolbar>
 					<p:toolbarGroup>
-						<h3>CUSTOMER TYPE DATA TABLE</h3>
-						<p:divider layout="vertical">
-						</p:divider>
+						<h3>CUSTOMER TYPE TABLE</h3>
+						<p:divider layout="vertical" />
 						<p:commandButton id="createNewButton" value="New data"
-							icon="#{uiValue.addIcon}" ajax="true"
+							icon="#{uiValue.addIcon}"
 							actionListener="#{customerTypeController.pushCreateNewButton()}"
 							rendered="#{customerTypeController.canUserModify()}"
 							disabled="#{customerTypeController.editingMode}"
@@ -78,16 +90,16 @@
 			<p:ajax id="ajaxRowEditInit" event="rowEditInit"
 				listener="#{customerTypeController.onRowInit}"
 				disabled="#{customerTypeController.editingMode}"
-				update="form:growlMessage createNewButton  form:dataTable">
+				update="form:growlMessage">
 			</p:ajax>
 			<p:ajax id="ajaxRowEdit" event="rowEdit"
 				listener="#{customerTypeController.onRowEdit}"
 				update="form:growlMessage"
-				oncomplete="if (!args.validationFailed) {updateDataTable()}">
+				oncomplete="if (!args.validationFailed) {updateMainTable()}">
 			</p:ajax>
 			<p:ajax id="ajaxRowEditCancel" event="rowEditCancel"
 				listener="#{customerTypeController.onRowCancel}"
-				update="form:growlMessage" oncomplete="updateDataTable()">
+				update="form:growlMessage" oncomplete="updateMainTable()">
 			</p:ajax>
 
 
@@ -97,7 +109,7 @@
                                    text-align: center;
                                    font-size: 11px;
                                    width: 60px;    
-                                   overflow: hidden"
+                                   "
 				headerText="DEL ROW"
 				rendered="#{customerTypeController.canUserModify()}">
 				<p:commandButton id="deleteRowButton"
@@ -106,7 +118,7 @@
 					actionListener="#{customerTypeController.pushDeleteRowButton()}"
 					immediate="true" onclick="PF('deleteRowDialogWidget').show()"
 					disabled="#{customerTypeController.editingMode}"
-					oncomplete="if(!args.validationFailed) {updateDataTable()}"
+					oncomplete="if(!args.validationFailed) {updateMainTable()}"
 					rendered="#{customerTypeController.canUserModify()}">
 					<f:setPropertyActionListener value="#{dataTable}"
 						target="#{customerTypeController.selectedData}" />
@@ -228,7 +240,7 @@
 		</p:dataTable>
 
 		<!--  CREATE NEW DIALOG -->
-		<p:dialog id="createNewDialog" header="Create new Customer Type"
+		<p:dialog id="createNewDialog" header="Create New Customer Type"
 			showEffect="fade" responsive="true" widgetVar="createNewDialogWidget">
 
 			<h:panelGrid id="createNewDialogPanelData" columns="2"
@@ -264,19 +276,18 @@
 			<h:panelGrid id="createNewDialogPanelButtons" columns="3"
 				cellpadding="5">
 				<p:commandButton id="createNewDialogConfirm"
-					value="#{uiValue.okLabel}" update="form:growlMessage"
+					value="#{uiValue.okLabel}"
 					actionListener="#{customerTypeController.pushConfirmButtonCreateNewDialog()}"
 					styleClass="ui-confirmdialog-yes" icon="#{uiValue.okCircleIcon}"
-					oncomplete="if (!args.validationFailed) {updateDataTable()}">
+					oncomplete="if (!args.validationFailed) {updateMainTable()}">
 				</p:commandButton>
 				<p:commandButton id="createNewDialogCancel"
 					value="#{uiValue.cancelLabel}" icon="#{uiValue.cancelCircleIcon}"
-					update="form:growlMessage"
 					onclick="PF('createNewDialogWidget').hide()"
 					class="ui-button-secondary" />
 				<p:commandButton id="createNewDialogClean"
-					value="#{uiValue.cleanLabel}" icon="#{uiValue.cleanCircleIcon}"
-					update="createNewDialogPanelData form:growlMessage" process="@this"
+					value="#{uiValue.cleanLabel}" icon="#{uiValue.cleanIcon}"
+					update="createNewDialogPanelData" process="@this"
 					class="ui-button-secondary">
 					<p:resetInput target="createNewDialogPanelData" />
 				</p:commandButton>
@@ -286,11 +297,12 @@
 		<!--  DELETE ROW DIALOG -->
 		<p:confirmDialog global="true" styleClass="change-position"
 			showEffect="fade" responsive="true" widgetVar="deleteRowDialogWidget"
-			header="DELETE ROW" message="Do you really want to delete this row?">
+			header="DELETE ROW"
+			message="Do you really want to delete this row? (The row will be inmediately deleted from the system)">
 			<p:commandButton id="deleteDialogConfirm" value="#{uiValue.okLabel}"
 				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
 				actionListener="#{customerTypeController.pushConfirmButtonDeleteDialog()}"
-				oncomplete="updateDataTable(); PF('deleteRowDialogWidget').hide()"
+				oncomplete="updateMainTable(); PF('deleteRowDialogWidget').hide()"
 				process="@this" icon="#{uiValue.okCircleIcon}" />
 			<p:commandButton id="deleteDialogCancel"
 				value="#{uiValue.cancelLabel}" styleClass="ui-confirmdialog-no"
@@ -303,3 +315,4 @@
 
 </body>
 </html>
+

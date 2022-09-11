@@ -1,3 +1,25 @@
+/*
+    CoMaSw - Contract Management Software is a software developed for 
+    the final academic project of the Universidade da Coruña (UDC).
+
+    Copyright (C) 2022  Catarina García Cal (catarina.garcia.cal@udc.es)
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*/
+
 package com.comasw.viewController.instance;
 
 import java.io.Serializable;
@@ -674,7 +696,7 @@ public class CustomerController extends BasicInstance<VwCustomerInstance, ItCust
 					// this.setInjectSelectedData(object);
 
 					messageDetail = "Data saves succesfully";
-					logger.info("Create customer: " + this.getNewData().toString() + " - " + messageDetail);
+					logger.info("Create customer: " + this.getNewData().getCustomerId().toString() + " - " + messageDetail);
 					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
 							messageDetail);
 				}
@@ -725,8 +747,7 @@ public class CustomerController extends BasicInstance<VwCustomerInstance, ItCust
 					PrimeFaces.current().executeScript("PF('multipleAccordionPanelWidget').selectAll();");
 					messageDetail = "Shown data for customer: ";
 					logger.info(message + " - " + messageDetail + this.getNewData().toString());
-					createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
-							messageDetail + this.getNewData().getCustomerId());
+					//createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,	messageDetail + this.getNewData().getCustomerId());
 				}
 				PrimeFaces.current().executeScript("PF('createNewDialogWidget').hide();");
 

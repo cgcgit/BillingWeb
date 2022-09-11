@@ -1,6 +1,25 @@
-/**
- * 
- */
+/*
+    CoMaSw - Contract Management Software is a software developed for 
+    the final academic project of the Universidade da Coruña (UDC).
+
+    Copyright (C) 2022  Catarina García Cal (catarina.garcia.cal@udc.es)
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*/
+
 package com.comasw.viewController.instance;
 
 import java.io.Serializable;
@@ -1001,7 +1020,7 @@ public class HierarchyController extends ClassWithLists implements Serializable 
 											Optional.ofNullable(s.getServiceId()), Optional.empty(), Optional.empty(),
 											Optional.ofNullable(s.getProductId()), Optional.empty(), Optional.empty(),
 											Optional.ofNullable(s.getAccountId()), Optional.empty(), Optional.empty(),
-											Optional.ofNullable(s.getAccountId()), Optional.empty(), Optional.empty()));
+											Optional.ofNullable(s.getCustomerId()), Optional.empty(), Optional.empty()));
 							for (VwPromotionInstance ps : this.getPromotionServiceDataList()) {
 								TreeNode promoServNode = new DefaultTreeNode("promotionService", ps, servNode);
 							}
@@ -1027,7 +1046,7 @@ public class HierarchyController extends ClassWithLists implements Serializable 
 										Optional.empty(), Optional.empty(), Optional.empty(),
 										Optional.ofNullable(p.getProductId()), Optional.empty(), Optional.empty(),
 										Optional.ofNullable(p.getAccountId()), Optional.empty(), Optional.empty(),
-										Optional.ofNullable(p.getAccountId()), Optional.empty(), Optional.empty()));
+										Optional.ofNullable(p.getCustomerId()), Optional.empty(), Optional.empty()));
 						for (VwPromotionInstance pp : this.getPromotionProductDataList()) {
 							TreeNode promoProdNode = new DefaultTreeNode("promotionProduct", pp, prodNode);
 						}
@@ -1075,14 +1094,11 @@ public class HierarchyController extends ClassWithLists implements Serializable 
 
 	public void onNodeExpand(NodeExpandEvent event) {
 		// 
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Expanded", event.getTreeNode().toString());
-		FacesContext.getCurrentInstance().addMessage(null, message);
+		
 	}
 
 	public void onNodeCollapse(NodeCollapseEvent event) {
-		FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "Collapsed",
-				event.getTreeNode().toString());
-		FacesContext.getCurrentInstance().addMessage(null, message);
+		
 	}
 
 	public void onNodeSelect(NodeSelectEvent event) {

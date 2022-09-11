@@ -1325,7 +1325,7 @@
 								</f:facet>
 								<f:facet id="facetActiveDateInputHist" name="input">
 									<p:inputMask id="activeDateInputHist"
-										valueChangeListener="#{productController.changeActiveDate}"
+										valueChangeListener="#{customerController.changeActiveDate}"
 										value="#{historicDataTable.activeDate}" mask="99/99/9999"
 										style="width:96%">
 										<f:converter
@@ -1430,7 +1430,7 @@
 
 								<p:outputLabel id="newStatusLabel" value="Status:" />
 								<p:selectOneMenu id="newStatusInput" editable="false"
-									disabled="true" immediate="true"
+									immediate="true"
 									value="#{customerController.newData.statusId}">
 									<f:selectItems id="selectItemsStatusOutputNew"
 										itemDisabled="true" var="Status"

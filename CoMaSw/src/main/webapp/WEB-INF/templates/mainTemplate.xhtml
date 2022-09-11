@@ -64,16 +64,20 @@
 
 	<h:body id="mainTemplateBody">
 
-	<p:sidebar widgetVar="sidebar" position="top"  style="height:20%" >
+		<p:sidebar widgetVar="sidebar" position="top" style="height:20%">
 			<p />
-			<ui:insert id="topPanel" name="top">
-				<ui:insert id="topTemplate" name="top">
-					<ui:include id="includeApplicationMenu"
-						src="../includes/layout/applicationMenu.xhtml">
-					</ui:include>
+			<p:panelGrid columns="2" columnClasses="ui-grid-col-1,ui-grid-col-11"
+				layout="grid" style="border:0px none; background-color:transparent;">
+				<p:button icon="pi pi-angle-double-up" value="Hide menu"  styleClass="ui-button-outlined ui-button-secondary"
+					onclick="PF('sidebar').hide()" type="button" />
+				<ui:insert id="topPanel" name="top">
+					<ui:insert id="topTemplate" name="top">
+						<ui:include id="includeApplicationMenu"
+							src="../includes/layout/applicationMenu.xhtml">
+						</ui:include>
+					</ui:insert>
 				</ui:insert>
-			</ui:insert>
-
+			</p:panelGrid>
 		</p:sidebar>
 	</h:body>
 

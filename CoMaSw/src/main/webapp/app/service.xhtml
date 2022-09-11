@@ -147,7 +147,7 @@
 											itemValue="#{serviceController.searchServiceTypeId}" />
 										<p:ajax event="valueChange" immediate="true" process="@this" />
 									</p:selectOneMenu>
-									<p:selectBooleanCheckbox id="includeCancelledData"
+									<p:selectBooleanCheckbox id="includeCancelledData" rendered="false"
 										value="#{serviceController.includeCanceledDataFlag}"
 										itemLabel="Include Canceled Data?">
 										<p:ajax event="valueChange" immediate="true" process="@this" />
@@ -1828,16 +1828,18 @@
 						converterId="com.comasw.converter.localDateTimeConverter" />
 					<p:ajax event="change" update="newEndDateInput" />
 				</p:inputMask>
-				
+
 				<p:outputLabel id="newTaxTypeLabel" value="Tax Type: " />
 				<p:selectOneMenu id="taxTypeInput"
-					value="#{productController.newData.taxTypeId}" immediate="true">
+					value="#{serviceController.newData.taxTypeId}"
+					disabled="#{serviceController.fromAddingRow}" immediate="true">
 					<f:selectItems
-						value="#{productController.taxTypeSelectItems()}"
+						value="#{serviceController.taxTypeSelectItems()}"
 						id="selectItemsTaxTypeInput" var="TaxType"
-						itemValue="#{productController.newData.taxTypeId}">
+						itemValue="#{serviceController.newData.taxTypeId}">
 					</f:selectItems>
 				</p:selectOneMenu>
+				
 
 				<p:outputLabel id="newServiceTypeLabel" value="Service Type: " />
 				<p:selectOneMenu id="serviceTypeInput"
@@ -1894,7 +1896,7 @@
 					update="form:growlMessage"
 					onclick="PF('createNewDialogWidget').hide()"
 					class="ui-button-secondary" />
-				<p:commandButton id="createNewDialogClean"
+				<p:commandButton id="createNewDialogClean" rendered="false"
 					value="#{uiValue.cleanLabel}" icon="#{uiValue.cleanCircleIcon}"
 					update="createNewDialogPanelData form:growlMessage" process="@this"
 					class="ui-button-secondary">

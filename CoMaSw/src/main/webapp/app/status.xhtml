@@ -7,8 +7,10 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
+
 <f:metadata>
-	<f:viewAction id="loadData" action="#{statusController.loadDataList()}"
+	<f:viewAction id="loadData"
+		action="#{statusController.loadDataList()}"
 		phase="INVOKE_APPLICATION">
 	</f:viewAction>
 	<f:viewAction id="defaultControlVariables"
@@ -18,18 +20,29 @@
 </f:metadata>
 
 
+<style type="text/css">
+button.ui-button {
+	margin-right: .5rem;
+}
+</style>
+
+
 <title>#{pageTitle.statusPage}</title>
 
 <body>
+
 	<h:outputStylesheet library="webjars"
 		name="primeflex/2.0.0/primeflex.min.css" />
+
 
 	<header>
 		<ui:include id="mainTemplate"
 			src="/WEB-INF/templates/mainTemplate.xhtml">
-			<ui:param name="title" value="STATUS" />
 		</ui:include>
 	</header>
+
+
+
 	<h:form id="form">
 		<p:growl id="growlMessage" showDetail="true" keepAlive="true">
 			<p:autoUpdate />
@@ -39,27 +52,27 @@
 
 		<!--  DATA TABLE -->
 
-		<p:remoteCommand id="remoteCommandUpdateDataTable"
-			name="updateDataTable" process="@this" update="form:dataTable" />
+		<p:remoteCommand id="remoteCommandUpdateMainTable"
+			name="updateMainTable" process="@this" update="form:dataTable" />
+
 
 		<p:dataTable id="dataTable" widgetVar="dataTableWidget"
 			var="dataTable" value="#{statusController.dataList}"
-			filteredValue="#{statusController.filteredDataList}"
+			editable="true" rowIndexVar="rowIndexMainTable" rows="10"
 			showGridlines="true" stripedRows="true" scrollable="true"
-			reflow="true" editable="true" rowIndexVar="rowIndexDataTable"
-			paginator="true" rows="10" size="small" paginatorPosition="bottom">
+			reflow="true" resizableColumns="true" size="small" paginator="true"
+			paginatorPosition="bottom">
 
 			<!--  DATA TABLE - HEADER -->
 			<f:facet name="header">
 				<p:toolbar>
 					<p:toolbarGroup>
 						<h3>STATUS DATA TABLE</h3>
-						<p:divider layout="vertical">
-						</p:divider>
+						<p:divider layout="vertical" />
 						<p:commandButton id="createNewButton" value="New data"
-							icon="#{uiValue.addIcon}" ajax="true"
+							icon="#{uiValue.addIcon}"
 							actionListener="#{statusController.pushCreateNewButton()}"
-							rendered="#{statusController.adminPermissions()}"
+							rendered="#{statusController.canUserModify()}"
 							disabled="#{statusController.editingMode}"
 							update=":form:createNewDialogPanelData"
 							styleClass="ui-button-info" style="margin-right: .5rem">
@@ -77,15 +90,16 @@
 			<p:ajax id="ajaxRowEditInit" event="rowEditInit"
 				listener="#{statusController.onRowInit}"
 				disabled="#{statusController.editingMode}"
-				update="form:growlMessage createNewButton  form:dataTable">
+				update="form:growlMessage">
 			</p:ajax>
 			<p:ajax id="ajaxRowEdit" event="rowEdit"
-				listener="#{statusController.onRowEdit}" update="form:growlMessage"
-				oncomplete="if (!args.validationFailed) {updateDataTable()}">
+				listener="#{statusController.onRowEdit}"
+				update="form:growlMessage"
+				oncomplete="if (!args.validationFailed) {updateMainTable()}">
 			</p:ajax>
 			<p:ajax id="ajaxRowEditCancel" event="rowEditCancel"
 				listener="#{statusController.onRowCancel}"
-				update="form:growlMessage" oncomplete="updateDataTable()">
+				update="form:growlMessage" oncomplete="updateMainTable()">
 			</p:ajax>
 
 
@@ -95,16 +109,17 @@
                                    text-align: center;
                                    font-size: 11px;
                                    width: 60px;    
-                                   overflow: hidden"
-				headerText="DEL ROW" rendered="#{statusController.adminPermissions()}">
+                                   "
+				headerText="DEL ROW"
+				rendered="#{statusController.canUserModify()}">
 				<p:commandButton id="deleteRowButton"
 					class="ui-button-warning rounded-button"
 					icon="#{uiValue.deleteIcon}"
 					actionListener="#{statusController.pushDeleteRowButton()}"
 					immediate="true" onclick="PF('deleteRowDialogWidget').show()"
 					disabled="#{statusController.editingMode}"
-					oncomplete="if(!args.validationFailed) {updateDataTable()}"
-					rendered="#{statusController.adminPermissions()}">
+					oncomplete="if(!args.validationFailed) {updateMainTable()}"
+					rendered="#{statusController.canUserModify()}">
 					<f:setPropertyActionListener value="#{dataTable}"
 						target="#{statusController.selectedData}" />
 				</p:commandButton>
@@ -115,10 +130,11 @@
                                   font-size: 11px;
                                   width: 60px;    
                                   overflow: hidden"
-				headerText="EDIT ROW" rendered="#{statusController.adminPermissions()}">
+				headerText="EDIT ROW"
+				rendered="#{statusController.canUserModify()}">
 				<p:rowEditor id="editRowButton" editTitle="Edit Row"
 					cancelTitle="Cancel Edit" saveTitle="Save Row"
-					rendered="#{statusController.adminPermissions()}">
+					rendered="#{statusController.canUserModify()}">
 				</p:rowEditor>
 			</p:column>
 
@@ -253,7 +269,6 @@
 				</p:cellEditor>
 			</p:column>
 
-
 		</p:dataTable>
 
 		<!--  CREATE NEW DIALOG -->
@@ -294,39 +309,18 @@
 						itemValue="#{statusController.selectedData.instance}">
 					</f:selectItems>
 				</p:selectOneMenu>
-				
-				
-			</h:panelGrid>
-			<h:panelGrid id="createNewDialogPanelButtons" columns="3"
-				cellpadding="5">
-				<p:commandButton id="createNewDialogConfirm"
-					value="#{uiValue.okLabel}" update="form:growlMessage"
-					actionListener="#{statusController.pushConfirmButtonCreateNewDialog()}"
-					styleClass="ui-confirmdialog-yes" icon="#{uiValue.okCircleIcon}"
-					oncomplete="if (!args.validationFailed) {updateDataTable()}">
-				</p:commandButton>
-				<p:commandButton id="createNewDialogCancel"
-					value="#{uiValue.cancelLabel}" icon="#{uiValue.cancelCircleIcon}"
-					update="form:growlMessage"
-					onclick="PF('createNewDialogWidget').hide()"
-					class="ui-button-secondary" />
-				<p:commandButton id="createNewDialogClean"
-					value="#{uiValue.cleanLabel}" icon="#{uiValue.cleanCircleIcon}"
-					update="createNewDialogPanelData form:growlMessage" process="@this"
-					class="ui-button-secondary">
-					<p:resetInput target="createNewDialogPanelData" />
-				</p:commandButton>
 			</h:panelGrid>
 		</p:dialog>
 
 		<!--  DELETE ROW DIALOG -->
 		<p:confirmDialog global="true" styleClass="change-position"
 			showEffect="fade" responsive="true" widgetVar="deleteRowDialogWidget"
-			header="DELETE ROW" message="Do you really want to delete this row?">
+			header="DELETE ROW"
+			message="Do you really want to delete this row? (The row will be inmediately deleted from the system)">
 			<p:commandButton id="deleteDialogConfirm" value="#{uiValue.okLabel}"
 				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
 				actionListener="#{statusController.pushConfirmButtonDeleteDialog()}"
-				oncomplete="updateDataTable(); PF('deleteRowDialogWidget').hide()"
+				oncomplete="updateMainTable(); PF('deleteRowDialogWidget').hide()"
 				process="@this" icon="#{uiValue.okCircleIcon}" />
 			<p:commandButton id="deleteDialogCancel"
 				value="#{uiValue.cancelLabel}" styleClass="ui-confirmdialog-no"
@@ -339,3 +333,4 @@
 
 </body>
 </html>
+

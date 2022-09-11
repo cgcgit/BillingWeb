@@ -7,6 +7,7 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
+
 <f:metadata>
 	<f:viewAction id="loadData"
 		action="#{paymentMethodController.loadDataList()}"
@@ -19,18 +20,29 @@
 </f:metadata>
 
 
+<style type="text/css">
+button.ui-button {
+	margin-right: .5rem;
+}
+</style>
+
+
 <title>#{pageTitle.paymentMethodPage}</title>
 
 <body>
+
 	<h:outputStylesheet library="webjars"
 		name="primeflex/2.0.0/primeflex.min.css" />
+
 
 	<header>
 		<ui:include id="mainTemplate"
 			src="/WEB-INF/templates/mainTemplate.xhtml">
-			<ui:param name="title" value="PAYMENT METHOD" />
 		</ui:include>
 	</header>
+
+
+
 	<h:form id="form">
 		<p:growl id="growlMessage" showDetail="true" keepAlive="true">
 			<p:autoUpdate />
@@ -40,27 +52,27 @@
 
 		<!--  DATA TABLE -->
 
-		<p:remoteCommand id="remoteCommandUpdateDataTable"
-			name="updateDataTable" process="@this" update="form:dataTable" />
+		<p:remoteCommand id="remoteCommandUpdateMainTable"
+			name="updateMainTable" process="@this" update="form:dataTable" />
+
 
 		<p:dataTable id="dataTable" widgetVar="dataTableWidget"
 			var="dataTable" value="#{paymentMethodController.dataList}"
-			filteredValue="#{paymentMethodController.filteredDataList}"
+			editable="true" rowIndexVar="rowIndexMainTable" rows="10"
 			showGridlines="true" stripedRows="true" scrollable="true"
-			reflow="true" editable="true" rowIndexVar="rowIndexDataTable"
-			paginator="true" rows="10" size="small" paginatorPosition="bottom">
+			reflow="true" resizableColumns="true" size="small" paginator="true"
+			paginatorPosition="bottom">
 
 			<!--  DATA TABLE - HEADER -->
 			<f:facet name="header">
 				<p:toolbar>
 					<p:toolbarGroup>
-						<h3>PAYMENT METHOD DATA TABLE</h3>
-						<p:divider layout="vertical">
-						</p:divider>
+						<h3>PAYMENT METHOD TABLE</h3>
+						<p:divider layout="vertical" />
 						<p:commandButton id="createNewButton" value="New data"
-							icon="#{uiValue.addIcon}" ajax="true"
+							icon="#{uiValue.addIcon}"
 							actionListener="#{paymentMethodController.pushCreateNewButton()}"
-							rendered="#{paymentMethodController.adminPermissions()}"
+							rendered="#{paymentMethodController.canUserModify()}"
 							disabled="#{paymentMethodController.editingMode}"
 							update=":form:createNewDialogPanelData"
 							styleClass="ui-button-info" style="margin-right: .5rem">
@@ -78,16 +90,16 @@
 			<p:ajax id="ajaxRowEditInit" event="rowEditInit"
 				listener="#{paymentMethodController.onRowInit}"
 				disabled="#{paymentMethodController.editingMode}"
-				update="form:growlMessage createNewButton  form:dataTable">
+				update="form:growlMessage">
 			</p:ajax>
 			<p:ajax id="ajaxRowEdit" event="rowEdit"
 				listener="#{paymentMethodController.onRowEdit}"
 				update="form:growlMessage"
-				oncomplete="if (!args.validationFailed) {updateDataTable()}">
+				oncomplete="if (!args.validationFailed) {updateMainTable()}">
 			</p:ajax>
 			<p:ajax id="ajaxRowEditCancel" event="rowEditCancel"
 				listener="#{paymentMethodController.onRowCancel}"
-				update="form:growlMessage" oncomplete="updateDataTable()">
+				update="form:growlMessage" oncomplete="updateMainTable()">
 			</p:ajax>
 
 
@@ -97,17 +109,17 @@
                                    text-align: center;
                                    font-size: 11px;
                                    width: 60px;    
-                                   overflow: hidden"
+                                   "
 				headerText="DEL ROW"
-				rendered="#{paymentMethodController.adminPermissions()}">
+				rendered="#{paymentMethodController.canUserModify()}">
 				<p:commandButton id="deleteRowButton"
 					class="ui-button-warning rounded-button"
 					icon="#{uiValue.deleteIcon}"
 					actionListener="#{paymentMethodController.pushDeleteRowButton()}"
 					immediate="true" onclick="PF('deleteRowDialogWidget').show()"
 					disabled="#{paymentMethodController.editingMode}"
-					oncomplete="if(!args.validationFailed) {updateDataTable()}"
-					rendered="#{paymentMethodController.adminPermissions()}">
+					oncomplete="if(!args.validationFailed) {updateMainTable()}"
+					rendered="#{paymentMethodController.canUserModify()}">
 					<f:setPropertyActionListener value="#{dataTable}"
 						target="#{paymentMethodController.selectedData}" />
 				</p:commandButton>
@@ -119,16 +131,15 @@
                                   width: 60px;    
                                   overflow: hidden"
 				headerText="EDIT ROW"
-				rendered="#{paymentMethodController.adminPermissions()}">
+				rendered="#{paymentMethodController.canUserModify()}">
 				<p:rowEditor id="editRowButton" editTitle="Edit Row"
 					cancelTitle="Cancel Edit" saveTitle="Save Row"
-					rendered="#{paymentMethodController.adminPermissions()}">
+					rendered="#{paymentMethodController.canUserModify()}">
 				</p:rowEditor>
 			</p:column>
 
 
 			<!--  DATA TABLE - DATA COLUMNS -->
-
 
 			<p:column id="code"
 				style="font-family:Arial Black;
@@ -187,7 +198,7 @@
 		</p:dataTable>
 
 		<!--  CREATE NEW DIALOG -->
-		<p:dialog id="createNewDialog" header="Create new Application Level"
+		<p:dialog id="createNewDialog" header="Create New Payment Method"
 			showEffect="fade" responsive="true" widgetVar="createNewDialogWidget">
 
 			<h:panelGrid id="createNewDialogPanelData" columns="2"
@@ -210,19 +221,18 @@
 			<h:panelGrid id="createNewDialogPanelButtons" columns="3"
 				cellpadding="5">
 				<p:commandButton id="createNewDialogConfirm"
-					value="#{uiValue.okLabel}" update="form:growlMessage"
+					value="#{uiValue.okLabel}"
 					actionListener="#{paymentMethodController.pushConfirmButtonCreateNewDialog()}"
 					styleClass="ui-confirmdialog-yes" icon="#{uiValue.okCircleIcon}"
-					oncomplete="if (!args.validationFailed) {updateDataTable()}">
+					oncomplete="if (!args.validationFailed) {updateMainTable()}">
 				</p:commandButton>
 				<p:commandButton id="createNewDialogCancel"
 					value="#{uiValue.cancelLabel}" icon="#{uiValue.cancelCircleIcon}"
-					update="form:growlMessage"
 					onclick="PF('createNewDialogWidget').hide()"
 					class="ui-button-secondary" />
 				<p:commandButton id="createNewDialogClean"
-					value="#{uiValue.cleanLabel}" icon="#{uiValue.cleanCircleIcon}"
-					update="createNewDialogPanelData form:growlMessage" process="@this"
+					value="#{uiValue.cleanLabel}" icon="#{uiValue.cleanIcon}"
+					update="createNewDialogPanelData" process="@this"
 					class="ui-button-secondary">
 					<p:resetInput target="createNewDialogPanelData" />
 				</p:commandButton>
@@ -232,11 +242,12 @@
 		<!--  DELETE ROW DIALOG -->
 		<p:confirmDialog global="true" styleClass="change-position"
 			showEffect="fade" responsive="true" widgetVar="deleteRowDialogWidget"
-			header="DELETE ROW" message="Do you really want to delete this row?">
+			header="DELETE ROW"
+			message="Do you really want to delete this row? (The row will be inmediately deleted from the system)">
 			<p:commandButton id="deleteDialogConfirm" value="#{uiValue.okLabel}"
 				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
 				actionListener="#{paymentMethodController.pushConfirmButtonDeleteDialog()}"
-				oncomplete="updateDataTable(); PF('deleteRowDialogWidget').hide()"
+				oncomplete="updateMainTable(); PF('deleteRowDialogWidget').hide()"
 				process="@this" icon="#{uiValue.okCircleIcon}" />
 			<p:commandButton id="deleteDialogCancel"
 				value="#{uiValue.cancelLabel}" styleClass="ui-confirmdialog-no"
@@ -249,3 +260,4 @@
 
 </body>
 </html>
+

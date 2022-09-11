@@ -16,15 +16,14 @@
 			src="/WEB-INF/templates/mainTemplate.xhtml">
 		</ui:include>
 	</header>
-	<h1>WELCOME TO THE CoMaSw (ContractManagementSofware)
-		APPLICATION!!</h1>
-	<p>Logged-in as #{request.userPrincipal.name}</p>
+	<h1>HELLO #{request.userPrincipal.name}</h1>
+	<p></p>
+	<h2>WELCOME TO THE CoMaSw (ContractManagementSofware)
+		APPLICATION!!</h2>
+	<p>This application will allow you to carry out the management of the service catalog and as well as product contracts. </p>
+	<p>Pressing the menu button will take you to the different elements of the application. </p>
 
-	<h:form>
-		<p:commandButton id="submit" update="@form" value="logout"
-			action="#{logoutController.submit()}">
-		</p:commandButton>
-	</h:form>
+
 
 
 </body>

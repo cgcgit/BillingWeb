@@ -7,6 +7,7 @@
 	xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
 	xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
+
 <f:metadata>
 	<f:viewAction id="loadData"
 		action="#{contractController.loadDataList()}"
@@ -19,18 +20,29 @@
 </f:metadata>
 
 
+<style type="text/css">
+button.ui-button {
+	margin-right: .5rem;
+}
+</style>
+
+
 <title>#{pageTitle.contractPage}</title>
 
 <body>
+
 	<h:outputStylesheet library="webjars"
 		name="primeflex/2.0.0/primeflex.min.css" />
+
 
 	<header>
 		<ui:include id="mainTemplate"
 			src="/WEB-INF/templates/mainTemplate.xhtml">
-			<ui:param name="title" value="CONTRACT" />
 		</ui:include>
 	</header>
+
+
+
 	<h:form id="form">
 		<p:growl id="growlMessage" showDetail="true" keepAlive="true">
 			<p:autoUpdate />
@@ -40,39 +52,30 @@
 
 		<!--  DATA TABLE -->
 
-		<p:remoteCommand id="remoteCommandUpdateDataTable"
-			name="updateDataTable" process="@this"
-			update="form:dataTable" />
+		<p:remoteCommand id="remoteCommandUpdateMainTable"
+			name="updateMainTable" process="@this" update="form:dataTable" />
 
-		
-
-		<p:remoteCommand id="remoteCommandUpdateCreateConfirmMessage"
-			name="updateCreateConfirmMessage" process="@this"
-			update="form:confirmCreateMessageDialog" />
-			
 
 		<p:dataTable id="dataTable" widgetVar="dataTableWidget"
 			var="dataTable" value="#{contractController.dataList}"
-			filteredValue="#{contractController.filteredDataList}"
+			editable="true" rowIndexVar="rowIndexMainTable" rows="10"
 			showGridlines="true" stripedRows="true" scrollable="true"
-			reflow="true" editable="true" rowIndexVar="rowIndexDataTable"
-			paginator="true" rows="10" size="small" paginatorPosition="bottom">
+			reflow="true" resizableColumns="true" size="small" paginator="true"
+			paginatorPosition="bottom">
 
 			<!--  DATA TABLE - HEADER -->
 			<f:facet name="header">
 				<p:toolbar>
 					<p:toolbarGroup>
 						<h3>CONTRACT DATA TABLE</h3>
-						<p:divider layout="vertical">
-						</p:divider>
+						<p:divider layout="vertical" />
 						<p:commandButton id="createNewButton" value="New data"
-							icon="#{uiValue.addIcon}" ajax="true" immediate="true"
+							icon="#{uiValue.addIcon}"
 							actionListener="#{contractController.pushCreateNewButton()}"
 							rendered="#{contractController.canUserModify()}"
 							disabled="#{contractController.editingMode}"
-							update=":form:createNewDialog :form:createNewDialogPanelData"
-							oncomplete="{updateDataTable()}" styleClass="ui-button-info"
-							style="margin-right: .5rem">
+							update=":form:createNewDialogPanelData"
+							styleClass="ui-button-info" style="margin-right: .5rem">
 							<p:resetInput target=":form:createNewDialogPanelData" />
 						</p:commandButton>
 					</p:toolbarGroup>
@@ -87,16 +90,16 @@
 			<p:ajax id="ajaxRowEditInit" event="rowEditInit"
 				listener="#{contractController.onRowInit}"
 				disabled="#{contractController.editingMode}"
-				update="form:growlMessage createNewButton form:dataTable">
+				update="form:growlMessage">
 			</p:ajax>
 			<p:ajax id="ajaxRowEdit" event="rowEdit"
 				listener="#{contractController.onRowEdit}"
 				update="form:growlMessage"
-				oncomplete="if (!args.validationFailed) {updateDataTable()}">
+				oncomplete="if (!args.validationFailed) {updateMainTable()}">
 			</p:ajax>
 			<p:ajax id="ajaxRowEditCancel" event="rowEditCancel"
 				listener="#{contractController.onRowCancel}"
-				update="form:growlMessage" oncomplete="updateDataTable()">
+				update="form:growlMessage" oncomplete="updateMainTable()">
 			</p:ajax>
 
 
@@ -106,7 +109,7 @@
                                    text-align: center;
                                    font-size: 11px;
                                    width: 60px;    
-                                   overflow: hidden"
+                                   "
 				headerText="DEL ROW"
 				rendered="#{contractController.canUserModify()}">
 				<p:commandButton id="deleteRowButton"
@@ -115,7 +118,7 @@
 					actionListener="#{contractController.pushDeleteRowButton()}"
 					immediate="true" onclick="PF('deleteRowDialogWidget').show()"
 					disabled="#{contractController.editingMode}"
-					oncomplete="if(!args.validationFailed) {updateDataTable()}"
+					oncomplete="if(!args.validationFailed) {updateMainTable()}"
 					rendered="#{contractController.canUserModify()}">
 					<f:setPropertyActionListener value="#{dataTable}"
 						target="#{contractController.selectedData}" />
@@ -137,7 +140,6 @@
 
 
 			<!--  DATA TABLE - DATA COLUMNS -->
-
 			<p:column id="contractNr"
 				style="font-family:Arial Black;
                                   text-align: left;
@@ -149,6 +151,33 @@
 				filterBy="#{dataTable.contractNumber}" filterMatchMode="contains">
 				<h:outputText id="codeOutput" value="#{dataTable.contractNumber}" />
 			</p:column>
+
+			<p:column id="createDate"
+				style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+				headerText="CREATE DATE" rendered="true"
+				sortBy="#{dataTable.inputDate}" filterBy="#{dataTable.inputDate}"
+				filterMatchMode="contains">
+				<f:facet id="createDateFilter" name="filter">
+					<p:datePicker id="createDateFilterPicker"
+						onchange="PF('dataTableWidget').filter()" focusOnSelect="true"
+						monthNavigator="true" yearNavigator="true" mask="true"
+						pattern="dd/MM/yyyy">
+						<f:converter
+							converterId="com.comasw.converter.localDateTimeConverter" />
+					</p:datePicker>
+				</f:facet>
+
+				<h:outputText id="createDateOutput" value="#{dataTable.inputDate}">
+					<f:converter
+						converterId="com.comasw.converter.localDateTimeConverter" />
+				</h:outputText>
+				
+			</p:column>
+
 
 			<p:column id="sendDate"
 				style="font-family:Arial Black;
@@ -262,15 +291,15 @@
 		</p:dataTable>
 
 		<!--  CREATE NEW DIALOG -->
-		<p:dialog id="createNewDialog"
-			header="Create new Contract - Null values result on default values"
+		<p:dialog id="createNewDialog" header="Create Contract"
 			showEffect="fade" responsive="true" widgetVar="createNewDialogWidget">
 
 			<h:panelGrid id="createNewDialogPanelData" columns="2"
 				cellpadding="5">
-
-				<p:outputLabel id="newContractNumber" value="Contract Nr " />
+				<p:outputLabel id="newContractNumber" value="Contract Nr "
+					rendered="false" />
 				<p:inputText id="newContractNrInput" label="ContractNumber"
+					rendered="false"
 					value="#{contractController.selectedData.contractNumber}">
 					<p:ajax event="change" update="newContractNrInput" />
 				</p:inputText>
@@ -302,31 +331,38 @@
 						converterId="com.comasw.converter.localDateTimeConverter" />
 					<p:ajax event="change" update="newActivedDateInput" />
 				</p:inputMask>
+
 			</h:panelGrid>
 			<h:panelGrid id="createNewDialogPanelButtons" columns="3"
 				cellpadding="5">
 				<p:commandButton id="createNewDialogConfirm"
-					value="#{uiValue.okLabel}" update="form:growlMessage"
+					value="#{uiValue.okLabel}"
 					actionListener="#{contractController.pushConfirmButtonCreateNewDialog()}"
 					styleClass="ui-confirmdialog-yes" icon="#{uiValue.okCircleIcon}"
-					oncomplete="if (!args.validationFailed) {updateDataTable()}">
+					oncomplete="if (!args.validationFailed) {updateMainTable()}">
 				</p:commandButton>
 				<p:commandButton id="createNewDialogCancel"
 					value="#{uiValue.cancelLabel}" icon="#{uiValue.cancelCircleIcon}"
-					update="form:growlMessage"
 					onclick="PF('createNewDialogWidget').hide()"
-					class="ui-button-secondary" />				
+					class="ui-button-secondary" />
+				<p:commandButton id="createNewDialogClean"
+					value="#{uiValue.cleanLabel}" icon="#{uiValue.cleanIcon}"
+					update="createNewDialogPanelData" process="@this"
+					class="ui-button-secondary">
+					<p:resetInput target="createNewDialogPanelData" />
+				</p:commandButton>
 			</h:panelGrid>
 		</p:dialog>
 
 		<!--  DELETE ROW DIALOG -->
 		<p:confirmDialog global="true" styleClass="change-position"
 			showEffect="fade" responsive="true" widgetVar="deleteRowDialogWidget"
-			header="DELETE ROW" message="Do you really want to delete this row?">
+			header="DELETE ROW"
+			message="Do you really want to delete this row? (The row will be inmediately deleted from the system)">
 			<p:commandButton id="deleteDialogConfirm" value="#{uiValue.okLabel}"
 				styleClass="ui-confirmdialog-yes" update="form:growlMessage"
 				actionListener="#{contractController.pushConfirmButtonDeleteDialog()}"
-				oncomplete="{updateDataTable(); PF('deleteRowDialogWidget').hide()"
+				oncomplete="updateMainTable(); PF('deleteRowDialogWidget').hide()"
 				process="@this" icon="#{uiValue.okCircleIcon}" />
 			<p:commandButton id="deleteDialogCancel"
 				value="#{uiValue.cancelLabel}" styleClass="ui-confirmdialog-no"
@@ -335,21 +371,8 @@
 				process="@this" icon="#{uiValue.cancelCircleIcon}" />
 		</p:confirmDialog>
 
-
-		<!--  CONFIRM CREATE MESSAGE -->
-		<p:confirmDialog id="confirmCreateMessageDialog" global="true"
-			styleClass="change-position" showEffect="fade" responsive="true"
-			widgetVar="confirmCreateMessageDialogWidget"
-			header="CREATED CONTRACT "
-			message="#{contractController.confirmCreateMessage}">
-			<p:commandButton id="confirmCreateMessageButton"
-				value="#{uiValue.okLabel}" styleClass="ui-confirmdialog-yes"
-				update="form:growlMessage"
-				oncomplete="PF('confirmCreateMessageDialogWidget').hide()"
-				process="@this" icon="#{uiValue.okCircleIcon}" />
-		</p:confirmDialog>
-
 	</h:form>
 
 </body>
 </html>
+

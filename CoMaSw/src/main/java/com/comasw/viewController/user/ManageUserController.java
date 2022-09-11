@@ -1,3 +1,25 @@
+/*
+    CoMaSw - Contract Management Software is a software developed for 
+    the final academic project of the Universidade da Coruña (UDC).
+
+    Copyright (C) 2022  Catarina García Cal (catarina.garcia.cal@udc.es)
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*/
+
 package com.comasw.viewController.user;
 
 import java.io.Serializable;
@@ -70,6 +92,8 @@ public class ManageUserController extends BasicType<ItUsers> implements Serializ
 
 	
 	private ItUsers selectedData;
+	
+	private ItUsers newData;
 
 	private List<SelectItem> profileList;
 
@@ -97,6 +121,21 @@ public class ManageUserController extends BasicType<ItUsers> implements Serializ
 		this.selectedData = selectedData;
 	}
 
+	
+	/**
+	 * @return the newData
+	 */
+	public ItUsers getNewData() {
+		return newData;
+	}
+
+	/**
+	 * @param newData the newData to set
+	 */
+	public void setNewData(ItUsers newData) {
+		this.newData = newData;
+	}
+	
 	/**
 	 * @return the profileList
 	 */
@@ -163,9 +202,13 @@ public class ManageUserController extends BasicType<ItUsers> implements Serializ
 
 	@PostConstruct
 	public void init() {
-
+	
 		if (this.getSelectedData() == null) {
 			this.setSelectedData (new ItUsers());
+		}
+		
+		if (this.getNewData() == null) {
+			this.setNewData(new ItUsers());
 		}
 
 		if (this.getBackupData() == null) {
@@ -251,7 +294,7 @@ public class ManageUserController extends BasicType<ItUsers> implements Serializ
 				// length characters exceeds the maximum length
 				validation = false;
 				messageDetail = "Error - The password (" + password.length() + " characters) must be between "
-						+ MIN_LENGTH_PASSWORD.toString() + "and " + MAX_LENGTH_PASSWORD.toString() + " characters";
+						+ MIN_LENGTH_PASSWORD.toString() + " and " + MAX_LENGTH_PASSWORD.toString() + " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 
@@ -339,7 +382,7 @@ public class ManageUserController extends BasicType<ItUsers> implements Serializ
 
 	@Override
 	public void pushCreateNewButton() {
-		this.selectedData = new ItUsers();
+		this.setNewData(new ItUsers());
 		PrimeFaces.current().executeScript("PF('createNewDialogWidget').show();");
 
 	}
@@ -352,20 +395,26 @@ public class ManageUserController extends BasicType<ItUsers> implements Serializ
 		boolean validation = true;
 
 		try {
-
-			// Validates the password
-			if ((this.selectedData.getPassword() == null) || (this.selectedData.getPassword().length() == 0)) {
+			
+			if (this.getNewData() == null) {
+				validation = false;
+				messageDetail = "Error - Please fill the fields to create a new user.";
+				logger.error(messageDetail);
+				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, "DATA VALIDATION",
+						messageDetail);
+				
+			} else if ((this.getNewData().getPassword() == null )|| (this.getNewData().getPassword().length() == 0)) {
 				validation = false;
 				messageDetail = "Error - The password can not be null";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, "DATA VALIDATION",
-						messageDetail);
+						messageDetail);				
 
-			} else if ((((Integer) this.selectedData.getPassword().length()).compareTo(MIN_LENGTH_PASSWORD) < 0)
-					|| (((Integer) this.selectedData.getPassword().length()).compareTo(MAX_LENGTH_PASSWORD) > 0)) {
+			} else if ((((Integer) this.getNewData().getPassword().length()).compareTo(MIN_LENGTH_PASSWORD) < 0)
+					|| (((Integer) this.getNewData().getPassword().length()).compareTo(MAX_LENGTH_PASSWORD) > 0)) {
 				// length characters exceeds the maximum length
 				validation = false;
-				messageDetail = "Error - The password (" + password.length() + " characters) must be between "
+				messageDetail = "Error - The password (" + this.getNewData().getPassword().length() + " characters) must be between "
 						+ MIN_LENGTH_PASSWORD.toString() + "and " + MAX_LENGTH_PASSWORD.toString() + " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, "DATA VALIDATION",
@@ -374,14 +423,14 @@ public class ManageUserController extends BasicType<ItUsers> implements Serializ
 			} else {
 				// password is OK --> md5 password
 				validation = true;
-				this.selectedData.setPassword(Utilities.MD5(this.selectedData.getPassword()));
+				this.getNewData().setPassword(Utilities.MD5(this.getNewData().getPassword()));
 			}
 
-			if (objectValidation(this.selectedData)) {
+			if (objectValidation(this.getNewData())) {
 				if (validation) {
-					applicationUserEJB.insertData(this.selectedData);
+					applicationUserEJB.insertData(this.getNewData());
 					messageDetail = "Data saved succesfully";
-					logger.info("Create user: " + this.selectedData.getUserCode() + " - " + messageDetail);
+					logger.info("Create user: " + this.getNewData().getUserCode() + " - " + messageDetail);
 					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
 							messageDetail);
 

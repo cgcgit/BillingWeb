@@ -1,3 +1,25 @@
+/*
+    CoMaSw - Contract Management Software is a software developed for 
+    the final academic project of the Universidade da Coruña (UDC).
+
+    Copyright (C) 2022  Catarina García Cal (catarina.garcia.cal@udc.es)
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*/
+
 package com.comasw.ejb.instance;
 
 import static com.comasw.model.Sequences.SEQ_PROMOTION_ID;
@@ -379,14 +401,14 @@ public class PromotionEJB implements PromotionEJBLocal {
 
 					query.addConditions(exists(create.selectOne().from(VW_PROMOTION_INSTANCE).where(VW_PROMOTION_INSTANCE.PROMOTION_ID
 							.eq(p.PROMOTION_ID).and(VW_PROMOTION_INSTANCE.PARENT_INSTANCE_ID.eq(p.PARENT_INSTANCE_ID))
-							.and(p.START_DATE.lessOrEqual(VW_PROMOTION_INSTANCE.SERVICE_END_DATE))
-							.and(p.END_DATE.lessOrEqual(VW_PROMOTION_INSTANCE.SERVICE_START_DATE))
-							.and(p.START_DATE.lessOrEqual(VW_PROMOTION_INSTANCE.PRODUCT_END_DATE))
-							.and(p.END_DATE.lessOrEqual(VW_PROMOTION_INSTANCE.PRODUCT_START_DATE))
-							.and(p.START_DATE.lessOrEqual(VW_PROMOTION_INSTANCE.ACCOUNT_END_DATE))
-							.and(p.END_DATE.lessOrEqual(VW_PROMOTION_INSTANCE.ACCOUNT_START_DATE))
-							.and(p.START_DATE.lessOrEqual(VW_PROMOTION_INSTANCE.CUSTOMER_END_DATE))
-							.and(p.END_DATE.lessOrEqual(VW_PROMOTION_INSTANCE.CUSTOMER_START_DATE))
+							.and(p.START_DATE.lessOrEqual(coalesce(VW_PROMOTION_INSTANCE.SERVICE_END_DATE, p.START_DATE)))
+							.and(p.END_DATE.lessOrEqual(coalesce(VW_PROMOTION_INSTANCE.SERVICE_START_DATE, p.END_DATE)))
+							.and(p.START_DATE.lessOrEqual(coalesce(VW_PROMOTION_INSTANCE.PRODUCT_END_DATE, p.START_DATE)))
+							.and(p.END_DATE.lessOrEqual(coalesce(VW_PROMOTION_INSTANCE.PRODUCT_START_DATE, p.END_DATE)))
+							.and(p.START_DATE.lessOrEqual(coalesce(VW_PROMOTION_INSTANCE.ACCOUNT_END_DATE, p.START_DATE)))
+							.and(p.END_DATE.lessOrEqual(coalesce(VW_PROMOTION_INSTANCE.ACCOUNT_START_DATE, p.END_DATE)))
+							.and(p.START_DATE.lessOrEqual(coalesce(VW_PROMOTION_INSTANCE.CUSTOMER_END_DATE, p.END_DATE)))
+							.and(p.END_DATE.lessOrEqual(coalesce(VW_PROMOTION_INSTANCE.CUSTOMER_START_DATE, p.START_DATE)))
 							.and(VW_PROMOTION_INSTANCE.APPLICATION_LEVEL_CODE
 									.eq(coalesce(val(applicatioLevelCodeAux), VW_PROMOTION_INSTANCE.APPLICATION_LEVEL_CODE)))
 							.and(VW_PROMOTION_INSTANCE.PRODUCT_TYPE_ID
@@ -460,8 +482,10 @@ public class PromotionEJB implements PromotionEJBLocal {
 
 				if (searchDate.isPresent()) {
 					query.addConditions((val(searchDate.get()).between(p.PROMOTION_START_DATE, p.PROMOTION_END_DATE))
-							.and(val(searchDate.get()).between(p.SERVICE_START_DATE, p.SERVICE_END_DATE))
-							.and(val(searchDate.get()).between(p.PRODUCT_START_DATE, p.PRODUCT_END_DATE))
+							.and(val(searchDate.get()).between(coalesce(p.SERVICE_START_DATE, val(searchDate.get())), 
+									coalesce(p.SERVICE_END_DATE,val(searchDate.get()))))
+							.and(val(searchDate.get()).between(coalesce(p.PRODUCT_START_DATE, val(searchDate.get())), 
+									coalesce(p.PRODUCT_END_DATE, val(searchDate.get()))))
 							.and(val(searchDate.get()).between(p.CUSTOMER_START_DATE, p.CUSTOMER_END_DATE))
 							.and(val(searchDate.get()).between(p.ACCOUNT_START_DATE, p.ACCOUNT_END_DATE)));
 				}
@@ -539,6 +563,8 @@ public class PromotionEJB implements PromotionEJBLocal {
 
 				query.addOrderBy(p.PARENT_INSTANCE_ID, p.PROMOTION_CODE, p.PROMOTION_ID, p.PROMOTION_START_DATE, p.PROMOTION_END_DATE);
 				result = query.fetchInto(VwPromotionInstance.class);
+				
+				//System.out.println("query: " + query.toString());
 
 			} catch (DataAccessException e) {
 				errorMessage = "Error while try to find all the promotion - " + e.getMessage();

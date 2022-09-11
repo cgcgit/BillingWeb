@@ -1,7 +1,30 @@
+/*
+    CoMaSw - Contract Management Software is a software developed for 
+    the final academic project of the Universidade da Coruña (UDC).
+
+    Copyright (C) 2022  Catarina García Cal (catarina.garcia.cal@udc.es)
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*/
+
 package com.comasw.viewController.parameterization;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -25,6 +48,7 @@ import com.comasw.model.tables.pojos.PtEntityType;
 import com.comasw.model.tables.pojos.VwUsers;
 import com.comasw.ejb.parameterization.EntityTypeEJBLocal;
 import com.comasw.generalClass.BasicType;
+import com.comasw.generalClass.BasicTypeWithLists;
 import com.comasw.interfaces.IEditableTable;
 
 @Named
@@ -33,7 +57,8 @@ import com.comasw.interfaces.IEditableTable;
  * @author catuxa
  *
  */
-public class EntityTypeController extends BasicType<PtEntityType> implements Serializable, IEditableTable {
+public class EntityTypeController extends BasicType<PtEntityType>
+		implements Serializable, IEditableTable {
 
 	private static final long serialVersionUID = 1478865394483051615L;
 
@@ -47,12 +72,17 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 	@EJB
 	private EntityTypeEJBLocal entityTypeEJB;
 
+
 	
 
+	
 	// -------------------
 	// METHODS
 	// -------------------
 
+	/**
+	 * 
+	 */
 	public EntityTypeController() {
 		// TODO Auto-generated constructor stub
 	}
@@ -69,8 +99,8 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 		}
 
 
-		if (this.getSelectedData() == null) {
-			this.setSelectedData(new PtEntityType());
+		if (getSelectedData() == null) {
+			setSelectedData (new PtEntityType());
 		}
 
 		if (this.getLoggedUser() == null) {
@@ -137,6 +167,7 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 
 			// Validates the data
 			if (this.objectValidation(dataObject)) {
+				// sets the modif data
 				entityTypeEJB.updateData(dataObject);
 				messageDetail = "Data saves correctly";
 				logger.info("Update entity type: " + this.getSelectedData().toString() + " - " + messageDetail);
@@ -172,7 +203,6 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 			if (error) {
 				FacesContext.getCurrentInstance().validationFailed();
 			} else {
-
 				this.loadDataList();
 			}
 		}
@@ -202,7 +232,7 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 
 	@Override
 	public void pushCreateNewButton() {
-		this.setSelectedData (new PtEntityType());
+		this.setSelectedData( new PtEntityType());
 		PrimeFaces.current().executeScript("PF('createNewDialogWidget').show();");
 
 	}
@@ -215,6 +245,8 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 
 		try {
 			if (objectValidation(this.getSelectedData())) {
+				// Set create values
+
 				entityTypeEJB.insertData(this.getSelectedData());
 				messageDetail = "Data saves succesfully";
 				logger.info("Create entity type: " + this.getSelectedData().toString() + " - " + messageDetail);
@@ -360,15 +392,18 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 				objectToValidate.setDescription(objectToValidate.getDescription().trim());
 			}
 
+			
+
 			if (objectToValidate.getCode() == null || objectToValidate.getCode().length() == 0) {
 				messageDetail = "ERROR - The code of the entity type can not be null";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} else if (((Integer) objectToValidate.getCode().length()).compareTo(BasicType.CODE_FIELD_LENGTH_MAX) > 0) {
+			} else if (((Integer) objectToValidate.getCode().length())
+					.compareTo(BasicTypeWithLists.CODE_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The code of the entity type (" + objectToValidate.getCode().length()
-						+ " characters) exceeds the limit of " + BasicType.CODE_FIELD_LENGTH_MAX.toString()
+						+ " characters) exceeds the limit of " + BasicTypeWithLists.CODE_FIELD_LENGTH_MAX.toString()
 						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
@@ -379,10 +414,11 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
-			} else if (((Integer) objectToValidate.getName().length()).compareTo(BasicType.NAME_FIELD_LENGTH_MAX) > 0) {
+			} else if (((Integer) objectToValidate.getName().length())
+					.compareTo(BasicTypeWithLists.NAME_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The name of the entity type (" + objectToValidate.getName().length()
-						+ " characters) exceeds the limit of " + BasicType.NAME_FIELD_LENGTH_MAX.toString()
+						+ " characters) exceeds the limit of " + BasicTypeWithLists.NAME_FIELD_LENGTH_MAX.toString()
 						+ " characters";
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
@@ -395,11 +431,11 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
 				result = false;
 			} else if (((Integer) objectToValidate.getDescription().length())
-					.compareTo(BasicType.DESCRIPTION_FIELD_LENGTH_MAX) > 0) {
+					.compareTo(BasicTypeWithLists.DESCRIPTION_FIELD_LENGTH_MAX) > 0) {
 				// length characters exceeds the maximum length
 				messageDetail = "Error - The description of the entity type ("
 						+ objectToValidate.getDescription().length() + " characters) exceeds the limit of "
-						+ BasicType.DESCRIPTION_FIELD_LENGTH_MAX.toString() + " characters";
+						+ BasicTypeWithLists.DESCRIPTION_FIELD_LENGTH_MAX.toString() + " characters";
 
 				logger.error(messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_ERROR, message, messageDetail);
@@ -435,18 +471,18 @@ public class EntityTypeController extends BasicType<PtEntityType> implements Ser
 	public void setControlVariablesToDefault() {
 		this.setInitVariablesToDefault();
 	}
+	
 
-	@Override
 	public void resetFilterDataTable() {
 		PrimeFaces current = PrimeFaces.current();
 		current.executeScript("PF('dataTableWidget').clearFilters()");
 
 	}
 
-	@Override
 	public void refreshDataTable() {
 		this.resetFilterDataTable();
 		this.loadDataList();
 		Ajax.update(DATA_TABLE_ID);
 	}
+
 }

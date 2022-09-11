@@ -54,12 +54,14 @@ import com.comasw.model.tables.PtTaxType;
 import com.comasw.model.tables.VwAccountInstance;
 import com.comasw.model.tables.VwCustomerInstance;
 import com.comasw.model.tables.VwFeeInstance;
+import com.comasw.model.tables.VwFeeInstanceAll;
 import com.comasw.model.tables.VwProductFeeType;
 import com.comasw.model.tables.VwProductInstance;
 import com.comasw.model.tables.VwProductServiceType;
 import com.comasw.model.tables.VwPromoConsumTypeDiscount;
 import com.comasw.model.tables.VwPromotionFeeTypeDiscount;
 import com.comasw.model.tables.VwPromotionInstance;
+import com.comasw.model.tables.VwPromotionInstanceAll;
 import com.comasw.model.tables.VwPromotionProductType;
 import com.comasw.model.tables.VwPromotionServiceType;
 import com.comasw.model.tables.VwServiceFeeType;
@@ -339,6 +341,11 @@ public class Public extends SchemaImpl {
     public final VwFeeInstance VW_FEE_INSTANCE = VwFeeInstance.VW_FEE_INSTANCE;
 
     /**
+     * The table <code>public.vw_fee_instance_all</code>.
+     */
+    public final VwFeeInstanceAll VW_FEE_INSTANCE_ALL = VwFeeInstanceAll.VW_FEE_INSTANCE_ALL;
+
+    /**
      * The table <code>public.vw_product_fee_type</code>.
      */
     public final VwProductFeeType VW_PRODUCT_FEE_TYPE = VwProductFeeType.VW_PRODUCT_FEE_TYPE;
@@ -367,6 +374,11 @@ public class Public extends SchemaImpl {
      * The table <code>public.vw_promotion_instance</code>.
      */
     public final VwPromotionInstance VW_PROMOTION_INSTANCE = VwPromotionInstance.VW_PROMOTION_INSTANCE;
+
+    /**
+     * The table <code>public.vw_promotion_instance_all</code>.
+     */
+    public final VwPromotionInstanceAll VW_PROMOTION_INSTANCE_ALL = VwPromotionInstanceAll.VW_PROMOTION_INSTANCE_ALL;
 
     /**
      * The table <code>public.vw_promotion_product_type</code>.
@@ -503,12 +515,14 @@ public class Public extends SchemaImpl {
             VwAccountInstance.VW_ACCOUNT_INSTANCE,
             VwCustomerInstance.VW_CUSTOMER_INSTANCE,
             VwFeeInstance.VW_FEE_INSTANCE,
+            VwFeeInstanceAll.VW_FEE_INSTANCE_ALL,
             VwProductFeeType.VW_PRODUCT_FEE_TYPE,
             VwProductInstance.VW_PRODUCT_INSTANCE,
             VwProductServiceType.VW_PRODUCT_SERVICE_TYPE,
             VwPromoConsumTypeDiscount.VW_PROMO_CONSUM_TYPE_DISCOUNT,
             VwPromotionFeeTypeDiscount.VW_PROMOTION_FEE_TYPE_DISCOUNT,
             VwPromotionInstance.VW_PROMOTION_INSTANCE,
+            VwPromotionInstanceAll.VW_PROMOTION_INSTANCE_ALL,
             VwPromotionProductType.VW_PROMOTION_PRODUCT_TYPE,
             VwPromotionServiceType.VW_PROMOTION_SERVICE_TYPE,
             VwServiceFeeType.VW_SERVICE_FEE_TYPE,

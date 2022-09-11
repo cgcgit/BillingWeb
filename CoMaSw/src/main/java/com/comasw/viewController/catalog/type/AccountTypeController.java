@@ -1,12 +1,29 @@
-/**
- * 
- */
+/*
+    CoMaSw - Contract Management Software is a software developed for 
+    the final academic project of the Universidade da Coruña (UDC).
+
+    Copyright (C) 2022  Catarina García Cal (catarina.garcia.cal@udc.es)
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation; either version 2 of the License, or
+    any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License along
+    with this program; if not, write to the Free Software Foundation, Inc.,
+    51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+*/
 package com.comasw.viewController.catalog.type;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -14,7 +31,6 @@ import javax.ejb.EJBException;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.faces.model.SelectItem;
 import javax.faces.validator.ValidatorException;
 import javax.faces.view.ViewScoped;
 import javax.inject.Inject;
@@ -24,16 +40,15 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.core.Logger;
 import org.omnifaces.util.Ajax;
 import org.primefaces.PrimeFaces;
-import org.primefaces.component.datatable.DataTable;
 import org.primefaces.event.RowEditEvent;
 
 import com.comasw.model.tables.pojos.CtAccountType;
-import com.comasw.model.tables.pojos.CtBillCycleType;
+
 import com.comasw.model.tables.pojos.VwUsers;
 import com.comasw.ejb.catalog.type.AccountTypeEJBLocal;
-import com.comasw.ejb.catalog.type.BillCycleTypeEJBLocal;
 import com.comasw.generalClass.BasicTypeWithLists;
 import com.comasw.interfaces.IEditableTable;
+
 
 @Named
 @ViewScoped
@@ -56,15 +71,47 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 
 	@EJB
 	private AccountTypeEJBLocal accountTypeEJB;
+	
+	private CtAccountType newData;
+	
+	private CtAccountType selectedData;
 
-	@EJB
-	private BillCycleTypeEJBLocal billCycleTypeEJB;
+	/**
+	 * @return the newData
+	 */
+	public CtAccountType getNewData() {
+		return newData;
+	}
 
+	/**
+	 * @param newData the newData to set
+	 */
+	public void setNewData(CtAccountType newData) {
+		this.newData = newData;
+	}
+
+	
+	
 	
 
 	// -------------------
 	// METHODS
 	// -------------------
+
+	
+	/**
+	 * @return the selectedData
+	 */
+	public CtAccountType getSelectedData() {
+		return selectedData;
+	}
+
+	/**
+	 * @param selectedData the selectedData to set
+	 */
+	public void setSelectedData(CtAccountType selectedData) {
+		this.selectedData = selectedData;
+	}
 
 	/**
 	 * 
@@ -76,6 +123,10 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 	@PostConstruct
 	public void init() {
 		
+		if (this.getNewData() == null) {
+			this.setNewData(new CtAccountType());
+		}
+		
 		if (this.getDataList() == null) {
 			this.setDataList(new ArrayList<CtAccountType>());
 		}
@@ -85,8 +136,8 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 		}
 
 
-		if (getSelectedData() == null) {
-			setSelectedData ( new CtAccountType());
+		if (this.getSelectedData() == null) {
+			this.setSelectedData ( new CtAccountType());
 		}
 
 		if (this.getLoggedUser() == null) {
@@ -115,8 +166,8 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 
 		message = "EDIT ROW";
 
-		DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent(DATA_TABLE_ID);
-		int rowPosition = dataTable.getRowIndex();
+		//DataTable dataTable = (DataTable) FacesContext.getCurrentInstance().getViewRoot().findComponent(DATA_TABLE_ID);
+		//int rowPosition = dataTable.getRowIndex();
 
 		// Gets the backup of the data to modify
 		dataObject = (CtAccountType) event.getObject();
@@ -126,8 +177,7 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 
 		// Due to the update of the entire table to show the password column
 		// the edition of the row set to unselect --> force to expand the edit button
-		PrimeFaces.current().executeScript(
-				"jQuery('span.ui-icon-pencil').eq(" + rowPosition + ").each(function(){jQuery(this).click()});");
+		//PrimeFaces.current().executeScript("jQuery('span.ui-icon-pencil').eq(" + rowPosition + ").each(function(){jQuery(this).click()});");
 
 		// If we are modifing a row we can't add a new row --> Disable all the other
 		// buttons
@@ -221,7 +271,7 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 
 	@Override
 	public void pushCreateNewButton() {
-		this.setSelectedData(new CtAccountType());
+		this.setNewData(new CtAccountType());
 		PrimeFaces.current().executeScript("PF('createNewDialogWidget').show();");
 
 	}
@@ -233,16 +283,16 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 		Boolean error = false;
 
 		try {
-			if (objectValidation(this.getSelectedData())) {
+			if (objectValidation(this.getNewData())) {
 				// Set create values
 
-				this.getSelectedData().setEntityTypeId(ENTITY_TYPE_ID);
-				this.getSelectedData().setInputUser(this.loggedUser.getUserCode());
-				this.getSelectedData().setInputDate(LocalDateTime.now());
+				this.getNewData().setEntityTypeId(ENTITY_TYPE_ID);
+				this.getNewData().setInputUser(this.loggedUser.getUserCode());
+				this.getNewData().setInputDate(LocalDateTime.now());
 
-				accountTypeEJB.insertData(this.getSelectedData());
+				accountTypeEJB.insertData(this.getNewData());
 				messageDetail = "Data saves succesfully";
-				logger.info("Create account type: " + this.getSelectedData().toString() + " - " + messageDetail);
+				logger.info("Create account type: " + this.getNewData().toString() + " - " + messageDetail);
 				this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message, messageDetail);
 
 			} else {
@@ -486,49 +536,7 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 
 	}
 
-	public List<SelectItem> ordinaryBillCycleSelectItemsMenu() {
-		List<SelectItem> selectItem = new ArrayList<>();
-		List<CtBillCycleType> list = billCycleTypeEJB.findOrdinaryCycleType();
-
-		SelectItem nullItem = new SelectItem();
-		nullItem.setLabel("Select One... ");
-		nullItem.setValue(null);
-		selectItem.add(nullItem);
-
-		if (list.isEmpty()) {
-			logger.error("ERROR - Not find profile list");
-		} else {
-			for (CtBillCycleType p : list) {
-				SelectItem item = new SelectItem();
-				item.setLabel(p.getCode());
-				item.setValue(p.getBillCycleTypeId());
-				selectItem.add(item);
-			}
-		}
-		return selectItem;
-	}
-
-	public List<SelectItem> correctiveBillCycleSelectItemsMenu() {
-		List<SelectItem> selectItem = new ArrayList<>();
-		List<CtBillCycleType> list = billCycleTypeEJB.findCorrectiveCycleType();
-
-		SelectItem nullItem = new SelectItem();
-		nullItem.setLabel("Select One... ");
-		nullItem.setValue(null);
-		selectItem.add(nullItem);
-
-		if (list.isEmpty()) {
-			logger.error("ERROR - Not find profile list");
-		} else {
-			for (CtBillCycleType p : list) {
-				SelectItem item = new SelectItem();
-				item.setLabel(p.getCode());
-				item.setValue(p.getBillCycleTypeId());
-				selectItem.add(item);
-			}
-		}
-		return selectItem;
-	}
+	
 
 	@Override
 	public void resetFilterDataTable() {
@@ -542,5 +550,7 @@ public class AccountTypeController extends BasicTypeWithLists<CtAccountType> imp
 		this.resetFilterDataTable();
 		this.loadDataList();
 		Ajax.update(DATA_TABLE_ID);
+		
 	}
+
 }
