@@ -71,7 +71,7 @@ button.ui-button {
 						<p:commandButton id="createNewButton" value="New data"
 							icon="#{uiValue.addIcon}"
 							actionListener="#{applicationLevelController.pushCreateNewButton()}"
-							rendered="#{applicationLevelController.canUserModify()}"
+							rendered="#{applicationLevelController.adminPermissions()}"
 							disabled="#{applicationLevelController.editingMode}"
 							update=":form:createNewDialogPanelData"
 							styleClass="ui-button-info" style="margin-right: .5rem">
@@ -110,7 +110,7 @@ button.ui-button {
                                    width: 60px;    
                                    "
 				headerText="DEL ROW"
-				rendered="#{applicationLevelController.canUserModify()}">
+				rendered="#{applicationLevelController.adminPermissions()}">
 				<p:commandButton id="deleteRowButton"
 					class="ui-button-warning rounded-button"
 					icon="#{uiValue.deleteIcon}"
@@ -118,7 +118,7 @@ button.ui-button {
 					immediate="true" onclick="PF('deleteRowDialogWidget').show()"
 					disabled="#{applicationLevelController.editingMode}"
 					oncomplete="if(!args.validationFailed) {updateMainTable()}"
-					rendered="#{applicationLevelController.canUserModify()}">
+					rendered="#{applicationLevelController.adminPermissions()}">
 					<f:setPropertyActionListener value="#{dataTable}"
 						target="#{applicationLevelController.selectedData}" />
 				</p:commandButton>
@@ -130,10 +130,10 @@ button.ui-button {
                                   width: 60px;    
                                   overflow: hidden"
 				headerText="EDIT ROW"
-				rendered="#{applicationLevelController.canUserModify()}">
+				rendered="#{applicationLevelController.adminPermissions()}">
 				<p:rowEditor id="editRowButton" editTitle="Edit Row"
 					cancelTitle="Cancel Edit" saveTitle="Save Row"
-					rendered="#{applicationLevelController.canUserModify()}">
+					rendered="#{applicationLevelController.adminPermissions()}">
 				</p:rowEditor>
 			</p:column>
 
