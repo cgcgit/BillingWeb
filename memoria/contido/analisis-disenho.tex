@@ -1,12 +1,12 @@
 \chapter{Análisis y diseño}
-\label{chap:analisis-disenho}
+\label{chap:analisis-diseño}
 
 
 \lettrine{E}{n} este capítulo nos centraremos en el análisis y posterior diseño realizado en este \acrshort{tfg} para el desarrollo de la herramienta de gestión de contratación propuesta.
 
 \section{Análisis de las necesidades}
 \label{sec:analisis}
-Se pretende desarrollar una aplicación web que permita registrar las distintas contrataciones realizadas por los clientes de una empresa proveedora de servicios. Puesto que las contrataciones se realizan sobre el catálogo de servicios de la empresa, también proveerá de las herramientas necesarias para mantener dicho catálogo. Asimismo deberá permitir definir una serie de elementos parmetrizables necesarios para definir las distintas entidades que alberga dicha aplicación. Por lo tanto las entidades a tratar en el sistema se englobarán en tres grandes grupos:
+Se pretende desarrollar una aplicación web de \gls{opensource} que permita registrar las distintas contrataciones realizadas por los clientes de una empresa proveedora de servicios. Puesto que las contrataciones se realizan sobre el catálogo de servicios de la empresa, también proveerá de las herramientas necesarias para mantener dicho catálogo. Asimismo deberá permitir definir una serie de elementos parmetrizables necesarios para definir las distintas entidades que alberga dicha aplicación. Por lo tanto las entidades a tratar en el sistema se englobarán en tres grandes grupos:
 \begin{itemize}
 \item Parametrización: esta categoría engloba todos los elementos de parametrización necesarios para la definición de las distintas entidades del sistema (niveles de aplicación, tipos de descuento, tipos impositivos, etc.).
 \item Catálogo: esta categoría engloba todos los elementos que definen el catálogo de servicios de la empresa (tipos de productos, servicios, cuotas, etc. y sus relaciones), así como los tipos de entidades que definen el catálogo de clientes y contrataciones (tipos de clientes, tipos de ciclos de facturación, etc.).
@@ -30,18 +30,26 @@ Con el fin de poder hacer un seguimiento de los distintos cambios producidos en 
 También con el objetivo de poder llevar un registro sobre los cambios producidos sobre determinadas entidades que pueden sufrir cambios durante su ciclo de vida se establecen registros de histórico para dichas entidades. El objetivo de estos históricos es poder tener la \textit{foto} del estado de una determinada entidad en un momento determinado, por ejemplo, el precio que tenía la definición de una cuota determinada o los distintos servicios activos de un cliente en una fecha determinada.
 
 
-Esta aplicación tendrá el objetivo de formar parte de un ecosistema mayor, integrándose en una segunda fase con el resto de herramientas de la empresa para conformar el área comercial de la misma. En la \figurename~\ref{fig:area-comercial} se muestra un esquema con las distintas aplicaciones que típicamente darían soporte a la actividad comercial de una empresa de servicios TIC.
+Esta aplicación tendrá el objetivo de formar parte de un ecosistema mayor, integrándose en una segunda fase con el resto de herramientas de la empresa para conformar el área comercial de la misma. En la \figurename~\ref{fig:area-comercial} se muestra un esquema con las distintas aplicaciones que típicamente darían soporte a la actividad comercial de una empresa de servicios TIC. El flujo de contratación en un sistema integrado sería el siguiente y sería análogo para el caso de modificaciones o bajas de contrataciones:
+\begin{enumerate}
+\item Se registra una contratación en el sistema de contrataciones. Éste notifica al sistema de provisiones la contratación y queda a la espera de que le confirmen que todos los servicios están provisionados. 
+\item Una vez provisionados, el sistema de provisión notificará al sistema de contratación del fin de la provión y éste facilita al sistema facturador todos los elementos necesarios para registrar esa contratacion en el sistema y realizar las correspondientes facturaciones. 
+\item En caso de que se produzca algún cambio de estado de alguna de las entidades contratadas por parte del sistema de facturación, éste notificará del cambio al sistema de contrataciones. Estos cambios pueden obdecer a impagos incurridos por el cliente, los cuales son notificados al facturador por el sistema de cobros (a quien el facturado envía los recibos de las facturas generadas para su puesta a cobro).
+\end{enumerate}
+
+La relación que se muestra entre el sistema de facturación y el de tarificación se refiere a los consumos que pueden realizar las distintas entidades facturables contratadas (el sistema de facturación notifica al de tarificación las nuevas entidades dadas de alta, modificadas o dadas de baja susceptibles de generar consumos , y el sistema de tarificación le envía al sistema de facturación los datos de los consumos realizados en tiempo real para su facturación).
+
 
 \begin{figure}
   \centering
   \includegraphics[width=0.55\textwidth]{imaxes/area-comercial.png}
-  \caption{Entorno comercial}
+  \caption{Entorno comercial y la comunicación establecida entre las distintas áreas de negocio.}
   \label{fig:area-comercial}
 \end{figure}
 
 
 \subsection{Catálogo de servicios}
-\label{sub:catalogo}
+\label{sub:catalogo-chap-analisis}
 
 \acrshort{itil} define el catálogo de servicios como~\cite{catalogoITIL}:
 \textquote{una base de datos centralizada que contiene información precisa sobre las ofertas de servicios de TI activas y un subconjunto de la cartera de servicios del proveedor de servicios de TI}. De forma simple vendría siendo la \textit{mercancía} que ofrece una determinada empresa. Pero va un paso más allá del mero listado de elementos ofertados en este momento, pues lleva además el registro del ciclo de vida de todos los productos y servicios gestionados por la empresa, tanto los servicios y productos retirados como los que se ofrecen actualmente e incluso los que están en desarrollo.
@@ -49,7 +57,7 @@ Esta aplicación tendrá el objetivo de formar parte de un ecosistema mayor, int
 Entendemos por prestación de servicios aquella actividad o actividades llevadas a cabo por un proveedor con el propósito de satisfacer una determinada necesidad del cliente a través de servicios, entendiendo por servicio un activo de naturaleza económica intangible.
 
 La idea es la siguiente: la empresa define su catálogo de servicios (tecnología a ofertar), los elementos facturables a aplicar por la prestación de servicios y los descuentos existentes sobre dichos elementos facturables. Se distinguen dos tipos de elementos facturables: cuotas (cargos periódicos asociados a la prestación de los distintos servicios) y consumos (cargos puntuales derivados del consumo de algún elemento definido como consumible).
-El catálogo de servicios de nuestra empresa estará formado por cinco entidades principales y las relaciones que guardan entre sí, como se muestra en el diagrama de la \figurename~\ref{fig:catalogo}):
+El catálogo de servicios de nuestra empresa estará formado por cinco entidades principales y las relaciones que guardan entre sí. Dichas entidades son las siguientes:
 
 \paragraph{Tipo de producto.} Es el elemento raíz del catálogo del sistema sobre el que se irán definiendo el resto de elementos que se pueden ofrecer al cliente. Podemos verlo como el \textit{paquete} que contendrá todo lo que se le ofrece al cliente.
 \paragraph{Tipo de servicio.} Es el elemento que realmente aporta valor al cliente, ya que es el que define el elemento que va a aportar el valor de la contratación, por ejemplo la línea de telefono.
@@ -57,13 +65,41 @@ El catálogo de servicios de nuestra empresa estará formado por cinco entidades
 \paragraph{Tipo de cuota.} Es el elemento que define la contraprestación económica que va a recibir la empresa de forma periódica por la prestación de servicios que ofrece al cliente. Su ámbito de aplicación se circunscribe a productos y servicios y forma parte de la definición del tipo de producto o servicio.
 \paragraph{Tipo de consumos.} Es el elemento que define el consumo puntual de un determinado elemento por parte del cliente, como puede ser una llamada de teléfono. Sólo tiene interés desde el punto de vista de la definición de la aplicación de los distintos descuentos, ya que a diferencia de las cuotas, para las que podemos definir un precio cerrado que puede conocerse de antemano, el importe de los consumos vendrá definido por la naturaleza propia del evento del consumo (por ejemplo, el coste de una llamada de teléfono viene dado, además de por el tipo de llamada, que lleva asociado un precio por minuto, por la duración de la misma o la franja horaria en la que se realiza) por lo que en la herramienta simplemente se definirán los consumos susceptibles de ser descontados. Se considera un único ámbito de aplicación: el de servicio.
 
+Y las relaciones que se establecen entre ellas como se muestra en el diagrama de la \figurename~\ref{fig:catalogo-chap-analisis}) y son como sigue:
+
+\begin{itemize}
+\item Un tipo de producto consta de:
+	\begin{itemize}
+		\item Uno o más tipos de servicio.
+		\item Cero, uno o más tipos de cuotas.
+		\item Cero, uno o más tipos de promociones.
+	\end{itemize}
+\item Un servicio consta de:
+	\begin{itemize}
+		\item Cero, uno o más tipos de cuotas.
+		\item Cero, uno o más tipos de promociones.
+	\end{itemize}
+		\item Un tipo de cuota puede estar relacionada con 
+	\begin{itemize}
+		\item Cero, uno o más tipos de productos.
+		\item Cero, uno o más tipos de servicios.
+		\item Cero, uno o más tipos de promociones.
+	\end{itemize}
+\item Un tipo de promoción puede estar relacionada con 
+	\begin{itemize}
+		\item Cero, uno o más tipos de productos.
+		\item Cero, uno o más tipos de servicios.
+		\item Uno o más tipos de cuotas.
+		\item Uno o más tipos de consumos.
+	\end{itemize}
+\end{itemize}
 
 
 \begin{figure}
   \centering
   \includegraphics[width=0.55\textwidth]{imaxes/catalogo.png}
-  \caption{Modelo Entidad-Relación del catálogo de servicios}
-  \label{fig:catalogo}
+  \caption{Modelo Entidad-Relación del catálogo de servicios.}
+  \label{fig:catalogo-chap-analisis}
 \end{figure}
 
 \paragraph{}
@@ -78,21 +114,21 @@ Puesto que el catálogo de servicios contiene la definición de los distintos el
 
 
 \subsection{Contratación}
-\label{sub:contratacion}
-La contratación contendrá la implementación (instancia) real de los distintos elementos definidos en el catálogo, esto es el conjunto de clientes y sus relaciones con los productos y servicios contratados. La \figurename~\ref{fig:contratacion} muestra el diagrama de clases para la gestión de la contratación.
+\label{sub:contratacion-chap-analisis}
+La contratación contendrá la implementación (instancia) real de los distintos elementos definidos en el catálogo, esto es el conjunto de clientes y sus relaciones con los productos y servicios contratados. La \figurename~\ref{fig:contratacion-chap-analisis} muestra el diagrama de clases para la gestión de la contratación.
 
 
 
 \begin{figure}
   \centering
   \includegraphics[width=0.55\textwidth]{imaxes/instancia.png}
-  \caption{Contratación}
-  \label{fig:contratacion}
+  \caption{Modelo de Contratación}
+  \label{fig:contratacion-chap-analisis}
 \end{figure}
 
 
 \subsection{Elementos de parametrización}
-\label{sub:parametrizacion}
+\label{sub:parametrizacion-chap-analisis}
 Los elementos de parametrización son elementos que nos permiten modelar entidades superiores para que se comporten de una forma determinada. No es lo mismo aplicar un descuento en forma de porcentaje sobre el total que en número de unidades contratadas. Para el desarrollo de la herramienta se han considerado los siguientes elementos de parametrización.
 \begin{description}
 \item[Endidades:] define los distintos tipos de entidades definidas en el sistema.
@@ -110,7 +146,7 @@ Los elementos de parametrización son elementos que nos permiten modelar entidad
 
 
 \section{Casos de uso}
-\label{sec:casos de uso}
+\label{sec:casos-uso-chap-analisis}
 
 Se consideran tres tipos de usuarios de la aplicación en función de los funcionalidades que puedan realizar en la misma en función del perfil que tengan asignado. Los perfiles definidos para la aplicación son los siguientes:
 \begin{itemize}
@@ -121,7 +157,7 @@ Se consideran tres tipos de usuarios de la aplicación en función de los funcio
 
 
 \subsection{Actores}
-\label{sub:actores_analisis}
+\label{sub:actores-chap-analisis}
 
 El actor ADMIN representa a los usuarios de la aplicación que tienen
 acceso completo a todas las funciones, incluyendo la gestión de usuarios.
@@ -130,17 +166,17 @@ Los actores  READ y  WRITE representan a cualquier usuario con un perfil READ o 
 
 
 \subsection{Casos de uso}
-\label{sub:casos-uso}
+\label{sub:casos-uso-chap-analisis}
 
 
-Todos los usuarios comparten los casos de uso de acceso y los relativos a la consulta de las entidades del sistema. El actor WRITE amplía esos casos de uso con funcionalidades de creación, modificación y borrado de entidades y por último el actor ADMIN amplía esos casos de uso con el caso de uso de administración de usuarios. Las siguientes figuras (\figurename{}s~\ref{fig:cu-acceso}, \ref{fig:cu-read-write} y \ref{fig:cu-admin}) muestran una visión de alto nivel de los distintos casos de uso definidos en el sistema. Dichos casos de uso se analizan con más detalle en los siguientes apartados.
+Todos los usuarios comparten los casos de uso de acceso y los relativos a la consulta de las entidades del sistema. El actor WRITE amplía esos casos de uso con funcionalidades de creación, modificación y borrado de entidades y por último el actor ADMIN amplía esos casos de uso con el caso de uso de administración de usuarios. Las siguientes figuras (\figurename{}s~\ref{fig:cu-acceso-chap-analisis}, \ref{fig:cu-read-write-chap-analisis} y \ref{fig:cu-admin-chap-analisis}) muestran una visión de alto nivel de los distintos casos de uso definidos en el sistema. Dichos casos de uso se analizan con más detalle en los siguientes apartados.
 
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.6\textwidth]{imaxes/cu_acceso.png}
   \caption{Caso de uso del acceso al sistema - Actores READ, WRITE y ADMIN}
-  \label{fig:cu-acceso}
+  \label{fig:cu-acceso-chap-analisis}
 \end{figure}
 
 
@@ -149,7 +185,7 @@ Todos los usuarios comparten los casos de uso de acceso y los relativos a la con
   \centering
   \includegraphics[width=\textwidth]{imaxes/cu-read-write.png}
   \caption{Casos de uso de los actores READ, WRITE}
-  \label{fig:cu-read-write}
+  \label{fig:cu-read-write-chap-analisis}
 \end{figure}
 
 
@@ -157,7 +193,7 @@ Todos los usuarios comparten los casos de uso de acceso y los relativos a la con
   \centering
   \includegraphics[width=\textwidth]{imaxes/cu-admin.png}
   \caption{Casos de uso del actor ADMIN}
-  \label{fig:cu-admin}
+  \label{fig:cu-admin-chap-analisis}
 \end{figure}
 
 
@@ -165,7 +201,7 @@ Todos los usuarios comparten los casos de uso de acceso y los relativos a la con
 A continuación se muestra un caso de uso destacable que representa
 aspecto centrales de la aplicación. La definición completa de casos de uso se encuentra en el Apéndice~\ref{chap:ref-tecnica}. 
 
-Se trata del caso de uso CU-24 (\tablename~\ref{tab:cu-listar-catálogo-historico}, página \pageref{tab:cu-listar-catálogo-historico}) y los casos de uso asociados  CU-05 (\tablename~\ref{tab:cu-editar-historico}, página \pageref{tab:cu-editar-historico}), CU-06 (\tablename~\ref{tab:cu-cancelar-historico}, página \pageref{tab:cu-cancelar-historico}), CU-07 (\tablename~\ref{tab:cu-anhadir-historico-elemento}, página \pageref{tab:cu-anhadir-historico-elemento}) y CU-09 (\tablename~\ref{tab:cu-borrar-historico-elemento} página \pageref{tab:cu-borrar-historico-elemento}), que hacen referencia a la modificación de un registro de histórico de una entidad con histórico de registros (como pudiera ser un tipo de cuota). A estos casos de uso pueden acceder los actores WRITE y ADMIN a través del correspondiente caso de uso de listado de la entidad a tratar y seleccionando el correspondiente registro de histórico a modificar.
+Se trata del caso de uso CU-24 (\tablename~\ref{tab:cu-listar-catálogo-historico-chap-analisis}, página \pageref{tab:cu-listar-catálogo-historico-chap-analisis}) y los casos de uso asociados  CU-05 (\tablename~\ref{tab:cu-editar-historico-chap-analisis}, página \pageref{tab:cu-editar-historico-chap-analisis}), CU-06 (\tablename~\ref{tab:cu-cancelar-historico-chap-analisis}, página \pageref{tab:cu-cancelar-historico-chap-analisis}), CU-07 (\tablename~\ref{tab:cu-anhadir-historico-elemento-chap-analisis}, página \pageref{tab:cu-anhadir-historico-elemento-chap-analisis}) y CU-09 (\tablename~\ref{tab:cu-borrar-historico-elemento-chap-analisis} página \pageref{tab:cu-borrar-historico-elemento-chap-analisis}), que hacen referencia a la modificación de un registro de histórico de una entidad con histórico de registros (como pudiera ser un tipo de cuota). A estos casos de uso pueden acceder los actores WRITE y ADMIN a través del correspondiente caso de uso de listado de la entidad a tratar y seleccionando el correspondiente registro de histórico a modificar.
 
 Para este tipo de entidades con registro de histórico es fundamental que exista una consecución temporal de los mismos. No puede haber registros de histórico que se solapen para una misma instacia de una entidad, ni tampoco \textit{huecos} en la línea temporal del ciclo de vida de la misma. Por lo tanto se debe revisar que los cambios producidos en las fechas de una entidad con registro de histórico sean coherentes con lo almacenado en el sistema, actualizando fechas de registros anteriores y/o posteriores en caso de ser necesario, para \textit{acortarlos} o \textit{alargarlos} según sea el caso.
 
@@ -200,7 +236,7 @@ Para este tipo de entidades con registro de histórico es fundamental que exista
     \end{tabular}
     } % end /resizebox
     \caption{CU-24 Acceder al catálog entidad con históricos}
-    \label{tab:cu-listar-catálogo-historico}
+    \label{tab:cu-listar-catálogo-historico-chap-analisis}
 \end{table}
 
 
@@ -235,7 +271,7 @@ Para este tipo de entidades con registro de histórico es fundamental que exista
     \end{tabular}
     } % end /resizebox
     \caption{CU-05 Editar histórico de elemento seleccionado}
-    \label{tab:cu-editar-historico}
+    \label{tab:cu-editar-historico-chap-analisis}
 \end{table}
 
 
@@ -265,7 +301,7 @@ Para este tipo de entidades con registro de histórico es fundamental que exista
     \end{tabular}
     } % end /resizebox
     \caption{CU-06 Cancelar el registro de histórico del elemento seleccionado}
-    \label{tab:cu-cancelar-historico}
+    \label{tab:cu-cancelar-historico-chap-analisis}
 \end{table}
 
 
@@ -297,7 +333,7 @@ Para este tipo de entidades con registro de histórico es fundamental que exista
     \end{tabular}
     } % end /resizebox
     \caption{CU-07 Añadir histórico de elemento seleccionado}
-    \label{tab:cu-anhadir-historico-elemento}
+    \label{tab:cu-anhadir-historico-elemento-chap-analisis}
 \end{table}
 
 
@@ -332,7 +368,7 @@ Para este tipo de entidades con registro de histórico es fundamental que exista
     \end{tabular}
     } % end /resizebox
     \caption{CU-09 Borrar histórico del elemento seleccionado}
-    \label{tab:cu-borrar-historico-elemento}
+    \label{tab:cu-borrar-historico-elemento-chap-analisis}
 \end{table}
 
 
@@ -347,24 +383,25 @@ En esta sección describiremos los distintos elementos usados para el diseño de
 \subsection{Arquitectura en tres niveles}
 \label{sub:arquitectura3niveles}
 
-Para el desarrollo de este proyecto se ha optado por el patrón de arquitectura \acrlong{mvc} que presenta una arquitectura que separa las aplicaciones en tres niveles \footnote{Aunque está comunmente aceptado capa como sinónimo de nivel, no significan lo mismo. Una \textit{\textbf{capa}} se refiere a una \textit{división funcional del software}, pero un \textit{\textbf{nivel}} se refiere a una \textit{división funcional del software que se ejecuta en una infraestructura separada}  de las otras divisiones, por lo que las capas no pueden ofrecer los mismos beneficios que los niveles} de informática lógica y física: la interfaz de usuario, el nivel donde se procesan los datos y el nivel donde se almacenan y gestionan esos datos ~\cite{ibmMVC} (ver \figurename~\ref{fig:arquitectura-3-niveles}):
+Para el desarrollo de este proyecto se ha optado por el patrón de arquitectura \acrlong{mvc} que presenta una arquitectura que separa las aplicaciones en tres niveles \footnote{Aunque está comunmente aceptado capa como sinónimo de nivel, no significan lo mismo. Una \textit{\textbf{capa}} se refiere a una \textit{división funcional del software}, pero un \textit{\textbf{nivel}} se refiere a una \textit{división funcional del software que se ejecuta en una infraestructura separada}  de las otras divisiones, por lo que las capas no pueden ofrecer los mismos beneficios que los niveles}: la interfaz de usuario, el nivel donde se procesan los datos y el nivel donde se almacenan y gestionan esos datos ~\cite{ibmMVC} (ver \figurename~\ref{fig:arquitectura-3-niveles}).
 
 \begin{figure}
   \centering
   \includegraphics[width=0.55\textwidth]{imaxes/arquitectura-3-niveles.png}
-  \caption{Arquitectura en tres niveles}
+  \caption{Representación de la arquitectura en tres niveles}
   \label{fig:arquitectura-3-niveles}
 \end{figure}
 
-\paragraph{Nivel de presentación.} Es la interfaz de usuario, donde el usuario final interactúa con la aplicación. Este primer nivel puede ejecutarse en una navegador web como una aplicación de escritorio o una \acrshort{gui}.
 
-\paragraph{Nivel de aplicación.} También conocido como el nivel lógico o medio, es el núcleo de la aplicación. Se procesa la información recogida en el nivel de presantación. En ocasiones este procesado de información se realiza junto con otra información en el nivel de datos a través de lo que se conoce como  lógica empresarial: un conjunto específico de reglas empresariales. Este nivel también puede añadir, suprimir o modificar datos en el nivel de datos. Se comunica con el nivel de datos mediante llamadas a las distintas \acrshort{api}. 
+El propósito de cada una de ellas es el siguiente:
+\begin{itemize}
+\item \textbf{Nivel de presentación}. Es la interfaz de usuario, donde el usuario final interactúa con la aplicación. Este primer nivel puede ejecutarse en una navegador web como una aplicación de escritorio o una \acrshort{gui}.
+\item \textbf{Nivel de aplicación}. También conocido como el \textit{nivel lógico o medio}, es el núcleo de la aplicación. Se procesa la información recogida en el nivel de presantación. En ocasiones este procesado de información se realiza junto con otra información en el nivel de datos a través de lo que se conoce como  lógica empresarial: un conjunto específico de reglas empresariales. Este nivel también puede añadir, suprimir o modificar datos en el nivel de datos. Se comunica con el nivel de datos mediante llamadas a las distintas \acrshort{api}. 
+\item \textbf{Nivel de datos}. También denominado nivel de base de datos, de acceso a datos o backend, es donde se almacena y gestiona la información procesada por la aplicación. Puede ser un sistema de gestión de base de datos relacional (PostgreSQL, MySQL, Oracle,\dots) o en un servidor de bases de datos NoSQL (MongoDB, Cassandra,\dots). \newline
+\end{itemize}
 
-\paragraph{Nivel de datos.} También denominado nivel de base de datos, de acceso a datos o backend, es donde se almacena y gestiona la información procesada por la aplicación. Puede ser un sistema de gestión de base de datos relacional (PostgreSQL, MySQL, Oracle,\dots) o en un servidor de bases de datos NoSQL (MongoDB, Cassandra,\dots). 
 
-\paragraph{}
 En una aplicación de tres niveles, toda la comunicación pasa por el nivel de aplicación. Los niveles de presentación y de datos no pueden comunicarse directamente entre sí.
-
 
 La arquitectura de tres niveles aporta múltiples ventajas~\cite{ibmMVC}:
 \begin{itemize}
@@ -387,16 +424,16 @@ El framework \acrshort{jsf} se basa en el patrón \acrlong{mvc}.
 
 Aunque el patrón \acrshort{mvc} comparte con la arquitectura de tres niveles la visión de la apliación en 3 áreas separadas, difiere en la forma de entender la comunicación entre ellas: en el patrón de modelo vista controlador las distintas capas se comunican de forma triangular, dos a dos, mientras que en la arquitectura de tres niveles toda comunicación pasa por el nivel de aplicación.
 \begin{itemize}
-\item Capa de persistencia: Recibe solicitudes de almacenamiento o recuperación de información por parte de la capa de negocio, es decir, es la encargada de cargar y modificar la información guardada en el servidor de base de datos. Se encarga de convertir los datos de los registros de la base de datos a objetos manejables por Jakarta EE, para lo que cuenta con un mecanismo de conversión de datos relacionales a objetos. 
-\item Capa de negocio: Se encarga de las reglas del negocio que resuelve o satisface las necesidades de un dominio en un negocio particular. En este nivel se encuentra en el servidor de aplicaciones. Los componentes de este nivel interactúan con el nivel de persistencia y suelen implementarse como componentes EJB.
-\item Nivel de presentación: Se encarga de interactuar con el usuario final. Contiene la lógica de presentación que se emplea para generar una respuesta al cliente y sus operaciones son soportadas por el contenedor web que es el encargado de dar un acceso visual al sistema a través de una interfaz de usuario como la web a través de un navegador. Esta capa utiliza la capa de negocio para realizar ciertas operaciones.
+\item \textbf{Nivel de persistencia}. Recibe solicitudes de almacenamiento o recuperación de información por parte del nivel de negocio, es decir, es la encargada de cargar y modificar la información guardada en el servidor de base de datos. Se encarga de convertir los datos de los registros de la base de datos a objetos manejables por Jakarta EE, para lo que cuenta con un mecanismo de conversión de datos relacionales a objetos. 
+\item \textbf{Nivel de negocio}. Se encarga de las reglas del negocio que resuelve o satisface las necesidades de un dominio en un negocio particular. En este nivel se encuentra en el servidor de aplicaciones. Los componentes de este nivel interactúan con el nivel de persistencia y suelen implementarse como componentes EJB.
+\item \textbf{Nivel de presentación}. Se encarga de interactuar con el usuario final. Contiene la lógica de presentación que se emplea para generar una respuesta al cliente y sus operaciones son soportadas por el contenedor web que es el encargado de dar un acceso visual al sistema a través de una interfaz de usuario como la web a través de un navegador. Este nivel utiliza el nivel de negocio para realizar ciertas operaciones.
 \end{itemize}
 
 
 \begin{figure}[H]
   \centering
   \includegraphics[width=0.6\textwidth]{imaxes/mvc-patron.png}
-  \caption{Patron MVC}
+  \caption{Diagrama del patron MVC donde se observan los distintos niveles y la comunicación entre ellos.}
   \label{fig:patron-mvc}
 \end{figure}
 

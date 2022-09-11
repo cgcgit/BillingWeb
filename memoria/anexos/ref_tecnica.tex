@@ -484,7 +484,7 @@ En este apartado se muestran los casos de uso genéricos para la búsqueda, sele
 	  \\\hline
     \end{tabular}
     } % end /resizebox
-    \caption{CU-12 Buscar relación para elementos simples}
+    \caption{CU-12 Buscar relación para elementos con histórico}
     \label{tab:cu-buscar-relacion-elementos-historico}
 \end{table}
 
@@ -652,7 +652,8 @@ En este apartado se muestran los casos de uso genéricos para la búsqueda, sele
 \end{table}
 
 
-\paragraph{Casos de uso Gestionar ficha personal} 
+\subsubsection{Casos de uso Gestionar ficha personal} 
+\label{sub:cu-ficha}
 
 Este caso de uso define las funcionalidades de gestión de la ficha personal del usuario: cambiar su contraseña o sus datos de contacto.
 
@@ -869,7 +870,7 @@ El caso de uso aquí presentado define las funcionalidades de gestión para los 
 	  \\\hline
     \end{tabular}
     } % end /resizebox
-    \caption{CU-24 Acceder al catálog entidad con históricos}
+    \caption{CU-24 Acceder al catálogo entidad con históricos}
     \label{tab:cu-listar-catálogo-historico}
 \end{table}
 
@@ -963,7 +964,7 @@ El caso de uso aquí descrito define las funcionalidades de gestión de los dist
 
 
 \subsubsection{Caso de uso Acceder a instancia} 
-\label{sub:cu-catalogo}
+\label{sub:cu-acceder-instancia}
 
 
 Los casos de uso aquí descritos definen las funcionalidades de gestión de los distintos elementos englobados en las entidades de instancia. 
@@ -975,7 +976,7 @@ Los casos de uso aquí descritos definen las funcionalidades de gestión de los 
 	\resizebox{14cm}{!} { % evita que la tabla sobresalga de la p\'agina, ajustando tama\'no de letra y grosor de l\'ineas
     \begin{tabular}{| m{3cm} | m{11cm} |}   
     \hline
-	  \textbf{CU-27} & \textbf{Gestionar usuarios} \\\hline
+	  \textbf{CU-27} & \textbf{Acceder a instancia} \\\hline
 	  \textbf{Descripción} & Listar la instancia seleccionada y gestionar los datos si se tienen los permisos correspondientes. \\\hline
 	  \textbf{Actores} & READ, WRITE y ADMIN. \\\hline
 	  \textbf{Precondiciones} & El usuario está conectado y ha seleccionado del menú la instancia de la entidad a listar y gestionar los datos si se tienen los permisos correspondientes. \\\hline
@@ -998,14 +999,14 @@ Los casos de uso aquí descritos definen las funcionalidades de gestión de los 
 	  \\\hline
     \end{tabular}
     } % end /resizebox
-    \caption{CU-27 Gestionar usuarios}
+    \caption{CU-27 Acceder a instancia}
     \label{tab:cu-listar-instancia}
 \end{table}
 
 
 
 \subsubsection{Caso de uso Acceder jerarquía} 
-\label{sub:cu-catalogo}
+\label{sub:cu-acceder-jerarquía}
 
 El caso de uso aquí descrito define las funcionalidades para mostrar los datos de contratación a nivel jerárquico.
 
@@ -1033,13 +1034,13 @@ El caso de uso aquí descrito define las funcionalidades para mostrar los datos 
     \end{tabular}
     } % end /resizebox
     \caption{CU-28 Acceder jerarquía}
-    \label{tab:cu-listar-instancia}
+    \label{tab:cu-acceder-jerarquia}
 \end{table}
 
 
 
 \subsubsection{Caso de uso Gestionar usuarios} 
-\label{sub:cu-catalogo}
+\label{sub:cu-gestionar-usuarios}
 
 
 El caso de uso Gestionar usuarios sólo está disponible para el actor ADMIN. A continuación se describe dicho caso de uso
@@ -1140,6 +1141,8 @@ A continuación se presentan los distintos diagramas de la E-R. Se han omitido l
 \section{Estructura del código}
 \label{chap:estructuraCodigo}
 
+El código presentado está totalmente accesible en el siguiente repositorio de Github \url{https://github.com/cgcgit/CoMaSw.git}, bajo la carpeta CoMaSw.
+
 El proyecto se ha desarrollado usando Maven, por lo que la estructura del mismo es la siguiente:
 
 
@@ -1165,7 +1168,7 @@ El proyecto se ha desarrollado usando Maven, por lo que la estructura del mismo 
     \end{tabular}
     } % end /resizebox
     \caption{}
-    \label{tab:cu-gestión-usuarios}
+    \label{tab:estructura-codigo}
 \end{table}
 
 
@@ -1429,7 +1432,7 @@ Además de contener las páginas \acrshort{xhtml} de login y error, contiene la 
 
 
 \subsection{Directorio /src/main/resources - Recursos de la aplicacion}
-\label{sub:recursos}
+\label{sub:recursos-aplicacion}
 El directorio \textit{\textbf{/src/main/resources}} contiene los distintos recursos usados por la aplicación. A continuación se ofrece un listado del contenido del mismo.
 
 
@@ -1445,9 +1448,17 @@ El directorio \textit{\textbf{/src/main/resources}} contiene los distintos recur
 \textit{uiValues.properties} que contiene valores genéricos de componentes usados en las páginas \acrshort{xhtml}.
 \textit{urlPage.properties} que contiene informaciones relativas a distintas urls.
 \\\hline
-	\textbf{Carpeta} & \textit{\textbf{db}} \newline
-    Contiene los ficheros necesarios para exportar la base de datos.
-	\\\hline
+	\textbf{Carpeta} & \textit{\textbf{Documentation}} \newline
+    Contiene lo siguiente:
+    \begin{itemize}
+    \item Carpeta instalationFiles, que contiene el fichero \emph{comasw\_files.zip} con todos los ficheros necesarios para instalar la aplicaicón y el fichero readme.txt con los pasos a seguir.
+    \item Fichero \emph{manual\_usuario.pdf} con el manual de usuario de la aplicación.
+    \item Fichero \emph{db\_comasw\_html.zip} con la documentación de la base de datos comasw en formato html.
+    \end{itemize}    
+    \\\hline
+	\textbf{Carpeta} & \textit{\textbf{License}} \newline
+	Contiene el fichero \emph{\textbf{gpl-3.0.txt}} que conitene la licencia bajo el que se ha desarrollado la aplicación (\acrshort{licencia}).
+    \\\hline
 	\textbf{Fichero} & \textit{\textbf{log4j2.xml}} \newline
     Fichero de configuración de Log4j.
 	\\\hline
@@ -1461,7 +1472,7 @@ El directorio \textit{\textbf{/src/main/resources}} contiene los distintos recur
 
 
 \subsection{Directorio /target/generated-sources/jooq - Clases generadas}
-\label{sub:recursos}
+\label{sub:clases-generadas}
 El directorio \textit{\textbf{/target/generated-sources/jooq}} contiene las distintas clases generadas por el generador de clases de \acrshort{jooq}. A continuación se presenta el listado con el contenido del mismo
 
 

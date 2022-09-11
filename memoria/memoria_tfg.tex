@@ -53,8 +53,13 @@
 \usepackage{float}  % para fijar la tabla en la posici\'on en la que se encuentra [H]
 \usepackage[normalem]{ulem} % para disponer de subrayado multilínea
 
+\usepackage[acronym]{glossaries}
+\usepackage[toc]{glossaries}
+
 \lstdefinestyle{comando}{language=Bash,numbers=none,frame=none,
   escapeinside={(*}{*)},commentstyle=\itshape\color{black!60}}
+
+\usepackage{hyperref}  
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Corpo                                                                        %
@@ -96,11 +101,12 @@
  %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
  \include{contido/introducion}
+ \include{contido/estado_arte}
  \include{contido/teoria}
  \include{contido/apartado-tecnico}
+ \include{contido/metodologia} 
  \include{contido/analisis-disenho} 
  \include{contido/implementacion} 
- \include{contido/pruebas} 
  \include{contido/planificacion}
 %\include{contido/...}
  \include{contido/conclusions}
@@ -120,6 +126,7 @@
 
  \bibliographystyle{IEEEtranN}
  \bibliography{\bibconfig,bibliografia/bibliografia}
+ \nocite{*} %incluir la bibliografía no citada
 
  \clearpage
  
