@@ -1,15 +1,16 @@
 \chapter{CoMaSw. Manual de la Aplicación}
 \label{chap:manual}
 
-\lettrine{CoMaSw} (\emph{\textbf{Co}}ntract \emph{\textbf{Ma}}nagement \emph{\textbf{S}}of\emph{\textbf{w}}are) una aplicación software desarrollado para la gestión de la contratación de una empresa proveedora de servicios. Las dos actividades principales de esta herramienta son:
+\lettrine{CoMaSw} (\emph{\textbf{Co}}ntract \emph{\textbf{Ma}}nagement \emph{\textbf{S}}of\emph{\textbf{w}}are) una aplicación de código abierto desarrollada bajo licencia \acrfull{licencia}.
+
+
+Se trata de un software para la gestión de la contratación de cualquier empresa cuyo modelo de negocio se base en suscripciones con tarifas periódicas (proveedores de servicios, gimnasios, academias, etc.). Las dos actividades principales de esta herramienta son:
 \begin{itemize}
 \item La gestión del catálogo de servicios de la empresa, mediante la definición de nuevos productos y servicios, elementos facturables como cuotas de consumo y aplicación de descuentos a través de promociones o modificación de las ya existentes.
 \item La gestión de la cartera de clientes, creando nuevos clientes o modificando clientes existentes y estableciendo las contrataciones oportunas de los distintos elementos ofertados por la empresa para esos clientes.
 \end{itemize}
 
 Para mayor flexibilidad se han definido una serie de elementos parametrizables cuyo objetivo es dotar de mayor adaptabilidad a las entidades ante nuevas necesidades que puedan surgir en el futuro.
-
-
 
 
 \section{Manual del administrador}
@@ -1082,7 +1083,7 @@ Las operaciones definidas para esta vista son las siguientes (nota: sólo están
 
 
 \subsubsection{Service Fee Type - Relación entre tipo de Servicio y de Cuota}
-\label{sub:product-fee-type-relation}
+\label{sub:service-fee-type-relation}
 
 Nota: Para acceder a la pantalla que da acceso a la operativa de este tipo de entidad se desplegará la sección \emph{CATALOG} del menú principal y se seleccionará el tipo de entidad \emph{Service Type} $\rightarrow$  \emph{Service Fee Type}.
 
@@ -1114,7 +1115,7 @@ Las operaciones definidas para esta vista son las siguientes (nota: sólo están
 
 
 \subsubsection{Service Promotion Type - Relación entre tipo de Servicio y de Promoción}
-\label{sub:product-promotion-type-relation}
+\label{sub:service-promotion-type-relation}
 
 Nota: Para acceder a la pantalla que da acceso a la operativa de este tipo de entidad se desplegará la sección \emph{CATALOG} del menú principal y se seleccionará el tipo de entidad \emph{Service Type} $\rightarrow$  \emph{Service Promotion Type}.
 
@@ -1360,6 +1361,49 @@ Para borrar un registro de histórico del cliente se seleccionará del listado e
 \item[\underline{\textsl{\textbf{Borrar el cliente}}}]
 Esta operación sólo está disponible para usuarios con permisos de edición.
 Para borrar completamente un cliente se deben borrar uno a uno todos los registros de histórico del cliente según lo indicado en el punto anterior.
+\end{description}
+
+
+\subsection{Contract - Contrato}
+\label{sub:contract}
+
+
+Esta vista muestra la información relativa a los contratos del sistema.
+
+Toda contratación debe llevar asociada un contrato, Dicho contacto debe ser único. Por lo general este contrato se va a generar en el momento de crear una cuenta, y por lo tanto su generación va a ser automática durante la creación de las cuentas (ver \ref{sub:account}). Sin embargo es posible que necesitemos gestionar datos relativos a la fecha de los contratos.
+
+Un tipo de contrato viene definido por los elementos indicados en la \tablename~\ref{tab:contrato}:
+
+
+
+\begin{table}[H]
+  \centering
+  \rowcolors{2}{white}{udcgray!25}
+  \setlength{\leftmargini}{0.4cm}
+  \resizebox{14cm}{!} {
+  \begin{tabular}{|m{3cm} m{11cm}|}
+  \rowcolor{udcpink!25}
+  \hline
+  	\textbf{Elemento} & \textbf{Descripción} \\\hline
+	\textbf{CONTRACT NUMBER} & Nñumero de contrato. Es único y se genera de forma automática.   \\
+	\textbf{CREATE DATE} & Es la fecha en la que se crea el contrato. Se genera de forma automática. \\
+	\textbf{SEND DATE} & Fecha de envío del contrato al cliente. Por defecto su valor es nulo (se cubrirá cuando se envíe dicho contrato. En esta versión la gestión de este valor debe ser manual). \\		
+	\textbf{SIGNED DATE} & Fecha de firma del contrato por el cliente. Por defecto su valor es nulo (se cubrirá cuando se reciba la firma de dicho contrato. En esta versión la gestión de este valor debe ser manual). \\	
+	\textbf{ACTIVE DATE} & Fecha de activación del contrato. Por defecto su valor es nulo (se cubrirá cuando se realice la activación de dicho contrato. En esta versión la gestión de este valor debe ser manual). \\	
+	\\\hline
+  \end{tabular}
+  } % end /resizebox
+  \caption{Datos que definen un contrato.}
+  \label{tab:contrato}
+\end{table}
+
+Las operaciones definidas para esta entidad son las siguientes (nota: sólo están habilitadas para usuarios con permisos de edición):
+\begin{description}
+\item[\underline{\textsl{\textbf{Crear nuevo contrato}}}] Para crear un nuevo contrato se pulsará el botón \textit{New Data} situado en la parte superior de la tabla. Aparecerá una ventana emergente que mostrará un formulario con los campos a cubrir. Si no se establece ningún campo se tomarán los valores por defecto.
+
+\item[\underline{\textsl{\textbf{Editar contrato existente}}}] Para editar un contrato existente se seleccionará del listado y se pulsará el botón editar de la columna \textit{EDIT ROW} correspondiente. Se editarán los campos pertinentes directamente en la tabla para realizar las modificaciones oportunas. 
+
+\item[\underline{\textsl{\textbf{Borrar contrato}}}] Para borrar un contrato se seleccionará del listado y se pulsará el botón amarillo de borrar de la columna \textit{DEL ROW} correspondiente.
 \end{description}
 
 
