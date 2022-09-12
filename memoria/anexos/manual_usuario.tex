@@ -63,6 +63,7 @@ A continuación se detallan los pasos a seguir para el proceso de instalación (
 \item \underline{\textbf{Descomprimir el fichero \emph{comasw\_files.zip}}} \newline
 Este fichero comprimido contiene lo siguiente:
 	\begin{itemize}
+	    \item readme.txt - fichero con los pasos a realizar para la instalación (los mismos que aquí se describen).
 		\item CoMaSw.war - fichero war de la aplicación.
 		\item postgresql-42.4.1.jar - driver jdbc para postgres.
 		\item creacion\_db.sql - script con los pasos necesarios para la creación de la base de datos.
@@ -75,7 +76,7 @@ La base de datos de la aplicación se llama \emph{\textbf{db\_comasw}} y tiene d
 		\item \emph{comasw\_admin} - usuario propietario de la base de datos. Todo nuevo objeto a crear en la base de datos de la aplicación deberá crearse con este usuario.
 		\item \emph{comasw\_app} - usuario de la aplicación CoMaSw (con el que establece conexión la aplicación a la base de datos). En caso de crear nuevos objetos en la base de datos relacionados con la aplicación deberán otorgársele los permisos correspondientes a este usuario sobre dichos objetos.
 	\end{itemize}
-
+\underline{\textbf{Por seguridad se recomienda cambiar las contraseñas de los usuarios comasw\_admin y comasw\_app}}.
 A continuación se describen los pasos a seguir para crear y configurar la base de datos.	
 	\begin{enumerate}
 		\item \underline{\textbf{Crear la base de datos \emph{\textbf{db\_comasw}}}}\\
@@ -101,10 +102,16 @@ Ejecutamos lo siguiente, siendo \textbf{[ruta\_driver]} la ruta en la que hemos 
   module add --name=org.postgresql --resources=(*\bfseries[ruta\_driver]*)/postgresql-42.4.1.jar --dependencies=javax.api,javax.transaction.api
 \end{lstlisting}
 
-	\item \underline{\textbf{Añadimos el driver JDBC}}\newline
+	\item \underline{\textbf{Asociar el driver JDBC}}\newline
 Ejecutamos lo siguiente:
 \begin{lstlisting}[style=comando]
 /subsystem=datasources/jdbc-driver=postgres:add( driver-name="postgres", driver-module-name="org.postgresql", driver-class-name=org.postgresql.Driver)
+\end{lstlisting}
+
+\item \underline{\textbf{Añadir la base de datos db\_comasw con el usuario de la aplicación comasw\_app}}\newline
+Ejecutamos lo siguiente, cambiando [comasw\_app] por la nueva contraseña del usuario comasw\_app asignada en la configuración de la base de datos:
+\begin{lstlisting}[style=comando]
+data-source add --name=db\_comasw --driver-name=postgres --jndi-name=java:jboss/datasources/db\_comasw --connection-url=jdbc:postgresql://localhost:5432/db\_comasw --user-name=comasw\_app --password=[comasw\_app] --enabled=true
 \end{lstlisting}
 	\end{enumerate}
 
@@ -1434,7 +1441,7 @@ Las operaciones definidas para esta entidad son las siguientes:
   	\textbf{END DATE} & Fecha de finalización del período temporal para el que aplican las condiciones especificadas para dicho período.\\
 	\textbf{CUSTOMER ID} & Identificador unívoco del cliente al que está vinculado la cuenta.\\
 	\textbf{ACCOUNT TYPE} & Tipo de cuenta asociado a la cuenta. Define la información relativa a la facturación.\\
-	\textbf{ACCOUNT ID} & Identificador unívoco de la cuenta generado por la apliación.\\
+	\textbf{ACCOUNT ID} & Identificador unívoco de la cuenta generado por la aplicación.\\
 	\textbf{CODE} & Código identificativo de la cuenta dentro del cliente. Sólo puede existir una cuenta con un código por cliente (aunque puede haber más cuentas con el mismo código identificativo para cuentas que pertenecen a distintos clientes).\\
 	\textbf{CONTRACT NUMBER} & Número de contrato asociado a la cuenta. No puede haber más de una cuenta distinta con el mismo número de contrato..\\
 	\textbf{NAME} & Nombre de la persona física o jurídica asociada a la cuenta.\\
@@ -1482,7 +1489,7 @@ Para crear una nueva cuenta se pulsará el botón \textit{New Data} situado en e
 \item Pestaña Contract and Customer Data: en este apartado se define tanto el contrato asociado a la cuenta como el cliente del que depende. 
 	\begin{itemize}
 		\item Área Contract Data: Si queremos usar un contrato ya existente en el servicio introduciremos el número de contrato a relacionar en el campo de texto \emph{Contract Nr}. Si por el contrario queremos asociar un nuevo contrato pulsaremos el botón \emph{New Contract}, que generará un nuevo número de contrato y lo visualizará en el campo de texto \emph{Contract Nr}.
-		\item Área Customer Data: Si sabemos el identificador del cliente del que dependerá la cuenta a crear, introduciremos ese valor en el campo \emph{Customer Id}. En caso contrario introduciremos el valor del documento identificativo del cliente a asociar en el área de texto Customer Identity Card y pulsaremos el botón search. Esto mostrará un listado con los clientes cuyo documento identificativo coincida con el introducido, seleccionaremos el cliente deseado y pulsaremos el botón amarillo de la columna \emph{Select} correspondiente a dicho registro. Esto cargará la información del cliente en el área Custome Data.		
+		\item Área Customer Data: Si sabemos el identificador del cliente del que dependerá la cuenta a crear, introduciremos ese valor en el campo \emph{Customer Id}. En caso contrario introduciremos el valor del documento identificativo del cliente a asociar en el área de texto Customer Identity Card y pulsaremos el botón search. Esto mostrará un listado con los clientes cuyo documento identificativo coincida con el introducido, seleccionaremos el cliente deseado y pulsaremos el botón amarillo de la columna \emph{Select} correspondiente a dicho registro. Esto cargará la información del cliente en el área Customer Data.		
 	\end{itemize}		
 \item Pestaña Instance Details: aquí se define, entre otros, el tipo de cuenta que va a tener asociada esta cuenta. Los campos a definir son los siguientes y son todos obligatorios:
 	\begin{itemize}
