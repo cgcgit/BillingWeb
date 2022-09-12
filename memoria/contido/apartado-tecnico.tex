@@ -19,7 +19,7 @@ Jakarta EE ofrece a los desarrolladores un conjunto completo de especificaciones
 
 El lenguaje de programación Java nació en 1991 de la mano de James Gosling, que en aquellos momentos trabajaba en Sun Microsystems, y su equipo. Los objetivos de Gosling eran implementar una máquina virtual y un lenguaje con una estructura y sintaxis similar a C++. La promesa inicial de Gosling era  \textquote{\textit{Write Once, Run Anywhere}} (Escríbelo una vez, ejecútalo en cualquier lugar), proporcionando un lenguaje independiente de la plataforma y un entorno de ejecución ligero y gratuito para las plataformas más populares (la \acrfull{jvm}), de forma que los binarios (\emph{bytecode}) de las aplicaciones Java pudiesen ejecutarse en cualquier plataforma. En 1995 fue lanzado comercialmente por Sun Microsystems como un componente fundamental de la plataforma Java. 
 
-La plataforma Java es un conjunto de programas que facilitan el desarrollo y la ejecución de programas escritos en el lenguaje de programación Java. Una plataforma Java incluye un motor de ejecución (la \acrshort{jvm}), un compilador y un conjunto de bibliotecas. También puede haber servidores adicionales y bibliotecas alternativas que dependen de los requisitos. Las plataformas Java se han implementado para una amplia variedad de hardware y sistemas operativos con el fin de permitir que los programas Java se ejecuten de manera idéntica en todos ellos. Existen distintas plataformas orientadas adistintas clases de dispositivos y aplicaciones, a saber:
+La plataforma Java es un conjunto de programas que facilitan el desarrollo y la ejecución de programas escritos en el lenguaje de programación Java. Una plataforma Java incluye un motor de ejecución (la \acrshort{jvm}), un compilador y un conjunto de bibliotecas. También puede haber servidores adicionales y bibliotecas alternativas que dependen de los requisitos. Las plataformas Java se han implementado para una amplia variedad de hardware y sistemas operativos con el fin de permitir que los programas Java se ejecuten de manera idéntica en todos ellos. Existen distintas plataformas orientadas a distintas clases de dispositivos y aplicaciones, a saber:
 \begin{itemize}
 \item Java Card: Una tecnología que permite que las pequeñas aplicaciones basadas en Java (applets) se ejecuten de forma segura en tarjetas inteligentes y dispositivos similares de pequeña memoria. 
 \item Java ME (Micro Edition): especifica varios conjuntos diferentes de bibliotecas (conocidas como perfiles) para dispositivos con capacidades limitadas de almacenamiento, visualización y energía. A menudo se utiliza para desarrollar aplicaciones para dispositivos móviles, PDA, decodificadores de TV e impresoras. 
@@ -30,9 +30,9 @@ La plataforma Java es un conjunto de programas que facilitan el desarrollo y la 
 
 Puesto que el desarrollo de este trabajo ha sido a través de \acrshort{jee}, nos centraremos en dicha plataforma. Java Enterprise Edition fue un proyecto iniciado por Sun Microsystems en el año 1999 bajo el nombre de J2EE y adquirida por Oracle diez años más tarde, dando continuidad al proyecto hasta 2017, momento en el que el proyecto pasó a manos de la Eclipse Foundation, quien continúa con su desarrollo bajo la modalidad de código abierto en la actualidad ~\cite{JakartaEE-eclipse}.
 
-Esta transferencia de proyecto de Oracle a Eclipse Foundation no incluyó el uso de la marca Java, por lo que Eclipse Foundation renombró el proyecto pasando a denominarse \acrshort{jee}. La primera versión lanzada bajo el paraguas de Eclipse Foundation fue la 8 (versión con la que se ha desarrollado la aplicación de este \acrshort{tfg}) y actualmente está disponible la versión 9.1. La \tablename~\ref{tab:evolucionJavaEE} muestra la evolución histórica de Java EE y Jakarta EE:
+Esta transferencia de proyecto de Oracle a Eclipse Foundation no incluyó el uso de la marca Java, por lo que Eclipse Foundation renombró el proyecto pasando a denominarse \acrshort{jee}. La primera versión lanzada bajo el paraguas de Eclipse Foundation fue la 8 (versión con la que se ha desarrollado la aplicación de este \acrshort{tfg}) y actualmente está disponible la versión 9.1. La \tablename~\ref{tab:evolucionJavaEE} muestra la evolución histórica de Java EE y Jakarta EE.
 
-\begin{table}[hp!]
+\begin{table}
   \centering
   \rowcolors{2}{white}{udcgray!25}
   \begin{tabular}{c|c|c|c}
@@ -121,7 +121,7 @@ Entre las distintas especificaciones de \acrshort{jee} cabe destacar las siguien
 
 \subsection{Contenedores}
 \label{sec:contenedores}
-\acrshort{jee} se divide en dominios lógicos llamados contenedores. En una aplicacion \acrshort{jee} los componentes nunca interactúan con otros componentes de la aplicación si no que utilizan los protocolos y métodos del contenedor para interactuar entre sí y con los servicios de la plataforma~\cite{JakartaEE}. Cada contenedor tiene una función específica, soporta un conjunto de \acrshort{api} y ofrece servicios a los componentes tales como seguridad, acceso a base de datos, gestión de transacciones, nombres de directorios e inyección de recursos. Los contenedores ocultan la complejidad técnica y mejoran la portabilidad lo que permite al desarrollador centrarse en la lógica de aplicación en lugar de resolver problemas técnicos. Por ejemplo el contenedor \acrshort{ejb} es responsable de administrar la ejecución de los beans que contienen la lógica de negocio.
+\acrshort{jee} se divide en dominios lógicos llamados contenedores. En una aplicación \acrshort{jee} los componentes nunca interactúan con otros componentes de la aplicación si no que utilizan los protocolos y métodos del contenedor para interactuar entre sí y con los servicios de la plataforma~\cite{JakartaEE}. Cada contenedor tiene una función específica, soporta un conjunto de \acrshort{api} y ofrece servicios a los componentes tales como seguridad, acceso a base de datos, gestión de transacciones, nombres de directorios e inyección de recursos. Los contenedores ocultan la complejidad técnica y mejoran la portabilidad lo que permite al desarrollador centrarse en la lógica de aplicación en lugar de resolver problemas técnicos. Por ejemplo el contenedor \acrshort{ejb} es responsable de administrar la ejecución de los beans que contienen la lógica de negocio.
 
 \subsubsection{Servidores}
 \label{sec:servidores}
@@ -166,7 +166,7 @@ En \acrshort{jsf} se define un \emph{servlet} llamado \emph{\textbf{Faces Servle
 El ciclo de vida de una aplicación \acrshort{jsf} consta de las siguientes fases~\cite{DesarrolloJakartaEE}:
 \begin{enumerate}
 \item Restaurar la vista: en esta etapa \acrshort{jsf} comprueba si la solicitud \acrshort{http} recibida es nueva o no con el fin de crear o restaurar el árbol de componentes (objetos Java necesarios).
-\item Aplicar los valores de la solicitud: una vez creado el arbol cada componente actualiza sus valores con los parámetros presentes en la solicitud.
+\item Aplicar los valores de la solicitud: una vez creado el árbol cada componente actualiza sus valores con los parámetros presentes en la solicitud.
 \item Procesar validaciones: valida y convierte los datos que el usuario ingresó al tipo que corresponda. En caso de que se produzca algún error, se saltará a la etapa de renderización, en la que se le informará al usuario de los errores producidos. En caso contrario se pasará a la siguiente fase (actualizar valores).
 \item Actualizar los valores del modelo: se refresca el árbol de componentes actualizando los valores del modelo.
 \item Invocar la lógica de la aplicación: se invocan los métodos solicitados por el usuario.
@@ -177,7 +177,7 @@ El ciclo de vida de una aplicación \acrshort{jsf} consta de las siguientes fase
 \subsection{Primefaces}
 \label{sec:primefaces}
 
-Primefaces es un framework de \gls{opensource} para \acrshort{jsf} que cuenta con un amplio conjunto de componentes enriquecidos para diseñar interfaces de usuario creada por PrimeTek Informatics. El desarrollo inicial de PrimeFaces se inició a finales de 2008.
+Primefaces es un \emph{framework} de \gls{opensource} para \acrshort{jsf} que cuenta con un amplio conjunto de componentes enriquecidos para diseñar interfaces de usuario creada por PrimeTek Informatics. El desarrollo inicial de PrimeFaces se inició a finales de 2008.
 
 Las principales características que presenta son las siguientes~\cite{Primefaces}:
 \begin{itemize}
@@ -204,7 +204,7 @@ El enfoque de \acrshort{jooq} pone el foco en el lado de \acrfull{sql} en lugar 
 
 Alguna de las características que presenta \acrshort{jooq} son las siguientes\citep{VentajasJooq}:
 \begin{itemize}
-\item Proporciona un generador de código que permite, mediante ingeniería inversa, converir el esquema de base de datos en conjunto de tablas de modelado de clases Java, registros, secuencias, POJO, DAO, procedimientos almacenados, tipos definidos por el usuario y muchos más listas para usarse. 
+\item Proporciona un generador de código que permite, mediante ingeniería inversa, convertir el esquema de base de datos en conjunto de tablas de modelado de clases Java, registros, secuencias, POJO, DAO, procedimientos almacenados, tipos definidos por el usuario y muchos más listas para usarse. 
 \item Ofrece la posibilidad de utilizar toda la funcionalidad de la base de datos seleccionada en lugar de una abstracción o un subconjunto limitado gracias a su \acrfull{dsl} fluido que se asigna uno a uno con \acrshort{sql}
 \item El \acrfull{dsl} que genera permite que su IDE se complete automáticamente mientras escribe las consultas.
 \item Utiliza el sistema de tipos de Java para garantizar que el SQL que genera es válido.
@@ -224,7 +224,7 @@ Existen diversos niveles de prioridad. A continuación se muestran los más util
 \begin{itemize}
 \item DEBUG: usado para escribir mensajes de depuración.
 \item INFO: mensajes puramente informativos.
-\item WARN: alertas. Generealmente utilizados para alertar de eventos de los que se quiere dejar constancia pero que no afectan al correcto funcionamiento de la aplicación.
+\item WARN: alertas. Generalmente utilizados para alertar de eventos de los que se quiere dejar constancia pero que no afectan al correcto funcionamiento de la aplicación.
 \item ERROR: usado para mensajes de eventos que afectan al programa pero lo dejan seguir funcionando (por ejemplo un parámetro figura como vacío por lo que se se carga el parámetro por defecto).
 \item FATAL: usado para errores críticos. 
 \end{itemize}  
@@ -259,10 +259,10 @@ Durante el desarrollo de PostgreSQL el foco se trasladó hacia el aumento de las
 \subsection{Características}
 \label{sec:caracteristicas}
 
-PostgreSQL es compatible con una gran parte del estándar SQL y entre sus caraterísticas figuran las siguientes: 
+PostgreSQL es compatible con una gran parte del estándar SQL y entre sus características figuran las siguientes: 
 \begin{itemize}
 \item Es \textit{open source}.
-\item Emplea un lenguaje SQL estandar lo que permite la importación de otras bases de datos.
+\item Emplea un lenguaje SQL estándar lo que permite la importación de otras bases de datos.
 \item Cumple con el modelo ACID (atomicidad, consistencia, aislamiento y durabilidad de los datos almacenados).
 \item Capacidad de realizar consultas complejas.
 \item Claves foráneas.
@@ -272,7 +272,7 @@ PostgreSQL es compatible con una gran parte del estándar SQL y entre sus carate
 \item Control de versiones simultánea.
 \end{itemize}
 
-También permite ampliaciones por parte del usuario de múliples formas, por ejemplo mediante la agregación de:
+También permite ampliaciones por parte del usuario de múltiples formas, por ejemplo mediante la agregación de:
 \begin{itemize}
 \item Nuevos tipos de datos 
 \item Funciones 

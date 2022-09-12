@@ -12,10 +12,10 @@
 \section{Casos de uso}
 \label{chap:casos-uso}
 
-Se definen tres tipos de usuarios de la aplicación en función de los funcionalidades que puedan realizar en la misma en función del perfil que tengan asignado. Los perfiles defindos para la aplicación son los siguientes:
+Se definen tres tipos de usuarios de la aplicación en función de los funcionalidades que puedan realizar en la misma en función del perfil que tengan asignado. Los perfiles definidos para la aplicación son los siguientes:
 
 \begin{itemize}
-\item READ: perfil de sólo lectura. Sólamente permite visualizar la información almacenada en la aplicación, pero no puede realizar ninguna modificación, salvo la relativa a su información de contacto y su contraseña.
+\item READ: perfil de sólo lectura. Solamente permite visualizar la información almacenada en la aplicación, pero no puede realizar ninguna modificación, salvo la relativa a su información de contacto y su contraseña.
 \item MODIF: perfil de lectura y modificación. Además de las funcionalidades descritas para el perfil READ, permite realizar modificaciones sobre las distintas entidades del sistema (altas/bajas/modificaciones).
 \item ADMIN: perfil de administrador. Además de las funcionalidades descritas para el perfil WRITE, permite la gestión de usuarios (altas/bajas/modificaciones).
 \end{itemize}
@@ -229,7 +229,7 @@ En este apartado se muestran los casos de uso genéricos para la búsqueda, sele
 	  \textbf{Descripción} & Editar registro de histórico del elemento seleccionado. \\\hline
 	  \textbf{Actores} & WRITE y ADMIN. \\\hline
 	  \textbf{Precondiciones} & El usuario del actor WRITE o ADMIN ha pulsado el botón editar para el registro de histórico para el elemento seleccionado. \\\hline
-	  \textbf{Postcondiciones} & Se modifica el registro de histórico elemento del listado de la entidad  y, si es necesario, se modifican las fechas de los regisros registros anterior y posterior para que sean consecutivos. \\\hline
+	  \textbf{Postcondiciones} & Se modifica el registro de histórico elemento del listado de la entidad  y, si es necesario, se modifican las fechas de los registros registros anterior y posterior para que sean consecutivos. \\\hline
 	  \textbf{Flujo básico} & 
 		\begin{enumerate}
 	  	\item El sistema muestra los campos editables del registro seleccionado y dos botones: guardar y cancelar.
@@ -293,7 +293,7 @@ En este apartado se muestran los casos de uso genéricos para la búsqueda, sele
 	  \textbf{Descripción} & Añadir registro de histórico del elemento seleccionado. \\\hline
 	  \textbf{Actores} & WRITE y ADMIN. \\\hline
 	  \textbf{Precondiciones} & El usuario del actor WRITE o ADMIN ha pulsado el botón añadir registro de histórico para el elemento seleccionado. \\\hline
-	  \textbf{Postcondiciones} & Se añade un nuevo registro de histórico  comprendido entre el elemento seleccionado del listado de la entidad y el siguiente elemento de la lista, o a continuación del elemento seleccionado si no hay más elementos en la lista, modificando fechas de dichos regisros para que sean consecutivos. \\\hline
+	  \textbf{Postcondiciones} & Se añade un nuevo registro de histórico  comprendido entre el elemento seleccionado del listado de la entidad y el siguiente elemento de la lista, o a continuación del elemento seleccionado si no hay más elementos en la lista, modificando fechas de dichos registros para que sean consecutivos. \\\hline
 	  \textbf{Flujo básico} & 
 		\begin{enumerate}
 	  	\item El sistema muestra un formulario con una copia del registro de histórico del elemento seleccionado con los campos susceptibles de modificar habilitados. El usuario modificará las fechas de inicio y/o fin del registro, así como el resto de campos que considere oportuno. 
@@ -360,8 +360,8 @@ En este apartado se muestran los casos de uso genéricos para la búsqueda, sele
 	  \textbf{CU-09} & \textbf{Borrar histórico del elemento seleccionado} \\\hline
 	  \textbf{Descripción} & Borrar histórico elemento seleccionado. \\\hline
 	  \textbf{Actores} & WRITE y ADMIN. \\\hline
-	  \textbf{Precondiciones} & El usuario del actor WRITE o ADMIN ha pulsado el botón de borrar para el registro de histórico del elemento selecconado. \\\hline
-	  \textbf{Postcondiciones} & Se elimina el registro de histórico del elemento seleccionado, modificando las fechas de los regisros anterior y/o posterior para que sean consecutivos. \\\hline
+	  \textbf{Precondiciones} & El usuario del actor WRITE o ADMIN ha pulsado el botón de borrar para el registro de histórico del elemento seleccionado. \\\hline
+	  \textbf{Postcondiciones} & Se elimina el registro de histórico del elemento seleccionado, modificando las fechas de los registros anterior y/o posterior para que sean consecutivos. \\\hline
 	  \textbf{Flujo básico} & 
 		\begin{enumerate}
 	  	\item El sistema muestra un cuadro de diálogo solicitando confirmación de borrado del registro de histórico del elemento seleccionado con dos botones: aceptar y cancelar.
@@ -765,7 +765,7 @@ Los casos de uso aquí descritos definen las funcionalidades de gestión de los 
 	\resizebox{14cm}{!} { % evita que la tabla sobresalga de la p\'agina, ajustando tama\'no de letra y grosor de l\'ineas
     \begin{tabular}{| m{3cm} | m{11cm} |}   
     \hline
-	  \textbf{CU-22} & \textbf{Acceder parametrizacion} \\\hline
+	  \textbf{CU-22} & \textbf{Acceder parametrización} \\\hline
 	  \textbf{Descripción} & Listar elementos de la entidad seleccionada de parametrización y gestionar los datos si se tienen los permisos correspondientes. \\\hline
 	  \textbf{Actores} & READ, WRITE y ADMIN. \\\hline
 	  \textbf{Precondiciones} & El usuario está conectado y ha seleccionado del menú la entidad a listar de la parametrización. \\\hline
@@ -775,7 +775,7 @@ Los casos de uso aquí descritos definen las funcionalidades de gestión de los 
 	  	\item El sistema muestra un listado paginado de todas las entidades del sistema del tipo seleccionado. Las
 cabeceras de los campos disponen de filtros para facilitar la búsqueda de una determinada entidad.
 		\item Si el usuario establece filtros, se muestran los datos que cumplen las condiciones seleccionadas en los mismos.
-		\item Si el usuario se correponde con el actor ADMIN se muestra un botón de creación de nuevo elemento de la entidad, y sobre el listado de entidades existente se muestran botones de edición y borrado del registro del listado seleccionado. Todos estos botones dan acceso a sus respectivos casos de uso.
+		\item Si el usuario se corresponde con el actor ADMIN se muestra un botón de creación de nuevo elemento de la entidad, y sobre el listado de entidades existente se muestran botones de edición y borrado del registro del listado seleccionado. Todos estos botones dan acceso a sus respectivos casos de uso.
 		\item Si el usuario selecciona la opción crear nuevo se da paso al \ref{tab:cu-nuevo-elemento} (\pageref{tab:cu-nuevo-elemento}.
 		\item Si el usuario es el actor ADMIN, selecciona un registro del listado y
 		    \begin{enumerate}
@@ -816,7 +816,7 @@ El caso de uso aquí presentado define las funcionalidades de gestión para los 
 	  	\item El sistema muestra un listado paginado de todas las entidades del sistema del tipo seleccionado. Las
 cabeceras de los campos disponen de filtros para facilitar la búsqueda de una determinada entidad.
 		\item Si el usuario establece filtros, se muestran los datos que cumplen las condiciones seleccionadas en los mismos.
-		\item Si el usuario se correponde con el actor WRITE o ADMIN se muestra un botón de creación de nuevo elemento de la entidad, y sobre el listado se muestran botones de edición y borrado del registro del listado seleccionado. Dichos botones dan acceso a los correspondientes casos de uso.
+		\item Si el usuario se corresponde con el actor WRITE o ADMIN se muestra un botón de creación de nuevo elemento de la entidad, y sobre el listado se muestran botones de edición y borrado del registro del listado seleccionado. Dichos botones dan acceso a los correspondientes casos de uso.
 		\item Si el usuario es el actor WRITE o ADMIN y selecciona la opción crear nuevo se da paso al \ref{tab:cu-nuevo-elemento} (\pageref{tab:cu-nuevo-elemento}.
 		\item Si el usuario es el actor WRITE o ADMIN, selecciona un registro del listado y
 		    \begin{enumerate}
@@ -890,7 +890,7 @@ El caso de uso aquí descrito define las funcionalidades de gestión de los dist
 	\resizebox{14cm}{!} { % evita que la tabla sobresalga de la p\'agina, ajustando tama\'no de letra y grosor de l\'ineas
     \begin{tabular}{| m{3cm} | m{11cm} |}   
     \hline
-	  \textbf{CU-25} & \textbf{Acceder a relacion simple del catálogo} \\\hline
+	  \textbf{CU-25} & \textbf{Acceder a relación simple del catálogo} \\\hline
 	  \textbf{Descripción} & Listar elementos de la entidad simple padre seleccionada del catálogo y gestionar los datos si se tienen los permisos correspondientes. \\\hline
 	  \textbf{Actores} & READ, WRITE y ADMIN. \\\hline
 	  \textbf{Precondiciones} & El usuario está conectado y ha seleccionado del menú la relación de entidad simple a listar del catálogo. \\\hline
@@ -915,7 +915,7 @@ El caso de uso aquí descrito define las funcionalidades de gestión de los dist
 	  \\\hline
     \end{tabular}
     } % end /resizebox
-    \caption{CU-25 Acceder a relacion simple del catálogo}
+    \caption{CU-25 Acceder a relación simple del catálogo}
     \label{tab:cu-listar-relaciones-catalogo-simple}
 \end{table}
 
@@ -932,7 +932,7 @@ El caso de uso aquí descrito define las funcionalidades de gestión de los dist
 	\resizebox{14cm}{!} { % evita que la tabla sobresalga de la p\'agina, ajustando tama\'no de letra y grosor de l\'ineas
     \begin{tabular}{| m{3cm} | m{11cm} |}   
     \hline
-	  \textbf{CU-26} & \textbf{Acceder a relacion con histórico del catálogo} \\\hline
+	  \textbf{CU-26} & \textbf{Acceder a relación con histórico del catálogo} \\\hline
 	  \textbf{Descripción} & Listar elementos de la entidad  padre con históricos seleccionada del catálogo y gestionar los datos si se tienen los permisos correspondientes. \\\hline
 	  \textbf{Actores} & READ, WRITE y ADMIN. \\\hline
 	  \textbf{Precondiciones} & El usuario está conectado y ha seleccionado del menú la relación de entidad con históricos a listar del catálogo. \\\hline
@@ -983,7 +983,7 @@ Los casos de uso aquí descritos definen las funcionalidades de gestión de los 
 	  \textbf{Postcondiciones} & Se muestra el listado de la instancia de la entidad. \\\hline
 	  \textbf{Flujo básico} & 
 		\begin{enumerate}
-	  	\item Se muestra un área de búsqueda con diversos criterios de búsqueda, siendo el de fecha de búsqueda criterio obligatorio y un botón para realizar la búsqueda de la instancia en función del criterio seleccionado. Al ser las instancias elementos jeraquizados entre los criterios de búsqueda estarán los datos que definen la jerarquía de las entidades padres del elemento a buscar.
+	  	\item Se muestra un área de búsqueda con diversos criterios de búsqueda, siendo el de fecha de búsqueda criterio obligatorio y un botón para realizar la búsqueda de la instancia en función del criterio seleccionado. Al ser las instancias elementos jerarquizados entre los criterios de búsqueda estarán los datos que definen la jerarquía de las entidades padres del elemento a buscar.
 	  	\item Si el cliente pulsa el botón de búsqueda se da paso al caso de uso \ref{tab:cu-buscar-elementos-historico}. 
 	  	\item Una vez obtenida la información de la instancia se muestra la información relevante de la entidad y el listado de históricos de la instancia.
 	  	\item Si el usuario tiene perfil WRITE o ADMIN se muestra un botón para crear una nueva entidad. Si pulsa dicho botón se da paso al caso de uso \ref{tab:cu-nuevo-elemento}.
@@ -1019,15 +1019,15 @@ El caso de uso aquí descrito define las funcionalidades para mostrar los datos 
     \begin{tabular}{| m{3cm} | m{11cm} |}   
     \hline
 	  \textbf{CU-28} & \textbf{Acceder jerarquía} \\\hline
-	  \textbf{Descripción} & Muestra los datos de contratación de forma jerárquica a través de un arbol \\\hline
+	  \textbf{Descripción} & Muestra los datos de contratación de forma jerárquica a través de un árbol \\\hline
 	  \textbf{Actores} & READ, WRITE y ADMIN. \\\hline
 	  \textbf{Precondiciones} & El usuario está conectado y ha seleccionado en el menú la opción de visualizar la jerarquía. \\\hline
-	  \textbf{Postcondiciones} & Se muestra el arbol jerárquico de la contratación seleccionada. \\\hline
+	  \textbf{Postcondiciones} & Se muestra el árbol jerárquico de la contratación seleccionada. \\\hline
 	  \textbf{Flujo básico} & 
 		\begin{enumerate}
 	  	\item Se muestra un área de búsqueda con diversos criterios de búsqueda, siendo el de fecha de búsqueda criterio obligatorio y un botón para realizar la búsqueda de las contrataciones en función del criterio seleccionado. 
 	  	\item Si el cliente pulsa el botón de búsqueda se obtiene toda la información acerca de las contrataciones para el cliente que cumple con los criterios de búsqueda. 
-	  	\item Una vez obtenida la información de los elementos de contratación para la fecha y los criterios indicados se muestra un arbol con la jerarquía de la contratación: cliente, cuentas, productos, servicios así como las cuotas y promociones asociadas a esos productos y servicios. Al seleccionar uno de los nodos se carga la información de todas las entidadea padre del elemento seleccionado para la fecha de búsqueda, así como toda la información de históricos para esa entidad.
+	  	\item Una vez obtenida la información de los elementos de contratación para la fecha y los criterios indicados se muestra un árbol con la jerarquía de la contratación: cliente, cuentas, productos, servicios así como las cuotas y promociones asociadas a esos productos y servicios. Al seleccionar uno de los nodos se carga la información de todas las entidades padre del elemento seleccionado para la fecha de búsqueda, así como toda la información de históricos para esa entidad.
 	  	\item Finaliza el caso de uso.
 	  \end{enumerate} 	  	  
 	  \\\hline
@@ -1082,7 +1082,7 @@ El caso de uso Gestionar usuarios sólo está disponible para el actor ADMIN. A 
 \label{sec:diagramaE-R}
 
 El sistema utiliza una base de datos en PostgreSQL como almacén de datos.
-En la nomenclatura de las tablas se ha utilizado la separación de palabras con guión bajo. 
+En la nomenclatura de las tablas se ha utilizado la separación de palabras con guion bajo. 
 
 Todas las tablas salvo las tablas que contienen registros de histórico utilizan como clave primaria un identificador generado de forma incremental mediante secuencias para todos los casos salvo para la tabla maestra  mt\_menu, que almacena la información del menú de la aplicación, que es un valor generado de forma manual.
 
@@ -1105,14 +1105,14 @@ A continuación se presentan los distintos diagramas de la E-R. Se han omitido l
 
 \begin{figure}[hp!]
   \centering
-  \includegraphics[width=1\textwidth]{imaxes/er-catalogo-01.png}          	  \caption{Diagrama ER del catálogo y la parametrizacion (I)}
+  \includegraphics[width=1\textwidth]{imaxes/er-catalogo-01.png}          	  \caption{Diagrama ER del catálogo y la parametrización (I)}
   \label{fig:er-catalogo-01}
 \end{figure}
 
 \begin{figure}[hp!]
   \centering
   \includegraphics[width=1\textwidth]{imaxes/er-catalogo-02.png}
-  \caption{Diagrama ER del catálogo y la parametrizacion (y II)}
+  \caption{Diagrama ER del catálogo y la parametrización (y II)}
   \label{fig:er-catalogo-02}
 \end{figure}
 
@@ -1123,14 +1123,14 @@ A continuación se presentan los distintos diagramas de la E-R. Se han omitido l
 
 \begin{figure}[hp!]
   \centering
-  \includegraphics[width=1\textwidth]{imaxes/er-instancia-01.png}          	  \caption{Diagrama ER de la contratación, el catálogo y la parametrizacion (I)}
+  \includegraphics[width=1\textwidth]{imaxes/er-instancia-01.png}          	  \caption{Diagrama ER de la contratación, el catálogo y la parametrización (I)}
   \label{fig:er-instancia-01}
 \end{figure}
 
 \begin{figure}[hp!]
   \centering
   \includegraphics[width=1\textwidth]{imaxes/er-instancia-02.png}
-  \caption{Diagrama ER de la contratación, el catálogo y la parametrizacion(y II)}
+  \caption{Diagrama ER de la contratación, el catálogo y la parametrización (y II)}
   \label{fig:er-instancia-02}
 \end{figure}
 
@@ -1180,7 +1180,7 @@ El directorio \textit{\textbf{/src/main/java}} contiene las clases de la aplicac
 
 
 
-\begin{longtable}{m{3cm} m{12cm}}
+\begin{longtable}{m{1cm} m{11cm}}
     \caption{Paquetes con las clases de la aplicación}
     \label{tab:paquetes}\\
     \rowcolors{2}{white}{white}
@@ -1284,7 +1284,6 @@ El directorio \textit{\textbf{/src/main/java}} contiene las clases de la aplicac
 \textit{PaymentMethodController.java},
 \textit{StatusController.java},
 \textit{TaxTypeController.java}.
-
 	\\\hline
 \textbf{Paquete} & \textit{\textbf{com.comasw.viewController.catalog.type}} \newline
      Controlador para las vistas relativas al catálogo.\newline
@@ -1330,7 +1329,7 @@ El directorio \textit{\textbf{/src/main/java}} contiene las clases de la aplicac
 
 
 \textbf{Paquete} & \textit{\textbf{com.comasw.viewController.appAccessController}} \newline
-     Controlador para el inicio y fin de sesión y la definición del menu en función de los permisos del usuario que ha accedido a la aplicación.\newline
+     Controlador para el inicio y fin de sesión y la definición del menú en función de los permisos del usuario que ha accedido a la aplicación.\newline
 \textit{LogoutController.java},
 \textit{LoginController.java},
 \textit{ApplicationMenuController.java}.
@@ -1415,7 +1414,7 @@ El directorio \textit{\textbf{/src/main/java}} contiene las clases de la aplicac
 Además de contener las páginas \acrshort{xhtml} de login y error, contiene la siguiente información:
 
 
-\begin{longtable}{m{3cm} m{12cm}}
+\begin{longtable}{m{1cm} m{11cm}}
     \caption{Directorio webapp}
     \label{tab:web}\\  	
     \rowcolors{2}{white}{white}
@@ -1431,12 +1430,12 @@ Además de contener las páginas \acrshort{xhtml} de login y error, contiene la 
  
 
 
-\subsection{Directorio /src/main/resources - Recursos de la aplicacion}
+\subsection{Directorio /src/main/resources - Recursos de la aplicación}
 \label{sub:recursos-aplicacion}
 El directorio \textit{\textbf{/src/main/resources}} contiene los distintos recursos usados por la aplicación. A continuación se ofrece un listado del contenido del mismo.
 
 
-\begin{longtable}{m{3cm} m{12cm}}
+\begin{longtable}{m{1cm} m{11cm}}
     \caption{Recursos}
     \label{tab:recursos}\\  	
     \rowcolors{2}{white}{white}
@@ -1451,13 +1450,13 @@ El directorio \textit{\textbf{/src/main/resources}} contiene los distintos recur
 	\textbf{Carpeta} & \textit{\textbf{Documentation}} \newline
     Contiene lo siguiente:
     \begin{itemize}
-    \item Carpeta instalationFiles, que contiene el fichero \emph{comasw\_files.zip} con todos los ficheros necesarios para instalar la aplicaicón y el fichero readme.txt con los pasos a seguir.
+    \item Carpeta instalationFiles, que contiene el fichero \emph{comasw\_files.zip} con todos los ficheros necesarios para instalar la aplicación y el fichero readme.txt con los pasos a seguir.
     \item Fichero \emph{manual\_usuario.pdf} con el manual de usuario de la aplicación.
     \item Fichero \emph{db\_comasw\_html.zip} con la documentación de la base de datos comasw en formato html.
     \end{itemize}    
     \\\hline
 	\textbf{Carpeta} & \textit{\textbf{License}} \newline
-	Contiene el fichero \emph{\textbf{gpl-3.0.txt}} que conitene la licencia bajo el que se ha desarrollado la aplicación (\acrshort{licencia}).
+	Contiene el fichero \emph{\textbf{gpl-3.0.txt}} que contiene la licencia bajo el que se ha desarrollado la aplicación (\acrshort{licencia}).
     \\\hline
 	\textbf{Fichero} & \textit{\textbf{log4j2.xml}} \newline
     Fichero de configuración de Log4j.
@@ -1477,7 +1476,7 @@ El directorio \textit{\textbf{/target/generated-sources/jooq}} contiene las dist
 
 
 
-\begin{longtable}{m{3cm} m{12cm}}
+\begin{longtable}{m{1cm} m{11cm}}
     \caption{Clases generadas}
     \label{tab:generados}\\  	
     \rowcolors{2}{white}{white}
