@@ -59,6 +59,7 @@
 			name="updateHistoricCandidateTable" process="@this"
 			update=":form:accordionPanel:historicCandidateTable" />
 
+
 		<p:remoteCommand id="remoteCommandUpdatePanelData"
 			name="updatePanelData" process="@this"
 			update="form:accordionPanel:selectedTablePanel
@@ -198,7 +199,7 @@
 					visible="#{productFeeTypeController.showDependentData}">
 					<p:dataTable id="selectedTable" widgetVar="selectedTableWidget"
 						var="selectedDataTable"
-						value="#{productFeeTypeController.selectedDataList}"
+						value="#{productFeeTypeController.selectedData}"
 						rendered="true" size="small" scrollable="true"
 						emptyMessage="No data to show" showGridlines="true"
 						paginatorPosition="bottom">
