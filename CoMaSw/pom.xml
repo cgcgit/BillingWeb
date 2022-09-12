@@ -135,13 +135,7 @@
 				<!-- Specify the plugin configuration. The configuration format is the 
 					same as for the standalone code generator -->
 				<configuration>
-					<!-- JDBC connection parameters -->
-					<jdbc>
-						<driver>org.postgresql.Driver</driver>
-						<url>jdbc:postgresql://localhost:5432/db_comasw</url>
-						<user>comasw_app</user>
-						<password>comasw_app</password>
-					</jdbc>
+					
 
 					<!-- Generator parameters -->
 					<generator>
