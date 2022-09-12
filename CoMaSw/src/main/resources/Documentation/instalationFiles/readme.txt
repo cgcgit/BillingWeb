@@ -12,6 +12,8 @@
      * comasw_admin - usuario propietario de la base de datos. Todo nuevo objeto a crear en la base de datos de la aplicación deberá crearse con este usuario.
      * comasw_app - usuario de la aplicación CoMaSw (con el que establece conexión la aplicación a la base de datos). En caso de crear nuevos objetos en la base de datos relacionados con la aplicación deberán otorgársele los permisos correspondientes a este usuario sobre dichos objetos. 
 
+Por seguridad se recomienda cambiar las contraseñas de los usuarios comasw_admin y comasw_app.
+
    A continuación se describen los pasos a seguir para crear y configurar la base de datos.
      (a) Crear la base de datos db_comasw
             Desde la ruta en la que hemos descomprimido el fichero nos conectaremos a la base de datos de postgresql y ejecutamos lo siguiente:
@@ -22,14 +24,16 @@
 
 
 3. Configurar el servidor web Wildfly. A través del CLI de Wildfly ejecutar lo siguiente:
-     (a) Desplegar el driver JDBC- Ejecutamos lo siguiente, siendo [ruta_driver] la ruta en la que hemos ubicado el driver contenido en el fichero comasw_files.zip:
-           module add --name=org.postgresql --resources=[ruta_driver]/postgresql-42.4.1.jar --dependencies=javax.api,javax.transaction.api 
-     (b) Añadimos el driver JDBC. Ejecutamos lo siguiente:
-           /subsystem=datasources/jdbc-driver=postgres:add(driver-name="postgres", driver-module-name="org.postgresql", driver-class-name=org.postgresql.Driver)
+     (a) Añadir el driver JDBC- Ejecutamos lo siguiente, siendo [ruta_driver] la ruta en la que hemos ubicado el driver contenido en el fichero comasw_files.zip:
+           $ module add --name=org.postgresql --resources=[ruta_driver]/postgresql-42.4.1.jar --dependencies=javax.api,javax.transaction.api 
+     (b) Asociar el driver JDBC. Ejecutamos lo siguiente:
+           $ /subsystem=datasources/jdbc-driver=postgres:add(driver-name="postgres", driver-module-name="org.postgresql", driver-class-name=org.postgresql.Driver)           
+     (c) Añadir la base de datos db_comasw con el usuario de la aplicación comasw_app. Ejecutamos lo siguiente, cambiando [comasw_app] por la nueva contraseña del usuario comasw_app asignada en la configuración de la base de datos:
+           $ data-source add --name=db_comasw --driver-name=postgres --jndi-name=java:jboss/datasources/db_comasw --connection-url=jdbc:postgresql://localhost:5432/db_comasw --user-name=comasw_app --password=[comasw_app] --enabled=true
 
-4. Copiar el fichero comasw.war a la carpeta de aplicaciones de Wildfly
+4. Copiar el fichero comasw.war a la carpeta de aplicaciones de Wildfly.
 
-5. Desplegar la apliación en el servidor
+5. Desplegar la apliación en el servidor.
 
 
 --------------------------
