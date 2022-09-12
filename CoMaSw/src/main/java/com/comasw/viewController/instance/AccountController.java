@@ -880,6 +880,7 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 					this.setSelectedData(null);
 					this.getSelectedDataList().clear();
 					this.getHistoricDataList().clear();
+					this.setShowSelectedData(false);	
 				} else {
 					this.refreshHistoricDataTable();
 				}
@@ -1011,7 +1012,7 @@ public class AccountController extends BasicInstance<VwAccountInstance, ItAccoun
 		this.setPrevStatusId(-1);
 		this.setShowSelectedData(false);
 		// this.setCreateNewContractFlag(true);
-		this.setCopyDataFromCustomerFlag(true);
+		this.setCopyDataFromCustomerFlag(false);
 
 	}
 

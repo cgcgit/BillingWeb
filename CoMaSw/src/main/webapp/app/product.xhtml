@@ -221,7 +221,18 @@
 						</p:column>
 
 						<!--  DATA TABLE - DATA COLUMNS -->
-
+						<p:column id="searchProductId"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="PRODUCT ID" rendered="true"
+							sortBy="#{dataTable.productId}"
+							filterBy="#{dataTable.productId}" filterMatchMode="contains">
+							<h:outputText id="searchProductIdText"
+								value="#{dataTable.productId}" />
+						</p:column>
 						<p:column id="searchCode"
 							style="font-family:Arial Black;
                                   text-align: left;
@@ -487,6 +498,18 @@
 						size="small" scrollable="true" emptyMessage="No data to show"
 						rows="1" showGridlines="true">
 
+
+						<p:column id="productId"
+							style="font-family:Arial Black;
+                                  text-align: left;
+                                  font-size: 11px;
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="PRODUCT ID" rendered="true">
+							<h:outputText id="productIdText"
+								value="#{selectedDataTable.productId}" />
+						</p:column>
+						
 						<p:column id="code"
 							style="font-family:Arial Black;
                                   text-align: left;
@@ -831,6 +854,7 @@
 								icon="#{uiValue.deleteIcon}" ajax="true"
 								actionListener="#{productController.pushDeleteRowButton()}"
 								rendered="#{productController.canUserModify()}"
+								oncomplete="if (!args.validationFailed) {updatePanelData(); updateSelectedTable(); updateHistoricTable()}"
 								update=":form:deleteConfirmDialog">
 								<f:setPropertyActionListener value="#{rowIndexHistoricTable}"
 									target="#{productController.rowHistoricSelected}" />
@@ -879,11 +903,13 @@
 							style="font-family:Arial Black;
                                   text-align: left;
                                   font-size: 11px;
-                                  width: 40px;    
-                                  overflow: hidden;
-                                  visibility: hidden"
-							headerText="PRODUCT ID" rendered="false">
-							<h:outputText value="#{historicDataTable.productId}" />
+                                  width: 100px;    
+                                  overflow: hidden"
+							headerText="PRODUCT ID" rendered="true"
+							sortBy="#{historicDataTable.productId}"
+							filterBy="#{historicDataTable.productId}" filterMatchMode="contains">
+							<h:outputText id="productIdHistOutput"
+										value="#{historicDataTable.productId}" />								
 						</p:column>
 
 						<p:column id="codeHist"

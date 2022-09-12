@@ -689,6 +689,7 @@
 								icon="#{uiValue.deleteIcon}" ajax="true"
 								actionListener="#{customerController.pushDeleteRowButton()}"
 								rendered="#{customerController.canUserModify()}"
+								oncomplete="if (!args.validationFailed) {updatePanelData(); updateSelectedTable(); updateHistoricTable()}"
 								update=":form:deleteConfirmDialog">
 								<f:setPropertyActionListener value="#{rowIndexHistoricTable}"
 									target="#{customerController.rowHistoricSelected}" />

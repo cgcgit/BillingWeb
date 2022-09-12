@@ -804,6 +804,7 @@ public class FeeTypeController extends BasicHistoricType<CtFeeType>
 					this.setSelectedData(null);
 					this.getSelectedDataList().clear();
 					this.getHistoricDataList().clear();
+					this.setShowSelectedData(false);					
 				} else {
 					this.refreshHistoricDataTable();
 				}

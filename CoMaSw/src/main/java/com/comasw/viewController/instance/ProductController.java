@@ -698,7 +698,7 @@ public class ProductController extends BasicInstance<VwProductInstance, ItProduc
 							Optional.empty(), Optional.empty(), Optional.empty()).get(0);
 
 					messageDetail = "Data saves succesfully";
-					logger.info("Create product: " + this.getNewData().toString() + " - " + messageDetail);
+					logger.info("Create product: " + object.getProductCode() + " - " + messageDetail);
 					this.createMessage(facesContext, externalContext, FacesMessage.SEVERITY_INFO, message,
 							messageDetail);
 
@@ -886,6 +886,7 @@ public class ProductController extends BasicInstance<VwProductInstance, ItProduc
 					this.setSelectedData(null);
 					this.getSelectedDataList().clear();
 					this.getHistoricDataList().clear();
+					this.setShowSelectedData(false);
 				} else {
 					this.refreshHistoricDataTable();
 				}

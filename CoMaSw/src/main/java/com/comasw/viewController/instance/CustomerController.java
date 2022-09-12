@@ -880,6 +880,7 @@ public class CustomerController extends BasicInstance<VwCustomerInstance, ItCust
 					this.setSelectedData(null);
 					this.getSelectedDataList().clear();
 					this.getHistoricDataList().clear();
+					this.setShowSelectedData(false);
 				} else {
 					this.refreshHistoricDataTable();
 				}

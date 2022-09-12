@@ -1131,6 +1131,7 @@
 								class="ui-button-warning rounded-button"
 								icon="#{uiValue.deleteIcon}" ajax="true"
 								actionListener="#{feeController.pushDeleteRowButton()}"
+								oncomplete="if (!args.validationFailed) {updatePanelData(); updateSelectedTable(); updateHistoricTable()}"
 								rendered="#{feeController.canUserModify()}"
 								update=":form:deleteConfirmDialog">
 								<f:setPropertyActionListener value="#{rowIndexHistoricTable}"

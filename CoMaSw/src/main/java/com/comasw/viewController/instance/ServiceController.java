@@ -1521,6 +1521,7 @@ public class ServiceController extends BasicInstance<VwServiceInstance, ItServic
 					this.setSelectedData(null);
 					this.getSelectedDataList().clear();
 					this.getHistoricDataList().clear();
+					this.setShowSelectedData(false);
 				} else {
 					this.refreshHistoricDataTable();
 				}
